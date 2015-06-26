@@ -24,11 +24,15 @@ module.exports = {
   },
 
   resolve: {
-    root: [path.join(__dirname, 'bower_components')],
+    root: [path.join(__dirname, 'bower_components'), path.join(__dirname, 'node_modules')],
     extensions: ['', '.ts', '.webpack.js', '.web.js', '.js', '.styl'],
     alias: {
       'underscore.string': 'underscore.string/index.js'
     }
+  },
+
+  resolveLoader: {
+    root: [path.join(__dirname, 'bower_components'), path.join(__dirname, 'node_modules')],
   },
 
   devServer: {
@@ -47,13 +51,11 @@ module.exports = {
 
   module: {
     loaders: [
-      {
-        test: /\.ts$/,
-        loader: 'awesome-typescript-loader'
-      },
-      { test: /\.json?$/, loader: 'json-loader' },
+
+      { test: /\.docscript\.json?$/, loader: 'raw-loader' },
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
       { test: /\.jsx$/, exclude: /node_modules/, loader: 'babel-loader'},
+      { test: /\.ts$/, loader: 'awesome-typescript-loader' },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&minetype=application/font-woff" },
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
       { test: /\.css$/, exclude: /\.useable\.css$/, loader: "style!css" },
