@@ -51,11 +51,10 @@ module.exports = {
 
   module: {
     loaders: [
-
-      { test: /\.docscript\.json?$/, loader: 'raw-loader' },
+      { test: /\.json?$/, loader: 'json-loader' },
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
       { test: /\.jsx$/, exclude: /node_modules/, loader: 'babel-loader'},
-      { test: /\.ts$/, loader: 'awesome-typescript-loader' },
+      { test: /\.ts$/, loader: 'awesome-typescript-loader?rewriteImports=awesome-typescript-loader&emitRequireType=false' },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&minetype=application/font-woff" },
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
       { test: /\.css$/, exclude: /\.useable\.css$/, loader: "style!css" },

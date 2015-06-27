@@ -3,21 +3,22 @@
 import { render, createElement } from 'react';
 import { Interface } from './interface/interface';
 import { Page } from './page/page';
-import * as _ from 'lodash';
+import { Service } from './service';
 
-let refify = require('refify');
+import * as _ from 'lodash';
 
 require('./css/main.css');
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
 
-(<any>window).docs = {};
-_.forEach(require('../.docs/registry.js'), (raw, fileName) => {
-    (<any>window).docs[fileName] = refify.parse(raw);
-});
+function loadFiles() {
+    return require('../.docs/registry.js')
+}
+
+let service = new Service(<any>loadFiles());
 
 injectTapEventPlugin();
 
 window.onload = () => {
-    render(Page(), document.body)
+    render(Page({ service }), document.body)
 };
