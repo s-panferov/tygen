@@ -3,15 +3,12 @@ import { DOM as dom } from 'react';
 import * as block from 'bem-cn';
 import * as mui from 'material-ui';
 
-export interface AppLayoutProps extends React.HTMLAttributes {
+export interface LayoutProps extends React.DOMAttributes {
     menu: any
 }
 
-export class AppLayoutComponent extends React.Component<AppLayoutProps, void> {
-    static contextTypes: {[key: string]: React.Validator<any>} = {
-        muiTheme: React.PropTypes.object,
-        service: React.PropTypes.object
-    };
+export class LayoutComponent extends React.Component<LayoutProps, void> {
+    props: LayoutProps;
 
     getStyle() {
         return {
@@ -21,7 +18,7 @@ export class AppLayoutComponent extends React.Component<AppLayoutProps, void> {
             menu: {
                 maxWidth: '250px',
                 flex: '0 0 auto',
-                paddingTop: '80px'
+                paddingTop: '64px'
             },
             content: {
                 flex: '1 1 auto'
@@ -31,13 +28,14 @@ export class AppLayoutComponent extends React.Component<AppLayoutProps, void> {
 
     render() {
         let style = this.getStyle();
-        return dom.div({
-            style: style.root
-        },
+        return dom.div(
+            {
+                style: style.root
+            },
             dom.div({ style: style.menu }, this.props.menu),
-            dom.div({ style: style.content }, this.props.content)
+            dom.div({ style: style.content }, this.props.children)
         )
     }
 }
 
-export var AppLayout = React.createFactory<AppLayoutProps>(AppLayoutComponent);
+export var Layout = React.createFactory<LayoutProps>(LayoutComponent);

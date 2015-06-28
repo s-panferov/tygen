@@ -11,11 +11,11 @@
     "lodash/lodash.d.ts": {
       "commit": "84dfeeac378552c22297a5d555b1999a396d7e7c"
     },
-    "underscore.string/underscore.string.d.ts": {
-      "commit": "84dfeeac378552c22297a5d555b1999a396d7e7c"
+    "flux/flux.d.ts": {
+      "commit": "6f04d25ad38982d372cc3cda62fa4c0eef9e24d7"
     },
-    "underscore/underscore.d.ts": {
-      "commit": "84dfeeac378552c22297a5d555b1999a396d7e7c"
+    "node/node.d.ts": {
+      "commit": "6f04d25ad38982d372cc3cda62fa4c0eef9e24d7"
     }
   }
 }

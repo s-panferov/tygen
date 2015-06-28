@@ -54,7 +54,7 @@ module.exports = {
       { test: /\.json?$/, loader: 'json-loader' },
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
       { test: /\.jsx$/, exclude: /node_modules/, loader: 'babel-loader'},
-      { test: /\.ts$/, loader: 'awesome-typescript-loader?rewriteImports=awesome-typescript-loader&emitRequireType=false' },
+      { test: /\.ts$/, loader: 'awesome-typescript-loader?rewriteImports=awesome-typescript-loader&emitRequireType=false&library=es6' },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&minetype=application/font-woff" },
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
       { test: /\.css$/, exclude: /\.useable\.css$/, loader: "style!css" },
@@ -66,6 +66,8 @@ module.exports = {
     new webpack.ResolverPlugin(
         new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', ['main'])
     ),
-    new HtmlWebpackPlugin()
+    new HtmlWebpackPlugin({
+      template: 'index.html'
+    })
   ]
 };
