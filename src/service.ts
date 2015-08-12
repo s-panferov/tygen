@@ -2,7 +2,7 @@ import { IDoc, IDocRegistry, IDocPkgInfo } from 'awesome-typescript-loader/src/d
 import * as _ from 'lodash';
 import * as path from 'path';
 
-import MemoryFileSystem = require('memory-fs');
+import MemoryFileSystem from 'memory-fs';
 
 export interface IPackageMap {
     [key: string]: IPackage

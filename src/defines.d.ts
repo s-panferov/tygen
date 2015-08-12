@@ -1,4 +1,3 @@
-/// <reference path="../node_modules/awesome-typescript-loader/node_modules/typescript/bin/typescriptServices.d.ts" />
 /// <reference path="../node_modules/immutable/dist/immutable.d.ts" />
 /// <reference path="../typings/tsd.d.ts" />
 
@@ -27,5 +26,5 @@ declare module "memory-fs" {
         writeFileSync(path: string, content: string);
     }
 
-    export = MemoryFileSystem
+    export default MemoryFileSystem
 }

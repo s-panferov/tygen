@@ -9,6 +9,14 @@
 *                                               *
 ************************************************/
 
+// compat for TypeScript 1.5.3
+// if you use with --target es3 or --target es5 and use below definitions,
+// use the lib.es6.d.ts that is bundled with TypeScript 1.5.3.
+interface MapConstructor {}
+interface WeakMapConstructor {}
+interface SetConstructor {}
+interface WeakSetConstructor {}
+
 /************************************************
 *                                               *
 *                   GLOBAL                      *
@@ -27,23 +35,16 @@ declare function clearInterval(intervalId: NodeJS.Timer): void;
 declare function setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;
 declare function clearImmediate(immediateId: any): void;
 
-declare var require: {
-    (id: string): any;
-    resolve(id:string): string;
-    cache: any;
-    extensions: any;
-    main: any;
-};
-
-declare var module: {
+interface NodeModule {
     exports: any;
-    require(id: string): any;
     id: string;
     filename: string;
     loaded: boolean;
     parent: any;
     children: any[];
-};
+}
+
+declare var module: NodeModule;
 
 // Same as module.exports
 declare var exports: any;
@@ -144,6 +145,7 @@ declare module NodeJS {
         code?: string;
         path?: string;
         syscall?: string;
+        stack?: string;
     }
 
     export interface EventEmitter {
@@ -270,7 +272,7 @@ declare module NodeJS {
         Int8Array: typeof Int8Array;
         Intl: typeof Intl;
         JSON: typeof JSON;
-        Map: typeof Map;
+        Map: MapConstructor;
         Math: typeof Math;
         NaN: typeof NaN;
         Number: typeof Number;
@@ -279,7 +281,7 @@ declare module NodeJS {
         RangeError: typeof RangeError;
         ReferenceError: typeof ReferenceError;
         RegExp: typeof RegExp;
-        Set: typeof Set;
+        Set: SetConstructor;
         String: typeof String;
         Symbol: Function;
         SyntaxError: typeof SyntaxError;
@@ -289,8 +291,8 @@ declare module NodeJS {
         Uint32Array: typeof Uint32Array;
         Uint8Array: typeof Uint8Array;
         Uint8ClampedArray: Function;
-        WeakMap: typeof WeakMap;
-        WeakSet: Function;
+        WeakMap: WeakMapConstructor;
+        WeakSet: WeakSetConstructor;
         clearImmediate: (immediateId: any) => void;
         clearInterval: (intervalId: NodeJS.Timer) => void;
         clearTimeout: (timeoutId: NodeJS.Timer) => void;
@@ -406,9 +408,9 @@ declare module "events" {
 }
 
 declare module "http" {
-    import events = require("events");
-    import net = require("net");
-    import stream = require("stream");
+    import * as events from "events";
+    import * as net from "net";
+    import * as stream from "stream";
 
     export interface Server extends events.EventEmitter {
         listen(port: number, hostname?: string, backlog?: number, callback?: Function): Server;
@@ -538,6 +540,8 @@ declare module "http" {
 		destroy(): void;
 	}
 
+    export var METHODS: string[];
+
     export var STATUS_CODES: {
         [errorCode: number]: string;
         [errorCode: string]: string;
@@ -549,48 +553,8 @@ declare module "http" {
     export var globalAgent: Agent;
 }
 
-declare module "cluster" {
-    import child  = require("child_process");
-    import events = require("events");
-
-    export interface ClusterSettings {
-        exec?: string;
-        args?: string[];
-        silent?: boolean;
-    }
-
-    export class Worker extends events.EventEmitter {
-        id: string;
-        process: child.ChildProcess;
-        suicide: boolean;
-        send(message: any, sendHandle?: any): void;
-        kill(signal?: string): void;
-        destroy(signal?: string): void;
-        disconnect(): void;
-    }
-
-    export var settings: ClusterSettings;
-    export var isMaster: boolean;
-    export var isWorker: boolean;
-    export function setupMaster(settings?: ClusterSettings): void;
-    export function fork(env?: any): Worker;
-    export function disconnect(callback?: Function): void;
-    export var worker: Worker;
-    export var workers: Worker[];
-
-    // Event emitter
-    export function addListener(event: string, listener: Function): void;
-    export function on(event: string, listener: Function): any;
-    export function once(event: string, listener: Function): void;
-    export function removeListener(event: string, listener: Function): void;
-    export function removeAllListeners(event?: string): void;
-    export function setMaxListeners(n: number): void;
-    export function listeners(event: string): Function[];
-    export function emit(event: string, ...args: any[]): boolean;
-}
-
 declare module "zlib" {
-    import stream = require("stream");
+    import * as stream from "stream";
     export interface ZlibOptions { chunkSize?: number; windowBits?: number; level?: number; memLevel?: number; strategy?: number; dictionary?: any; }
 
     export interface Gzip extends stream.Transform { }
@@ -675,9 +639,9 @@ declare module "os" {
 }
 
 declare module "https" {
-    import tls = require("tls");
-    import events = require("events");
-    import http = require("http");
+    import * as tls from "tls";
+    import * as events from "events";
+    import * as http from "http";
 
     export interface ServerOptions {
         pfx?: any;
@@ -741,8 +705,8 @@ declare module "punycode" {
 }
 
 declare module "repl" {
-    import stream = require("stream");
-    import events = require("events");
+    import * as stream from "stream";
+    import * as events from "events";
 
     export interface ReplOptions {
         prompt?: string;
@@ -759,8 +723,8 @@ declare module "repl" {
 }
 
 declare module "readline" {
-    import events = require("events");
-    import stream = require("stream");
+    import * as events from "events";
+    import * as stream from "stream";
 
     export interface ReadLine extends events.EventEmitter {
         setPrompt(prompt: string, length: number): void;
@@ -794,8 +758,8 @@ declare module "vm" {
 }
 
 declare module "child_process" {
-    import events = require("events");
-    import stream = require("stream");
+    import * as events from "events";
+    import * as stream from "stream";
 
     export interface ChildProcess extends events.EventEmitter {
         stdin:  stream.Writable;
@@ -805,6 +769,7 @@ declare module "child_process" {
         kill(signal?: string): void;
         send(message: any, sendHandle?: any): void;
         disconnect(): void;
+        unref(): void;
     }
 
     export function spawn(command: string, args?: string[], options?: {
@@ -920,7 +885,7 @@ declare module "dns" {
 }
 
 declare module "net" {
-    import stream = require("stream");
+    import * as stream from "stream";
 
     export interface Socket extends stream.Duplex {
         // Extended base methods
@@ -988,7 +953,7 @@ declare module "net" {
 }
 
 declare module "dgram" {
-    import events = require("events");
+    import * as events from "events";
 
     interface RemoteInfo {
         address: string;
@@ -1018,8 +983,8 @@ declare module "dgram" {
 }
 
 declare module "fs" {
-    import stream = require("stream");
-    import events = require("events");
+    import * as stream from "stream";
+    import * as events from "events";
 
     interface Stats {
         isFile(): boolean;
@@ -1053,6 +1018,7 @@ declare module "fs" {
     }
     export interface WriteStream extends stream.Writable {
         close(): void;
+        bytesWritten: number;
     }
 
     /**
@@ -1192,6 +1158,7 @@ declare module "fs" {
     export function fsync(fd: number, callback?: (err?: NodeJS.ErrnoException) => void): void;
     export function fsyncSync(fd: number): void;
     export function write(fd: number, buffer: Buffer, offset: number, length: number, position: number, callback?: (err: NodeJS.ErrnoException, written: number, buffer: Buffer) => void): void;
+    export function write(fd: number, buffer: Buffer, offset: number, length: number, callback?: (err: NodeJS.ErrnoException, written: number, buffer: Buffer) => void): void;
     export function writeSync(fd: number, buffer: Buffer, offset: number, length: number, position: number): number;
     export function read(fd: number, buffer: Buffer, offset: number, length: number, position: number, callback?: (err: NodeJS.ErrnoException, bytesRead: number, buffer: Buffer) => void): void;
     export function readSync(fd: number, buffer: Buffer, offset: number, length: number, position: number): number;
@@ -1455,9 +1422,9 @@ declare module "string_decoder" {
 }
 
 declare module "tls" {
-    import crypto = require("crypto");
-    import net = require("net");
-    import stream = require("stream");
+    import * as crypto from "crypto";
+    import * as net from "net";
+    import * as stream from "stream";
 
     var CLIENT_RENEG_LIMIT: number;
     var CLIENT_RENEG_WINDOW: number;
@@ -1623,7 +1590,9 @@ declare module "crypto" {
     }
     export function getDiffieHellman(group_name: string): DiffieHellman;
     export function pbkdf2(password: string, salt: string, iterations: number, keylen: number, callback: (err: Error, derivedKey: Buffer) => any): void;
+    export function pbkdf2(password: string, salt: string, iterations: number, keylen: number, digest: string, callback: (err: Error, derivedKey: Buffer) => any): void;
     export function pbkdf2Sync(password: string, salt: string, iterations: number, keylen: number) : Buffer;
+    export function pbkdf2Sync(password: string, salt: string, iterations: number, keylen: number, digest: string) : Buffer;
     export function randomBytes(size: number): Buffer;
     export function randomBytes(size: number, callback: (err: Error, buf: Buffer) =>void ): void;
     export function pseudoRandomBytes(size: number): Buffer;
@@ -1631,7 +1600,7 @@ declare module "crypto" {
 }
 
 declare module "stream" {
-    import events = require("events");
+    import * as events from "events";
 
     export interface Stream extends events.EventEmitter {
         pipe<T extends NodeJS.WritableStream>(destination: T, options?: { end?: boolean; }): T;
@@ -1796,7 +1765,7 @@ declare module "assert" {
 }
 
 declare module "tty" {
-    import net = require("net");
+    import * as net from "net";
 
     export function isatty(fd: number): boolean;
     export interface ReadStream extends net.Socket {
@@ -1810,7 +1779,7 @@ declare module "tty" {
 }
 
 declare module "domain" {
-    import events = require("events");
+    import * as events from "events";
 
     export class Domain extends events.EventEmitter {
         run(fn: Function): void;

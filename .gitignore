@@ -3,3 +3,4 @@ docs
 dist
 .docs
 .loader
+.awcache

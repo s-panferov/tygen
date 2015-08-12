@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { DOM as dom } from 'react';
 import * as block from 'bem-cn';
 import * as mui from 'material-ui';
