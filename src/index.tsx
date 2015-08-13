@@ -1,23 +1,21 @@
 /// <reference path="defines.d.ts" />
 
 import React from 'react';
-// import { Page } from './components/page/page';
+import $ from 'jquery';
 import { Service } from './service';
 import { Dispatcher as FluxDispatcher } from 'flux';
 import { EventEmitter } from 'events';
-
 import { Map, fromJS } from 'immutable';
+import { Action } from './actions';
 
-import { IAction } from './actions';
+import { Page } from './components/page/page';
 
-export type IDispatcher = FluxDispatcher<IAction>;
+export type IDispatcher = FluxDispatcher<Action>;
 export type IState = Map<string, any>;
 
 import * as _ from 'lodash';
 
 require('./css/main.css');
-
-var injectTapEventPlugin = require("react-tap-event-plugin");
 
 function loadFiles() {
     return require('../.docs/registry.js')

@@ -3,7 +3,7 @@ export enum ActionType {
     Navigate = <any>"navigate"
 }
 
-export interface IAction {
+export interface Action {
     actionType?: ActionType
 }
 

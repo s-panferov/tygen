@@ -2,13 +2,12 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 declare module "bem-cn" {
-    var block: any;
-    export = block
-}
+    interface ClassName {
+        (name: string, ...mod: any[]): any
+    }
 
-declare module "material-ui" {
-    var block: any;
-    export = block
+    var block: ClassName;
+    export default block;
 }
 
 declare module "memory-fs" {
@@ -28,3 +27,19 @@ declare module "memory-fs" {
 
     export default MemoryFileSystem
 }
+
+/**
+ * Type declarations for Webpack runtime.
+ */
+
+interface WebpackRequireEnsureCallback {
+    (req: WebpackRequire): void
+}
+
+interface WebpackRequire {
+    (id: string): any;
+    (paths: string[], callback: (...modules: any[]) => void): void;
+    ensure(ids: string[], callback: WebpackRequireEnsureCallback, chunkName?: string): void;
+}
+
+declare var require: WebpackRequire;

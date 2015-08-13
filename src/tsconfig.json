@@ -13,20 +13,24 @@
     "compileOnSave": false,
     "filesGlob": [
         "./**/*.ts",
-        "!./node_modules/**/*.ts"
+        "./**/*.tsx",
+        "!./node_modules/**/*.ts",
+        "!./node_modules/**/*.tsx"
     ],
     "files": [
         "./actions.ts",
         "./components/interface/interface.ts",
-        "./components/layout/layout.ts",
-        "./components/navigator/navigator.ts",
         "./components/package-nav/package-nav.ts",
-        "./components/page/page.ts",
         "./defines.d.ts",
         "./models-i.ts",
         "./models.ts",
         "./service.ts",
         "./state.ts",
-        "./stores/navigation.ts"
+        "./stores/navigation.ts",
+        "./components/layout/layout.tsx",
+        "./components/navigator/navigator.tsx",
+        "./components/page/page.tsx",
+        "./flux.tsx",
+        "./index.tsx"
     ]
 }

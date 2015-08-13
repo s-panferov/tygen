@@ -1,6 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
-var _ = require('lodash');
+var _ = require('lodash-node');
 var WebpackDevServer = require('webpack-dev-server');
 
 var optimist = require('optimist');

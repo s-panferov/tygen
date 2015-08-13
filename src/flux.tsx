@@ -22,14 +22,15 @@ import { Map, fromJS } from 'immutable';
 import { EventEmitter } from 'events';
 import { Dispatcher as FluxDispatcher } from 'flux';
 
+export type Addons = {};
 export type Action = _Action<ActionType>;
-export type Store<StoreState> = _Store<ActionType, typeof actions, StoreState, State>;
-export type Flux = _Flux<ActionType, State, typeof actions>;
+export type Store<StoreState> = _Store<ActionType, typeof actions, StoreState, State, Addons>;
+export type Flux = _Flux<ActionType, State, typeof actions, Addons>;
 export type FluxProps = _FluxProps<ActionType>;
-export type ConnectorContext = _ConnectorContext<Action, typeof actions, State>;
+export type ConnectorContext = _ConnectorContext<Action, typeof actions, State, Addons>;
 export type ActionCreators = typeof actions;
 
-let { Connector, connect, Provider } = createAll<ActionType, ActionCreators, State>(React, fromJS);
+let { Connector, connect, Provider } = createAll<ActionType, ActionCreators, State, Addons>(React, fromJS);
 export { Connector, connect, Provider };
 export { Map, fromJS };
 
@@ -37,5 +38,5 @@ export function runFlux(stores, initialState): Flux {
     let ds = new FluxDispatcher();
     let events = new EventEmitter();
 
-    return _runFlux<ActionType, ActionCreators, State, Action>(stores, initialState, ds, events, actions as any);
+    return _runFlux<ActionType, ActionCreators, State, Action, Addons>(stores, initialState, ds, events, actions as any);
 }
