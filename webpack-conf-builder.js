@@ -12,7 +12,7 @@ module.exports = function(options) {
     var doTypeCheck = options.doTypeCheck;
 
     var externals = [
-        
+
     ].join('');
 
     var ATL_OPTIONS = [
@@ -22,6 +22,7 @@ module.exports = function(options) {
         '&+experimentalDecorators',
         '&+useBabel',
         '&+useCache',
+        '&tsconfig=./src/tsconfig.json',
         externals
     ].join('');
 

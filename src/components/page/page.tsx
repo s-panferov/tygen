@@ -1,7 +1,7 @@
 import React from 'react';
 import block from 'bem-cn';
 
-import { IDoc, IDocMap } from '../../../../awesome-typescript-loader/src/doc/doc';
+import { IDoc, IDocMap } from '../../doc/doc';
 import { Service, IPackageMap } from '../../service';
 
 // import { Layout } from '../layout/layout';

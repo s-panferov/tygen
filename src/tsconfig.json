@@ -15,13 +15,16 @@
         "./**/*.ts",
         "./**/*.tsx",
         "!./node_modules/**/*.ts",
-        "!./node_modules/**/*.tsx"
+        "!./node_modules/**/*.tsx",
+        "../node_modules/typescript/lib/typescriptServices.d.ts"
     ],
     "files": [
         "./actions.ts",
         "./components/interface/interface.ts",
         "./components/package-nav/package-nav.ts",
         "./defines.d.ts",
+        "./doc/doc.ts",
+        "./doc/gen.ts",
         "./models-i.ts",
         "./models.ts",
         "./service.ts",
@@ -31,6 +34,7 @@
         "./components/navigator/navigator.tsx",
         "./components/page/page.tsx",
         "./flux.tsx",
-        "./index.tsx"
+        "./index.tsx",
+        "../node_modules/typescript/lib/typescriptServices.d.ts"
     ]
 }

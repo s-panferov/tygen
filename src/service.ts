@@ -1,4 +1,4 @@
-import { IDoc, IDocRegistry, IDocPkgInfo } from 'awesome-typescript-loader/src/doc/doc';
+import { IDoc, IDocRegistry, IDocPkgInfo } from './doc/doc';
 import * as _ from 'lodash';
 import * as path from 'path';
 
