@@ -1,14 +1,11 @@
 import {
 } from './models-i';
 
-export {
-}
-
-export interface NavigationState {
+export interface Navigation {
     pkg: string;
     path: string;
 }
 
-export interface AppState {
-
+export interface App {
+    navigation: Navigation
 }

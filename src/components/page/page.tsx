@@ -1,50 +1,44 @@
 import React from 'react';
 import block from 'bem-cn';
+import { Record } from 'immutable';
 
-import { IDoc, IDocMap } from '../../doc/doc';
-import { Service, IPackageMap } from '../../service';
+import { Doc, DocMap } from '../../doc/doc';
+import { Service, PackageMap } from '../../service';
+
+import { connect } from '../../flux';
+import { NavigationRecord } from '../../state-i';
 
 // import { Layout } from '../layout/layout';
 // import { Navigator } from '../navigator/navigator';
-// import { PackageNav } from '../package-nav/package-nav';
+import { PackageNav } from '../package-nav/package-nav';
 
 let pageCn = block('page');
+require('./page.css');
 
-export interface PageProps extends React.DOMAttributes {
+export interface PageProps extends React.CommonAttributes {
+    data?: PageData
 }
 
-export interface PageState {
+export interface PageState {}
 
+export class PageData extends Record({
+    navigation: null
+}) {
+    navigation: NavigationRecord
 }
 
+@connect(PageData, (state, appState) => {
+    state.navigation = appState.navigation;
+})
 export class Page extends React.Component<PageProps, PageState> {
-    refs: {
-        [key: string]: React.Component<any, any>;
-        packageNav: any
-    };
 
-    // constructor(props: IPageProps, context) {
-    //     super(props, context);
-    //
-    //     function navigation(currState: IState, navState: IState, globalState: IState) {
-    //         return currState.withMutations((state) => {
-    //             state.set('pkg', navState.get('pkg'))
-    //         })
-    //     }
-    //
-    //     bindState(<any>this, navigation, props.env);
-    // }
-    //
-    // componentWillUnmount() {
-    //     unbindState(<any>this, this.props.env);
-    // }
-    //
-    // getChildContext() {
-    //     return {
-    //         muiTheme: ThemeManager.getCurrentTheme(),
-    //         env: this.props.env
-    //     };
-    // }
+    render() {
+        return (
+            <div className={ pageCn() }>
+                <PackageNav className={ pageCn('package-nav') } />
+            </div>
+        )
+    }
 
     // render() {
     //     let packageName = this.state.map.get('pkg');

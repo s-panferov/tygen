@@ -1,21 +1,22 @@
 /// <reference path="defines.d.ts" />
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import { Service } from './service';
-import { Dispatcher as FluxDispatcher } from 'flux';
 import { EventEmitter } from 'events';
 import { Map, fromJS } from 'immutable';
 import { Action } from './actions';
 
+import { Provider, runFlux } from './flux';
 import { Page } from './components/page/page';
-
-export type IDispatcher = FluxDispatcher<Action>;
-export type IState = Map<string, any>;
+import { navigation } from './stores/navigation';
+import { AppRecord } from './state-i';
+import allRecords from './records';
 
 import * as _ from 'lodash';
 
-require('./css/main.css');
+require('./index.css');
 
 function loadFiles() {
     return require('../.docs/registry.js')
@@ -26,18 +27,22 @@ let service = new Service(loadFiles() as any);
 export function run() {
     $(() => {
         let stores = [
+            navigation
         ] as any;
 
-        // let initialState = AppStateRecord.fromJS({
-        //
-        // }, allRecords);
-        //
-        // let fluxInst = flux.runFlux(stores, initialState);
+        let initialState = AppRecord.fromJS({
+            navigation: {
+                pkg: service.getMainPackageName(),
+                path: '/'
+            }
+        }, allRecords);
 
-        // ReactDOM.render(
-        //     <Provider flux={ fluxInst }>{() => <App />}</Provider>,
-        //     document.getElementById('react-app')
-        // );
+        let fluxInst = runFlux(stores, initialState, { service });
+
+        ReactDOM.render(
+            <Provider flux={ fluxInst }>{() => <Page />}</Provider>,
+            document.getElementById('react-app')
+        );
     });
 }
 

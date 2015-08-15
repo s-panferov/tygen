@@ -1,4 +1,5 @@
 /// <reference path="../node_modules/immutable/dist/immutable.d.ts" />
+/// <reference path="./typings/react-dom.d.ts"/>
 /// <reference path="../typings/tsd.d.ts" />
 
 declare module "bem-cn" {
@@ -43,3 +44,45 @@ interface WebpackRequire {
 }
 
 declare var require: WebpackRequire;
+
+declare let DEBUG: boolean;
+
+declare module __React {
+    interface CSSProperties {
+        width?: string;
+        display?: string;
+        position?: string;
+        padding?: string;
+        margin?: string;
+        paddingBottom?: string;
+        paddingTop?: string;
+        paddingLeft?: string;
+        paddingRight?: string;
+        marginBottom?: string;
+        marginTop?: string;
+        marginLeft?: string;
+        marginRight?: string;
+        listStyle?: string;
+        color?: string;
+        alignSelf?: string;
+        backgroundColor?: string;
+        flexDirection?: string;
+        cursor?: string;
+    }
+
+    interface JsxClass<P, S> extends Component<P, S> {
+        render(): ReactElement<P>
+    }
+
+    interface ReactCtor<P, S> {
+        new(props: P, context: any): JsxClass<P, S>;
+    }
+
+    interface CommonAttributes extends DOMAttributes {
+        ref?: string | ((component: HTMLComponent) => void);
+        className?: string | { toString: () => string };
+        style?: CSSProperties;
+        tabIndex?: number;
+        id?: string;
+    }
+}

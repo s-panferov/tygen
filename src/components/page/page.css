@@ -1,0 +1,8 @@
+.page {
+    display: flex;
+    height: 100%;
+}
+
+.page__package-nav {
+    flex: 0 0 280px
+}

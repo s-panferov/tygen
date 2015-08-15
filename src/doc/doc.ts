@@ -13,19 +13,42 @@ import Symbol = ts.Symbol;
 let fse = require('fs-extra');
 let closest = require('closest-package');
 
-export interface IDocMap {
-    [key: string]: IDoc
+export interface DocMap {
+    [key: string]: Doc
 }
 
-export interface IDocRegistry {
+export interface DocIndex {
     mainPackage: string;
-    files: IDocMap
+    files: DocMap
+}
+
+export interface PackageDef {
+    info: any;
+    path: string;
+}
+
+export interface DocPkgInfo {
+    name: string;
+    version: string;
+    description: string;
+}
+
+export interface Doc {
+    text: string;
+    pkg: DocPkgInfo;
+    fileInfo: DocFileDef;
+}
+
+export interface DocFileDef {
+    relativeToOrigin: string;
+    relativeToPackage: string;
+    metaName: string;
 }
 
 export class DocRegistry {
-    docs: IDocMap = {};
+    docs: DocMap = {};
 
-    addDoc(fileName, doc: Doc) {
+    addDoc(fileName, doc: DocRuntime) {
         this.docs[fileName] = doc;
     }
 
@@ -61,12 +84,7 @@ module.exports = {\n
     }
 }
 
-export interface IPackage {
-    info: any;
-    path: string;
-}
-
-export function extractPackage(fileName: string): IPackage {
+export function extractPackage(fileName: string): PackageDef {
     let pkgJson = closest.sync(path.dirname(fileName));
     return {
         path: path.dirname(pkgJson),
@@ -74,13 +92,9 @@ export function extractPackage(fileName: string): IPackage {
     }
 }
 
-export interface IDocFile {
-    relativeToOrigin: string;
-    relativeToPackage: string;
-    metaName: string;
-}
 
-export function getDocFilePath(fileName: string, pkg: IPackage): IDocFile {
+
+export function getDocFilePath(fileName: string, pkg: PackageDef): DocFileDef {
     let relativeToOrigin = path.relative(process.cwd(), fileName);
 
     let shasum = crypto.createHash('sha1');
@@ -100,24 +114,12 @@ export function getDocFilePath(fileName: string, pkg: IPackage): IDocFile {
     }
 }
 
-export interface IDocPkgInfo {
-    name: string;
-    version: string;
-    description: string;
-}
-
-export interface IDoc {
+class DocRuntime implements Doc {
     text: string;
-    pkg: IDocPkgInfo;
-    fileInfo: IDocFile;
-}
+    pkg: DocPkgInfo;
+    fileInfo: DocFileDef;
 
-class Doc implements IDoc {
-    text: string;
-    pkg: IDocPkgInfo;
-    fileInfo: IDocFile;
-
-    constructor(sourceFile: SourceFile, pkg: IPackage, fileInfo: IDocFile) {
+    constructor(sourceFile: SourceFile, pkg: PackageDef, fileInfo: DocFileDef) {
         this.text = sourceFile.text;
         this.pkg = {
             name: pkg.info.name,
@@ -133,10 +135,10 @@ class Doc implements IDoc {
     }
 }
 
-export function generateDoc(fileName: string, source: SourceFile): Doc {
+export function generateDoc(fileName: string, source: SourceFile): DocRuntime {
     let pkg = extractPackage(fileName);
     let docFilePath = getDocFilePath(fileName, pkg);
 
-    let doc = new Doc(source, pkg, docFilePath);
+    let doc = new DocRuntime(source, pkg, docFilePath);
     return doc;
 }

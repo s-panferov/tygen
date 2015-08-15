@@ -9,10 +9,10 @@ import {
 } from 'tsflux/index';
 
 import {
-    AppStateRecord
+    AppRecord
 } from './state-i';
 
-export type State = AppStateRecord;
+export type State = AppRecord;
 
 import React from 'react';
 import * as actions from './actions';
@@ -21,8 +21,11 @@ import { ActionType } from './actions';
 import { Map, fromJS } from 'immutable';
 import { EventEmitter } from 'events';
 import { Dispatcher as FluxDispatcher } from 'flux';
+import { Service } from './service';
 
-export type Addons = {};
+export type Addons = {
+    service: Service
+};
 export type Action = _Action<ActionType>;
 export type Store<StoreState> = _Store<ActionType, typeof actions, StoreState, State, Addons>;
 export type Flux = _Flux<ActionType, State, typeof actions, Addons>;
@@ -34,9 +37,9 @@ let { Connector, connect, Provider } = createAll<ActionType, ActionCreators, Sta
 export { Connector, connect, Provider };
 export { Map, fromJS };
 
-export function runFlux(stores, initialState): Flux {
+export function runFlux(stores: Store<any>[], initialState: State, addons?: Addons): Flux {
     let ds = new FluxDispatcher();
     let events = new EventEmitter();
 
-    return _runFlux<ActionType, ActionCreators, State, Action, Addons>(stores, initialState, ds, events, actions as any);
+    return _runFlux<ActionType, ActionCreators, State, Action, Addons>(stores, initialState, ds, events, actions as any, addons);
 }

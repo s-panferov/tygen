@@ -1,21 +1,21 @@
-import { IDoc, IDocRegistry, IDocPkgInfo } from './doc/doc';
+import { Doc, DocIndex, DocPkgInfo } from './doc/doc';
 import * as _ from 'lodash';
 import * as path from 'path';
 
 import MemoryFileSystem from 'memory-fs';
 
-export interface IPackageMap {
-    [key: string]: IPackage
+export interface PackageMap {
+    [key: string]: Package
 }
 
-export interface IPackage {
-    info: IDocPkgInfo,
-    files: { [key: string]: IDoc },
-    docs: IDoc[],
+export interface Package {
+    info: DocPkgInfo,
+    files: { [key: string]: Doc },
+    docs: Doc[],
     fs: MemoryFileSystem
 }
 
-interface IFileStructure {
+interface FileStructure {
     currentName: string;
     prevExists: boolean;
     prevPath: string,
@@ -25,19 +25,19 @@ interface IFileStructure {
 }
 
 export class Service {
-    registry: IDocRegistry;
-    packages: IPackageMap;
+    index: DocIndex;
+    packages: PackageMap;
 
-    constructor(registry: IDocRegistry) {
-        this.registry = registry;
+    constructor(registry: DocIndex) {
+        this.index = registry;
         this.packages = readPackages(registry);
     }
 
     getMainPackageName(): string {
-        return this.registry.mainPackage;
+        return this.index.mainPackage;
     }
 
-    getMainPackage(): IPackage {
+    getMainPackage(): Package {
         return this.packages[this.getMainPackageName()]
     }
 
@@ -45,14 +45,14 @@ export class Service {
         return this.packages[pkgName];
     }
 
-    getPackages(): IPackageMap {
+    getPackages(): PackageMap {
         return this.packages;
     }
 }
 
-function readPackages(registry: IDocRegistry): IPackageMap {
-    let packages: IPackageMap = {};
-    _.forEach(registry.files, (doc: IDoc) => {
+function readPackages(registry: DocIndex): PackageMap {
+    let packages: PackageMap = {};
+    _.forEach(registry.files, (doc: Doc) => {
         let pkg;
         if (!packages[doc.pkg.name]) {
             pkg = packages[doc.pkg.name] = <any>{ files: {}, docs: [], fs: new MemoryFileSystem() };
@@ -70,13 +70,13 @@ function readPackages(registry: IDocRegistry): IPackageMap {
     return packages;
 }
 
-export function getFileStructure(pkg: IPackage, targetPath: string): IFileStructure {
+export function getFileStructure(pkg: Package, targetPath: string): FileStructure {
     let dir = pkg.fs.readdirSync(targetPath);
 
     let prevPath = path.dirname(targetPath);
     let prevExists = prevPath !== targetPath;
 
-    let structure: IFileStructure = {
+    let structure: FileStructure = {
         currentName: path.basename(targetPath),
         prevPath,
         prevName: path.basename(prevPath),

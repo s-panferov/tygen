@@ -91,6 +91,7 @@ module.exports = function(options) {
         new TsImmutablePlugin({
             files: [
                 './src/models.ts',
+                './src/state.ts'
             ],
 
             /*

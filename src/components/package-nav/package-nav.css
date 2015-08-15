@@ -1,0 +1,28 @@
+.package-nav {
+    border-right: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.package-nav__package {
+    position: relative;
+    height: 40px;
+}
+
+.package-nav__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    text-transform: uppercase;
+    text-align: center;
+    background-color: #0e70c0;
+}
+
+.package-nav__package {
+    box-sizing: border-box;
+    background-color: #555;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

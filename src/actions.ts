@@ -1,20 +1,20 @@
+import { NavigationRecord } from './state-i';
 
 export enum ActionType {
-    Navigate = <any>"navigate"
+    Navigate = <any>"NAVIGATE"
 }
 
 export interface Action {
     actionType?: ActionType
 }
 
-export interface INavigate {
-    pkg?: string,
-    path?: string
+export interface Navigate extends Action {
+    nav: NavigationRecord
 }
 
-export function navigate(params: INavigate): INavigate {
-    return _.defaults(params, {
+export function navigate(nav: NavigationRecord): Navigate {
+    return {
         actionType: ActionType.Navigate,
-        path: '/'
-    })
+        nav
+    }
 }

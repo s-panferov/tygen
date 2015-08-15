@@ -1,41 +1,14 @@
-// import { Map } from 'immutable';
-//
-// import { IState, IEnv } from '../index';
-// import { Action, INavigate, ActionType } from '../actions';
-//
-// export interface IRawNavState {
-//     pkg: string,
-//     path: string
-// }
-//
-// export interface INavState extends IState {
-//     get(key: 'pkg'): string
-//     get(key: 'path'): string
-//     get(key: string): void
-// }
-//
-// export function navigation(state: IState, action: Action, env: IEnv) {
-//     if (state.isEmpty()) {
-//         return defaultNavigation(env)
-//     }
-//
-//     switch (action.actionType) {
-//         case ActionType.Navigate: return onNavigate(state, <any>action, env);
-//     }
-// }
-//
-// function defaultNavigation(env: IEnv) {
-//     return Map({
-//         pkg: env.service.getMainPackageName(),
-//         path: '/'
-//     })
-// }
-//
-// function onNavigate(state: IState, action: INavigate, env: IEnv) {
-//     return state.update((_val) => {
-//         return Map<string, any>(<IRawNavState>{
-//             pkg: action.pkg,
-//             path: action.path
-//         })
-//     })
-// }
+import { Flux } from '../flux';
+import { Action, ActionType, Navigate } from '../actions';
+import { NavigationRecord } from '../state-i';
+
+export function navigation(state: NavigationRecord, action: Action, flux: Flux): NavigationRecord {
+    switch (action.actionType) {
+        case ActionType.Navigate: return onNavigate(state, action as any, flux);
+    }
+}
+
+
+function onNavigate(state: NavigationRecord, action: Navigate, flux: Flux): NavigationRecord {
+    return action.nav
+}
