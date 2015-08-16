@@ -1,13 +1,20 @@
 .file {
-    color: var(--color-4);
     display: flex;
     align-items: center;
 
     font-weight: lighter;
     transition: all 250ms;
+}
+
+.file_folder {
+    font-weight: normal;
+}
+
+.file_pseudo {
+    color: #ccc;
 
     &:visited {
-        color: var(--color-4);
+        color: #ccc;
     }
 
     &:hover {
@@ -15,6 +22,6 @@
     }
 }
 
-.file_folder {
-    font-weight: normal;
+.file_active {
+    font-weight: bold;
 }

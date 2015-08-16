@@ -6,7 +6,7 @@ import * as path from 'path';
 import { Link } from '../link/link';
 import { File } from '../file/file';
 
-import { NavigationRecord } from '../../state-i';
+import { Navigation, NavigationRecord } from '../../state-i';
 import { Service } from '../../service';
 import { Flux } from '../../flux';
 
@@ -18,7 +18,8 @@ require('./nav.css');
 
 export interface NavProps extends React.CommonAttributes {
     navigation: NavigationRecord;
-    service: Service
+    service: Service;
+    navigate: (nav: Navigation) => void
 }
 
 export interface NavState {}
@@ -31,16 +32,18 @@ export class Nav extends React.Component<NavProps, NavState> {
         return <div { ...props } className={ className }>
             { this.renderLogo() }
             <div className={ navCn('section') }>
-                Navigation
+                { navigation.pkg ? navigation.pkg : 'Packages' }
             </div>
             <div className={ navCn('struct') }>
                 {
-                    this.renderFileItems(
-                        service.getPackage(
-                            navigation.pkg
-                        ),
-                        navigation.path
-                    )
+                    navigation.pkg
+                        ? this.renderFileItems(
+                            service.getPackage(
+                                navigation.pkg
+                            ),
+                            navigation.path
+                        )
+                        : this.renderPkgItems()
                 }
             </div>
         </div>
@@ -56,8 +59,23 @@ export class Nav extends React.Component<NavProps, NavState> {
         )
     }
 
+    renderPkgItems() {
+        let packages = this.props.service.getPackages();
+        return Object.keys(packages).map(pkgName => {
+            return <File
+                pkg={ pkgName }
+                folder={ true }
+                name={ pkgName }
+                path={ '/' }
+                className={ navCn('struct-item') }
+                navigate={ this.props.navigate }
+            />
+        })
+    }
+
     renderFileItems(pkg: Package, targetPath: string) {
         let pkgName = pkg.info.name;
+
         let structure = getFileStructure(pkg, targetPath);
 
         let files = [];
@@ -67,31 +85,23 @@ export class Nav extends React.Component<NavProps, NavState> {
                 <File
                     pkg={ pkgName }
                     pseudo={ true }
+                    folder={ true }
                     name={ structure.prevName || '/' }
                     path={ structure.prevPath }
                     className={ navCn('struct-item') }
+                    navigate={ this.props.navigate }
                 />
             );
         }
-
-        // if (structure.currentName) {
-        //     files.push(
-        //         <File
-        //             pkg={ pkgName }
-        //             folder={ true }
-        //             name={ structure.currentName || '/' }
-        //             path={ structure.currentName || '/' }
-        //         />
-        //     );
-        // }
 
         files = files.concat(structure.folders.map((folder) => {
             return <File
                 pkg={ pkgName }
                 folder={ true }
                 name={ folder }
-                path={ folder }
+                path={ path.join(structure.dirPath, folder) }
                 className={ navCn('struct-item') }
+                navigate={ this.props.navigate }
             />
         }));
 
@@ -99,8 +109,10 @@ export class Nav extends React.Component<NavProps, NavState> {
             return <File
                 pkg={ pkgName }
                 name={ file }
-                path={ path.join(targetPath, file) }
+                active={ structure.isFile && file == structure.currentName }
+                path={ path.join(structure.dirPath, file) }
                 className={ navCn('struct-item') }
+                navigate={ this.props.navigate }
             />
         }));
 

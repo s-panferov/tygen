@@ -5,13 +5,14 @@ import * as path from 'path';
 
 import { File } from '../file/file';
 
-import { NavigationRecord } from '../../state-i';
+import { Navigation, NavigationRecord } from '../../state-i';
 
 let pathCn = block('path');
 require('./path.css');
 
 export interface PathProps extends React.CommonAttributes {
-    navigation: NavigationRecord
+    navigation: NavigationRecord;
+    navigate: (nav: Navigation) => void;
 }
 
 export interface PathState {}
@@ -27,17 +28,24 @@ export class Path extends React.Component<PathProps, PathState> {
                     name='packages'
                     pkg={ null }
                     path={ null }
+                    disabled={ !navigation.pkg }
                     className={ pathCn('item') }
+                    navigate={ this.props.navigate }
                 />
 
-                <File
-                    name={ navigation.pkg }
-                    pkg={ navigation.pkg }
-                    path={ null }
-                    className={ pathCn('item') }
-                />
+                {
+                    navigation.pkg && <File
+                        name={ navigation.pkg }
+                        pkg={ navigation.pkg }
+                        path={ '/' }
+                        className={ pathCn('item') }
+                        navigate={ this.props.navigate }
+                    />
+                }
 
-                { this.renderPath(navigation) }
+                {
+                    navigation.pkg && this.renderPath(navigation)
+                }
             </div>
         )
     }
@@ -46,13 +54,18 @@ export class Path extends React.Component<PathProps, PathState> {
         let sections = [];
         let pathSections = compact(navigation.path.split(path.sep));
 
-        return pathSections.map(item => {
+        return pathSections.map((item, i) => {
+            let before = pathSections.slice(0, i + 1);
+            before.unshift('/');
+            let fullPath = path.join.apply(path, before);
             return (
                 <File
                     name={ item }
-                    path='item'
                     pkg={ navigation.pkg }
+                    path={ fullPath }
                     className={ pathCn('item') }
+                    disabled={ i == pathSections.length - 1 }
+                    navigate={ this.props.navigate }
                 />
             )
         })

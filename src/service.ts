@@ -18,10 +18,12 @@ export interface Package {
 interface FileStructure {
     currentName: string;
     prevExists: boolean;
+    dirPath: string;
     prevPath: string,
     prevName: string,
     files: string[],
-    folders: string[]
+    folders: string[],
+    isFile: boolean;
 }
 
 export class Service {
@@ -71,18 +73,30 @@ function readPackages(registry: DocIndex): PackageMap {
 }
 
 export function getFileStructure(pkg: Package, targetPath: string): FileStructure {
-    let dir = pkg.fs.readdirSync(targetPath);
+    var stat = pkg.fs.statSync(targetPath);
 
-    let prevPath = path.dirname(targetPath);
-    let prevExists = prevPath !== targetPath;
+    var dirPath: string;
+    var isFile = false;
+    if (stat.isDirectory()) {
+        dirPath = targetPath;
+    } else {
+        dirPath = path.dirname(targetPath);
+        isFile = true;
+    }
+
+    let dir = pkg.fs.readdirSync(dirPath);
+    let prevPath = path.dirname(dirPath);
+    let prevExists = prevPath !== dirPath;
 
     let structure: FileStructure = {
         currentName: path.basename(targetPath),
+        isFile,
+        dirPath,
         prevPath,
         prevName: path.basename(prevPath),
         prevExists,
-        files: dir.filter((item) => pkg.fs.statSync(path.join(targetPath, item)).isFile()),
-        folders: dir.filter((item) => pkg.fs.statSync(path.join(targetPath, item)).isDirectory()),
+        files: dir.filter((item) => pkg.fs.statSync(path.join(dirPath, item)).isFile()),
+        folders: dir.filter((item) => pkg.fs.statSync(path.join(dirPath, item)).isDirectory()),
     };
 
     return structure;

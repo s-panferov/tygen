@@ -37,16 +37,22 @@ export class Page extends React.Component<PageProps, PageState> {
 
     render() {
         let { navigation } = this.props.data;
+        let { navigate } = this.props.flux.actions;
         return (
             <div className={ pageCn() }>
                 <Nav
                     className={ pageCn('package-nav') }
                     navigation={ navigation }
+                    navigate={ navigate }
                     service={ this.props.flux.addons.service }
                 />
                 <div className={ pageCn('content') }>
                     <Search className={ pageCn('search') } />
-                    <Path navigation={ navigation } className={ pageCn('path') } />
+                    <Path
+                        navigation={ navigation }
+                        navigate={ navigate }
+                        className={ pageCn('path') }
+                    />
                 </div>
             </div>
         )
