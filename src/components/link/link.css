@@ -1,14 +1,18 @@
 .link {
-    color: white;
+    text-transform: none;
     text-decoration: none;
+    cursor: pointer;
 
-    &:hover {
-        color: white;
-        text-decoration: none;
-    }
+    color: var(--color-4);
+
+    font-weight: lighter;
+    transition: all 250ms;
 
     &:visited {
-        color: white;
-        text-decoration: none;
+        color: var(--color-4);
+    }
+
+    &:hover {
+        color: var(--color-3);
     }
 }

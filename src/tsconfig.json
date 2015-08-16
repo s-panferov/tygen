@@ -33,9 +33,11 @@
         "./typings/react-dom.d.ts",
         "./components/file/file.tsx",
         "./components/link/link.tsx",
+        "./components/nav/nav.tsx",
         "./components/navigator/navigator.tsx",
-        "./components/package-nav/package-nav.tsx",
         "./components/page/page.tsx",
+        "./components/path/path.tsx",
+        "./components/search/search.tsx",
         "./flux.tsx",
         "./index.tsx",
         "../node_modules/typescript/lib/typescriptServices.d.ts"

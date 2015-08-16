@@ -1,7 +1,8 @@
 module.exports = {
-    'outcome-color': 'rgb(255, 66, 31)',
-    'income-color': 'rgb(108, 214, 19)',
-    'balance-color': 'rgb(255, 213, 0)',
-    'debt-color': 'rgb(218, 224, 230)',
-    'grey-color': 'rgb(218, 224, 230)'
+    '--color-1': '#25283D',
+    '--color-2': '#FEFFFE',
+    '--color-3': '#EE4266',
+    '--color-4': '#547AA5',
+    '--color-5': '#BAEF94',
+    '--light-panel': '#eee'
 };

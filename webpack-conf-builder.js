@@ -4,6 +4,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var _ = require('lodash-node');
 var TsImmutablePlugin = require('./node_modules/tsimmutable/dist/plugin.js');
 var SplitByPathPlugin = require('webpack-split-by-path');
+var cssvariables = require('postcss-css-variables');
 
 module.exports = function(options) {
     var isTest = options.isTest;
@@ -184,7 +185,7 @@ module.exports = function(options) {
             require('postcss-nested'),
             require('autoprefixer'),
             require('lost'),
-            require('postcss-custom-properties')({
+            cssvariables({
                 variables: require('./src/css-variables')
             })
         ];

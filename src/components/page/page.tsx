@@ -5,18 +5,21 @@ import { Record } from 'immutable';
 import { Doc, DocMap } from '../../doc/doc';
 import { Service, PackageMap } from '../../service';
 
-import { connect } from '../../flux';
+import { connect, Flux } from '../../flux';
 import { NavigationRecord } from '../../state-i';
 
 // import { Layout } from '../layout/layout';
 // import { Navigator } from '../navigator/navigator';
-import { PackageNav } from '../package-nav/package-nav';
+import { Nav } from '../nav/nav';
+import { Search } from '../search/search';
+import { Path } from '../path/path';
 
 let pageCn = block('page');
 require('./page.css');
 
 export interface PageProps extends React.CommonAttributes {
     data?: PageData
+    flux?: Flux
 }
 
 export interface PageState {}
@@ -33,9 +36,18 @@ export class PageData extends Record({
 export class Page extends React.Component<PageProps, PageState> {
 
     render() {
+        let { navigation } = this.props.data;
         return (
             <div className={ pageCn() }>
-                <PackageNav className={ pageCn('package-nav') } />
+                <Nav
+                    className={ pageCn('package-nav') }
+                    navigation={ navigation }
+                    service={ this.props.flux.addons.service }
+                />
+                <div className={ pageCn('content') }>
+                    <Search className={ pageCn('search') } />
+                    <Path navigation={ navigation } className={ pageCn('path') } />
+                </div>
             </div>
         )
     }

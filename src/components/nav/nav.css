@@ -1,0 +1,48 @@
+.nav {
+    box-sizing: border-box;
+    padding-left: 20px;
+}
+
+.nav__package {
+    position: relative;
+    height: 40px;
+}
+
+.nav__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: lighter;
+    text-transform: uppercase;
+    height: 40px;
+    font-size: 15px;
+    text-align: center;
+    color: #aaa;
+
+    border-bottom: 1px solid #ccc;
+}
+
+.nav__section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.nav__package {
+    /*text-shadow: 1px 1px 1px #555;*/
+    color: #444;
+    box-sizing: border-box;
+    background-color: var(--color-5);
+
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 30px;
+}
+
+.nav__struct-item {
+    height: 26px;
+}
