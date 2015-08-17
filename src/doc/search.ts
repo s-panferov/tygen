@@ -1,2 +1,2 @@
-import * as lunr from 'lunr';
-import * as fuse from 'fuse';
+import lunr from 'lunr';
+import fuse from 'fuse';
