@@ -37,6 +37,7 @@
     "json-loader": "^0.5.2",
     "lodash-node": "^3.10.1",
     "lost": "^6.5.0",
+    "lunr": "^0.5.12",
     "memory-fs": "^0.2.0",
     "mock-fs": "^3.0.0",
     "node-libs-browser": "^0.5.2",

@@ -3,6 +3,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as crypto from 'crypto';
 
+import * as lunr from 'lunr';
+
 import SyntaxKind = ts.SyntaxKind;
 import TypeChecker = ts.TypeChecker;
 import SourceFile = ts.SourceFile;
@@ -91,8 +93,6 @@ export function extractPackage(fileName: string): PackageDef {
         info: JSON.parse(fs.readFileSync(pkgJson).toString())
     }
 }
-
-
 
 export function getDocFilePath(fileName: string, pkg: PackageDef): DocFileDef {
     let relativeToOrigin = path.relative(process.cwd(), fileName);

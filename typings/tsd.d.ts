@@ -4,3 +4,4 @@
 /// <reference path="react/react-addons.d.ts" />
 /// <reference path="lodash/lodash.d.ts" />
 /// <reference path="flux/flux.d.ts" />
+/// <reference path="lunr/lunr.d.ts" />
