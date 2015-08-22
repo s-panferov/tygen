@@ -2,9 +2,12 @@
   "name": "docscript",
   "version": "0.0.0",
   "description": "Documentation generator for TypeScript built with ReactJS",
-  "main": "index.js",
+  "main": "docscript/dist/docscript.js",
   "scripts": {
-    "dev": "node ./dev-server.js"
+    "dev": "node ./dev-server.js",
+    "build": "./node_modules/.bin/webpack",
+    "dev-lib": "./node_modules/.bin/webpack --config webpack.library.config.js --progress --watch",
+    "build-lib": "./node_modules/.bin/webpack --config webpack.library.config.js --progress"
   },
   "repository": {
     "type": "git",

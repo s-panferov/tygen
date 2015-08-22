@@ -1,3 +1,5 @@
+/// <reference path="../defines.d.ts" />
+
 import * as _ from 'lodash';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -71,11 +73,11 @@ export function getDocFilePath(fileName: string, pkg: PackageDef): DocFileDef {
     let metaName = shasum.digest('hex') + '.json';
     let relativeToPackage = path.relative(pkg.path, fileName);
 
-    let withPackage = pkg.info.name + '://' + relativeToPackage;
-
     if (!/^(\.|\/)/.test(relativeToPackage)) {
         relativeToPackage = '/' + relativeToPackage
     }
+
+    let withPackage = pkg.info.name + '://' + relativeToPackage;
 
     return {
         metaName,
