@@ -11,7 +11,8 @@ import { Action } from './actions';
 import { Provider, runFlux } from './flux';
 import { Page } from './components/page/page';
 import { navigation } from './stores/navigation';
-import { AppRecord } from './state-i';
+import { search } from './stores/search';
+import { AppR } from './state-i';
 import allRecords from './records';
 
 import * as _ from 'lodash';
@@ -27,13 +28,19 @@ let service = new Service(loadFiles() as any);
 export function run() {
     $(() => {
         let stores = [
-            navigation
+            navigation,
+            search
         ] as any;
 
-        let initialState = AppRecord.fromJS({
+        let initialState = AppR.fromJS({
             navigation: {
                 pkg: service.getMainPackageName(),
                 path: '/'
+            },
+            search: {
+                query: '',
+                docs: [],
+                hasResults: false
             }
         }, allRecords);
 

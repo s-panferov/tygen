@@ -86,3 +86,7 @@ declare module __React {
         id?: string;
     }
 }
+
+declare interface Dictionary<T> {
+    [key: string]: T
+}

@@ -5,13 +5,13 @@ import * as path from 'path';
 
 import { File } from '../file/file';
 
-import { Navigation, NavigationRecord } from '../../state-i';
+import { Navigation, NavigationR } from '../../state-i';
 
 let pathCn = block('path');
 require('./path.css');
 
 export interface PathProps extends React.CommonAttributes {
-    navigation: NavigationRecord;
+    navigation: NavigationR;
     navigate: (nav: Navigation) => void;
 }
 
@@ -50,7 +50,7 @@ export class Path extends React.Component<PathProps, PathState> {
         )
     }
 
-    renderPath(navigation: NavigationRecord) {
+    renderPath(navigation: NavigationR) {
         let sections = [];
         let pathSections = compact(navigation.path.split(path.sep));
 

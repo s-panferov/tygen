@@ -6,18 +6,18 @@ import * as path from 'path';
 import { Link } from '../link/link';
 import { File } from '../file/file';
 
-import { Navigation, NavigationRecord } from '../../state-i';
+import { PackageR, Navigation, NavigationR } from '../../state-i';
 import { Service } from '../../service';
 import { Flux } from '../../flux';
 
 import {  } from '../../doc/doc';
-import { Package, getFileStructure } from '../../service';
+import { getFileStructure } from '../../service';
 
 let navCn = block('nav');
 require('./nav.css');
 
 export interface NavProps extends React.CommonAttributes {
-    navigation: NavigationRecord;
+    navigation: NavigationR;
     service: Service;
     navigate: (nav: Navigation) => void
 }
@@ -61,7 +61,7 @@ export class Nav extends React.Component<NavProps, NavState> {
 
     renderPkgItems() {
         let packages = this.props.service.getPackages();
-        return Object.keys(packages).map(pkgName => {
+        return packages.map((pkg, pkgName) => {
             return <File
                 pkg={ pkgName }
                 folder={ true }
@@ -70,10 +70,10 @@ export class Nav extends React.Component<NavProps, NavState> {
                 className={ navCn('struct-item') }
                 navigate={ this.props.navigate }
             />
-        })
+        }).toJS();
     }
 
-    renderFileItems(pkg: Package, targetPath: string) {
+    renderFileItems(pkg: PackageR, targetPath: string) {
         let pkgName = pkg.info.name;
 
         let structure = getFileStructure(pkg, targetPath);

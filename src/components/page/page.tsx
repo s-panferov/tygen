@@ -2,11 +2,10 @@ import React from 'react';
 import block from 'bem-cn';
 import { Record } from 'immutable';
 
-import { Doc, DocMap } from '../../doc/doc';
-import { Service, PackageMap } from '../../service';
+import { Service } from '../../service';
 
 import { connect, Flux } from '../../flux';
-import { NavigationRecord } from '../../state-i';
+import { NavigationR } from '../../state-i';
 
 // import { Layout } from '../layout/layout';
 // import { Navigator } from '../navigator/navigator';
@@ -27,7 +26,7 @@ export interface PageState {}
 export class PageData extends Record({
     navigation: null
 }) {
-    navigation: NavigationRecord
+    navigation: NavigationR
 }
 
 @connect(PageData, (state, appState) => {

@@ -9,10 +9,10 @@ import {
 } from 'tsflux/index';
 
 import {
-    AppRecord
+    AppR
 } from './state-i';
 
-export type State = AppRecord;
+export type State = AppR;
 
 import React from 'react';
 import * as actions from './actions';

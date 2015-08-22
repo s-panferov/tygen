@@ -3,8 +3,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as crypto from 'crypto';
 
-import * as lunr from 'lunr';
-
 import SyntaxKind = ts.SyntaxKind;
 import TypeChecker = ts.TypeChecker;
 import SourceFile = ts.SourceFile;
@@ -12,43 +10,13 @@ import Node = ts.Node;
 import Type = ts.Type;
 import Symbol = ts.Symbol;
 
+import { PackageDef, DocPkgInfo, Doc, DocFileDef } from '../state';
+
 let fse = require('fs-extra');
 let closest = require('closest-package');
 
-export interface DocMap {
-    [key: string]: Doc
-}
-
-export interface DocIndex {
-    mainPackage: string;
-    files: DocMap
-}
-
-export interface PackageDef {
-    info: any;
-    path: string;
-}
-
-export interface DocPkgInfo {
-    name: string;
-    version: string;
-    description: string;
-}
-
-export interface Doc {
-    text: string;
-    pkg: DocPkgInfo;
-    fileInfo: DocFileDef;
-}
-
-export interface DocFileDef {
-    relativeToOrigin: string;
-    relativeToPackage: string;
-    metaName: string;
-}
-
 export class DocRegistry {
-    docs: DocMap = {};
+    docs: Dictionary<Doc> = {};
 
     addDoc(fileName, doc: DocRuntime) {
         this.docs[fileName] = doc;
@@ -103,14 +71,16 @@ export function getDocFilePath(fileName: string, pkg: PackageDef): DocFileDef {
     let metaName = shasum.digest('hex') + '.json';
     let relativeToPackage = path.relative(pkg.path, fileName);
 
+    let withPackage = pkg.info.name + '://' + relativeToPackage;
+
     if (!/^(\.|\/)/.test(relativeToPackage)) {
         relativeToPackage = '/' + relativeToPackage
     }
 
     return {
         metaName,
-        relativeToOrigin,
-        relativeToPackage
+        relativeToPackage,
+        withPackage
     }
 }
 

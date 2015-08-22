@@ -107,6 +107,7 @@ module.exports = function(options) {
             emitMarkers: true,
             emitEmptyRecords: true,
             emitTypedMethods: true,
+            recordSuffix: 'R',
             defaultEmptyType: 'null'
         })
       ]

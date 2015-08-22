@@ -22,3 +22,18 @@
         }
     }
 }
+
+.search__results {
+    height: 0;
+    position: absolute;
+    background: #f0f0f0;
+    z-index: 1;
+    left: 20px;
+    right: 20px;
+
+    transition: all 250ms ease;
+}
+
+.search__results_expanded {
+    height: 100%;
+}

@@ -32,12 +32,12 @@
     "file-loader": "^0.8.4",
     "flux": "^2.0.3",
     "fs-extra": "^0.23.1",
+    "fuzzaldrin": "^2.1.0",
     "html-webpack-plugin": "^1.5.2",
     "immutable": "^3.7.4",
     "json-loader": "^0.5.2",
     "lodash-node": "^3.10.1",
     "lost": "^6.5.0",
-    "lunr": "^0.5.12",
     "memory-fs": "^0.2.0",
     "mock-fs": "^3.0.0",
     "node-libs-browser": "^0.5.2",
@@ -60,7 +60,6 @@
     "webpack-split-by-path": "0.0.2"
   },
   "dependencies": {
-    "fuse": "^0.4.0",
     "jquery": "^2.1.4"
   }
 }
