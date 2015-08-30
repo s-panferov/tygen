@@ -8,7 +8,8 @@ export enum DocItemType {
     TypeParameter = 'TypeParameter' as any,
     CallSignature = 'CallSignature' as any,
     TypeConstrint = 'TypeConstraint' as any,
-    Parameter = 'Parameter' as any
+    Parameter = 'Parameter' as any,
+    Function = 'Function' as any
 }
 
 export interface DocItem {
