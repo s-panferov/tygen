@@ -24,6 +24,8 @@
         "./doc/gen.ts",
         "./doc/interface.ts",
         "./doc/items.ts",
+        "./doc/test/iface-property-func.test.ts",
+        "./doc/test/iface-property-func.ts",
         "./doc/test/iface.test.ts",
         "./doc/test/iface.ts",
         "./doc/tools.ts",

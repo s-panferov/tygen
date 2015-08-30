@@ -1,3 +1,3 @@
 interface Test {
-    name: string
+    name?: string
 }

@@ -16,12 +16,12 @@ import { TypeDoc, visitType } from './type';
 
 import { CoreType, getCoreType, inspect } from './tools';
 
-interface PropertyDoc extends DocItem {
+export interface PropertyDoc extends DocItem {
     optional: boolean;
     type: TypeDoc;
 }
 
-interface InterfaceDoc extends DocItem {
+export interface InterfaceDoc extends DocItem {
     properties: PropertyDoc[];
 }
 
@@ -59,8 +59,6 @@ export function visitInterface(type: InterfaceType, ctx: DocContext): InterfaceD
         comment: '',
         properties
     }
-
-    inspect(DocItem);
 
     return DocItem;
 }

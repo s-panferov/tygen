@@ -154,7 +154,6 @@ export function _compile(fileNames: string[], options: typescript.CompilerOption
     var allDiagnostics = typescript.getPreEmitDiagnostics(program);
 
     allDiagnostics.forEach(diagnostic => {
-        console.log(diagnostic)
         if (diagnostic.file) {
             var { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
         }
