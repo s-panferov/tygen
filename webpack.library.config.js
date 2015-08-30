@@ -31,6 +31,8 @@ var config = {
     output: {
         path: path.join(__dirname, 'dist'),
         filename: 'docscript.js',
+        library: 'docscript',
+        libraryTarget: 'commonjs2',
     },
 
     resolveLoader: {
@@ -66,11 +68,12 @@ var config = {
         }]
     },
 
-    library: 'docscript',
-    libraryTarget: 'commonjs2',
     externals: nodeModules,
 
-    plugins: []
+    plugins: [
+        new webpack.BannerPlugin('require("source-map-support").install();',
+            { raw: true, entryOnly: false })
+    ]
 };
 
 if (isProduction) {

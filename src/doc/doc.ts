@@ -1,32 +1,95 @@
 /// <reference path="../defines.d.ts" />
 
+require('source-map-support').install();
+
 import * as _ from 'lodash';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as crypto from 'crypto';
 
-import SyntaxKind = ts.SyntaxKind;
-import TypeChecker = ts.TypeChecker;
-import SourceFile = ts.SourceFile;
-import Node = ts.Node;
-import Type = ts.Type;
-import Symbol = ts.Symbol;
-
 import { PackageDef, DocPkgInfo, Doc, DocFileDef } from '../state';
+import { processSourceFile } from './gen';
+import { DocItem } from './items';
+
+import {
+    TypeChecker,
+    Program,
+    SourceFile
+} from 'typescript';
+
+import * as typescript from 'typescript';
 
 let fse = require('fs-extra');
 let closest = require('closest-package');
 
-export class DocRegistry {
-    docs: Dictionary<Doc> = {};
+export class DocContext {
+    docs: Dictionary<DocRuntime> = {};
+    ts = typescript;
+    checker: TypeChecker = null;
+    program: Program;
 
-    addDoc(fileName, doc: DocRuntime) {
+    doc: DocRuntime;
+
+    setProgram(program: Program) {
+        this.program = program;
+        this.checker = this.program.getTypeChecker();
+    }
+
+    addDoc(fileName, sourceFile: SourceFile) {
+        let doc = this.generateDoc(fileName, sourceFile);
         this.docs[fileName] = doc;
+    }
+
+    generateDoc(fileName: string, source: SourceFile): DocRuntime {
+        let pkg = extractPackage(fileName);
+        let docFilePath = getDocFilePath(fileName, pkg);
+        let doc = new DocRuntime(source, pkg, docFilePath);
+
+        this.doc = doc;
+        processSourceFile(source, this);
+        this.doc = null;
+
+        return doc;
+    }
+
+    getDoc(fileName): DocRuntime {
+        return this.docs[fileName];
+    }
+}
+
+export class DocRuntime implements Doc {
+    text: string;
+    pkg: DocPkgInfo;
+    fileInfo: DocFileDef;
+    items: DocItem[] = [];
+
+    constructor(sourceFile: SourceFile, pkg: PackageDef, fileInfo: DocFileDef) {
+        this.text = sourceFile.text;
+        this.pkg = {
+            name: pkg.info.name,
+            version: pkg.info.version,
+            description: pkg.info.description,
+        };
+
+        this.fileInfo = fileInfo;
+    }
+
+    toJSON() {
+        let { text, pkg, fileInfo } = this;
+        return { pkg, fileInfo, text };
+    }
+}
+
+export class DocWriter {
+    context: DocContext;
+
+    constructor(context: DocContext) {
+        this.context = context;
     }
 
     writeDocs(dir: string) {
         fse.ensureDirSync(dir);
-        _.forEach(this.docs, (doc) => {
+        _.forEach(this.context.docs, (doc) => {
             let metaPath = path.join(dir, doc.fileInfo.metaName);
             fs.writeFileSync(metaPath, JSON.stringify(doc, null, 4));
         });
@@ -41,7 +104,7 @@ module.exports = {\n
     files: {
         `;
 
-        _.forEach(this.docs, (doc) => {
+        _.forEach(this.context.docs, (doc) => {
             buf += `    '${doc.fileInfo.metaName}': require('./${ doc.fileInfo.metaName }'),\n`
         });
 
@@ -86,31 +149,35 @@ export function getDocFilePath(fileName: string, pkg: PackageDef): DocFileDef {
     }
 }
 
-class DocRuntime implements Doc {
-    text: string;
-    pkg: DocPkgInfo;
-    fileInfo: DocFileDef;
+export function _compile(fileNames: string[], options: typescript.CompilerOptions): typescript.Program {
+    var program = typescript.createProgram(fileNames, options);
+    var allDiagnostics = typescript.getPreEmitDiagnostics(program);
 
-    constructor(sourceFile: SourceFile, pkg: PackageDef, fileInfo: DocFileDef) {
-        this.text = sourceFile.text;
-        this.pkg = {
-            name: pkg.info.name,
-            version: pkg.info.version,
-            description: pkg.info.description,
-        };
-        this.fileInfo = fileInfo;
-    }
+    allDiagnostics.forEach(diagnostic => {
+        console.log(diagnostic)
+        if (diagnostic.file) {
+            var { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+        }
+        var message = typescript.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+        console.log(`${diagnostic.file && diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
+    });
 
-    toJSON() {
-        let { text, pkg, fileInfo } = this;
-        return { pkg, fileInfo, text };
-    }
+    return program;
 }
 
-export function generateDoc(fileName: string, source: SourceFile): DocRuntime {
-    let pkg = extractPackage(fileName);
-    let docFilePath = getDocFilePath(fileName, pkg);
+export function generateFiles(fileNames: string[]): DocContext {
+    let ctx = new DocContext();
+    let program = _compile(fileNames, { target: typescript.ScriptTarget.Latest });
 
-    let doc = new DocRuntime(source, pkg, docFilePath);
-    return doc;
+    ctx.setProgram(program);
+
+    fileNames.forEach(fileName => {
+        ctx.addDoc(fileName, program.getSourceFile(fileName));
+    })
+
+    return ctx;
+}
+
+export function generateFile(fileName: string): DocRuntime {
+    return generateFiles([ fileName ]).getDoc(fileName);
 }

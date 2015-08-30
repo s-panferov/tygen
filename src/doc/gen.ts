@@ -1,34 +1,39 @@
-//import SyntaxKind = ts.SyntaxKind;
-//import TypeChecker = ts.TypeChecker;
-//import SourceFile = ts.SourceFile;
-//
-//import { Doc } from './doc';
-//
-//interface VisitContext {
-//    typeChecker: TypeChecker;
-//    tsInst: typeof ts;
-//    doc: Doc
-//}
-//
-//export function processSourceFile(source: SourceFile, ctx: VisitContext) {
-//    ctx.doc.sourceFile = {
-//        fileName: source.fileName,
-//        text: source.fileName,
-//        moduleName: source.moduleName,
-//        languageVersion: source.languageVersion
-//    };
-//
-//    function visitNode(node: Node) {
-//        switch (node.kind) {
-//            case SyntaxKind.InterfaceDeclaration:
-//                visitInterface(node, ctx)
-//        }
-//        ctx.tsInst.forEachChild(node, visitNode);
-//    }
-//    visitNode(source);
-//}
-//
-//export function visitInterface(node: Node, ctx: VisitContext) {
-//    ctx.doc.addType(ctx.typeChecker.getTypeAtLocation(node))
-//}
-//
+/// <reference path="../../node_modules/typescript/lib/typescript.d.ts" />
+
+import {
+    InterfaceDeclaration,
+    SyntaxKind,
+    TypeChecker,
+    SourceFile,
+    Symbol,
+    Node,
+    Type,
+    TypeFlags,
+    SymbolFlags
+} from 'typescript';
+
+import * as typescript from 'typescript';
+
+import { DocRuntime, DocContext } from './doc';
+import { visitInterface } from './interface';
+import { DocItem } from './items';
+
+export function processSourceFile(source: SourceFile, ctx: DocContext) {
+    source.statements.forEach(statement => {
+        ctx.doc.items.push(
+            visitType(ctx.checker.getTypeAtLocation(statement), ctx)
+        )
+    });
+}
+
+export function visitType(type: Type, ctx: DocContext): DocItem {
+    if (type.flags & TypeFlags.Interface) {
+        return visitInterface(type as any, ctx)
+    }
+}
+
+export function visitSymbol(symbol: Symbol, ctx: DocContext) {
+    // if (symbol.flags & SymbolFlags.) {
+
+    // }
+}

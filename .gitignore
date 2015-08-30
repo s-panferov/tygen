@@ -4,3 +4,6 @@ dist
 .docs
 .loader
 .awcache
+.tscache
+/test
+.baseDir.ts

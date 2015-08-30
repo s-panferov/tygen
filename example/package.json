@@ -1,0 +1,15 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel": "^5.8.21",
+    "webpack": "^1.11.0"
+  }
+}
