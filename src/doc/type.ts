@@ -17,8 +17,26 @@ import * as _ from 'lodash';
 import { DocContext } from './doc';
 
 export interface TypeDoc extends DocItem {
+
     coreType?: CoreType;
 }
+
+export interface Signatures {
+    callSignatures?: CallSignatureDoc[];
+    constructSignatures?: CallSignatureDoc[];
+}
+
+export interface IndexDoc {
+    keyName: string;
+    type: TypeDoc;
+}
+
+export interface Index {
+    stringIndex: IndexDoc;
+    numberIndex: IndexDoc;
+}
+
+export interface AnonymousTypeDoc extends TypeDoc, Signatures { }
 
 export interface TypeParameterDoc extends DocItem {
     constraint: TypeDoc
@@ -30,8 +48,7 @@ export interface CallSignatureDoc extends DocItem {
     returnType: TypeDoc;
 }
 
-export interface TypeLiteralDoc extends DocItem {
-    callSignatures: CallSignatureDoc[]
+export interface TypeLiteralDoc extends DocItem, Signatures {
 }
 
 export interface ParameterDoc extends DocItem {
@@ -54,9 +71,9 @@ export function visitType(type: Type, ctx: DocContext): TypeDoc {
         return visitTypeLiteral(type, ctx);
     }
 
-    // if (type.flags & TypeFlags.ObjectType) {
-    //     return visitObjectType(type as ObjectType, ctx);
-    // }
+    if (type.flags & TypeFlags.Anonymous) {
+        return visitAnonymousType(type, ctx);
+    }
 
     let coreType = getCoreType(type);
 
@@ -67,6 +84,14 @@ export function visitType(type: Type, ctx: DocContext): TypeDoc {
     }
 
     return typeDoc;
+}
+
+export function visitAnonymousType(type: Type, ctx: DocContext): AnonymousTypeDoc  {
+    return {
+        itemType: DocItemType.AnonymousType,
+        callSignatures: getCallSignatures(type, ctx),
+        constructSignatures: getConstructSignatures(type, ctx)
+    };
 }
 
 export function visitUnionOrIntersectionType(type: UnionOrIntersectionType, ctx: DocContext): UnionOrIntersectionTypeDoc {
@@ -83,13 +108,21 @@ export function visitObjectType(type: ObjectType, ctx: DocContext): any {
     return null
 }
 
-export function visitTypeLiteral(type: Type, ctx: DocContext): TypeLiteralDoc {
-    let callSignatures = (type.getCallSignatures() || [])
+export function getCallSignatures(type: Type, ctx: DocContext): CallSignatureDoc[] {
+    return (type.getCallSignatures() || [])
         .map(signature => visitCallSignature(signature, ctx))
+}
 
+export function getConstructSignatures(type: Type, ctx: DocContext): CallSignatureDoc[] {
+    return (type.getConstructSignatures() || [])
+        .map(signature => visitCallSignature(signature, ctx))
+}
+
+export function visitTypeLiteral(type: Type, ctx: DocContext): TypeLiteralDoc {
     return {
         itemType: DocItemType.TypeLiteral,
-        callSignatures
+        constructSignatures: getConstructSignatures(type, ctx),
+        callSignatures: getCallSignatures(type, ctx)
     }
 }
 
@@ -128,5 +161,17 @@ export function visitParameter(parameter: Symbol, ctx: DocContext): ParameterDoc
         rest: !!parameterDeclaration.dotDotDotToken,
         type: visitType(ctx.checker.getTypeAtLocation(parameter.valueDeclaration), ctx),
         initializer: null
+    }
+}
+
+export function visitIndexType(type: Type, indexType: Type, ctx: DocContext): IndexDoc {
+    if (indexType) {
+        return {
+            // TODO keyName
+            keyName: '',
+            type: visitType(indexType, ctx)
+        }
+    } else {
+        return null;
     }
 }

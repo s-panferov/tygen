@@ -1,4 +1,4 @@
-/// <reference path="../../node_modules/typescript/lib/typescript.d.ts" />
+/// <reference path="../../node_modules/typescript/lib/typescriptServices.d.ts"/>
 
 import {
     InterfaceDeclaration,
@@ -7,6 +7,7 @@ import {
     SourceFile,
     Symbol,
     Node,
+    NodeFlags,
     Type,
     TypeFlags,
     SymbolFlags,

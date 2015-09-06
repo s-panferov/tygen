@@ -12,31 +12,40 @@ import {
 import { DocContext } from './doc';
 import { DocItem, DocItemType } from './items';
 import { visitSymbol } from './gen';
-import { TypeDoc, visitType } from './type';
+import {
+    TypeDoc, visitType, CallSignatureDoc,
+    visitCallSignature, getCallSignatures,
+    Index, IndexDoc, visitIndexType, Signatures
+} from './type';
 
 import { CoreType, getCoreType, inspect } from './tools';
 
-export interface PropertyDoc extends DocItem {
+export interface InterfacePropertyDoc extends DocItem {
     optional: boolean;
+    method: boolean;
     type: TypeDoc;
 }
 
-export interface InterfaceDoc extends DocItem {
-    properties: PropertyDoc[];
+export interface InterfaceDoc extends DocItem, Signatures, Index {
+    properties: InterfacePropertyDoc[];
+    apparentProperties: InterfacePropertyDoc[];
 }
 
-export function visitInterfaceApparentProperty(symbol: Symbol, ctx: DocContext): PropertyDoc {
+export function visitInterfaceProperty(symbol: Symbol, ctx: DocContext): InterfacePropertyDoc {
     let name = symbol.getName();
     let value = symbol.valueDeclaration as PropertyDeclaration;
     let optional = !!value.questionToken;
-    let type = ctx.checker.getTypeAtLocation(value.type);
+    let method = !!(symbol.flags & SymbolFlags.Method);
+
+    let type = ctx.checker.getTypeAtLocation(value);
     let typeDoc = visitType(type, ctx);
 
     let propertyDoc = {
         itemType: DocItemType.Property,
         name,
         optional,
-        type: typeDoc
+        method,
+        type: typeDoc,
     }
 
     return propertyDoc;
@@ -48,8 +57,23 @@ export function visitInterface(type: InterfaceType, ctx: DocContext): InterfaceD
     let name = symbol.name;
     let comment = symbol.getDocumentationComment();
 
-    let properties = type.getApparentProperties().map((property) => {
-        return visitInterfaceApparentProperty(property, ctx)
+    // FIXME too dirty in debug output
+    // let apparentProperties = (type.getApparentProperties() || []).map((property) => {
+    //     return visitInterfaceProperty(property, ctx)
+    // });
+
+    let apparentProperties = [];
+
+    let properties = (type.getProperties() || []).map((property) => {
+        return visitInterfaceProperty(property, ctx)
+    });
+
+    let callSignatures = (type.getCallSignatures() || []).map((signature) => {
+        return visitCallSignature(signature, ctx);
+    });
+
+    let constructSignatures = (type.getConstructSignatures() || []).map((signature) => {
+        return visitCallSignature(signature, ctx);
     });
 
     let DocItem: InterfaceDoc = {
@@ -57,7 +81,12 @@ export function visitInterface(type: InterfaceType, ctx: DocContext): InterfaceD
         itemType: DocItemType.Interface,
         name,
         comment: '',
-        properties
+        apparentProperties,
+        properties,
+        callSignatures,
+        constructSignatures,
+        stringIndex: visitIndexType(type, type.getStringIndexType(), ctx),
+        numberIndex: visitIndexType(type, type.getNumberIndexType(), ctx)
     }
 
     return DocItem;

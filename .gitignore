@@ -8,3 +8,4 @@ dist
 /test
 .baseDir.ts
 tscommand*
+NOTES.md
