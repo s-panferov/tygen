@@ -9,3 +9,4 @@ dist
 .baseDir.ts
 tscommand*
 NOTES.md
+/tmp/*
