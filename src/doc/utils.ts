@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import * as crypto from 'crypto';
+import * as _ from 'lodash';
 
 import { Package, FileInfo } from './index';
 
@@ -34,4 +35,8 @@ export function getFileInfo(fileName: string, pkg: Package): FileInfo {
         relativeToPackage,
         withPackage
     };
+}
+
+export function logNode(node) {
+    return console.log(node);
 }

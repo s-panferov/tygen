@@ -22,6 +22,7 @@
         "../node_modules/typescript/lib/typescriptServices.d.ts"
     ],
     "files": [
+        "./doc/ast/interface.ts",
         "./doc/defines.d.ts",
         "./doc/gen.ts",
         "./doc/index.ts",

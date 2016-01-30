@@ -4,7 +4,8 @@ require('source-map-support').install();
 
 import { extractPackage, getFileInfo } from './utils';
 import { processSourceFile } from './gen';
-import { DocItem } from './items';
+import { Item } from './items';
+import * as uuid from 'node-uuid';
 
 import {
     TypeChecker,
@@ -52,6 +53,19 @@ export class Context {
     program: Program;
 
     currentModule: Module;
+    ids: WeakMap<any, string>;
+
+    constructor() {
+        this.ids = new WeakMap();
+    }
+
+    id(object: any): string {
+        if (!this.ids.has(object)) {
+            this.ids.set(object, uuid.v1());
+        }
+
+        return this.ids.get(object);
+    }
 
     setProgram(program: Program) {
         this.program = program;
@@ -85,7 +99,7 @@ export class Module implements ModuleInfo {
     pkg: Package;
     fileInfo: FileInfo;
 
-    items: DocItem[] = [];
+    items: Item[] = [];
 
     constructor(sourceFile: SourceFile, pkg: Package, fileInfo: FileInfo) {
         this.text = sourceFile.text;

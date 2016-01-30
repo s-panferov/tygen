@@ -3,10 +3,11 @@ import { expect } from 'chai';
 
 import { generateModule } from '../test';
 import { filePath } from './utils';
+import { inspect } from '../tools';
 
 let doc = generateModule(filePath('simple.ts'));
 describe('simple.ts', () => {
     it('works', () => {
-        console.log(doc);
+        inspect(doc.items as any)
     });
 });
