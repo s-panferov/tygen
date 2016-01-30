@@ -1,15 +1,5 @@
 /// <reference path="../typings/tsd.d.ts" />
-/// <reference path="../node_modules/immutable/dist/immutable.d.ts" />
 /// <reference path="./typings/react-dom.d.ts"/>
-
-declare module "bem-cn" {
-    interface ClassName {
-        (name: string, ...mod: any[]): any
-    }
-
-    var block: ClassName;
-    export default block;
-}
 
 declare module "memory-fs" {
     interface MemoryFsStat {

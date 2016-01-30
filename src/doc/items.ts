@@ -1,4 +1,4 @@
-export enum DocItemType {
+export enum ItemType {
     Interface = 'Interface' as any,
     Property = 'Property' as any,
     UnionType = 'UnionType' as any,
@@ -16,7 +16,7 @@ export enum DocItemType {
 
 export interface DocItem {
     id?: number;
-    itemType: DocItemType;
+    itemType: ItemType;
     name?: string;
     comment?: string;
 }

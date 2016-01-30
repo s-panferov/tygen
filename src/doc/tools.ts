@@ -8,14 +8,15 @@ export enum CoreType {
 }
 
 export function getCoreType(type: Type): CoreType {
-    if (type.flags & TypeFlags.String)
+    if (type.flags & TypeFlags.String) {
         return CoreType.String;
-    else if (type.flags & TypeFlags.Number)
+    } else if (type.flags & TypeFlags.Number) {
         return CoreType.Number;
-    else if (type.flags & TypeFlags.Any)
+    } else if (type.flags & TypeFlags.Any) {
         return CoreType.Any;
+    }
 }
 
 export function inspect(obj: any) {
-    console.log(nodeInspect(obj, { depth:null }))
+    console.log(nodeInspect(obj, { depth:null }));
 }

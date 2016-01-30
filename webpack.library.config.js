@@ -24,7 +24,7 @@ var ATL_OPTIONS = [
 ].join('');
 
 var config = {
-    entry: './src/doc/doc.ts',
+    entry: './src/doc/tests/index.ts',
 
     target: 'node',
 
