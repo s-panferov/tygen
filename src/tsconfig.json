@@ -23,6 +23,7 @@
     ],
     "files": [
         "./doc/ast/interface.ts",
+        "./doc/ast/type.ts",
         "./doc/defines.d.ts",
         "./doc/gen.ts",
         "./doc/index.ts",

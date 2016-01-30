@@ -1,8 +1,11 @@
 import { generateInline, expect } from './utils';
 import {
     isInterfaceReflection,
-    isTypeLiteralReflection
 } from '../ast/interface';
+
+import {
+    isTypeLiteralReflection
+} from '../ast/type';
 
 describe('interface-literal', () => {
     let module = generateInline(`

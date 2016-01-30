@@ -2,9 +2,13 @@ import { generateInline, expect } from './utils';
 import { CoreType } from '../tools';
 import {
     isInterfaceReflection,
+
+} from '../ast/interface';
+
+import {
     isIntersectionTypeReflection,
     isUnionTypeReflection
-} from '../ast/interface';
+} from '../ast/type';
 
 describe('interface-intersection', () => {
     let module = generateInline(`
