@@ -8,7 +8,9 @@ import {
     IntersectionTypeNode,
     Type,
     UnionType,
-    IntersectionType
+    IntersectionType,
+    TypeElement,
+    PropertySignature
 } from 'typescript';
 
 import {
@@ -19,26 +21,34 @@ import {
 import { Context } from '../index';
 import { Item, RefType } from '../items';
 
-export interface MemberReflection {
+export interface MemberReflection extends Item {
     name: string;
     optional: boolean;
     type: TypeReflection;
 }
 
-export function visitMembers(
-    members: NodeArray<PropertyDeclaration>,
+export function visitTypeElements(
+    members: NodeArray<TypeElement>,
     ctx: Context
 ): MemberReflection[] {
     let reflections: MemberReflection[] = [];
-    for (let [, decl] of members.entries()) {
-        reflections.push({
-            name: decl.name.getText(),
-            optional: !!decl.questionToken,
-            type: visitTypeNode(decl.type, ctx)
-        });
+
+    for (let [, member] of members.entries()) {
+        if (isPropertySignature(member)) {
+            reflections.push({
+                refType: RefType.PropertySignature,
+                name: member.name.getText(),
+                optional: !!member.questionToken,
+                type: visitTypeNode(member.type, ctx)
+            });
+        }
     }
 
     return reflections;
+}
+
+export function isPropertySignature(node: TypeElement): node is PropertySignature {
+    return node.kind == SyntaxKind.PropertySignature;
 }
 
 export interface TypeReflection extends Item {
@@ -96,8 +106,8 @@ export function visitTypeLiteral(node: TypeLiteralNode, type: Type, ctx: Context
     let reflection = visitType(type, ctx);
     return Object.assign(reflection, {
         refType: RefType.TypeLiteral,
-        members: visitMembers(
-            node.members as NodeArray<PropertyDeclaration>,
+        members: visitTypeElements(
+            node.members,
             ctx
         )
     });

@@ -3,6 +3,7 @@ export enum RefType {
     UnionType = 'UnionType' as any,
     IntersectionType = 'IntersectionType' as any,
     TypeLiteral = 'TypeLiteral' as any,
+    PropertySignature = 'PropertySignature' as any,
 }
 
 export interface Item {

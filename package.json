@@ -27,15 +27,17 @@
     "awesome-typescript-loader": "^0.15.10",
     "chai": "^3.2.0",
     "fs-extra": "^0.23.1",
+    "git-hooks": "^1.0.2",
     "memory-fs": "^0.2.0",
     "mocha": "^2.2.5",
     "mocha-loader": "^0.7.1",
     "node-uuid": "^1.4.7",
     "pkg-up": "^1.0.0",
-    "typescript": "^1.9.0-dev.20160130",
+    "shelljs": "^0.5.3",
+    "typescript": "^1.8.0",
     "webpack": "^1.10.5"
   },
   "dependencies": {
-    "source-map-support": "^0.3.2"
+    "source-map-support": "^0.4.0"
   }
 }

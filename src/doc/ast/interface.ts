@@ -13,7 +13,7 @@ import { Item, RefType } from '../items';
 
 import {
     MemberReflection,
-    visitMembers
+    visitTypeElements
 } from './type';
 
 export interface InterfaceReflection extends Item {
@@ -45,8 +45,8 @@ export function visitInterface(
         id: ctx.id(type),
         name: iface.name.text,
         refType: RefType.Interface,
-        members: visitMembers(
-            iface.members as NodeArray<PropertyDeclaration>,
+        members: visitTypeElements(
+            iface.members,
             ctx
         )
     };

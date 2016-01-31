@@ -30,6 +30,7 @@
         "./doc/items.ts",
         "./doc/test.ts",
         "./doc/tests/index.ts",
+        "./doc/tests/interface-generic.ts",
         "./doc/tests/interface-intersection.ts",
         "./doc/tests/interface-literal.ts",
         "./doc/tests/interface-simple.ts",
@@ -39,6 +40,10 @@
         "./doc/writer.ts",
         "./lib/autobind.ts",
         "../node_modules/typescript/lib/typescriptServices.d.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "bower_components"
     ],
     "atom": {
         "rewriteTsconfig": true

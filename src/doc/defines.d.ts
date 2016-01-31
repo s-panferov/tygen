@@ -7,6 +7,10 @@ declare module 'node-uuid' {
     export function v4(): string;
 }
 
+declare module 'typescript' {
+    export = ts;
+}
+
 /**
  * Type declarations for Webpack runtime.
  */

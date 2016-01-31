@@ -2,6 +2,7 @@ var webpack = require('webpack');
 var path = require("path");
 var _ = require('lodash-node');
 var fs = require("fs");
+var MochaPlugin = require("./mocha-plugin");
 
 var nodeModules = {};
 fs.readdirSync('node_modules')
@@ -71,6 +72,7 @@ var config = {
     externals: nodeModules,
 
     plugins: [
+        new MochaPlugin(),
         new webpack.BannerPlugin('require("source-map-support").install();',
             { raw: true, entryOnly: false })
     ]
