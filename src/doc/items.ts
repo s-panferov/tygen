@@ -4,7 +4,10 @@ export enum RefType {
     IntersectionType = 'IntersectionType' as any,
     TypeLiteral = 'TypeLiteral' as any,
     PropertySignature = 'PropertySignature' as any,
-    TypeParameter = 'TypeParameter' as any
+    TypeParameter = 'TypeParameter' as any,
+    HeritageClause = 'HeritageClause' as any,
+    ExpressionWithTypeArguments = 'ExpressionWithTypeArguments' as any,
+    LeftHandSideExpression = 'LeftHandSideExpression' as any,
 }
 
 export interface Item {

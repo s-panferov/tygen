@@ -2,8 +2,7 @@ import {
     InterfaceDeclaration,
     Statement,
     SyntaxKind,
-    NodeArray,
-    PropertyDeclaration,
+    HeritageClause
 } from 'typescript';
 
 import * as assert from 'assert';
@@ -15,15 +14,15 @@ import {
     MemberReflection,
     visitTypeElements,
     TypeParameterReflection,
-    visitTypeParameter
+    visitTypeParameter,
+    visitExpressionWithTypeArguments,
+    ExpressionWithTypeArgumentsReflection,
 } from './type';
 
 export interface InterfaceReflection extends Item {
     members: MemberReflection[];
     typeParameters?: TypeParameterReflection[];
-    // typeParameters?: NodeArray<TypeParameterDeclaration>;
-    // heritageClauses?: NodeArray<HeritageClause>;
-    // members: NodeArray<Declaration>;
+    heritageClauses?: HeritageClauseReflection[];
 }
 
 export function isInterfaceReflection(item: Item): item is InterfaceReflection {
@@ -48,10 +47,37 @@ export function visitInterface(
         id: ctx.id(type),
         name: iface.name.text,
         refType: RefType.Interface,
-        typeParameters: iface.typeParameters.map(tp => visitTypeParameter(tp, ctx)),
-        members: visitTypeElements(
+        typeParameters: iface.typeParameters &&
+            iface.typeParameters.map(tp => visitTypeParameter(tp, ctx)),
+        members: iface.members && visitTypeElements(
             iface.members,
             ctx
-        )
+        ),
+        heritageClauses: iface.heritageClauses &&
+            iface.heritageClauses.map(hc => visitHeritageClause(hc, ctx))
+    };
+}
+
+export enum HeritageClauseType {
+    Extends = 'extends' as any,
+    Implements = 'implements' as any,
+}
+
+export var HeritageClauseTypeTsMapping: { [ key: number ]: HeritageClauseType } = {
+    [ SyntaxKind.ExtendsKeyword ]: HeritageClauseType.Extends,
+    [ SyntaxKind.ImplementsKeyword ]: HeritageClauseType.Implements
+};
+
+export interface HeritageClauseReflection extends Item {
+    clause: HeritageClauseType;
+    types: ExpressionWithTypeArgumentsReflection[];
+}
+
+function visitHeritageClause(hc: HeritageClause, ctx: Context): HeritageClauseReflection {
+    return {
+        refType: RefType.HeritageClause,
+        clause: HeritageClauseTypeTsMapping[hc.token],
+        types: hc.types &&
+            hc.types.map(expr => visitExpressionWithTypeArguments(expr, ctx)),
     };
 }

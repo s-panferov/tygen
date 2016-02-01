@@ -11,6 +11,8 @@ import {
     TypeElement,
     PropertySignature,
     TypeParameterDeclaration,
+    ExpressionWithTypeArguments,
+    LeftHandSideExpression
 } from 'typescript';
 
 import {
@@ -175,5 +177,34 @@ export function visitTypeParameter(decl: TypeParameterDeclaration, ctx: Context)
         refType: RefType.TypeParameter,
         name: decl.name.text,
         constraint: decl.constraint && visitTypeNode(decl.constraint, ctx)
+    };
+}
+
+export interface ExpressionWithTypeArgumentsReflection extends Item {
+    expression: LeftHandSideExpressionReflection;
+    typeArguments: TypeReflection[];
+}
+
+export function visitExpressionWithTypeArguments(expr: ExpressionWithTypeArguments, ctx: Context) {
+    return {
+        refType: RefType.ExpressionWithTypeArguments,
+        typeArguments: expr.typeArguments &&
+            expr.typeArguments.map(ta => visitTypeNode(ta, ctx)),
+        expression: visitLeftHandSideExpression(expr.expression, ctx)
+    };
+}
+
+export interface LeftHandSideExpressionReflection extends Item {
+    type: TypeReflection;
+}
+
+export function visitLeftHandSideExpression(
+    expr: LeftHandSideExpression,
+    ctx: Context
+): LeftHandSideExpressionReflection {
+    let type = ctx.checker.getTypeAtLocation(expr);
+    return {
+        refType: RefType.LeftHandSideExpression,
+        type: visitType(type, ctx)
     };
 }
