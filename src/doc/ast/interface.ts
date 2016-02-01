@@ -13,11 +13,14 @@ import { Item, RefType } from '../items';
 
 import {
     MemberReflection,
-    visitTypeElements
+    visitTypeElements,
+    TypeParameterReflection,
+    visitTypeParameter
 } from './type';
 
 export interface InterfaceReflection extends Item {
     members: MemberReflection[];
+    typeParameters?: TypeParameterReflection[];
     // typeParameters?: NodeArray<TypeParameterDeclaration>;
     // heritageClauses?: NodeArray<HeritageClause>;
     // members: NodeArray<Declaration>;
@@ -45,6 +48,7 @@ export function visitInterface(
         id: ctx.id(type),
         name: iface.name.text,
         refType: RefType.Interface,
+        typeParameters: iface.typeParameters.map(tp => visitTypeParameter(tp, ctx)),
         members: visitTypeElements(
             iface.members,
             ctx

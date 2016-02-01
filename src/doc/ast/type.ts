@@ -1,7 +1,6 @@
 import {
     SyntaxKind,
     NodeArray,
-    PropertyDeclaration,
     TypeNode,
     TypeLiteralNode,
     UnionTypeNode,
@@ -10,7 +9,8 @@ import {
     UnionType,
     IntersectionType,
     TypeElement,
-    PropertySignature
+    PropertySignature,
+    TypeParameterDeclaration,
 } from 'typescript';
 
 import {
@@ -157,4 +157,23 @@ export function visitUnionType(
         refType: RefType.UnionType,
         types: node.types.map((type) => visitTypeNode(type, ctx))
     });
+}
+
+export interface TypeParameterReflection extends Item {
+    constraint: TypeReflection;
+}
+
+export function isTypeParameterReflection(item: Item): item is TypeParameterReflection {
+    return item.refType == RefType.TypeParameter;
+}
+
+export function visitTypeParameter(decl: TypeParameterDeclaration, ctx: Context): TypeParameterReflection {
+    let type = ctx.checker.getTypeAtLocation(decl);
+
+    return {
+        id: ctx.id(type),
+        refType: RefType.TypeParameter,
+        name: decl.name.text,
+        constraint: decl.constraint && visitTypeNode(decl.constraint, ctx)
+    };
 }

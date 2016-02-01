@@ -1,14 +1,9 @@
 import { generateInline, expect } from './utils';
-import { CoreType } from '../tools';
+import { RefType } from '../items';
 import {
     isInterfaceReflection,
 
 } from '../ast/interface';
-
-import {
-    isIntersectionTypeReflection,
-    isUnionTypeReflection
-} from '../ast/type';
 
 describe('interface-generic', () => {
     let module = generateInline(`
@@ -20,9 +15,33 @@ describe('interface-generic', () => {
 
     let iface = module.items[0];
 
-    it('generic types in interface', () => {
-        if (isInterfaceReflection(iface)) {
+    if (isInterfaceReflection(iface)) {
+        it('members', () => {
             expect(iface.members).lengthOf(2);
-        }
-    });
+        });
+
+        it('type parameters', () => {
+            expect(iface.typeParameters).lengthOf(2);
+        });
+
+        it('first type parameter', () => {
+            let tp = iface.typeParameters[0];
+
+            expect(tp.name).equal('T');
+            expect(tp.refType).equal(RefType.TypeParameter);
+            expect(iface.members[0].type.id).equal(tp.id);
+        });
+
+        it('second type parameter', () => {
+            let tp = iface.typeParameters[1];
+
+            expect(tp.name).equal('A');
+            expect(tp.refType).equal(RefType.TypeParameter);
+            expect(iface.members[1].type.id).equal(tp.id);
+
+            expect(tp.constraint.id).equal(iface.typeParameters[0].id);
+        });
+    } else {
+        expect(false).to.true;
+    }
 });
