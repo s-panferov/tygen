@@ -19,7 +19,9 @@ import {
     TypeReferenceNode,
     TypeReference,
     MethodSignature,
-    SignatureDeclaration
+    SignatureDeclaration,
+    FunctionTypeNode,
+    Signature
 } from 'typescript';
 
 import {
@@ -64,12 +66,9 @@ export function visitTypeElements(
 
     for (let [, member] of members.entries()) {
         if (isPropertySignature(member)) {
-            reflections.push({
-                refType: RefType.PropertySignature,
-                name: member.name.getText(),
-                optional: !!member.questionToken,
-                type: visitTypeNode(member.type, ctx)
-            } as PropertySignatureReflection);
+            reflections.push(
+                visitPropertySignature(member, ctx)
+            );
         } else if (isIndexSignatureDeclaration(member)) {
             reflections.push(
                 visitIndexSignature(member, ctx)
@@ -86,6 +85,18 @@ export function visitTypeElements(
      }
 
     return reflections;
+}
+
+export function visitPropertySignature(
+    prop: PropertySignature,
+    ctx: Context
+): PropertySignatureReflection {
+    return {
+        refType: RefType.PropertySignature,
+        name: prop.name.getText(),
+        optional: !!prop.questionToken,
+        type: visitTypeNode(prop.type, ctx)
+    } as PropertySignatureReflection;
 }
 
 export function isIndexSignatureDeclaration(node: TypeElement): node is IndexSignatureDeclaration {
@@ -116,6 +127,10 @@ export function isIntersectionTypeNode(node: TypeNode): node is IntersectionType
     return node.kind == SyntaxKind.IntersectionType;
 }
 
+export function isFunctionTypeNode(node: TypeNode): node is FunctionTypeNode {
+    return node.kind == SyntaxKind.FunctionType;
+}
+
 export function visitTypeNode(node: TypeNode, ctx: Context): TypeReflection {
     let type = ctx.checker.getTypeAtLocation(node);
 
@@ -133,6 +148,10 @@ export function visitTypeNode(node: TypeNode, ctx: Context): TypeReflection {
 
     if (isTypeReferenceNode(node)) {
         return visitTypeReference(node, type as TypeReference, ctx);
+    }
+
+    if (isFunctionTypeNode(node)) {
+        return visitFunctionTypeNode(node, type, ctx);
     }
 
     return visitType(type, ctx);
@@ -201,6 +220,29 @@ export function visitUnionType(
     return Object.assign(reflection, {
         refType: RefType.UnionType,
         types: node.types.map((type) => visitTypeNode(type, ctx))
+    });
+}
+
+export interface FunctionTypeReflection extends TypeReflection {
+    signature: SignatureReflection;
+}
+
+export function isFunctionTypeReflection(item: Item): item is FunctionTypeReflection {
+    return item.refType == RefType.FunctionType;
+}
+
+export function visitFunctionTypeNode(
+    node: FunctionTypeNode,
+    type: Type,
+    ctx: Context
+): FunctionTypeReflection {
+    // TODO regiser inline types globally?
+
+    let reflection = visitType(type, ctx);
+
+    return Object.assign(reflection, {
+        refType: RefType.FunctionType,
+        signature: visitSignature(node, ctx)
     });
 }
 

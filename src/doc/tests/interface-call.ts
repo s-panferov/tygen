@@ -9,6 +9,8 @@ import {
     isCallSignatureReflection,
     isTypeReferenceReflection,
     isMethodSignatureReflection,
+    isPropertySignatureReflection,
+    isFunctionTypeReflection,
     SignatureReflection
 } from '../ast/type';
 
@@ -16,7 +18,8 @@ describe('interface-call', () => {
     let module = generateInline(`
         interface Test<T> {
             <I>(a: I): Test<I>
-            name<I>(a: I): Test<I>
+            method<I>(a: I): Test<I>
+            property?: <I>(a: I) => Test<I>
         }
     `);
 
@@ -35,7 +38,24 @@ describe('interface-call', () => {
         let methodSig = iface.members[1];
         if (isMethodSignatureReflection(methodSig)) {
             it ('method signature reflection', () => {
+                expect(methodSig.name).equal('method');
                 testSignature(iface, methodSig);
+            });
+        } else {
+            expect(false).to.true;
+        }
+
+        let propertySig = iface.members[2];
+        if (isPropertySignatureReflection(propertySig)) {
+            it ('property signature with function type reflection', () => {
+                expect(propertySig.name).equal('property');
+                expect(propertySig.optional).true;
+                let type = propertySig.type;
+                if (isFunctionTypeReflection(type)) {
+                    testSignature(iface, type.signature);
+                } else {
+                    expect(false).to.true;
+                }
             });
         } else {
             expect(false).to.true;
