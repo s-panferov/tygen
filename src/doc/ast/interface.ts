@@ -11,7 +11,6 @@ import { Context } from '../index';
 import { Item, RefType } from '../items';
 
 import {
-    MemberReflection,
     visitTypeElements,
     TypeParameterReflection,
     visitTypeParameter,
@@ -20,7 +19,7 @@ import {
 } from './type';
 
 export interface InterfaceReflection extends Item {
-    members: MemberReflection[];
+    members: Item[];
     typeParameters?: TypeParameterReflection[];
     heritageClauses?: HeritageClauseReflection[];
 }

@@ -32,6 +32,7 @@
         "./doc/tests/index.ts",
         "./doc/tests/interface-generic.ts",
         "./doc/tests/interface-heritage.ts",
+        "./doc/tests/interface-index.ts",
         "./doc/tests/interface-intersection.ts",
         "./doc/tests/interface-literal.ts",
         "./doc/tests/interface-simple.ts",

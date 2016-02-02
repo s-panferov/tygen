@@ -12,7 +12,9 @@ import {
     PropertySignature,
     TypeParameterDeclaration,
     ExpressionWithTypeArguments,
-    LeftHandSideExpression
+    LeftHandSideExpression,
+    IndexSignatureDeclaration,
+    ParameterDeclaration
 } from 'typescript';
 
 import {
@@ -23,17 +25,21 @@ import {
 import { Context } from '../index';
 import { Item, RefType } from '../items';
 
-export interface MemberReflection extends Item {
+export interface PropertySignatureReflection extends Item {
     name: string;
     optional: boolean;
     type: TypeReflection;
 }
 
+export function isPropertySignature(node: TypeElement): node is PropertySignature {
+    return node.kind == SyntaxKind.PropertySignature;
+}
+
 export function visitTypeElements(
     members: NodeArray<TypeElement>,
     ctx: Context
-): MemberReflection[] {
-    let reflections: MemberReflection[] = [];
+): Item[] {
+    let reflections: Item[] = [];
 
     for (let [, member] of members.entries()) {
         if (isPropertySignature(member)) {
@@ -42,15 +48,19 @@ export function visitTypeElements(
                 name: member.name.getText(),
                 optional: !!member.questionToken,
                 type: visitTypeNode(member.type, ctx)
-            });
+            } as PropertySignatureReflection);
+        } else if (isIndexSignatureDeclaration(member)) {
+            reflections.push(
+                visitIndexSignature(member, ctx)
+            );
         }
-    }
+     }
 
     return reflections;
 }
 
-export function isPropertySignature(node: TypeElement): node is PropertySignature {
-    return node.kind == SyntaxKind.PropertySignature;
+export function isIndexSignatureDeclaration(node: TypeElement): node is IndexSignatureDeclaration {
+    return node.kind == SyntaxKind.IndexSignature;
 }
 
 export interface TypeReflection extends Item {
@@ -58,7 +68,7 @@ export interface TypeReflection extends Item {
 }
 
 export interface TypeLiteralReflection extends TypeReflection {
-    members: MemberReflection[];
+    members: Item[];
 }
 
 export function isTypeLiteralReflection(item: Item): item is TypeLiteralReflection {
@@ -207,4 +217,48 @@ export function visitLeftHandSideExpression(
         refType: RefType.LeftHandSideExpression,
         type: visitType(type, ctx)
     };
+}
+
+export interface ParameterReflection extends Item {
+    name: string;
+    optional: boolean;
+    spread: boolean;
+    type: TypeReflection;
+}
+
+export function isParameterReflection(item: Item): item is ParameterReflection {
+    return item.refType == RefType.Parameter;
+}
+
+export function visitParameter(
+    param: ParameterDeclaration,
+    ctx: Context
+): ParameterReflection {
+    return {
+        refType: RefType.Parameter,
+        name: param.name.getText(),
+        optional: !!param.questionToken,
+        spread: !!param.dotDotDotToken,
+        type: visitTypeNode(param.type, ctx)
+    } as ParameterReflection;
+}
+
+export interface IndexSignatureReflection extends Item {
+    parameter: ParameterReflection;
+    type: TypeReflection;
+}
+
+export function isIndexSignatureReflection(item: Item): item is IndexSignatureReflection {
+    return item.refType == RefType.IndexSignature;
+}
+
+export function visitIndexSignature(
+    sig: IndexSignatureDeclaration,
+    ctx: Context
+): IndexSignatureReflection {
+    return {
+        refType: RefType.IndexSignature,
+        parameter: visitParameter(sig.parameters[0], ctx),
+        type: visitTypeNode(sig.type, ctx)
+    } as IndexSignatureReflection;
 }

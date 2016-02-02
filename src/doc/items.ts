@@ -8,6 +8,8 @@ export enum RefType {
     HeritageClause = 'HeritageClause' as any,
     ExpressionWithTypeArguments = 'ExpressionWithTypeArguments' as any,
     LeftHandSideExpression = 'LeftHandSideExpression' as any,
+    IndexSignature = 'IndexSignature' as any,
+    Parameter = 'Parameter' as any,
 }
 
 export interface Item {
