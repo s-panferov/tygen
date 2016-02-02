@@ -14,7 +14,10 @@ import {
     ExpressionWithTypeArguments,
     LeftHandSideExpression,
     IndexSignatureDeclaration,
-    ParameterDeclaration
+    ParameterDeclaration,
+    CallSignatureDeclaration,
+    TypeReferenceNode,
+    TypeReference
 } from 'typescript';
 
 import {
@@ -39,6 +42,14 @@ export function isPropertySignature(node: TypeElement): node is PropertySignatur
     return node.kind == SyntaxKind.PropertySignature;
 }
 
+export function isCallSignature(node: TypeElement): node is CallSignatureDeclaration {
+    return node.kind == SyntaxKind.CallSignature;
+}
+
+export function isTypeReferenceNode(node: TypeNode): node is TypeReferenceNode {
+    return node.kind == SyntaxKind.TypeReference;
+}
+
 export function visitTypeElements(
     members: NodeArray<TypeElement>,
     ctx: Context
@@ -56,6 +67,10 @@ export function visitTypeElements(
         } else if (isIndexSignatureDeclaration(member)) {
             reflections.push(
                 visitIndexSignature(member, ctx)
+            );
+        } else if (isCallSignature(member)) {
+            reflections.push(
+                visitCallSignature(member, ctx)
             );
         }
      }
@@ -104,6 +119,10 @@ export function visitTypeNode(node: TypeNode, ctx: Context): TypeReflection {
 
     if (isIntersectionTypeNode(node)) {
         return visitIntersectionType(node, type as IntersectionType, ctx);
+    }
+
+    if (isTypeReferenceNode(node)) {
+        return visitTypeReference(node, type as TypeReference, ctx);
     }
 
     return visitType(type, ctx);
@@ -172,6 +191,33 @@ export function visitUnionType(
     return Object.assign(reflection, {
         refType: RefType.UnionType,
         types: node.types.map((type) => visitTypeNode(type, ctx))
+    });
+}
+
+interface TypeReferenceReflection extends TypeReflection {
+    typeName: string;
+    targetType: TypeReflection;
+    typeArguments: TypeReflection[];
+}
+
+export function isTypeReferenceReflection(item: Item): item is TypeReferenceReflection {
+    return item.refType == RefType.TypeReference;
+}
+
+export function visitTypeReference(
+    node: TypeReferenceNode,
+    type: TypeReference,
+    ctx: Context
+): TypeReferenceReflection {
+    let targetType = type.target && visitType(type.target, ctx);
+    let reflection = visitType(type, ctx);
+
+    return Object.assign(reflection, {
+        refType: RefType.TypeReference,
+        typeName: node.typeName.getText(),
+        targetType,
+        typeArguments: type.typeArguments &&
+            node.typeArguments.map(ta => visitTypeNode(ta, ctx))
     });
 }
 
@@ -247,9 +293,8 @@ export function visitParameter(
     } as ParameterReflection;
 }
 
-export interface IndexSignatureReflection extends Item {
-    parameter: ParameterReflection;
-    type: TypeReflection;
+export interface IndexSignatureReflection extends SignatureReflection {
+
 }
 
 export function isIndexSignatureReflection(item: Item): item is IndexSignatureReflection {
@@ -262,7 +307,37 @@ export function visitIndexSignature(
 ): IndexSignatureReflection {
     return {
         refType: RefType.IndexSignature,
-        parameter: visitParameter(sig.parameters[0], ctx),
+        parameters: sig.parameters &&
+            sig.parameters.map(p => visitParameter(p, ctx)),
+        typeParameters: null,
         type: visitTypeNode(sig.type, ctx)
     } as IndexSignatureReflection;
+}
+
+export interface SignatureReflection extends Item {
+    typeParameters: TypeParameterReflection[];
+    parameters: ParameterReflection[];
+    type: TypeReflection;
+}
+
+export interface CallSignatureReflection extends SignatureReflection {
+}
+
+export function isCallSignatureReflection(item: Item): item is IndexSignatureReflection {
+    return item.refType == RefType.CallSignature;
+}
+
+export function visitCallSignature(
+    sig: CallSignatureDeclaration,
+    ctx: Context
+): CallSignatureReflection {
+    return {
+        refType: RefType.CallSignature,
+        typeParameters: sig.typeParameters &&
+            sig.typeParameters.map(tp => visitTypeParameter(tp, ctx)),
+        parameters: sig.parameters &&
+            sig.parameters.map(p => visitParameter(p, ctx)),
+        type: sig.type &&
+            visitTypeNode(sig.type, ctx)
+    } as CallSignatureReflection;
 }

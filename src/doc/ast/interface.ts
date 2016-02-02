@@ -42,6 +42,8 @@ export function visitInterface(
 
     assert.ok(type, 'Expect type to exist');
 
+    // console.log(iface.members[0]);
+
     return {
         id: ctx.id(type),
         name: iface.name.text,

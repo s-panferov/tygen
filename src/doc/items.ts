@@ -10,6 +10,9 @@ export enum RefType {
     LeftHandSideExpression = 'LeftHandSideExpression' as any,
     IndexSignature = 'IndexSignature' as any,
     Parameter = 'Parameter' as any,
+    CallSignature = 'CallSignature' as any,
+    Signature = 'Signature' as any,
+    TypeReference = 'TypeReference' as any,
 }
 
 export interface Item {

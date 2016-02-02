@@ -21,8 +21,8 @@ describe('interface-index', () => {
         let index = iface.members[0];
         if (isIndexSignatureReflection(index)) {
             it ('fields', () => {
-                expect(index.parameter.name).equal('key');
-                expect(index.parameter.type.coreType).equal(CoreType.String);
+                expect(index.parameters[0].name).equal('key');
+                expect(index.parameters[0].type.coreType).equal(CoreType.String);
                 expect(index.type.id).equal(iface.id);
             });
         }
