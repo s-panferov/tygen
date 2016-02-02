@@ -20,7 +20,7 @@ describe('interface-heritage', () => {
 
     if (isInterfaceReflection(iface)) {
         if (isInterfaceReflection(base)) {
-            it('parses heritage clause', () => {
+            it('reflection', () => {
                 let hc = iface.heritageClauses[0];
                 expect(hc.refType).equal(RefType.HeritageClause);
                 expect(hc.clause).equal(HeritageClauseType.Extends);

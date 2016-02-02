@@ -13,6 +13,7 @@ export enum RefType {
     CallSignature = 'CallSignature' as any,
     Signature = 'Signature' as any,
     TypeReference = 'TypeReference' as any,
+    MethodSignature = 'MethodSignature' as any,
 }
 
 export interface Item {

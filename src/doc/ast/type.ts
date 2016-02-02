@@ -17,7 +17,9 @@ import {
     ParameterDeclaration,
     CallSignatureDeclaration,
     TypeReferenceNode,
-    TypeReference
+    TypeReference,
+    MethodSignature,
+    SignatureDeclaration
 } from 'typescript';
 
 import {
@@ -50,6 +52,10 @@ export function isTypeReferenceNode(node: TypeNode): node is TypeReferenceNode {
     return node.kind == SyntaxKind.TypeReference;
 }
 
+export function isMethodSignature(node: TypeElement): node is MethodSignature {
+    return node.kind == SyntaxKind.MethodSignature;
+}
+
 export function visitTypeElements(
     members: NodeArray<TypeElement>,
     ctx: Context
@@ -71,6 +77,10 @@ export function visitTypeElements(
         } else if (isCallSignature(member)) {
             reflections.push(
                 visitCallSignature(member, ctx)
+            );
+        } else if (isMethodSignature(member)) {
+            reflections.push(
+                visitMethodSignature(member, ctx)
             );
         }
      }
@@ -320,6 +330,19 @@ export interface SignatureReflection extends Item {
     type: TypeReflection;
 }
 
+export function visitSignature(sig: SignatureDeclaration, ctx: Context): SignatureReflection {
+    return {
+        refType: RefType.Signature,
+        name: sig.name && sig.name.getText(),
+        typeParameters: sig.typeParameters &&
+            sig.typeParameters.map(tp => visitTypeParameter(tp, ctx)),
+        parameters: sig.parameters &&
+            sig.parameters.map(p => visitParameter(p, ctx)),
+        type: sig.type &&
+            visitTypeNode(sig.type, ctx)
+    } as SignatureReflection;
+}
+
 export interface CallSignatureReflection extends SignatureReflection {
 }
 
@@ -331,13 +354,24 @@ export function visitCallSignature(
     sig: CallSignatureDeclaration,
     ctx: Context
 ): CallSignatureReflection {
-    return {
-        refType: RefType.CallSignature,
-        typeParameters: sig.typeParameters &&
-            sig.typeParameters.map(tp => visitTypeParameter(tp, ctx)),
-        parameters: sig.parameters &&
-            sig.parameters.map(p => visitParameter(p, ctx)),
-        type: sig.type &&
-            visitTypeNode(sig.type, ctx)
-    } as CallSignatureReflection;
+    return Object.assign(visitSignature(sig, ctx), {
+        refType: RefType.CallSignature
+    });
+}
+
+export interface MethodSignatureReflection extends SignatureReflection {
+
+}
+
+export function isMethodSignatureReflection(item: Item): item is MethodSignatureReflection {
+    return item.refType == RefType.MethodSignature;
+}
+
+export function visitMethodSignature(
+    sig: MethodSignature,
+    ctx: Context
+): MethodSignatureReflection {
+    return Object.assign(visitSignature(sig, ctx), {
+        refType: RefType.MethodSignature
+    });
 }
