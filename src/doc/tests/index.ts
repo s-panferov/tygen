@@ -4,3 +4,4 @@ import './interface-intersection';
 import './interface-generic';
 import './interface-heritage';
 import './interface-index';
+import './interface-call';

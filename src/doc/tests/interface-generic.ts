@@ -2,8 +2,11 @@ import { generateInline, expect } from './utils';
 import { RefType } from '../items';
 import {
     isInterfaceReflection,
-
 } from '../ast/interface';
+
+import {
+    isPropertySignatureReflection,
+} from '../ast/type';
 
 describe('interface-generic', () => {
     let module = generateInline(`
@@ -29,7 +32,11 @@ describe('interface-generic', () => {
 
             expect(tp.name).equal('T');
             expect(tp.refType).equal(RefType.TypeParameter);
-            expect(iface.members[0].type.id).equal(tp.id);
+
+            let member = iface.members[0];
+            if (isPropertySignatureReflection(member)) {
+                expect(member.type.id).equal(tp.id);
+            }
         });
 
         it('second type parameter', () => {
@@ -37,8 +44,11 @@ describe('interface-generic', () => {
 
             expect(tp.name).equal('A');
             expect(tp.refType).equal(RefType.TypeParameter);
-            expect(iface.members[1].type.id).equal(tp.id);
 
+            let member = iface.members[1];
+            if (isPropertySignatureReflection(member)) {
+                expect(member.type.id).equal(tp.id);
+            }
             expect(tp.constraint.id).equal(iface.typeParameters[0].id);
         });
     } else {

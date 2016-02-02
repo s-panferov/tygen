@@ -31,6 +31,10 @@ export interface PropertySignatureReflection extends Item {
     type: TypeReflection;
 }
 
+export function isPropertySignatureReflection(item: Item): item is PropertySignatureReflection {
+    return item.refType == RefType.PropertySignature;
+}
+
 export function isPropertySignature(node: TypeElement): node is PropertySignature {
     return node.kind == SyntaxKind.PropertySignature;
 }

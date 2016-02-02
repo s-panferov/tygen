@@ -30,6 +30,7 @@
         "./doc/items.ts",
         "./doc/test.ts",
         "./doc/tests/index.ts",
+        "./doc/tests/interface-call.ts",
         "./doc/tests/interface-generic.ts",
         "./doc/tests/interface-heritage.ts",
         "./doc/tests/interface-index.ts",

@@ -1,6 +1,7 @@
 import { generateInline, expect } from './utils';
 import { CoreType } from '../tools';
 import { isInterfaceReflection } from '../ast/interface';
+import { isPropertySignatureReflection } from '../ast/type';
 
 describe('interface:simple', () => {
     let module = generateInline(`
@@ -26,9 +27,14 @@ describe('interface:simple', () => {
             expect(iface.members).lengthOf(1);
 
             let first = iface.members[0];
-            expect(first.name).to.equal('name');
-            expect(first.optional).to.false;
-            expect(first.type.coreType).to.equal(CoreType.String);
+
+            if (isPropertySignatureReflection(first)) {
+                expect(first.name).to.equal('name');
+                expect(first.optional).to.false;
+                expect(first.type.coreType).to.equal(CoreType.String);
+            } else {
+                expect(false).to.true;
+            }
         }
     });
 });

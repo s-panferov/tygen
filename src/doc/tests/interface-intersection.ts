@@ -2,12 +2,12 @@ import { generateInline, expect } from './utils';
 import { CoreType } from '../tools';
 import {
     isInterfaceReflection,
-
 } from '../ast/interface';
 
 import {
     isIntersectionTypeReflection,
-    isUnionTypeReflection
+    isUnionTypeReflection,
+    isPropertySignatureReflection
 } from '../ast/type';
 
 describe('interface-intersection', () => {
@@ -26,26 +26,39 @@ describe('interface-intersection', () => {
 
             {
                 let member = iface.members[0];
-                let type = member.type;
-                expect(isIntersectionTypeReflection(type)).to.true;
 
-                if (isIntersectionTypeReflection(type)) {
-                    expect(type.types).lengthOf(2);
-                    expect(type.types[0].coreType).to.equal(CoreType.String);
-                    expect(type.types[1].id).to.equal(iface.id);
+                if (isPropertySignatureReflection(member)) {
+                    let type = member.type;
+                    expect(isIntersectionTypeReflection(type)).to.true;
+
+                    if (isIntersectionTypeReflection(type)) {
+                        expect(type.types).lengthOf(2);
+                        expect(type.types[0].coreType).to.equal(CoreType.String);
+                        expect(type.types[1].id).to.equal(iface.id);
+                    } else {
+                        expect(false).to.true;
+                    }
+                } else {
+                    expect(false).to.true;
                 }
-
             }
 
             {
                 let member = iface.members[1];
-                let type = member.type;
-                expect(isUnionTypeReflection(type)).to.true;
 
-                if (isUnionTypeReflection(type)) {
-                    expect(type.types).lengthOf(2);
-                    expect(type.types[0].coreType).to.equal(CoreType.String);
-                    expect(type.types[1].id).to.equal(iface.id);
+                if (isPropertySignatureReflection(member)) {
+                    let type = member.type;
+                    expect(isUnionTypeReflection(type)).to.true;
+
+                    if (isUnionTypeReflection(type)) {
+                        expect(type.types).lengthOf(2);
+                        expect(type.types[0].coreType).to.equal(CoreType.String);
+                        expect(type.types[1].id).to.equal(iface.id);
+                    } else {
+                        expect(false).to.true;
+                    }
+                } else {
+                    expect(false).to.true;
                 }
             }
         }

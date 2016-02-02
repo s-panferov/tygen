@@ -4,7 +4,8 @@ import {
 } from '../ast/interface';
 
 import {
-    isTypeLiteralReflection
+    isTypeLiteralReflection,
+    isPropertySignatureReflection
 } from '../ast/type';
 
 describe('interface-literal', () => {
@@ -23,16 +24,29 @@ describe('interface-literal', () => {
             expect(iface.members).lengthOf(1);
 
             let first = iface.members[0];
-            expect(first.name).to.equal('p0');
-            expect(first.optional).to.true;
 
-            let type = first.type;
-            expect(isTypeLiteralReflection(type)).to.true;
+            if (isPropertySignatureReflection(first)) {
+                expect(first.name).to.equal('p0');
+                expect(first.optional).to.true;
 
-            if (isTypeLiteralReflection(type)) {
-                expect(type.members).lengthOf(1);
-                expect(type.members[0].name).to.equal('p0');
-                expect(type.members[0].type.id).to.equal(iface.id);
+                let type = first.type;
+                expect(isTypeLiteralReflection(type)).to.true;
+
+                if (isTypeLiteralReflection(type)) {
+                    expect(type.members).lengthOf(1);
+                    let member = type.members[0];
+
+                    if (isPropertySignatureReflection(member)) {
+                        expect(member.name).to.equal('p0');
+                        expect(member.type.id).to.equal(iface.id);
+                    } else {
+                        expect(false).to.true;
+                    }
+                } else {
+                    expect(false).to.true;
+                }
+            } else {
+                expect(false).to.true;
             }
         }
     });
