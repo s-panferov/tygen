@@ -22,6 +22,7 @@
         "../node_modules/typescript/lib/typescriptServices.d.ts"
     ],
     "files": [
+        "./doc/ast/class.ts",
         "./doc/ast/interface.ts",
         "./doc/ast/type.ts",
         "./doc/defines.d.ts",
@@ -29,6 +30,9 @@
         "./doc/index.ts",
         "./doc/items.ts",
         "./doc/test.ts",
+        "./doc/tests/class-accessors.ts",
+        "./doc/tests/class-constructor.ts",
+        "./doc/tests/class-simple.ts",
         "./doc/tests/index.ts",
         "./doc/tests/interface-call.ts",
         "./doc/tests/interface-generic.ts",

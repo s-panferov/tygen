@@ -21,7 +21,13 @@ import {
     MethodSignature,
     SignatureDeclaration,
     FunctionTypeNode,
-    Signature
+    Signature,
+    ClassElement,
+    PropertyDeclaration,
+    MethodDeclaration,
+    ConstructorDeclaration,
+    GetAccessorDeclaration,
+    SetAccessorDeclaration
 } from 'typescript';
 
 import {
@@ -44,6 +50,18 @@ export function isPropertySignatureReflection(item: Item): item is PropertySigna
 
 export function isPropertySignature(node: TypeElement): node is PropertySignature {
     return node.kind == SyntaxKind.PropertySignature;
+}
+
+export function isConstructorDeclaration(elem: ClassElement): elem is ConstructorDeclaration {
+    return elem.kind === SyntaxKind.Constructor;
+}
+
+export function isGetAccessorDeclaration(elem: ClassElement): elem is GetAccessorDeclaration {
+    return elem.kind === SyntaxKind.GetAccessor;
+}
+
+export function isSetAccessorDeclaration(elem: ClassElement): elem is SetAccessorDeclaration {
+    return elem.kind === SyntaxKind.SetAccessor;
 }
 
 export function isCallSignature(node: TypeElement): node is CallSignatureDeclaration {
@@ -82,13 +100,53 @@ export function visitTypeElements(
                 visitMethodSignature(member, ctx)
             );
         }
-     }
+    }
+
+    return reflections;
+}
+
+export function isPropertyDeclaration(element: ClassElement): element is PropertyDeclaration {
+    return element.kind == SyntaxKind.PropertyDeclaration;
+}
+export function isMethodDeclaration(element: ClassElement): element is MethodDeclaration {
+    return element.kind == SyntaxKind.MethodDeclaration;
+}
+
+export function visitClassElements(
+    members: NodeArray<ClassElement>,
+    ctx: Context
+): Item[] {
+    let reflections: Item[] = [];
+
+    for (let [, member] of members.entries()) {
+        if (isPropertyDeclaration(member)) {
+            reflections.push(
+                visitPropertyDeclaration(member, ctx)
+            );
+        } else if (isMethodDeclaration(member)) {
+            reflections.push(
+                visitMethodDeclaration(member, ctx)
+            );
+        } else if (isConstructorDeclaration(member)) {
+            reflections.push(
+                visitConstructorDeclaration(member, ctx)
+            );
+        } else if (isGetAccessorDeclaration(member)) {
+            reflections.push(
+                visitGetAccessorDeclaration(member, ctx)
+            );
+        } else if (isSetAccessorDeclaration(member)) {
+            reflections.push(
+                visitSetAccessorDeclaration(member, ctx)
+            );
+        }
+    }
 
     return reflections;
 }
 
 export function visitPropertySignature(
-    prop: PropertySignature,
+    prop: PropertySignature | PropertyDeclaration,
     ctx: Context
 ): PropertySignatureReflection {
     return {
@@ -97,6 +155,24 @@ export function visitPropertySignature(
         optional: !!prop.questionToken,
         type: visitTypeNode(prop.type, ctx)
     } as PropertySignatureReflection;
+}
+
+export interface PropertyDeclarationReflection extends PropertySignatureReflection {
+
+}
+
+export function isPropertyDeclarationReflection(item: Item): item is PropertyDeclarationReflection {
+    return item.refType == RefType.PropertyDeclaration;
+}
+
+export function visitPropertyDeclaration(
+    prop: PropertyDeclaration,
+    ctx: Context
+): PropertyDeclarationReflection {
+    let propertySig = visitPropertySignature(prop, ctx);
+    return Object.assign(propertySig, {
+        refType: RefType.PropertyDeclaration
+    });
 }
 
 export function isIndexSignatureDeclaration(node: TypeElement): node is IndexSignatureDeclaration {
@@ -415,5 +491,81 @@ export function visitMethodSignature(
 ): MethodSignatureReflection {
     return Object.assign(visitSignature(sig, ctx), {
         refType: RefType.MethodSignature
+    });
+}
+
+export interface MethodDeclarationReflection extends SignatureReflection {
+
+}
+
+export function isMethodDeclarationReflection(item: Item): item is MethodSignatureReflection {
+    return item.refType == RefType.MethodDeclaration;
+}
+
+export function visitMethodDeclaration(
+    decl: MethodDeclaration,
+    ctx: Context
+): MethodDeclarationReflection {
+    let signatureRefl = visitSignature(decl, ctx);
+
+    return Object.assign(signatureRefl, {
+        refType: RefType.MethodDeclaration,
+    });
+}
+
+export interface ConstructorDeclarationReflection extends SignatureReflection {
+
+}
+
+export function isConstructorDeclarationReflection(item: Item): item is ConstructorDeclarationReflection {
+    return item.refType == RefType.ConstructorDeclaration;
+}
+
+export function visitConstructorDeclaration(
+    decl: ConstructorDeclaration,
+    ctx: Context
+): ConstructorDeclarationReflection {
+    let signatureRefl = visitSignature(decl, ctx);
+
+    return Object.assign(signatureRefl, {
+        refType: RefType.ConstructorDeclaration,
+    });
+}
+
+export interface GetAccessorDeclarationReflection extends SignatureReflection {
+
+}
+
+export function isGetAccessorDeclarationReflection(item: Item): item is GetAccessorDeclarationReflection {
+    return item.refType == RefType.GetAccessorDeclaration;
+}
+
+export function visitGetAccessorDeclaration(
+    decl: GetAccessorDeclaration,
+    ctx: Context
+): ConstructorDeclarationReflection {
+    let signatureRefl = visitSignature(decl, ctx);
+
+    return Object.assign(signatureRefl, {
+        refType: RefType.GetAccessorDeclaration,
+    });
+}
+
+export interface SetAccessorDeclarationReflection extends SignatureReflection {
+
+}
+
+export function isSetAccessorDeclarationReflection(item: Item): item is SetAccessorDeclarationReflection {
+    return item.refType == RefType.SetAccessorDeclaration;
+}
+
+export function visitSetAccessorDeclaration(
+    decl: SetAccessorDeclaration,
+    ctx: Context
+): SetAccessorDeclarationReflection {
+    let signatureRefl = visitSignature(decl, ctx);
+
+    return Object.assign(signatureRefl, {
+        refType: RefType.SetAccessorDeclaration,
     });
 }

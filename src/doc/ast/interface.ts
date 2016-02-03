@@ -1,5 +1,6 @@
 import {
     InterfaceDeclaration,
+    ClassDeclaration,
     Statement,
     SyntaxKind,
     HeritageClause
@@ -34,8 +35,8 @@ export function isInterfaceDeclaration(statement: Statement)
     return statement.kind == SyntaxKind.InterfaceDeclaration;
 }
 
-export function visitInterface(
-    iface: InterfaceDeclaration,
+export function visitBasicInfo(
+    iface: InterfaceDeclaration | ClassDeclaration,
     ctx: Context
 ): InterfaceReflection {
     let type = ctx.checker.getTypeAtLocation(iface);
@@ -45,16 +46,27 @@ export function visitInterface(
     return {
         id: ctx.id(type),
         name: iface.name.text,
-        refType: RefType.Interface,
         typeParameters: iface.typeParameters &&
             iface.typeParameters.map(tp => visitTypeParameter(tp, ctx)),
+        heritageClauses: iface.heritageClauses &&
+            iface.heritageClauses.map(hc => visitHeritageClause(hc, ctx)),
+        members: []
+    };
+}
+
+export function visitInterface(
+    iface: InterfaceDeclaration,
+    ctx: Context
+): InterfaceReflection {
+    let basicInfo = visitBasicInfo(iface, ctx);
+
+    return Object.assign(basicInfo, {
+        refType: RefType.Interface,
         members: iface.members && visitTypeElements(
             iface.members,
             ctx
-        ),
-        heritageClauses: iface.heritageClauses &&
-            iface.heritageClauses.map(hc => visitHeritageClause(hc, ctx))
-    };
+        )
+    });
 }
 
 export enum HeritageClauseType {

@@ -4,6 +4,7 @@ export enum RefType {
     IntersectionType = 'IntersectionType' as any,
     TypeLiteral = 'TypeLiteral' as any,
     PropertySignature = 'PropertySignature' as any,
+    PropertyDeclaration = 'PropertyDeclaration' as any,
     TypeParameter = 'TypeParameter' as any,
     HeritageClause = 'HeritageClause' as any,
     ExpressionWithTypeArguments = 'ExpressionWithTypeArguments' as any,
@@ -15,6 +16,11 @@ export enum RefType {
     TypeReference = 'TypeReference' as any,
     MethodSignature = 'MethodSignature' as any,
     FunctionType = 'FunctionType' as any,
+    Class = 'Class' as any,
+    MethodDeclaration = 'MethodDeclaration' as any,
+    ConstructorDeclaration = 'ConstructorDeclaration' as any,
+    GetAccessorDeclaration = 'GetAccessorDeclaration' as any,
+    SetAccessorDeclaration = 'SetAccessorDeclaration' as any,
 }
 
 export interface Item {

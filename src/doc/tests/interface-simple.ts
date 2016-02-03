@@ -19,7 +19,6 @@ describe('interface:simple', () => {
     it('interface', () => {
         expect(iface.id).to.ok;
         expect(iface.name).to.equal('Test');
-        expect(isInterfaceReflection(iface)).to.true;
     });
 
     it('interface members', () => {
@@ -35,6 +34,8 @@ describe('interface:simple', () => {
             } else {
                 expect(false).to.true;
             }
+        } else {
+            expect(false).to.true;
         }
     });
 });
