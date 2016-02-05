@@ -1,0 +1,9 @@
+/// <reference path="./typings/react/react.d.ts"/>
+/// <reference path="./typings/react/react-dom.d.ts"/>
+/// <reference path="./typings/bem-cn.d.ts"/>
+/// <reference path="./typings/history.d.ts"/>
+/// <reference path="./typings/react-common.d.ts"/>
+/// <reference path="./typings/react-custom-scrollbars.d.ts"/>
+/// <reference path="./typings/redux.d.ts"/>
+/// <reference path="./typings/react-redux.d.ts"/>
+/// <reference path="./typings/redux-thunk.d.ts"/>

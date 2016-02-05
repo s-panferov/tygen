@@ -10,18 +10,6 @@ describe('class:simple', () => {
     let module = generateInline(`
         class Test {
             prop: Test;
-            // get name() {
-            //     return null;
-            // }
-
-            // set name(a: string) {
-            //     return null;
-            // }
-
-            // name: string
-            // method(a: string = 1) {
-            //
-            // }
         }
     `);
 

@@ -8,3 +8,5 @@ import './interface-call';
 import './class-simple';
 import './class-accessors';
 import './class-constructor';
+
+console.log('tests loaded');

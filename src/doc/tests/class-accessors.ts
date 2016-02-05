@@ -15,7 +15,7 @@ describe('class:accessors', () => {
             }
 
             set name(a: Test) {
-                return null;
+                
             }
         }
     `);
