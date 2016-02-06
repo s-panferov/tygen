@@ -1,7 +1,11 @@
 {
-    "version": "1.5.0-alpha",
     "compilerOptions": {
         "target": "es6",
+        "moduleResolution": "node",
+        "isolatedModules": false,
+        "jsx": "preserve",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
         "declaration": false,
         "noImplicitAny": false,
         "removeComments": true,
@@ -45,8 +49,12 @@
         "./doc/tools.ts",
         "./doc/utils.ts",
         "./doc/writer.ts",
+        "./explorer/actions.ts",
         "./explorer/defines.d.ts",
+        "./explorer/reducers/index.ts",
         "./explorer/redux.ts",
+        "./explorer/state.ts",
+        "./explorer/theme.ts",
         "./explorer/typings/bem-cn.d.ts",
         "./explorer/typings/history.d.ts",
         "./explorer/typings/react-common.d.ts",
@@ -57,6 +65,7 @@
         "./explorer/typings/redux-thunk.d.ts",
         "./explorer/typings/redux.d.ts",
         "./lib/autobind.ts",
+        "./explorer/components/explorer/index.tsx",
         "./explorer/index.tsx",
         "../node_modules/typescript/lib/typescriptServices.d.ts"
     ],

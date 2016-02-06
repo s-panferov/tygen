@@ -7,12 +7,16 @@ module.exports.postcss = function(webpack) {
             path: [__dirname],
             addDependencyTo: webpack
         }),
+        require('postcss-fontpath'),
+        require('postcss-url')({
+            url: "rebase" // or "inline" or "copy"
+        }),
         require('precss'),
         require('postcss-cssnext')({
-            // features: {
-            //     autoprefixer: false,
-            //     initial: false
-            // }
+            features: {
+                autoprefixer: false,
+                initial: false
+            }
         }),
         // require('postcss-initial')({
         //     reset: 'inherited' // reset only inherited rules

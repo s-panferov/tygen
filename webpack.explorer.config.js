@@ -62,7 +62,7 @@ module.exports = {
                 test: /\.tsx?$/,
                 loaders: [
                     !STANDALONE ? "react-hot" : null,
-                    "awesome-typescript-loader?compiler=typescript&+useBabel&+useCache&+forkChecker&tsconfig=./tsconfig.json"
+                    "awesome-typescript-loader?compiler=typescript&+useBabel&+useCache&+forkChecker&tsconfig=./src/explorer/tsconfig.json"
                 ].filter(Boolean)
             },
             {
@@ -115,7 +115,10 @@ module.exports = {
     postcss: webpackConfig.postcss,
 
     plugins: [
-        new HtmlWebpackPlugin(),
+        new HtmlWebpackPlugin({
+            title: 'DocScript Explorer',
+            filename: '../index.html'
+        }),
         new ForkCheckerPlugin(),
         new webpack.ProvidePlugin({
             React: "react"

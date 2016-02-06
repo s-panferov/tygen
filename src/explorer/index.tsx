@@ -7,38 +7,12 @@ import { createHistory }  from 'history';
 let useQueries = require('history/lib/useQueries');
 let history = useQueries(createHistory)();
 
-class Explorer extends React.Component<any, any> {
-    constructor(props, context) {
-        super(props, context);
+import Explorer from './components/explorer';
+import { Provider, createStore } from './redux';
 
-        this.state = {
-            route: '/',
-        };
-    }
+import rootReducer from './reducers';
 
-    componentDidMount() {
-        history.listen(location => {
-            this.setState({
-                route: location.pathname,
-            });
-        });
-    }
-
-    render() {
-        return (
-            <div>
-            </div>
-        );
-    }
-
-    onPathChange(path: string) {
-        history.pushState(null, path, { theme: this.state.theme });
-
-        this.setState({
-            route: path
-        });
-    }
-}
+let store = createStore(rootReducer, {});
 
 export function runApp() {
     let reactApp = document.createElement('div');
@@ -46,7 +20,9 @@ export function runApp() {
     document.body.appendChild(reactApp);
 
     ReactDOM.render(
-        React.createElement(Explorer),
+        <Provider store={ store }>
+            <Explorer history={ history } />
+        </Provider>,
         reactApp
     );
 }
