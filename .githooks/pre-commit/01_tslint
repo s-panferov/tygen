@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Check changed js files using jshint and jscs
+
+
+PATCH_FILE="working-tree.patch"
+NPM="./node_modules"
+
+FILE_PATTERN="\.ts"
+
+function cleanup {
+    exit_code=$?
+    if [ -f "$PATCH_FILE" ]; then
+        patch -p0 < "$PATCH_FILE"
+        rm "$PATCH_FILE"
+    fi
+    exit $exit_code
+}
+
+trap cleanup EXIT SIGINT SIGHUP
+
+# Cancel any changes to the working tree that are not going to be committed
+git diff --no-prefix > "$PATCH_FILE"
+git checkout -- .
+
+git_cached_files=$(git diff --cached --name-only --diff-filter=ACMR | grep $FILE_PATTERN | xargs echo)
+if [ "$git_cached_files" ]; then
+    $NPM/tslint/bin/tslint $git_cached_files || exit 1
+fi
