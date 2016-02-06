@@ -7,10 +7,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "babel": "^5.8.21",
-    "typescript": "^1.6.0-dev.20150905",
-    "webpack": "^1.11.0"
-  }
+  "license": "ISC"
 }

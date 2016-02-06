@@ -7,6 +7,8 @@ import { processSourceFile } from './gen';
 import { Item } from './items';
 import * as uuid from 'node-uuid';
 
+export { DocWriter } from './writer';
+
 import {
     TypeChecker,
     Program,

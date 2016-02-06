@@ -1,15 +1,3 @@
-// export interface Profile {
-//     avatar: string;
-// }
-//
+interface UserName {
 
-/**
- * Docstring
- */
-export interface UserName {
-    // name: string;
-    // profile?: Profile;
-    // profile1?: Profile | string;
-
-    get: () => string;
 }

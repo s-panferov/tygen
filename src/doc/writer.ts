@@ -40,6 +40,6 @@ module.exports = {\n
 
     writeRegistryModule(dir: string) {
         let registryModule = this.generateRegistryModule(dir);
-        fs.writeFileSync('./docs/registry.js', registryModule);
+        fs.writeFileSync(path.join(dir, 'registry.js'), registryModule);
     }
 }

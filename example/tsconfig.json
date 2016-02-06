@@ -1,10 +1,9 @@
 {
-    "version": "1.5.0-beta",
     "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
+        "target": "es6",
+        "moduleResolution": "node",
         "isolatedModules": false,
-        "jsx": "react",
+        "jsx": "preserve",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "declaration": false,
@@ -14,6 +13,10 @@
         "preserveConstEnums": true,
         "suppressImplicitAnyIndexErrors": true
     },
+    "exclude": [
+        "node_modules",
+        "bower_components"
+    ],
     "compileOnSave": false,
     "filesGlob": [
         "./**/*.ts",

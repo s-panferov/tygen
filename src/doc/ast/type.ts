@@ -246,7 +246,7 @@ export function visitTypeLiteral(node: TypeLiteralNode, type: Type, ctx: Context
     let reflection = visitType(type, ctx);
     return Object.assign(reflection, {
         refType: RefType.TypeLiteral,
-        members: visitTypeElements(
+        members: node.members && visitTypeElements(
             node.members,
             ctx
         )

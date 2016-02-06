@@ -2,14 +2,10 @@ var webpack = require('webpack');
 var path = require("path");
 
 var ATL_OPTIONS = [
-    '&target=es6',
-    '&jsx=react',
-    '&+experimentalDecorators',
-    '&+useBabel',
-    '&+generateDoc'
+    '&tsconfig=./tsconfig.json',
 ].join();
 
-var base = __dirname + '../'
+var base = path.resolve(__dirname + '/../');
 
 var config = {
 
@@ -31,17 +27,24 @@ var config = {
             path.join(base, 'node_modules'),
         ],
         extensions: ['', '.ts', '.tsx', '.webpack.js', '.web.js', '.js'],
-        alias: {
-            "lodash": "lodash-node/modern"
-        }
     },
 
     node: {
         fs: "empty"
     },
 
-    // Source maps support (or 'inline-source-map' also works)
-    devtool: 'source-map',
+    devtool: 'eval',
+
+    atl: {
+        plugins: [
+            {
+                file: path.resolve(path.join(base, 'dist', 'loader-plugin.js')),
+                options: {
+                    output: path.resolve(path.join(__dirname, 'doc'))
+                }
+            }
+        ]
+    },
 
     module: {
         loaders: [{

@@ -4,7 +4,8 @@
   "description": "Documentation generator for TypeScript built with ReactJS",
   "main": "./dist/docscript.js",
   "scripts": {
-    "lib": "./node_modules/.bin/webpack --config webpack.library.config.js --watch --progress",
+    "doc": "./node_modules/.bin/webpack --config webpack.doc.config.js --watch --progress",
+    "loader": "./node_modules/.bin/webpack --config webpack.loader.config.js --watch --progress",
     "explorer": "./node_modules/.bin/webpack-dev-server --hot --inline --config webpack.explorer.config.js --progress",
     "explorer-build": "./node_modules/.bin/webpack --config webpack.explorer.config.js --progress"
   },

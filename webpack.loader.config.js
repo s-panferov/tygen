@@ -2,7 +2,6 @@ var webpack = require('webpack');
 var path = require("path");
 var _ = require('lodash-node');
 var fs = require("fs");
-var MochaPlugin = require("./mocha-plugin");
 
 var nodeModules = {};
 fs.readdirSync('node_modules')
@@ -25,14 +24,18 @@ var ATL_OPTIONS = [
 ].join('');
 
 var config = {
-    entry: './src/doc/tests/index.ts',
+    entry: {
+        'loader-plugin': [
+            './src/loader-plugin/index.ts'
+        ]
+    },
 
     target: 'node',
 
     output: {
         path: path.join(__dirname, 'dist'),
-        filename: 'docscript.js',
-        library: 'docscript',
+        filename: '[name].js',
+        library: '[name]',
         libraryTarget: 'commonjs2',
     },
 
@@ -72,9 +75,14 @@ var config = {
     externals: nodeModules,
 
     plugins: [
-        new MochaPlugin(),
         new webpack.BannerPlugin('require("source-map-support").install();',
-            { raw: true, entryOnly: false })
+            { raw: true, entryOnly: false }),
+        new webpack.DllReferencePlugin({
+            context: __dirname,
+            manifest: require("./dist/manifest.json"),
+            name: "require('./docscript.js')",
+            sourceType: "commonsjs2",
+        })
     ]
 };
 
