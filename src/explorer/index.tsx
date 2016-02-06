@@ -7,8 +7,9 @@ import { createHistory }  from 'history';
 let useQueries = require('history/lib/useQueries');
 let history = useQueries(createHistory)();
 
-import Explorer from './components/explorer';
+import App from './components/app';
 import { Provider, createStore } from './redux';
+import { ThemeProvider, ThemeType } from './components/theme';
 
 import rootReducer from './reducers';
 
@@ -21,7 +22,9 @@ export function runApp() {
 
     ReactDOM.render(
         <Provider store={ store }>
-            <Explorer history={ history } />
+            <ThemeProvider theme={ ThemeType.White }>
+                <App history={ history } />
+            </ThemeProvider>
         </Provider>,
         reactApp
     );

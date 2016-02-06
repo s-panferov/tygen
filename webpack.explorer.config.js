@@ -14,7 +14,7 @@ module.exports = {
     entry: {
         index: [
             './src/explorer/entry.js'
-        ]
+        ].filter(Boolean)
     },
 
     externals: {
@@ -124,9 +124,6 @@ module.exports = {
             React: "react"
         }),
         new webpack.NoErrorsPlugin(),
-        !STANDALONE && new webpack.HotModuleReplacementPlugin({
-            hot: true
-        }),
         // new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js"),
         new webpack.ResolverPlugin(
             new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])

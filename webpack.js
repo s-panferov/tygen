@@ -18,6 +18,9 @@ module.exports.postcss = function(webpack) {
                 initial: false
             }
         }),
+        require('postcss-font-magician')({
+           foundries: 'google'
+        }),
         // require('postcss-initial')({
         //     reset: 'inherited' // reset only inherited rules
         // }),

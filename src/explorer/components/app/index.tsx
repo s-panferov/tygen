@@ -1,11 +1,18 @@
 import * as React from 'react';
+import * as theme from '../theme';
 import { History } from 'history';
 
-interface ExplorerProps {
+const block = theme.block('app');
+require('./index.css');
+
+import Layout from '../layout';
+
+interface AppProps {
     history: History;
 }
 
-export default class Explorer extends React.Component<any, any> {
+export default class App extends React.Component<any, any> {
+    static contextTypes = theme.themeContext;
     constructor(props, context) {
         super(props, context);
 
@@ -22,10 +29,16 @@ export default class Explorer extends React.Component<any, any> {
         });
     }
 
+    getClassName() {
+        return block(theme.resolveTheme(this));
+    }
+
     render() {
         return (
-            <div>
-                <h1>HELLO</h1>
+            <div className={ this.getClassName() }>
+                <Layout className={ block('layout') }>
+
+                </Layout>
             </div>
         );
     }
