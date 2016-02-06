@@ -1,0 +1,27 @@
+.path {
+    height: 40px;
+    display: flex;
+    margin-left: 20px;
+}
+
+.path__disabled {
+    color: #ccc;
+}
+
+.path__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+
+    &:after {
+        margin-left: 5px;
+        margin-right: 5px;
+        content: '/';
+        color: #ccc;
+    }
+
+    &:nth-last-child(1):after {
+        content: '';
+    }
+}
