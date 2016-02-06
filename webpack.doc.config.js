@@ -1,8 +1,6 @@
 var webpack = require('webpack');
 var path = require("path");
-var _ = require('lodash-node');
 var fs = require("fs");
-var MochaPlugin = require("./mocha-plugin");
 
 var nodeModules = {};
 fs.readdirSync('node_modules')
@@ -27,7 +25,7 @@ var ATL_OPTIONS = [
 var config = {
     entry: {
         docscript: [
-            './src/doc/tests/index.ts'
+            './src/doc/index.ts'
         ]
     },
 
@@ -52,7 +50,6 @@ var config = {
         ],
         extensions: ['', '.ts', '.tsx', '.webpack.js', '.web.js', '.js'],
         alias: {
-            "lodash": "lodash-node/modern"
         }
     },
 
@@ -76,7 +73,6 @@ var config = {
     externals: nodeModules,
 
     plugins: [
-        new MochaPlugin(),
         new webpack.BannerPlugin('require("source-map-support").install();',
             { raw: true, entryOnly: false }),
         new webpack.DllPlugin({

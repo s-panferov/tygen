@@ -5,6 +5,7 @@
   "main": "./dist/docscript.js",
   "scripts": {
     "doc": "./node_modules/.bin/webpack --config webpack.doc.config.js --watch --progress",
+    "doc-tests": "./node_modules/.bin/webpack --config webpack.doc-tests.config.js --watch --progress",
     "loader": "./node_modules/.bin/webpack --config webpack.loader.config.js --watch --progress",
     "explorer": "./node_modules/.bin/webpack-dev-server --hot --inline --config webpack.explorer.config.js --progress",
     "explorer-build": "./node_modules/.bin/webpack --config webpack.explorer.config.js --progress"
@@ -37,7 +38,8 @@
     "git-hooks": "^1.0.2",
     "history": "^2.0.0",
     "html-webpack-plugin": "^2.8.1",
-    "lodash-node": "^3.10.2",
+    "json-loader": "^0.5.4",
+    "lodash": "^4.2.1",
     "memory-fs": "^0.2.0",
     "mocha": "^2.2.5",
     "mocha-loader": "^0.7.1",
@@ -60,7 +62,8 @@
     "shelljs": "^0.5.3",
     "source-map-support": "^0.4.0",
     "style-loader": "^0.13.0",
-    "typescript": "^1.9.0-dev.20160205",
+    "tslint": "^3.3.0-dev.2",
+    "typescript": "^1.9.0-dev.20160206",
     "webpack": "^1.12.13",
     "webpack-dev-server": "^1.14.1"
   },

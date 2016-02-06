@@ -54,6 +54,7 @@
         "./explorer/defines.d.ts",
         "./explorer/reducers/index.ts",
         "./explorer/redux.ts",
+        "./explorer/service.ts",
         "./explorer/state.ts",
         "./explorer/typings/bem-cn.d.ts",
         "./explorer/typings/history.d.ts",

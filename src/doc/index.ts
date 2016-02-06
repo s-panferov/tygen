@@ -40,7 +40,7 @@ export interface ModuleInfo {
     fileInfo: FileInfo;
 }
 
-export interface ModulesIndex {
+export interface DocRegistry {
     mainPackage: string;
     files: Dictionary<ModuleInfo>;
 }
@@ -110,7 +110,7 @@ export class Module implements ModuleInfo {
     }
 
     toJSON() {
-        let { text, pkg, fileInfo } = this;
-        return { pkg, fileInfo, text };
+        let { text, pkg, fileInfo, items } = this;
+        return { pkg, fileInfo, text, items };
     }
 }

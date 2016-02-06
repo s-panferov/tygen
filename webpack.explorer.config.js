@@ -45,7 +45,6 @@ module.exports = {
         ],
         extensions: ['', '.ts', '.tsx', '.webpack.js', '.web.js', '.js', '.styl'],
         alias: {
-
         }
     },
 
@@ -115,6 +114,12 @@ module.exports = {
     postcss: webpackConfig.postcss,
 
     plugins: [
+        // new webpack.DllReferencePlugin({
+        //     context: __dirname,
+        //     manifest: require("./dist/manifest.json"),
+        //     // name: "require('./docscript.js')",
+        //     sourceType: "commonsjs2",
+        // }),
         new HtmlWebpackPlugin({
             title: 'DocScript Explorer',
             filename: '../index.html'

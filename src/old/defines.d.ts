@@ -1,24 +1,6 @@
 /// <reference path="../typings/tsd.d.ts" />
 /// <reference path="./typings/react-dom.d.ts"/>
 
-declare module "memory-fs" {
-    interface MemoryFsStat {
-        isFile: () => boolean,
-        isDirectory: () => boolean,
-        isSymbolicLink: () => boolean,
-    }
-
-    class MemoryFileSystem {
-        statSync(path: string): MemoryFsStat;
-        readdirSync(path: string): string[];
-        mkdirpSync(path: string);
-        mkdirSync(path: string);
-        writeFileSync(path: string, content: string);
-    }
-
-    export default MemoryFileSystem
-}
-
 /**
  * Type declarations for Webpack runtime.
  */

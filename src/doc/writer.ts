@@ -13,8 +13,12 @@ export class DocWriter {
     }
 
     writeModules(dir: string) {
+        fse.removeSync(dir);
         fse.ensureDirSync(dir);
-        _.forEach(this.context.modules, (module) => {
+
+        let modules = this.context.modules;
+        Object.keys(modules).forEach(moduleKey => {
+            let module = modules[moduleKey];
             let metaPath = path.join(dir, module.fileInfo.metaName);
             fs.writeFileSync(metaPath, JSON.stringify(module, null, 4));
         });
@@ -29,7 +33,9 @@ module.exports = {\n
     files: {
         `;
 
-        _.forEach(this.context.modules, (module) => {
+        let modules = this.context.modules;
+        Object.keys(modules).forEach(moduleKey => {
+            let module = modules[moduleKey];
             buf += `    '${module.fileInfo.metaName}': require('./${ module.fileInfo.metaName }'),\n`;
         });
 

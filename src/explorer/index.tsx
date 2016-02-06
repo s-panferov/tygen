@@ -8,12 +8,13 @@ let useQueries = require('history/lib/useQueries');
 let history = useQueries(createHistory)();
 
 import App from './components/app';
+import { defaultState } from './state';
 import { Provider, createStore } from './redux';
 import { ThemeProvider, ThemeType } from './components/theme';
 
 import rootReducer from './reducers';
 
-let store = createStore(rootReducer, {});
+let store = createStore(rootReducer, defaultState());
 
 export function runApp() {
     let reactApp = document.createElement('div');

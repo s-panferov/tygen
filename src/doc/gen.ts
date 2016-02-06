@@ -2,12 +2,6 @@ import {
     SourceFile,
 } from 'typescript';
 
-import {
-    SyntaxKind
-} from 'typescript';
-
-import * as typescript from 'typescript';
-
 import { Context } from './index';
 import * as iface from './ast/interface';
 import * as cls from './ast/class';

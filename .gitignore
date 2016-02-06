@@ -11,3 +11,4 @@ tscommand*
 NOTES.md
 /tmp/*
 npm-debug.log
+/example/doc

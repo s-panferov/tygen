@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 var path = require("path");
 var fs = require("fs");
+var MochaPlugin = require('./mocha-plugin');
 
 var nodeModules = {};
 fs.readdirSync('node_modules')
@@ -24,8 +25,8 @@ var ATL_OPTIONS = [
 
 var config = {
     entry: {
-        'loader-plugin': [
-            './src/loader-plugin/index.ts'
+        tests: [
+            './src/doc/tests/index.ts'
         ]
     },
 
@@ -73,6 +74,7 @@ var config = {
     externals: nodeModules,
 
     plugins: [
+        new MochaPlugin(),
         new webpack.BannerPlugin('require("source-map-support").install();',
             { raw: true, entryOnly: false }),
         new webpack.DllReferencePlugin({

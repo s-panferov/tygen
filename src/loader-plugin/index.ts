@@ -25,7 +25,9 @@ class Plugin {
 
         let files = program.getSourceFiles();
         files.forEach(file => {
-            ctx.addModule(file.fileName, file);
+            if (file.fileName.indexOf('.d.ts') === -1) {
+                ctx.addModule(file.fileName, file);
+            }
         });
 
         let writer = new DocWriter(ctx);
