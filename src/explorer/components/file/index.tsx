@@ -2,10 +2,10 @@ import * as React from 'react';
 import * as theme from '../theme';
 
 import Link from '../link';
-// import { Navigation } from '../../state';
+import { Route } from '../../state';
 
 let block = theme.block('file');
-require('./file.css');
+require('./index.css');
 
 export interface FileProps extends React.CommonProps {
     pkg: string;
@@ -17,7 +17,7 @@ export interface FileProps extends React.CommonProps {
     disabled?: boolean;
     active?: boolean;
 
-    navigate: (nav: Navigation) => void;
+    navigate: (nav: Route) => void;
 }
 
 export interface FileState {}

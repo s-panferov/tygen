@@ -24,7 +24,8 @@
         "!./node_modules/**/*"
     ],
     "files": [
-        "./index.ts"
+        "./src/index.ts",
+        "./src/test.ts"
     ],
     "atom": {
         "rewriteTsconfig": true

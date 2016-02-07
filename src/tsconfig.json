@@ -72,7 +72,7 @@
         "./explorer/components/layout/index.tsx",
         "./explorer/components/link/index.tsx",
         "./explorer/components/nav/index.tsx",
-        "./explorer/components/path/path.tsx",
+        "./explorer/components/path/index.tsx",
         "./explorer/index.tsx",
         "../node_modules/typescript/lib/typescriptServices.d.ts"
     ],

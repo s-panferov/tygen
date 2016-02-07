@@ -10,7 +10,7 @@ var base = path.resolve(__dirname + '/../');
 var config = {
 
     entry: {
-        index: './index.ts'
+        index: './src/index.ts'
     },
 
     output: {

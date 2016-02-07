@@ -8,13 +8,16 @@ let useQueries = require('history/lib/useQueries');
 let history = useQueries(createHistory)();
 
 import App from './components/app';
+import Service from './service';
+
 import { defaultState } from './state';
 import { Provider, createStore } from './redux';
 import { ThemeProvider, ThemeType } from './components/theme';
 
 import rootReducer from './reducers';
 
-let store = createStore(rootReducer, defaultState());
+let service = new Service(require('../../example/doc/registry.js'));
+let store = createStore(rootReducer, defaultState(service));
 
 export function runApp() {
     let reactApp = document.createElement('div');

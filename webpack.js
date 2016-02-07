@@ -4,7 +4,7 @@ var path = require('path');
 module.exports.postcss = function(webpack) {
     return [
         require('postcss-import')({
-            path: [__dirname],
+            path: [path.join(__dirname, 'src', 'explorer')],
             addDependencyTo: webpack
         }),
         require('postcss-fontpath'),
@@ -18,12 +18,10 @@ module.exports.postcss = function(webpack) {
                 initial: false
             }
         }),
-        require('postcss-font-magician')({
-           foundries: 'google'
-        }),
         // require('postcss-initial')({
         //     reset: 'inherited' // reset only inherited rules
         // }),
+        require('postcss-font-magician'),
         require('colorguard')
     ];
 };

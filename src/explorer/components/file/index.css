@@ -16,12 +16,8 @@
     &:visited {
         color: #ccc;
     }
-
-    &:hover {
-        color: var(--color-3);
-    }
 }
 
 .file_active {
-    font-weight: bold;
+    font-weight: 400;
 }
