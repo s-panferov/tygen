@@ -16,13 +16,28 @@ export interface ThemeProps {
     theme?: ThemeType;
 }
 
-export function cloneWithClass(children: React.ReactNode, className: string | {toString: () => string}): React.ReactNode {
-    if (children instanceof Array) {
-        return children.map((child) => {
-            return React.cloneElement(child as any, {className: className});
-        });
+export function isReactElement(
+    elem: React.ReactElement<any> | string | number
+): elem is React.ReactElement<any> {
+    if (typeof elem !== 'number' && typeof elem !== 'string') {
+        return true;
     } else {
-        return React.cloneElement(<React.ReactElement<any>>children, {className: className});
+        return false;
+    }
+}
+
+export function joinClasses(
+    className,
+    add
+): ClassName {
+    if (className) {
+        if (className.mix) {
+            return className.mix(add);
+        } else {
+            return className + ' ' + add;
+        }
+    } else {
+        return add;
     }
 }
 

@@ -36,7 +36,7 @@ module.exports = {\n
         let modules = this.context.modules;
         Object.keys(modules).forEach(moduleKey => {
             let module = modules[moduleKey];
-            buf += `    '${module.fileInfo.metaName}': require('./${ module.fileInfo.metaName }'),\n`;
+            buf += `    '${module.fileInfo.relativeToPackage}': require('./${ module.fileInfo.metaName }'),\n`;
         });
 
         buf += '}}';

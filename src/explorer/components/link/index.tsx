@@ -10,8 +10,10 @@ export interface LinkProps extends React.CommonProps {
 export interface LinkState {}
 
 export default class Link extends React.Component<LinkProps, LinkState> {
+    static contextTypes = theme.themeContext;
+
     getClassName() {
-        return block().mix(this.props.className);
+        return block(theme.resolveTheme(this)).mix(this.props.className);
     }
 
     render() {

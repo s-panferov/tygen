@@ -1,9 +1,6 @@
-import Service from './service';
+import Service, { Route } from './service';
 
-export interface Route {
-    pkg: string;
-    path: string;
-}
+export { Route }
 
 export interface State {
     service?: Service;

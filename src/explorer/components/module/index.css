@@ -1,0 +1,16 @@
+@import 'theme';
+
+.module {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+
+    &__header {
+        flex: 0;
+        height: 40px;
+        display: flex;
+        align-items: center;
+
+        font-family: var(--sans-serif);
+    }
+}

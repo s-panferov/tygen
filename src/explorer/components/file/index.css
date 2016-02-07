@@ -1,5 +1,5 @@
 .file {
-    display: flex;
+    display: inline-flex;
     align-items: center;
 
     font-weight: lighter;

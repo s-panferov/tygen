@@ -2,43 +2,29 @@ import * as React from 'react';
 import * as path from 'path';
 import * as theme from '../theme';
 
-import autobind from '../../../lib/autobind';
-
 import Link from '../link';
 import File from '../file';
-import Service, { PackageService } from '../../service';
+import Service from '../../service';
 import { Route } from '../../state';
-import { connect, DispatchProps, actions } from '../../redux';
-
-import { getFileStructure } from '../../service';
 
 let block = theme.block('nav');
 require('./index.css');
 
-export interface NavReduxProps extends DispatchProps {
-    route?: Route;
-    service?: Service;
-}
-
-export interface NavProps extends React.CommonProps, NavReduxProps {
-
+export interface NavProps extends React.CommonProps {
+    route: Route;
+    service: Service;
+    onNavigate: (route: Route) => void;
 }
 
 export interface NavState {}
 
-@connect(({ route, service }): NavReduxProps => {
-    return {
-        route,
-        service
-    };
-})
 export default class Nav extends React.Component<NavProps, NavState> {
     getClassName() {
         return block(theme.resolveTheme(this)).mix(this.props.className);
     }
 
     render() {
-        let { route, service } = this.props;
+        let { route } = this.props;
 
         return (
             <div { ...this.props } className={ this.getClassName() }>
@@ -49,12 +35,7 @@ export default class Nav extends React.Component<NavProps, NavState> {
                 <div key='struct' className={ block('struct') }>
                     {
                         route.pkg
-                            ? this.renderFileItems(
-                                service.getPackage(
-                                    route.pkg
-                                ),
-                                route.path
-                            )
+                            ? this.renderFileItems(route)
                             : this.renderPkgItems()
                     }
                 </div>
@@ -76,27 +57,20 @@ export default class Nav extends React.Component<NavProps, NavState> {
         let packages = this.props.service.getPackages();
         return Object.keys(packages).map(pkgName => {
             return <File
+                key={ pkgName }
                 pkg={ pkgName }
                 folder={ true }
                 name={ pkgName }
                 path={ '/' }
                 className={ block('struct-item') }
-                navigate={ this.onNavigate }
+                navigate={ this.props.onNavigate }
             />;
         });
     }
 
-    @autobind
-    onNavigate(route: Route) {
-        this.props.dispatch(
-            actions.navigate(route)
-        );
-    }
-
-    renderFileItems(pkg: PackageService, targetPath: string) {
-        let pkgName = pkg.info.name;
-
-        let structure = getFileStructure(pkg, targetPath);
+    renderFileItems(route: Route) {
+        let pkgName = route.pkg;
+        let structure = this.props.service.getFileStructure(route);
         let files = [];
 
         if (structure.prevExists) {
@@ -109,7 +83,7 @@ export default class Nav extends React.Component<NavProps, NavState> {
                     name={ structure.prevName || '/' }
                     path={ structure.prevPath }
                     className={ block('struct-item') }
-                    navigate={ this.onNavigate }
+                    navigate={ this.props.onNavigate }
                 />
             );
         }
@@ -122,7 +96,7 @@ export default class Nav extends React.Component<NavProps, NavState> {
                 name={ folder }
                 path={ path.join(structure.dirPath, folder) }
                 className={ block('struct-item') }
-                navigate={ this.onNavigate }
+                navigate={ this.props.onNavigate }
             />;
         }));
 
@@ -134,7 +108,7 @@ export default class Nav extends React.Component<NavProps, NavState> {
                 active={ structure.isFile && file == structure.currentName }
                 path={ path.join(structure.dirPath, file) }
                 className={ block('struct-item') }
-                navigate={ this.onNavigate }
+                navigate={ this.props.onNavigate }
             />;
         }));
 
