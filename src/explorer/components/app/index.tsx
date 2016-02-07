@@ -6,6 +6,7 @@ import { History } from 'history';
 import autobind from '../../../lib/autobind';
 
 import Service, { Route } from '../../service';
+import { PluginRegistry } from '../../state';
 
 const block = theme.block('app');
 require('./index.css');
@@ -17,14 +18,15 @@ import Nav from '../nav';
 interface AppReduxProps extends DispatchProps {
     service?: Service;
     route?: Route;
+    plugins?: PluginRegistry;
 }
 
 interface AppProps extends AppReduxProps {
     history: History;
 }
 
-@connect(({ service, route }): AppReduxProps => {
-    return { service, route };
+@connect(({ service, route, plugins }): AppReduxProps => {
+    return { service, route, plugins };
 })
 export default class App extends React.Component<AppProps, any> {
     static contextTypes = theme.themeContext;
@@ -61,6 +63,7 @@ export default class App extends React.Component<AppProps, any> {
                     /> }
                 >
                     <Module
+                        plugins={ this.props.plugins }
                         route={ this.props.route }
                         module={ module }
                         onNavigate={ this.onNavigate }

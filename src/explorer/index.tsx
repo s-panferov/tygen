@@ -16,8 +16,13 @@ import { ThemeProvider, ThemeType } from './components/theme';
 
 import rootReducer from './reducers';
 
+import PluginRegistry from './plugins';
+import tsPlugin from './plugins/ts';
+let plugins = new PluginRegistry();
+plugins.register(tsPlugin);
+
 let service = new Service(require('../../example/doc/registry.js'));
-let store = createStore(rootReducer, defaultState(service));
+let store = createStore(rootReducer, defaultState(service, plugins));
 
 export function runApp() {
     let reactApp = document.createElement('div');

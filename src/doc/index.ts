@@ -7,8 +7,6 @@ import { processSourceFile } from './gen';
 import { Item } from './items';
 import * as uuid from 'node-uuid';
 
-export { DocWriter } from './writer';
-
 import {
     TypeChecker,
     Program,
@@ -34,10 +32,16 @@ export interface FileInfo {
     metaName: string;
 }
 
+export enum ModuleKind {
+    TypeScript = 'typescript' as any
+}
+
 export interface ModuleInfo {
+    kind: ModuleKind;
     text: string;
     pkg: Package;
     fileInfo: FileInfo;
+    items: Item[];
 }
 
 export interface DocRegistry {
@@ -97,6 +101,7 @@ export class Context {
 }
 
 export class Module implements ModuleInfo {
+    kind = ModuleKind.TypeScript;
     text: string;
     pkg: Package;
     fileInfo: FileInfo;
@@ -110,7 +115,7 @@ export class Module implements ModuleInfo {
     }
 
     toJSON() {
-        let { text, pkg, fileInfo, items } = this;
-        return { pkg, fileInfo, text, items };
+        let { text, pkg, fileInfo, items, kind } = this;
+        return { pkg, fileInfo, text, items, kind };
     }
 }

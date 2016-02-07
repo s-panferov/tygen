@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as theme from '../theme';
 import { Maybe } from 'tsmonad';
 
-import { Route } from '../../state';
+import { Route, PluginRegistry } from '../../state';
 import { Module as ModuleRef } from '../../../doc/index';
 
 import Breadcrumbs from '../breadcrumbs';
@@ -15,6 +15,7 @@ export interface ModuleProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     route: Route;
     module: Maybe<ModuleRef>;
+    plugins: PluginRegistry;
 
     onNavigate: (route: Route) => void;
 }
@@ -36,9 +37,26 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
                     </Breadcrumbs>
                 </div>
                 <div className={ block('content') }>
+                    { this.renderView() }
                 </div>
             </div>
         );
+    }
+
+    renderView(): React.ReactNode {
+        let { module, plugins } = this.props;
+        return module.caseOf({
+            just: (module) => {
+                let Component = plugins.getModuleComponent(module);
+                return (
+                    <Component
+                        className={ block('view') }
+                        module={ module }
+                    />
+                );
+            },
+            nothing: () => <div/>
+        });
     }
 
     renderRoute() {

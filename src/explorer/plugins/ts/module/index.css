@@ -1,0 +1,10 @@
+@import 'theme';
+
+.ts-module {
+    display: flex;
+    flex-direction: column;
+
+    &__layout {
+        flex: 1 1;
+    }
+}

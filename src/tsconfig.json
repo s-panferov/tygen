@@ -52,6 +52,8 @@
         "./explorer/actions.ts",
         "./explorer/components/theme.ts",
         "./explorer/defines.d.ts",
+        "./explorer/plugins.ts",
+        "./explorer/plugins/ts/index.ts",
         "./explorer/reducers/index.ts",
         "./explorer/redux.ts",
         "./explorer/service.ts",
@@ -76,6 +78,8 @@
         "./explorer/components/nav/index.tsx",
         "./explorer/components/path/index.tsx",
         "./explorer/index.tsx",
+        "./explorer/plugins/ts/list/index.tsx",
+        "./explorer/plugins/ts/module/index.tsx",
         "../node_modules/typescript/lib/typescriptServices.d.ts"
     ],
     "exclude": [
