@@ -1,4 +1,4 @@
-export enum RefType {
+export enum ItemType {
     Interface = 'Interface' as any,
     UnionType = 'UnionType' as any,
     IntersectionType = 'IntersectionType' as any,
@@ -27,5 +27,5 @@ export interface Item {
     id?: string;
     name?: string;
     comment?: string;
-    refType?: RefType;
+    itemType?: ItemType;
 }

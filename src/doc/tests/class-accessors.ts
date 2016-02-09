@@ -1,4 +1,4 @@
-import { generateInline, expect } from './utils';
+import { generateInline, expect, typeRef } from './utils';
 import {
     isClassReflection
 } from '../ast/class';
@@ -15,7 +15,7 @@ describe('class:accessors', () => {
             }
 
             set name(a: Test) {
-                
+
             }
         }
     `);
@@ -39,7 +39,7 @@ describe('class:accessors', () => {
 
             if (isGetAccessorDeclarationReflection(getter)) {
                 expect(getter.name).to.equal('name');
-                expect(getter.type.id).to.equal(cls.id);
+                expect(typeRef(getter.type)).to.equal(cls.id);
             } else {
                 expect(false).to.true;
             }

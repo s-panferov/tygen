@@ -1,4 +1,4 @@
-import { generateInline, expect } from './utils';
+import { generateInline, expect, typeRef } from './utils';
 import { CoreType } from '../tools';
 import {
     isInterfaceReflection,
@@ -34,7 +34,7 @@ describe('interface-intersection', () => {
                     if (isIntersectionTypeReflection(type)) {
                         expect(type.types).lengthOf(2);
                         expect(type.types[0].coreType).to.equal(CoreType.String);
-                        expect(type.types[1].id).to.equal(iface.id);
+                        expect(typeRef(type.types[1])).to.equal(iface.id);
                     } else {
                         expect(false).to.true;
                     }
@@ -53,7 +53,7 @@ describe('interface-intersection', () => {
                     if (isUnionTypeReflection(type)) {
                         expect(type.types).lengthOf(2);
                         expect(type.types[0].coreType).to.equal(CoreType.String);
-                        expect(type.types[1].id).to.equal(iface.id);
+                        expect(typeRef(type.types[1])).to.equal(iface.id);
                     } else {
                         expect(false).to.true;
                     }

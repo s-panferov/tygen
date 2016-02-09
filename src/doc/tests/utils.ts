@@ -7,6 +7,17 @@ export { inspect } from '../tools';
 
 import * as uuid from 'node-uuid';
 
+import { isTypeReferenceReflection } from '../ast/type';
+import { Item } from '../items';
+
+export function typeRef(item: Item): string {
+    if (isTypeReferenceReflection(item)) {
+        return item.ref;
+    } else {
+        throw new Error('item is not type reference');
+    }
+}
+
 export function filePath(file: string) {
     return path.join(process.cwd(), 'src', 'doc', 'tests', file);
 }

@@ -9,7 +9,7 @@ import {
 import * as assert from 'assert';
 
 import { Context } from '../index';
-import { Item, RefType } from '../items';
+import { Item, ItemType } from '../items';
 
 import {
     visitTypeElements,
@@ -26,7 +26,7 @@ export interface InterfaceReflection extends Item {
 }
 
 export function isInterfaceReflection(item: Item): item is InterfaceReflection {
-    return item.refType == RefType.Interface;
+    return item.itemType == ItemType.Interface;
 }
 
 export function isInterfaceDeclaration(statement: Statement)
@@ -61,7 +61,7 @@ export function visitInterface(
     let basicInfo = visitBasicInfo(iface, ctx);
 
     return Object.assign(basicInfo, {
-        refType: RefType.Interface,
+        itemType: ItemType.Interface,
         members: iface.members && visitTypeElements(
             iface.members,
             ctx
@@ -86,7 +86,7 @@ export interface HeritageClauseReflection extends Item {
 
 function visitHeritageClause(hc: HeritageClause, ctx: Context): HeritageClauseReflection {
     return {
-        refType: RefType.HeritageClause,
+        itemType: ItemType.HeritageClause,
         clause: HeritageClauseTypeTsMapping[hc.token],
         types: hc.types &&
             hc.types.map(expr => visitExpressionWithTypeArguments(expr, ctx)),

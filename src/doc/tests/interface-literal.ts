@@ -1,11 +1,12 @@
-import { generateInline, expect } from './utils';
+import { generateInline, expect, typeRef } from './utils';
 import {
     isInterfaceReflection,
 } from '../ast/interface';
 
 import {
     isTypeLiteralReflection,
-    isPropertySignatureReflection
+    isPropertySignatureReflection,
+    isTypeReferenceReflection
 } from '../ast/type';
 
 describe('interface-literal', () => {
@@ -38,7 +39,7 @@ describe('interface-literal', () => {
 
                     if (isPropertySignatureReflection(member)) {
                         expect(member.name).to.equal('p0');
-                        expect(member.type.id).to.equal(iface.id);
+                        expect(typeRef(member.type)).equal(iface.id);
                     } else {
                         expect(false).to.true;
                     }

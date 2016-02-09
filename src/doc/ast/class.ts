@@ -6,7 +6,7 @@ import {
 } from 'typescript';
 
 import { Context } from '../index';
-import { Item, RefType } from '../items';
+import { Item, ItemType } from '../items';
 
 import {
     InterfaceReflection,
@@ -22,7 +22,7 @@ export interface ClassReflection extends InterfaceReflection {
 }
 
 export function isClassReflection(item: Item): item is InterfaceReflection {
-    return item.refType == RefType.Class;
+    return item.itemType == ItemType.Class;
 }
 
 export function isClasDeclaration(statement: Statement)
@@ -38,7 +38,7 @@ export function visitClass(
     let basicInfo = visitBasicInfo(cls, ctx);
 
     return Object.assign(basicInfo, {
-        refType: RefType.Class,
+        itemType: ItemType.Class,
         members: cls.members && visitClassElements(
             cls.members,
             ctx

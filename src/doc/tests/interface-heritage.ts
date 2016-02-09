@@ -1,6 +1,6 @@
 import { generateInline, expect } from './utils';
 import { CoreType } from '../tools';
-import { RefType } from '../items';
+import { ItemType } from '../items';
 import {
     isInterfaceReflection,
     HeritageClauseType
@@ -22,7 +22,7 @@ describe('interface-heritage', () => {
         if (isInterfaceReflection(base)) {
             it('reflection', () => {
                 let hc = iface.heritageClauses[0];
-                expect(hc.refType).equal(RefType.HeritageClause);
+                expect(hc.itemType).equal(ItemType.HeritageClause);
                 expect(hc.clause).equal(HeritageClauseType.Extends);
                 expect(hc.types[0].expression.type.id).equal(base.id);
                 expect(hc.types[0].typeArguments[0].coreType).equal(CoreType.String);

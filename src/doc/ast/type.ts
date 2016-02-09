@@ -36,7 +36,7 @@ import {
 } from '../tools';
 
 import { Context } from '../index';
-import { Item, RefType } from '../items';
+import { Item, ItemType } from '../items';
 
 export interface PropertySignatureReflection extends Item {
     name: string;
@@ -45,7 +45,7 @@ export interface PropertySignatureReflection extends Item {
 }
 
 export function isPropertySignatureReflection(item: Item): item is PropertySignatureReflection {
-    return item.refType == RefType.PropertySignature;
+    return item.itemType == ItemType.PropertySignature;
 }
 
 export function isPropertySignature(node: TypeElement): node is PropertySignature {
@@ -150,7 +150,7 @@ export function visitPropertySignature(
     ctx: Context
 ): PropertySignatureReflection {
     return {
-        refType: RefType.PropertySignature,
+        itemType: ItemType.PropertySignature,
         name: prop.name.getText(),
         optional: !!prop.questionToken,
         type: visitTypeNode(prop.type, ctx)
@@ -162,7 +162,7 @@ export interface PropertyDeclarationReflection extends PropertySignatureReflecti
 }
 
 export function isPropertyDeclarationReflection(item: Item): item is PropertyDeclarationReflection {
-    return item.refType == RefType.PropertyDeclaration;
+    return item.itemType == ItemType.PropertyDeclaration;
 }
 
 export function visitPropertyDeclaration(
@@ -171,7 +171,7 @@ export function visitPropertyDeclaration(
 ): PropertyDeclarationReflection {
     let propertySig = visitPropertySignature(prop, ctx);
     return Object.assign(propertySig, {
-        refType: RefType.PropertyDeclaration
+        itemType: ItemType.PropertyDeclaration
     });
 }
 
@@ -188,7 +188,7 @@ export interface TypeLiteralReflection extends TypeReflection {
 }
 
 export function isTypeLiteralReflection(item: Item): item is TypeLiteralReflection {
-    return  item.refType == RefType.TypeLiteral;
+    return  item.itemType == ItemType.TypeLiteral;
 }
 
 export function isTypeLiteral(node: TypeNode): node is TypeLiteralNode {
@@ -245,7 +245,7 @@ export function visitTypeLiteral(node: TypeLiteralNode, type: Type, ctx: Context
 
     let reflection = visitType(type, ctx);
     return Object.assign(reflection, {
-        refType: RefType.TypeLiteral,
+        itemType: ItemType.TypeLiteral,
         members: node.members && visitTypeElements(
             node.members,
             ctx
@@ -258,7 +258,7 @@ export interface IntersectionTypeReflection extends TypeReflection {
 }
 
 export function isIntersectionTypeReflection(item: Item): item is IntersectionTypeReflection {
-    return item.refType == RefType.IntersectionType;
+    return item.itemType == ItemType.IntersectionType;
 }
 
 export interface UnionTypeReflection extends IntersectionTypeReflection {
@@ -266,7 +266,7 @@ export interface UnionTypeReflection extends IntersectionTypeReflection {
 }
 
 export function isUnionTypeReflection(item: Item): item is UnionTypeReflection {
-    return item.refType == RefType.UnionType;
+    return item.itemType == ItemType.UnionType;
 }
 
 export function visitIntersectionType(
@@ -279,7 +279,7 @@ export function visitIntersectionType(
     let reflection = visitType(type, ctx);
 
     return Object.assign(reflection, {
-        refType: RefType.IntersectionType,
+        itemType: ItemType.IntersectionType,
         types: node.types.map((type) => visitTypeNode(type, ctx))
     });
 }
@@ -294,7 +294,7 @@ export function visitUnionType(
     let reflection = visitType(type, ctx);
 
     return Object.assign(reflection, {
-        refType: RefType.UnionType,
+        itemType: ItemType.UnionType,
         types: node.types.map((type) => visitTypeNode(type, ctx))
     });
 }
@@ -304,7 +304,7 @@ export interface FunctionTypeReflection extends TypeReflection {
 }
 
 export function isFunctionTypeReflection(item: Item): item is FunctionTypeReflection {
-    return item.refType == RefType.FunctionType;
+    return item.itemType == ItemType.FunctionType;
 }
 
 export function visitFunctionTypeNode(
@@ -317,19 +317,20 @@ export function visitFunctionTypeNode(
     let reflection = visitType(type, ctx);
 
     return Object.assign(reflection, {
-        refType: RefType.FunctionType,
+        itemType: ItemType.FunctionType,
         signature: visitSignature(node, ctx)
     });
 }
 
 interface TypeReferenceReflection extends TypeReflection {
+    ref: string;
     typeName: string;
     targetType: TypeReflection;
     typeArguments: TypeReflection[];
 }
 
 export function isTypeReferenceReflection(item: Item): item is TypeReferenceReflection {
-    return item.refType == RefType.TypeReference;
+    return item.itemType == ItemType.TypeReference;
 }
 
 export function visitTypeReference(
@@ -341,7 +342,9 @@ export function visitTypeReference(
     let reflection = visitType(type, ctx);
 
     return Object.assign(reflection, {
-        refType: RefType.TypeReference,
+        id: null,
+        ref: reflection.id,
+        itemType: ItemType.TypeReference,
         typeName: node.typeName.getText(),
         targetType,
         typeArguments: type.typeArguments &&
@@ -354,7 +357,7 @@ export interface TypeParameterReflection extends Item {
 }
 
 export function isTypeParameterReflection(item: Item): item is TypeParameterReflection {
-    return item.refType == RefType.TypeParameter;
+    return item.itemType == ItemType.TypeParameter;
 }
 
 export function visitTypeParameter(decl: TypeParameterDeclaration, ctx: Context): TypeParameterReflection {
@@ -362,7 +365,7 @@ export function visitTypeParameter(decl: TypeParameterDeclaration, ctx: Context)
 
     return {
         id: ctx.id(type),
-        refType: RefType.TypeParameter,
+        itemType: ItemType.TypeParameter,
         name: decl.name.text,
         constraint: decl.constraint && visitTypeNode(decl.constraint, ctx)
     };
@@ -375,7 +378,7 @@ export interface ExpressionWithTypeArgumentsReflection extends Item {
 
 export function visitExpressionWithTypeArguments(expr: ExpressionWithTypeArguments, ctx: Context) {
     return {
-        refType: RefType.ExpressionWithTypeArguments,
+        itemType: ItemType.ExpressionWithTypeArguments,
         typeArguments: expr.typeArguments &&
             expr.typeArguments.map(ta => visitTypeNode(ta, ctx)),
         expression: visitLeftHandSideExpression(expr.expression, ctx)
@@ -392,7 +395,7 @@ export function visitLeftHandSideExpression(
 ): LeftHandSideExpressionReflection {
     let type = ctx.checker.getTypeAtLocation(expr);
     return {
-        refType: RefType.LeftHandSideExpression,
+        itemType: ItemType.LeftHandSideExpression,
         type: visitType(type, ctx)
     };
 }
@@ -405,7 +408,7 @@ export interface ParameterReflection extends Item {
 }
 
 export function isParameterReflection(item: Item): item is ParameterReflection {
-    return item.refType == RefType.Parameter;
+    return item.itemType == ItemType.Parameter;
 }
 
 export function visitParameter(
@@ -413,7 +416,7 @@ export function visitParameter(
     ctx: Context
 ): ParameterReflection {
     return {
-        refType: RefType.Parameter,
+        itemType: ItemType.Parameter,
         name: param.name.getText(),
         optional: !!param.questionToken,
         spread: !!param.dotDotDotToken,
@@ -426,7 +429,7 @@ export interface IndexSignatureReflection extends SignatureReflection {
 }
 
 export function isIndexSignatureReflection(item: Item): item is IndexSignatureReflection {
-    return item.refType == RefType.IndexSignature;
+    return item.itemType == ItemType.IndexSignature;
 }
 
 export function visitIndexSignature(
@@ -434,7 +437,7 @@ export function visitIndexSignature(
     ctx: Context
 ): IndexSignatureReflection {
     return {
-        refType: RefType.IndexSignature,
+        itemType: ItemType.IndexSignature,
         parameters: sig.parameters &&
             sig.parameters.map(p => visitParameter(p, ctx)),
         typeParameters: null,
@@ -450,7 +453,7 @@ export interface SignatureReflection extends Item {
 
 export function visitSignature(sig: SignatureDeclaration, ctx: Context): SignatureReflection {
     return {
-        refType: RefType.Signature,
+        itemType: ItemType.Signature,
         name: sig.name && sig.name.getText(),
         typeParameters: sig.typeParameters &&
             sig.typeParameters.map(tp => visitTypeParameter(tp, ctx)),
@@ -465,7 +468,7 @@ export interface CallSignatureReflection extends SignatureReflection {
 }
 
 export function isCallSignatureReflection(item: Item): item is IndexSignatureReflection {
-    return item.refType == RefType.CallSignature;
+    return item.itemType == ItemType.CallSignature;
 }
 
 export function visitCallSignature(
@@ -473,7 +476,7 @@ export function visitCallSignature(
     ctx: Context
 ): CallSignatureReflection {
     return Object.assign(visitSignature(sig, ctx), {
-        refType: RefType.CallSignature
+        itemType: ItemType.CallSignature
     });
 }
 
@@ -482,7 +485,7 @@ export interface MethodSignatureReflection extends SignatureReflection {
 }
 
 export function isMethodSignatureReflection(item: Item): item is MethodSignatureReflection {
-    return item.refType == RefType.MethodSignature;
+    return item.itemType == ItemType.MethodSignature;
 }
 
 export function visitMethodSignature(
@@ -490,7 +493,7 @@ export function visitMethodSignature(
     ctx: Context
 ): MethodSignatureReflection {
     return Object.assign(visitSignature(sig, ctx), {
-        refType: RefType.MethodSignature
+        itemType: ItemType.MethodSignature
     });
 }
 
@@ -499,7 +502,7 @@ export interface MethodDeclarationReflection extends SignatureReflection {
 }
 
 export function isMethodDeclarationReflection(item: Item): item is MethodSignatureReflection {
-    return item.refType == RefType.MethodDeclaration;
+    return item.itemType == ItemType.MethodDeclaration;
 }
 
 export function visitMethodDeclaration(
@@ -509,7 +512,7 @@ export function visitMethodDeclaration(
     let signatureRefl = visitSignature(decl, ctx);
 
     return Object.assign(signatureRefl, {
-        refType: RefType.MethodDeclaration,
+        itemType: ItemType.MethodDeclaration,
     });
 }
 
@@ -518,7 +521,7 @@ export interface ConstructorDeclarationReflection extends SignatureReflection {
 }
 
 export function isConstructorDeclarationReflection(item: Item): item is ConstructorDeclarationReflection {
-    return item.refType == RefType.ConstructorDeclaration;
+    return item.itemType == ItemType.ConstructorDeclaration;
 }
 
 export function visitConstructorDeclaration(
@@ -528,7 +531,7 @@ export function visitConstructorDeclaration(
     let signatureRefl = visitSignature(decl, ctx);
 
     return Object.assign(signatureRefl, {
-        refType: RefType.ConstructorDeclaration,
+        itemType: ItemType.ConstructorDeclaration,
     });
 }
 
@@ -537,7 +540,7 @@ export interface GetAccessorDeclarationReflection extends SignatureReflection {
 }
 
 export function isGetAccessorDeclarationReflection(item: Item): item is GetAccessorDeclarationReflection {
-    return item.refType == RefType.GetAccessorDeclaration;
+    return item.itemType == ItemType.GetAccessorDeclaration;
 }
 
 export function visitGetAccessorDeclaration(
@@ -547,7 +550,7 @@ export function visitGetAccessorDeclaration(
     let signatureRefl = visitSignature(decl, ctx);
 
     return Object.assign(signatureRefl, {
-        refType: RefType.GetAccessorDeclaration,
+        itemType: ItemType.GetAccessorDeclaration,
     });
 }
 
@@ -556,7 +559,7 @@ export interface SetAccessorDeclarationReflection extends SignatureReflection {
 }
 
 export function isSetAccessorDeclarationReflection(item: Item): item is SetAccessorDeclarationReflection {
-    return item.refType == RefType.SetAccessorDeclaration;
+    return item.itemType == ItemType.SetAccessorDeclaration;
 }
 
 export function visitSetAccessorDeclaration(
@@ -566,6 +569,6 @@ export function visitSetAccessorDeclaration(
     let signatureRefl = visitSignature(decl, ctx);
 
     return Object.assign(signatureRefl, {
-        refType: RefType.SetAccessorDeclaration,
+        itemType: ItemType.SetAccessorDeclaration,
     });
 }

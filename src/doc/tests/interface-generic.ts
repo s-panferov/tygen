@@ -1,5 +1,5 @@
-import { generateInline, expect } from './utils';
-import { RefType } from '../items';
+import { generateInline, expect, typeRef } from './utils';
+import { ItemType } from '../items';
 import {
     isInterfaceReflection,
 } from '../ast/interface';
@@ -31,11 +31,11 @@ describe('interface-generic', () => {
             let tp = iface.typeParameters[0];
 
             expect(tp.name).equal('T');
-            expect(tp.refType).equal(RefType.TypeParameter);
+            expect(tp.itemType).equal(ItemType.TypeParameter);
 
             let member = iface.members[0];
             if (isPropertySignatureReflection(member)) {
-                expect(member.type.id).equal(tp.id);
+                expect(typeRef(member.type)).equal(tp.id);
             }
         });
 
@@ -43,13 +43,13 @@ describe('interface-generic', () => {
             let tp = iface.typeParameters[1];
 
             expect(tp.name).equal('A');
-            expect(tp.refType).equal(RefType.TypeParameter);
+            expect(tp.itemType).equal(ItemType.TypeParameter);
 
             let member = iface.members[1];
             if (isPropertySignatureReflection(member)) {
-                expect(member.type.id).equal(tp.id);
+                expect(typeRef(member.type)).equal(tp.id);
             }
-            expect(tp.constraint.id).equal(iface.typeParameters[0].id);
+            expect(typeRef(tp.constraint)).equal(iface.typeParameters[0].id);
         });
     } else {
         expect(false).to.true;

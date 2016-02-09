@@ -1,4 +1,4 @@
-import { generateInline, expect } from './utils';
+import { generateInline, expect, typeRef } from './utils';
 import {
     isClassReflection
 } from '../ast/class';
@@ -33,7 +33,7 @@ describe('class:simple', () => {
             if (isPropertyDeclarationReflection(first)) {
                 expect(first.name).to.equal('prop');
                 expect(first.optional).to.false;
-                expect(first.type.id).to.equal(cls.id);
+                expect(typeRef(first.type)).to.equal(cls.id);
             } else {
                 expect(false).to.true;
             }
