@@ -11,27 +11,28 @@ declare module 'history' {
         /**
          * The pathname portion of the URL, without query string
          */
-        pathname: string;
+        pathname?: string;
         /**
          * The query string portion of the URL, including the ?
          */
-        search: string;
+        search?: string;
         /**
          * An object of data tied to this location
          */
-        state: string;
+        state?: string;
         /**
          * One of PUSH, REPLACE, or POP
          */
-        action: string;
+        action?: string;
         /**
          * A unique identifier for this location
          */
-        key: string;
+        key?: string;
     }
 
     export interface History {
         listen(cb: (location: Location) => void): { unlisten(): void };
+        push(location: Location): void;
         pushState(state: any, location: string, query: any): void;
         replaceState(state: any, location: string): void;
         setState(state: any): void;

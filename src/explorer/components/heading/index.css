@@ -1,0 +1,15 @@
+@import 'theme';
+
+.heading {
+    font-family: var(--sans-serif);
+    font-weight: 400;
+
+    margin: 0;
+    padding: 0;
+
+    &_lvl_1 {
+        font-size: 24px;
+        line-height: 40px;
+        border-bottom: 1px dashed #D5D5D5;
+    }
+}

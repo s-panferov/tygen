@@ -73,19 +73,24 @@
         "./explorer/components/app/index.tsx",
         "./explorer/components/breadcrumbs/index.tsx",
         "./explorer/components/file/index.tsx",
+        "./explorer/components/heading/index.tsx",
         "./explorer/components/layout/index.tsx",
         "./explorer/components/link/index.tsx",
         "./explorer/components/module/index.tsx",
         "./explorer/components/nav/index.tsx",
+        "./explorer/components/paper/index.tsx",
         "./explorer/components/path/index.tsx",
         "./explorer/index.tsx",
+        "./explorer/plugins/ts/interface/index.tsx",
         "./explorer/plugins/ts/list/index.tsx",
         "./explorer/plugins/ts/module/index.tsx",
         "../node_modules/typescript/lib/typescriptServices.d.ts"
     ],
     "exclude": [
         "node_modules",
-        "bower_components"
+        "bower_components",
+        "example",
+        "dist"
     ],
     "atom": {
         "rewriteTsconfig": true

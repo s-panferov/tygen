@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import { createHistory, History }  from 'history';
+import { createHistory, History, Location }  from 'history';
 let useQueries = require('history/lib/useQueries');
 let history: History = useQueries(createHistory)();
 
@@ -25,48 +25,57 @@ let service = new Service(require('../../example/doc/registry.js'));
 let prevState = defaultState(service, plugins);
 let store = createStore(rootReducer, prevState);
 
-function routeUrl(route: Route): string {
+function pathFromRoute(route: Route): string {
     let routeUrl = `/${route.pkg}${route.path}`;
     routeUrl = routeUrl.replace('.', '~~');
 
     return routeUrl;
 }
 
+function routeFromPath(urlPath: string): Route {
+    let parts = urlPath.split('/').filter(Boolean);
+    return {
+        pkg: parts[0],
+        path: '/' + parts.slice(1).join('/').replace('~~', '.')
+    };
+}
+
+let currentLocation: Location;
+history.listen(location => {
+    currentLocation = location;
+    if (location.action === 'POP') {
+        if (location.pathname === '/') {
+            let mainPackage = service.getMainPackageName();
+            history.replaceState(null, `/${mainPackage}/`);
+
+            store.dispatch(
+                actions.navigate({
+                    pkg: mainPackage,
+                    path: location.pathname
+                })
+            );
+        } else {
+            store.dispatch(
+                actions.navigate(routeFromPath(location.pathname))
+            );
+        }
+    }
+});
+
 store.subscribe(() => {
     let state = store.getState();
 
     if (!equal(prevState.route, state.route)) {
-        history.pushState(null, routeUrl(state.route), null);
+        let newPathName = pathFromRoute(state.route);
+        if (!currentLocation || (currentLocation && currentLocation.pathname !== newPathName)) {
+            history.push({
+                pathname: newPathName
+            });
+        }
     }
 
     prevState = state;
 });
-//
-// history.listen(location => {
-//     if (location.action === 'REPLACE') {
-//         return;
-//     }
-//
-//     if (location.pathname === '/') {
-//         let mainPackage = service.getMainPackageName();
-//         history.replaceState(null, `/${mainPackage}/`);
-//
-//         store.dispatch(
-//             actions.navigate({
-//                 pkg: mainPackage,
-//                 path: location.pathname
-//             })
-//         );
-//     } else {
-//         let parts = location.pathname.split('/').filter(Boolean);
-//         store.dispatch(
-//             actions.navigate({
-//                 pkg: parts[0],
-//                 path: '/' + parts.slice(1).join('/')
-//             })
-//         );
-//     }
-// });
 
 export function runApp() {
     let reactApp = document.createElement('div');

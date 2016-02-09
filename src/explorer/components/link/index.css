@@ -7,7 +7,6 @@
 
     color: var(--link-color);
 
-    font-weight: lighter;
     transition: all 250ms;
 
     &:visited {
