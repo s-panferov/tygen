@@ -28,22 +28,10 @@ interface AppProps extends AppReduxProps {
 @connect(({ service, route, plugins }): AppReduxProps => {
     return { service, route, plugins };
 })
-export default class App extends React.Component<AppProps, any> {
+export default class App extends React.Component<AppProps, void> {
     static contextTypes = theme.themeContext;
     constructor(props, context) {
         super(props, context);
-
-        this.state = {
-            route: '/',
-        };
-    }
-
-    componentDidMount() {
-        this.props.history.listen(location => {
-            this.setState({
-                route: location.pathname,
-            });
-        });
     }
 
     getClassName() {
@@ -78,17 +66,5 @@ export default class App extends React.Component<AppProps, any> {
         this.props.dispatch(
             actions.navigate(route)
         );
-    }
-
-    onPathChange(path: string) {
-        this.props.history.pushState(
-            null,
-            path,
-            { theme: this.state.theme }
-        );
-
-        this.setState({
-            route: path
-        });
     }
 }

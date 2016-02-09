@@ -7,8 +7,31 @@ declare module 'history' {
 
     export const Actions: ActionsInterface;
 
+    export interface Location {
+        /**
+         * The pathname portion of the URL, without query string
+         */
+        pathname: string;
+        /**
+         * The query string portion of the URL, including the ?
+         */
+        search: string;
+        /**
+         * An object of data tied to this location
+         */
+        state: string;
+        /**
+         * One of PUSH, REPLACE, or POP
+         */
+        action: string;
+        /**
+         * A unique identifier for this location
+         */
+        key: string;
+    }
+
     export interface History {
-        listen(cb: (location: any) => void): { unlisten(): void };
+        listen(cb: (location: Location) => void): { unlisten(): void };
         pushState(state: any, location: string, query: any): void;
         replaceState(state: any, location: string): void;
         setState(state: any): void;

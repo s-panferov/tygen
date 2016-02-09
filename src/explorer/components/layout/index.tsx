@@ -6,12 +6,15 @@ require('./index.css');
 
 interface LayoutProps extends React.CommonProps {
     sidebar: React.ReactNode;
+    reverse?: boolean;
 }
 
 export default class Layout extends React.Component<LayoutProps, any> {
     static contextTypes = theme.themeContext;
     getClassName() {
-        return block(theme.resolveTheme(this)).mix(this.props.className);
+        return block(theme.resolveTheme(this), {
+            reverse: this.props.reverse
+        }).mix(this.props.className);
     }
 
     render() {

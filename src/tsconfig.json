@@ -68,6 +68,7 @@
         "./explorer/typings/redux-thunk.d.ts",
         "./explorer/typings/redux.d.ts",
         "./lib/autobind.ts",
+        "./lib/equal.ts",
         "./loader-plugin/index.ts",
         "./explorer/components/app/index.tsx",
         "./explorer/components/breadcrumbs/index.tsx",

@@ -40,7 +40,6 @@ export default class File extends React.Component<FileProps, FileState> {
             return (
                 <Link
                     htmlProps={{
-                        href: '#',
                         onClick: this.onClick
                     }}
                     className={ className }

@@ -28,6 +28,7 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
             <div className={ this.getClassName() }>
                 <Layout
                     className={ block('layout') }
+                    reverse={ true }
                     sidebar={
                         <List module={ this.props.module }/>
                     }

@@ -7,7 +7,7 @@
     "doc": "./node_modules/.bin/webpack --config webpack.doc.config.js --watch --progress",
     "doc-tests": "./node_modules/.bin/webpack --config webpack.doc-tests.config.js --watch --progress",
     "loader": "./node_modules/.bin/webpack --config webpack.loader.config.js --watch --progress",
-    "explorer": "./node_modules/.bin/webpack-dev-server --hot --inline --config webpack.explorer.config.js --progress",
+    "explorer": "./node_modules/.bin/webpack-dev-server --hot --inline --config webpack.explorer.config.js --progress --history-api-fallback",
     "explorer-build": "./node_modules/.bin/webpack --config webpack.explorer.config.js --progress"
   },
   "repository": {

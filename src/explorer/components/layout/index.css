@@ -2,6 +2,11 @@
     display: flex;
     flex-direction: row;
     align-items: stretch;
+
+    &_reverse {
+        flex-direction: row-reverse;
+    }
+
     &__sidebar {
         flex: 0 0 200px;
     }
@@ -20,6 +25,7 @@
 .layout_theme_white {
     & .layout {
         &__sidebar {
+
         }
     }
 }
