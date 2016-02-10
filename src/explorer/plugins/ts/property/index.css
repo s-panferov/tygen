@@ -1,0 +1,12 @@
+@import 'theme';
+
+.ts-property {
+    display: flex;
+    flex-direction: column;
+
+    font-family: var(--mono);
+
+    &__signature {
+        
+    }
+}

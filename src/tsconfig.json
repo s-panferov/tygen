@@ -84,6 +84,10 @@
         "./explorer/plugins/ts/interface/index.tsx",
         "./explorer/plugins/ts/list/index.tsx",
         "./explorer/plugins/ts/module/index.tsx",
+        "./explorer/plugins/ts/property/index.tsx",
+        "./explorer/plugins/ts/type-core/index.tsx",
+        "./explorer/plugins/ts/type-ref/index.tsx",
+        "./explorer/plugins/ts/type.tsx",
         "../node_modules/typescript/lib/typescriptServices.d.ts"
     ],
     "exclude": [

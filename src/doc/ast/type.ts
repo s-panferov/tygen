@@ -322,7 +322,7 @@ export function visitFunctionTypeNode(
     });
 }
 
-interface TypeReferenceReflection extends TypeReflection {
+export interface TypeReferenceReflection extends TypeReflection {
     ref: string;
     typeName: string;
     targetType: TypeReflection;
@@ -338,12 +338,13 @@ export function visitTypeReference(
     type: TypeReference,
     ctx: Context
 ): TypeReferenceReflection {
-    let targetType = type.target && visitType(type.target, ctx);
+    let targetType = type.target && type.target !== type && visitType(type.target, ctx);
     let reflection = visitType(type, ctx);
 
     return Object.assign(reflection, {
-        id: null,
-        ref: reflection.id,
+        // if we have targetType — it's generic that has own id and can be referenced
+        id: targetType ? reflection.id : null,
+        ref: !targetType ? reflection.id : null,
         itemType: ItemType.TypeReference,
         typeName: node.typeName.getText(),
         targetType,
