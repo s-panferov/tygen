@@ -28,6 +28,8 @@ declare module 'history' {
          * A unique identifier for this location
          */
         key?: string;
+
+        query?: any;
     }
 
     export interface History {

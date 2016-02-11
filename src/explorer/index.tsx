@@ -25,18 +25,23 @@ let service = new Service(require('../../example/doc/registry.js'));
 let prevState = defaultState(service, plugins);
 let store = createStore(rootReducer, prevState);
 
-function pathFromRoute(route: Route): string {
+export function pathFromRoute(route: Route): string {
     let routeUrl = `/${route.pkg}${route.path}`;
     routeUrl = routeUrl.replace('.', '~~');
+
+    if (route.id) {
+        routeUrl += '?id=' + route.id;
+    }
 
     return routeUrl;
 }
 
-function routeFromPath(urlPath: string): Route {
+function routeFromPath(urlPath: string, query: any): Route {
     let parts = urlPath.split('/').filter(Boolean);
     return {
         pkg: parts[0],
-        path: '/' + parts.slice(1).join('/').replace('~~', '.')
+        path: '/' + parts.slice(1).join('/').replace('~~', '.'),
+        id: query.id
     };
 }
 
@@ -56,7 +61,7 @@ history.listen(location => {
             );
         } else {
             store.dispatch(
-                actions.navigate(routeFromPath(location.pathname))
+                actions.navigate(routeFromPath(location.pathname, location.query))
             );
         }
     }

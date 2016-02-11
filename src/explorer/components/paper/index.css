@@ -1,5 +1,7 @@
 @import 'theme';
 
 .paper {
-
+    &_active {
+        background: #FFFBCC;
+    }
 }

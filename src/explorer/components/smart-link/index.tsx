@@ -8,16 +8,35 @@ const block = theme.block('smart-link');
 
 import Link, { LinkProps } from '../link';
 import { Route } from '../../state';
+import Service from '../../service';
 
-export interface SmartLinkProps extends LinkProps, DispatchProps {
+import {
+    pathFromRoute
+} from '../../index';
+
+interface SmartLinkReduxProps extends DispatchProps {
+    service?: Service;
+}
+
+export interface SmartLinkProps extends SmartLinkReduxProps, LinkProps, DispatchProps {
     route: Route;
 }
 
 export interface SmartLinkState {}
 
-@connect((state) => { return {}; })
+@connect(({ service }) => { return { service } as SmartLinkReduxProps; })
 export default class SmartLink extends React.Component<SmartLinkProps, SmartLinkState> {
     static contextTypes = theme.themeContext;
+
+    finalRoute: Route;
+
+    componentWillMount() {
+        this.finalRoute = this.props.service.getFullRoute(this.props.route);
+    }
+
+    componentWillUpdate() {
+        this.finalRoute = this.props.service.getFullRoute(this.props.route);
+    }
 
     getClassName() {
         return block(theme.resolveTheme(this)).mix(this.props.className);
@@ -25,7 +44,8 @@ export default class SmartLink extends React.Component<SmartLinkProps, SmartLink
 
     render() {
         let htmlProps = Object.assign({}, this.props.htmlProps, {
-            onClick: this.onClick
+            onClick: this.onClick,
+            href: pathFromRoute(this.finalRoute)
         });
 
         return (
@@ -38,7 +58,9 @@ export default class SmartLink extends React.Component<SmartLinkProps, SmartLink
     }
 
     @autobind
-    onClick() {
+    onClick(e: React.MouseEvent) {
+        e.preventDefault();
+
         this.props.dispatch(
             actions.navigate(this.props.route)
         );

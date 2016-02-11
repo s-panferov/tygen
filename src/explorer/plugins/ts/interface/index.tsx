@@ -32,8 +32,10 @@ export default class Interface extends React.Component<InterfaceProps, Interface
     render() {
         let iface = this.props.iface;
         return (
-            <Paper className={ this.getClassName() }>
-                <Heading lvl={ 2 }>Interface <Link>{ iface.name }</Link></Heading>
+            <Paper id={ iface.id } className={ this.getClassName() }>
+                <Heading lvl={ 2 }>
+                    Interface <Link>{ iface.name }</Link>
+                </Heading>
                 { this.renderMembers() }
             </Paper>
         );
