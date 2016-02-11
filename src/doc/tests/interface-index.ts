@@ -1,4 +1,4 @@
-import { generateInline, expect, typeRef } from './utils';
+import { generateInline, expect, typeRef, coreType } from './utils';
 import { CoreType } from '../tools';
 import {
     isInterfaceReflection,
@@ -22,7 +22,7 @@ describe('interface-index', () => {
         if (isIndexSignatureReflection(index)) {
             it ('reflection', () => {
                 expect(index.parameters[0].name).equal('key');
-                expect(index.parameters[0].type.coreType).equal(CoreType.String);
+                expect(coreType(index.parameters[0].type)).equal(CoreType.String);
                 expect(typeRef(index.type)).equal(iface.id);
             });
         }

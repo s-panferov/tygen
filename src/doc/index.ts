@@ -44,9 +44,19 @@ export interface ModuleInfo {
     items: Item[];
 }
 
+export interface IdMap {
+    [key: string]: {
+        id: string;
+        pkg: string;
+        path: string;
+        nesting: string[];
+    };
+}
+
 export interface DocRegistry {
     mainPackage: string;
     files: Dictionary<ModuleInfo>;
+    idMap: IdMap;
 }
 
 /**

@@ -1,4 +1,4 @@
-import { generateInline, expect } from './utils';
+import { generateInline, expect, coreType } from './utils';
 import { CoreType } from '../tools';
 import { isInterfaceReflection } from '../ast/interface';
 import { isPropertySignatureReflection } from '../ast/type';
@@ -30,7 +30,7 @@ describe('interface:simple', () => {
             if (isPropertySignatureReflection(first)) {
                 expect(first.name).to.equal('name');
                 expect(first.optional).to.false;
-                expect(first.type.coreType).to.equal(CoreType.String);
+                expect(coreType(first.type)).to.equal(CoreType.String);
             } else {
                 expect(false).to.true;
             }

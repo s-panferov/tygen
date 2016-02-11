@@ -27,7 +27,7 @@ import {
     MethodDeclaration,
     ConstructorDeclaration,
     GetAccessorDeclaration,
-    SetAccessorDeclaration
+    SetAccessorDeclaration,
 } from 'typescript';
 
 import {
@@ -180,7 +180,7 @@ export function isIndexSignatureDeclaration(node: TypeElement): node is IndexSig
 }
 
 export interface TypeReflection extends Item {
-    coreType: CoreType;
+
 }
 
 export interface TypeLiteralReflection extends TypeReflection {
@@ -207,6 +207,22 @@ export function isFunctionTypeNode(node: TypeNode): node is FunctionTypeNode {
     return node.kind == SyntaxKind.FunctionType;
 }
 
+export function matchCoreType(node: TypeNode): CoreType {
+    switch(node.kind) {
+        case SyntaxKind.StringKeyword: return CoreType.String;
+        case SyntaxKind.BooleanKeyword: return CoreType.Boolean;
+        case SyntaxKind.NumberKeyword: return CoreType.Number;
+        case SyntaxKind.VoidKeyword: return CoreType.Void;
+        case SyntaxKind.VoidKeyword: return CoreType.Void;
+        case SyntaxKind.AnyKeyword: return CoreType.Any;
+        default: return null;
+    }
+}
+
+export function isStringKeyword(node: TypeNode): boolean {
+    return node.kind == SyntaxKind.FunctionType;
+}
+
 export function visitTypeNode(node: TypeNode, ctx: Context): TypeReflection {
     let type = ctx.checker.getTypeAtLocation(node);
 
@@ -230,27 +246,39 @@ export function visitTypeNode(node: TypeNode, ctx: Context): TypeReflection {
         return visitFunctionTypeNode(node, type, ctx);
     }
 
-    return visitType(type, ctx);
+    return extractTypeReference(type, ctx);
 }
 
-export function visitType(type: Type, ctx: Context): TypeReflection {
-    return {
-        id: ctx.id(type),
-        coreType: getCoreType(type)
-    };
+export interface CoreTypeReferenceReflection extends TypeReflection {
+    coreType: CoreType;
+}
+
+export function extractTypeReference(type: Type, ctx: Context): TypeReflection {
+    let coreType = getCoreType(type);
+    if (coreType) {
+        return {
+            itemType: ItemType.CoreTypeReference,
+            coreType
+        } as CoreTypeReferenceReflection;
+    } else {
+        return {
+            ref: ctx.id(type),
+            itemType: ItemType.TypeReference,
+        } as TypeReferenceReflection;
+    }
 }
 
 export function visitTypeLiteral(node: TypeLiteralNode, type: Type, ctx: Context): TypeLiteralReflection {
     // TODO regiser inline types globally?
 
-    let reflection = visitType(type, ctx);
-    return Object.assign(reflection, {
+    return {
+        id: ctx.id(type),
         itemType: ItemType.TypeLiteral,
         members: node.members && visitTypeElements(
             node.members,
             ctx
         )
-    });
+    };
 }
 
 export interface IntersectionTypeReflection extends TypeReflection {
@@ -276,12 +304,11 @@ export function visitIntersectionType(
 ): IntersectionTypeReflection {
     // TODO regiser inline types globally?
 
-    let reflection = visitType(type, ctx);
-
-    return Object.assign(reflection, {
+    return {
+        id: ctx.id(type),
         itemType: ItemType.IntersectionType,
         types: node.types.map((type) => visitTypeNode(type, ctx))
-    });
+    };
 }
 
 export function visitUnionType(
@@ -291,12 +318,11 @@ export function visitUnionType(
 ): UnionTypeReflection {
     // TODO regiser inline types globally?
 
-    let reflection = visitType(type, ctx);
-
-    return Object.assign(reflection, {
+    return {
+        id: ctx.id(type),
         itemType: ItemType.UnionType,
         types: node.types.map((type) => visitTypeNode(type, ctx))
-    });
+    };
 }
 
 export interface FunctionTypeReflection extends TypeReflection {
@@ -314,23 +340,26 @@ export function visitFunctionTypeNode(
 ): FunctionTypeReflection {
     // TODO regiser inline types globally?
 
-    let reflection = visitType(type, ctx);
-
-    return Object.assign(reflection, {
+    return {
+        id: ctx.id(type),
         itemType: ItemType.FunctionType,
         signature: visitSignature(node, ctx)
-    });
+    };
 }
 
 export interface TypeReferenceReflection extends TypeReflection {
     ref: string;
-    typeName: string;
-    targetType: TypeReflection;
-    typeArguments: TypeReflection[];
+    typeName?: string;
+    targetType?: TypeReflection;
+    typeArguments?: TypeReflection[];
 }
 
 export function isTypeReferenceReflection(item: Item): item is TypeReferenceReflection {
     return item.itemType == ItemType.TypeReference;
+}
+
+export function isCoreTypeReferenceReflection(item: Item): item is CoreTypeReferenceReflection {
+    return item.itemType == ItemType.CoreTypeReference;
 }
 
 export function visitTypeReference(
@@ -338,19 +367,25 @@ export function visitTypeReference(
     type: TypeReference,
     ctx: Context
 ): TypeReferenceReflection {
-    let targetType = type.target && type.target !== type && visitType(type.target, ctx);
-    let reflection = visitType(type, ctx);
+    let targetType = type.target;
+    // FIXME @spanferov create visitType that returns ref, e.g. getTypeRef
 
-    return Object.assign(reflection, {
+    let targetTypeRef = targetType
+        && targetType !== type
+        && extractTypeReference(targetType, ctx);
+
+    let id = ctx.id(type);
+
+    return {
         // if we have targetType — it's generic that has own id and can be referenced
-        id: targetType ? reflection.id : null,
-        ref: !targetType ? reflection.id : null,
+        id: targetTypeRef ? id : null,
+        ref: !targetTypeRef ? id : null,
         itemType: ItemType.TypeReference,
         typeName: node.typeName.getText(),
-        targetType,
+        targetType: targetTypeRef ? targetTypeRef : null,
         typeArguments: type.typeArguments &&
             node.typeArguments.map(ta => visitTypeNode(ta, ctx))
-    });
+    };
 }
 
 export interface TypeParameterReflection extends Item {
@@ -397,7 +432,7 @@ export function visitLeftHandSideExpression(
     let type = ctx.checker.getTypeAtLocation(expr);
     return {
         itemType: ItemType.LeftHandSideExpression,
-        type: visitType(type, ctx)
+        type: extractTypeReference(type, ctx)
     };
 }
 

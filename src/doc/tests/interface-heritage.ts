@@ -1,4 +1,4 @@
-import { generateInline, expect } from './utils';
+import { generateInline, expect, coreType, typeRef } from './utils';
 import { CoreType } from '../tools';
 import { ItemType } from '../items';
 import {
@@ -24,8 +24,8 @@ describe('interface-heritage', () => {
                 let hc = iface.heritageClauses[0];
                 expect(hc.itemType).equal(ItemType.HeritageClause);
                 expect(hc.clause).equal(HeritageClauseType.Extends);
-                expect(hc.types[0].expression.type.id).equal(base.id);
-                expect(hc.types[0].typeArguments[0].coreType).equal(CoreType.String);
+                expect(typeRef(hc.types[0].expression.type)).equal(base.id);
+                expect(coreType(hc.types[0].typeArguments[0])).equal(CoreType.String);
             });
         } else {
             expect(false).to.true;

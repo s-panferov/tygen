@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import { Context } from './index';
+import { Context, IdMap } from './index';
 import { extractPackage } from './utils';
 
 let fse = require('fs-extra');
@@ -10,6 +10,46 @@ export class DocWriter {
 
     constructor(context: Context) {
         this.context = context;
+    }
+
+    generateIdMap(): IdMap {
+        let idMap = {} as IdMap;
+
+        function walkObject(obj: any, pkg: string, path: string, nesting: string[] = []) {
+            if (obj.id) {
+                nesting = nesting.concat(obj.id);
+                idMap[obj.id] = {
+                    id: obj.id,
+                    pkg,
+                    path,
+                    nesting
+                };
+            }
+
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    let o = obj[key];
+                    console.log(o);
+
+                    if (o != null &&
+                        typeof o === 'object' &&
+                        (Array.isArray(o) ||
+                        Object.prototype.toString.call(o) === '[object Object]')) {
+                            walkObject(o, pkg, path, nesting);
+                        }
+                }
+            }
+        }
+
+        let modules = this.context.modules;
+        Object.keys(modules).forEach(moduleKey => {
+            let module = modules[moduleKey];
+            module.items.forEach(item => {
+                walkObject(item, module.pkg.info.name, module.fileInfo.relativeToPackage);
+            });
+        });
+
+        return idMap;
     }
 
     writeModules(dir: string) {
@@ -30,6 +70,7 @@ export class DocWriter {
         let buf = `
 module.exports = {\n
     mainPackage: '${extractPackage(dir).info.name}',
+    idMap: ${ JSON.stringify(this.generateIdMap(), null, 4) },
     files: {
         `;
 

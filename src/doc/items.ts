@@ -13,6 +13,7 @@ export enum ItemType {
     Parameter = 'Parameter' as any,
     CallSignature = 'CallSignature' as any,
     Signature = 'Signature' as any,
+    CoreTypeReference = 'CoreTypeReference' as any, // synthetic
     TypeReference = 'TypeReference' as any,
     MethodSignature = 'MethodSignature' as any,
     FunctionType = 'FunctionType' as any,

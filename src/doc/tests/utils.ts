@@ -5,9 +5,15 @@ import { generateModule } from '../test';
 export { expect } from 'chai';
 export { inspect } from '../tools';
 
+import { CoreType } from '../tools';
+
 import * as uuid from 'node-uuid';
 
-import { isTypeReferenceReflection } from '../ast/type';
+import {
+    isTypeReferenceReflection,
+    isCoreTypeReferenceReflection
+} from '../ast/type';
+
 import { Item } from '../items';
 
 export function typeRef(item: Item): string {
@@ -15,6 +21,14 @@ export function typeRef(item: Item): string {
         return item.ref;
     } else {
         throw new Error('item is not type reference');
+    }
+}
+
+export function coreType(item: Item): CoreType {
+    if (isCoreTypeReferenceReflection(item)) {
+        return item.coreType;
+    } else {
+        throw new Error('item is not core type reference');
     }
 }
 
