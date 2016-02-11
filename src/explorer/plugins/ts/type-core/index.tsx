@@ -22,7 +22,7 @@ export default class TypeCore extends React.Component<TypeProps, void> {
         return (
             <div
                 { ...this.props.htmlProps }
-                className={ this.getClassName }
+                className={ this.getClassName() }
             >
                 { type }
             </div>

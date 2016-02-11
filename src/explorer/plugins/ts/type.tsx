@@ -3,6 +3,7 @@ import * as React from 'react';
 import {
     TypeReflection,
     isTypeReferenceReflection,
+    isCoreTypeReferenceReflection
 } from 'docscript/src/doc/ast/type';
 
 import TypeRef from './type-ref';
@@ -16,10 +17,10 @@ export interface TypeProps extends React.CommonProps {
 export default class Type extends React.Component<TypeProps, void> {
     render() {
         let type = this.props.type;
-        if (isTypeReferenceReflection(type)) {
-            return <TypeRef { ...this.props } typeRef={ type } />;
-        } else if (type.coreType) {
+        if (isCoreTypeReferenceReflection(type)) {
             return <TypeCore {...this.props } coreType={ type.coreType as any as string }/>;
+        } else if (isTypeReferenceReflection(type)) {
+            return <TypeRef { ...this.props } typeRef={ type } />;
         }
     }
 }

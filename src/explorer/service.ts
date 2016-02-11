@@ -5,8 +5,10 @@ import { Maybe } from 'tsmonad';
 import * as path from 'path';
 
 export interface Route {
-    pkg: string;
-    path: string;
+    pkg?: string;
+    path?: string;
+    id?: string;
+    nesting?: string[];
 }
 
 interface FileStructure {
@@ -66,6 +68,21 @@ export default class Service {
             } else {
                 return Maybe.nothing<Module>();
             }
+        }
+    }
+
+    getFullRoute(route: Route): Route {
+        if (route.id && !route.pkg) {
+            // know only id, need to fill all other info
+            let finalRoute = this.registry.idMap[route.id];
+
+            if (finalRoute) {
+                return finalRoute;
+            } else {
+                throw new Error(`Unknown id ${ route.id }`);
+            }
+        } else {
+            return route;
         }
     }
 

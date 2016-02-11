@@ -6,7 +6,7 @@ import {
     isTypeReferenceReflection,
 } from 'docscript/src/doc/ast/type';
 
-import Link from 'docscript/src/explorer/components/link';
+import SmartLink from 'docscript/src/explorer/components/smart-link';
 import Paper from 'docscript/src/explorer/components/paper';
 
 import Type from '../type';
@@ -30,9 +30,22 @@ export default class TypeRef extends React.Component<TypeRefProps, TypeRefState>
 
     render() {
         let typeRef = this.props.typeRef;
+        let targetType = typeRef.targetType;
+        let ref: string = null;
+        if (targetType && isTypeReferenceReflection(targetType)) {
+            ref = targetType.ref;
+        } else {
+            ref = typeRef.ref;
+        }
+
+        let route = { id: ref };
+        if (!route.id) {
+            console.error('id expected', typeRef);
+        }
+
         return (
             <Paper className={ this.getClassName() }>
-                <Link>{ typeRef.typeName }</Link>
+                <SmartLink route={ route }>{ typeRef.typeName }</SmartLink>
                 { this.renderTypeArguments() }
             </Paper>
         );

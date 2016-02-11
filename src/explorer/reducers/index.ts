@@ -3,7 +3,9 @@ import { Navigate } from '../actions';
 
 function navigate(state: State, { route }: Navigate): State {
     return Object.assign({}, state,
-        { route }
+        {
+            route: state.service.getFullRoute(route)
+        }
     );
 }
 
