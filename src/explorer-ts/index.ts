@@ -1,8 +1,8 @@
-import { Module, ModuleKind } from '../../../doc';
+import { Module, ModuleKind } from '../doc';
 import PluginRegistry, {
     ModuleComponentCtor,
     ModulePlugin as ModulePluginInterface,
-} from '../../plugins';
+} from '../explorer/plugins';
 
 import ModuleComponent from './module';
 

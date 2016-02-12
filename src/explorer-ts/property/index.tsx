@@ -1,11 +1,11 @@
 import * as React from 'react';
-import * as theme from '../../../components/theme';
+import * as theme from '../../explorer/components/theme';
 
 import {
     PropertySignatureReflection,
-} from '../../../../doc/ast/type';
+} from '../../doc/ast/type';
 
-import Paper from '../../../components/paper';
+import Paper from '../../explorer/components/paper';
 
 import Type from '../type';
 

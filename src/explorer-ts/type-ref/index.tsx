@@ -1,13 +1,13 @@
 import * as React from 'react';
-import * as theme from '../../../components/theme';
+import * as theme from '../../explorer/components/theme';
 
 import {
     TypeReferenceReflection,
     isTypeReferenceReflection,
-} from '../../../../doc/ast/type';
+} from '../../doc/ast/type';
 
-import SmartLink from '../../../components/smart-link';
-import Paper from '../../../components/paper';
+import SmartLink from '../../explorer/components/smart-link';
+import Paper from '../../explorer/components/paper';
 import Brackets from '../brackets';
 
 import Type from '../type';

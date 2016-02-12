@@ -17,7 +17,7 @@ import equal from '../lib/equal';
 import rootReducer from './reducers';
 
 import PluginRegistry from './plugins';
-import tsPlugin from './plugins/ts';
+import tsPlugin from '../explorer-ts';
 let plugins = new PluginRegistry();
 plugins.register(tsPlugin);
 

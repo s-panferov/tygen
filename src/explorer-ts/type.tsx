@@ -4,7 +4,7 @@ import {
     TypeReflection,
     isTypeReferenceReflection,
     isCoreTypeReferenceReflection
-} from '../../../doc/ast/type';
+} from '../doc/ast/type';
 
 import TypeRef from './type-ref';
 import TypeCore from './type-core';

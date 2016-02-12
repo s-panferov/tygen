@@ -1,14 +1,14 @@
 import * as React from 'react';
-import * as theme from '../../../components/theme';
+import * as theme from '../../explorer/components/theme';
 
-import { InterfaceReflection } from '../../../../doc/ast/interface';
+import { InterfaceReflection } from '../../doc/ast/interface';
 import {
     PropertySignatureReflection,
     isPropertySignatureReflection
-} from '../../../../doc/ast/type';
-import Heading from '../../../components/heading';
-import SmartLink from '../../../components/smart-link';
-import Paper from '../../../components/paper';
+} from '../../doc/ast/type';
+import Heading from '../../explorer/components/heading';
+import SmartLink from '../../explorer/components/smart-link';
+import Paper from '../../explorer/components/paper';
 
 import Property from '../property';
 

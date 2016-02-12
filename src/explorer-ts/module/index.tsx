@@ -1,10 +1,10 @@
 import * as React from 'react';
-import * as theme from '../../../components/theme';
+import * as theme from '../../explorer/components/theme';
 
-import Layout from '../../../components/layout';
-import Heading from '../../../components/heading';
-import { Module as ModuleRef } from '../../../../doc';
-import { isInterfaceReflection } from '../../../../doc/ast/interface';
+import Layout from '../../explorer/components/layout';
+import Heading from '../../explorer/components/heading';
+import { Module as ModuleRef } from '../../doc';
+import { isInterfaceReflection } from '../../doc/ast/interface';
 
 import List from '../list';
 import Interface from '../interface';

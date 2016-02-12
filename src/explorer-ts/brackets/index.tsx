@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as theme from '../../../components/theme';
+import * as theme from '../../explorer/components/theme';
 
 require('./index.css');
 const block = theme.block('ts-brackets');
