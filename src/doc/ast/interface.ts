@@ -43,9 +43,13 @@ export function visitBasicInfo(
 
     assert.ok(type, 'Expect type to exist');
 
+    let symbol = type.getSymbol();
+    let comment = symbol.getDocumentationComment();
+
     return {
         id: ctx.id(type),
         name: iface.name.text,
+        comment: comment && comment.map(c => c.text).join(''),
         typeParameters: iface.typeParameters &&
             iface.typeParameters.map(tp => visitTypeParameter(tp, ctx)),
         heritageClauses: iface.heritageClauses &&

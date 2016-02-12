@@ -40,6 +40,7 @@ export default class Interface extends React.Component<InterfaceProps, Interface
                     <SmartLink id={ iface.id }>{ iface.name }</SmartLink>
                     { this.renderTypeParameters() }
                 </Heading>
+                { iface.comment }
                 { this.renderMembers() }
             </Paper>
         );

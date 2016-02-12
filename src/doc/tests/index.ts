@@ -5,6 +5,7 @@ import './interface-generic';
 import './interface-heritage';
 import './interface-index';
 import './interface-call';
+import './interface-doc';
 import './class-simple';
 import './class-accessors';
 import './class-constructor';

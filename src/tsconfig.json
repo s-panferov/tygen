@@ -33,6 +33,7 @@
         "./doc/tests/class-simple.ts",
         "./doc/tests/index.ts",
         "./doc/tests/interface-call.ts",
+        "./doc/tests/interface-doc.ts",
         "./doc/tests/interface-generic.ts",
         "./doc/tests/interface-heritage.ts",
         "./doc/tests/interface-index.ts",
