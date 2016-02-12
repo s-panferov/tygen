@@ -1,5 +1,5 @@
 import { Test } from './test';
 
-interface UserName {
-    test: Test<UserName, Test<string, number>>;
+interface UserName extends Test<Promise<string>, string> {
+    test: Test<Promise<string>, Test<Promise<string>, number>>;
 }

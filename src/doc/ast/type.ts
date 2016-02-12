@@ -1,4 +1,6 @@
 import {
+    TypeFlags,
+    NodeFlags,
     SyntaxKind,
     NodeArray,
     TypeNode,
@@ -412,6 +414,10 @@ export interface ExpressionWithTypeArgumentsReflection extends Item {
     typeArguments: TypeReflection[];
 }
 
+export function isExpressionWithTypeArgumentsReflection(item: TypeReflection): item is ExpressionWithTypeArgumentsReflection {
+    return item.itemType == ItemType.ExpressionWithTypeArguments;
+}
+
 export function visitExpressionWithTypeArguments(expr: ExpressionWithTypeArguments, ctx: Context) {
     return {
         itemType: ItemType.ExpressionWithTypeArguments,
@@ -430,9 +436,20 @@ export function visitLeftHandSideExpression(
     ctx: Context
 ): LeftHandSideExpressionReflection {
     let type = ctx.checker.getTypeAtLocation(expr);
+    let symbol = type.getSymbol();
+    let targetType = type;
+
+    // FIXME @spanverov check for correctness
+    if (type.flags & NodeFlags.HasExplicitReturn) {
+        if (symbol.valueDeclaration) {
+            targetType = ctx.checker.getTypeAtLocation(type.getSymbol().valueDeclaration);
+        }
+    }
+
     return {
         itemType: ItemType.LeftHandSideExpression,
-        type: extractTypeReference(type, ctx)
+        name: type.symbol.name,
+        type: extractTypeReference(targetType, ctx)
     };
 }
 

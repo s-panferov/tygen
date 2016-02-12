@@ -79,7 +79,11 @@ export default class Service {
             if (finalRoute) {
                 return finalRoute;
             } else {
-                throw new Error(`Unknown id ${ route.id }`);
+                console.error(`Unknown id ${ route.id }`);
+                return {
+                    pkg: this.getMainPackageName(),
+                    path: '/'
+                };
             }
         } else {
             return route;

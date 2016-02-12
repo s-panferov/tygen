@@ -8,9 +8,7 @@ import {
 
 import SmartLink from '../../explorer/components/smart-link';
 import Paper from '../../explorer/components/paper';
-import Brackets from '../brackets';
-
-import Type from '../type';
+import TypeArguments from '../type-arguments';
 
 require('./index.css');
 const block = theme.block('ts-type-ref');
@@ -47,26 +45,9 @@ export default class TypeRef extends React.Component<TypeRefProps, TypeRefState>
         return (
             <Paper className={ this.getClassName() }>
                 <SmartLink route={ route }>{ typeRef.typeName }</SmartLink>
-                { this.renderTypeArguments() }
+                { typeRef.typeArguments &&
+                    <TypeArguments typeArguments={ typeRef.typeArguments }/> }
             </Paper>
         );
-    }
-
-    renderTypeArguments(): React.ReactChild {
-        let typeArguments = this.props.typeRef.typeArguments;
-        if (!typeArguments) {
-            return null;
-        }
-
-        let result: React.ReactChild[] = [];
-
-        typeArguments.forEach((typeArg, i) => {
-            result.push(<Type type={ typeArg } />);
-            if (i < typeArguments.length - 1) {
-                result.push(', ');
-            }
-        });
-
-        return <Brackets>{ result }</Brackets>;
     }
 }

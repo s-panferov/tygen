@@ -9,8 +9,10 @@ import {
 import Heading from '../../explorer/components/heading';
 import SmartLink from '../../explorer/components/smart-link';
 import Paper from '../../explorer/components/paper';
-
 import Property from '../property';
+
+import Brackets from '../brackets';
+import TypeParameter from '../type-parameter';
 
 require('./index.css');
 const block = theme.block('ts-interface');
@@ -36,6 +38,7 @@ export default class Interface extends React.Component<InterfaceProps, Interface
                 <Heading lvl={ 2 }>
                     Interface
                     <SmartLink id={ iface.id }>{ iface.name }</SmartLink>
+                    { this.renderTypeParameters() }
                 </Heading>
                 { this.renderMembers() }
             </Paper>
@@ -63,21 +66,21 @@ export default class Interface extends React.Component<InterfaceProps, Interface
         });
     }
 
-    // renderTypeArguments(): React.ReactChild {
-    //     let typeArguments = this.props..typeArguments;
-    //     if (!typeArguments) {
-    //         return null;
-    //     }
-    //
-    //     let result: React.ReactChild[] = [];
-    //
-    //     typeArguments.forEach((typeArg, i) => {
-    //         result.push(<Type type={ typeArg } />);
-    //         if (i < typeArguments.length - 1) {
-    //             result.push(', ');
-    //         }
-    //     });
-    //
-    //     return <Brackets>{ result }</Brackets>;
-    // }
+    renderTypeParameters(): React.ReactChild {
+        let typeParameters = this.props.iface.typeParameters;
+        if (!typeParameters) {
+            return null;
+        }
+
+        let result: React.ReactChild[] = [];
+
+        typeParameters.forEach((typeParam, i) => {
+            result.push(<TypeParameter typeParam={ typeParam } />);
+            if (i < typeParameters.length - 1) {
+                result.push(', ');
+            }
+        });
+
+        return <Brackets>{ result }</Brackets>;
+    }
 }

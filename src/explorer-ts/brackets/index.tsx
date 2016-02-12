@@ -21,9 +21,9 @@ export default class Brackets extends React.Component<BracketsProps, BracketsSta
 
     render() {
         return (
-            <div className={ this.props.className }>
+            <span className={ this.props.className }>
                 { '<' }{ this.props.children }{ '>' }
-            </div>
+            </span>
         );
     }
 }
