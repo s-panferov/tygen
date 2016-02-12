@@ -1,14 +1,14 @@
 import * as React from 'react';
-import * as theme from 'docscript/src/explorer/components/theme';
+import * as theme from '../../../components/theme';
 
-import { InterfaceReflection } from 'docscript/src/doc/ast/interface';
+import { InterfaceReflection } from '../../../../doc/ast/interface';
 import {
     PropertySignatureReflection,
     isPropertySignatureReflection
-} from 'docscript/src/doc/ast/type';
-import Heading from 'docscript/src/explorer/components/heading';
-import Link from 'docscript/src/explorer/components/link';
-import Paper from 'docscript/src/explorer/components/paper';
+} from '../../../../doc/ast/type';
+import Heading from '../../../components/heading';
+import SmartLink from '../../../components/smart-link';
+import Paper from '../../../components/paper';
 
 import Property from '../property';
 
@@ -34,7 +34,8 @@ export default class Interface extends React.Component<InterfaceProps, Interface
         return (
             <Paper id={ iface.id } className={ this.getClassName() }>
                 <Heading lvl={ 2 }>
-                    Interface <Link>{ iface.name }</Link>
+                    Interface
+                    <SmartLink id={ iface.id }>{ iface.name }</SmartLink>
                 </Heading>
                 { this.renderMembers() }
             </Paper>
@@ -61,4 +62,22 @@ export default class Interface extends React.Component<InterfaceProps, Interface
             return <Property property={ sig } />;
         });
     }
+
+    // renderTypeArguments(): React.ReactChild {
+    //     let typeArguments = this.props..typeArguments;
+    //     if (!typeArguments) {
+    //         return null;
+    //     }
+    //
+    //     let result: React.ReactChild[] = [];
+    //
+    //     typeArguments.forEach((typeArg, i) => {
+    //         result.push(<Type type={ typeArg } />);
+    //         if (i < typeArguments.length - 1) {
+    //             result.push(', ');
+    //         }
+    //     });
+    //
+    //     return <Brackets>{ result }</Brackets>;
+    // }
 }

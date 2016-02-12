@@ -1,14 +1,14 @@
 import * as React from 'react';
-import * as theme from 'docscript/src/explorer/components/theme';
+import * as theme from '../../../components/theme';
 
-import { Module as ModuleRef } from 'docscript/src/doc';
-import { Item } from 'docscript/src/doc/items';
+import { Module as ModuleRef } from '../../../../doc';
+import { Item } from '../../../../doc/items';
 import {
     isInterfaceReflection,
     InterfaceReflection
-} from 'docscript/src/doc/ast/interface';
+} from '../../../../doc/ast/interface';
 
-import Link from 'docscript/src/explorer/components/link';
+import Link from '../../../components/link';
 
 require('./index.css');
 const block = theme.block('ts-list');

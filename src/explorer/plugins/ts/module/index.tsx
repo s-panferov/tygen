@@ -1,10 +1,10 @@
 import * as React from 'react';
-import * as theme from 'docscript/src/explorer/components/theme';
+import * as theme from '../../../components/theme';
 
-import Layout from 'docscript/src/explorer/components/layout';
-import Heading from 'docscript/src/explorer/components/heading';
-import { Module as ModuleRef } from 'docscript/src/doc';
-import { isInterfaceReflection } from 'docscript/src/doc/ast/interface';
+import Layout from '../../../components/layout';
+import Heading from '../../../components/heading';
+import { Module as ModuleRef } from '../../../../doc';
+import { isInterfaceReflection } from '../../../../doc/ast/interface';
 
 import List from '../list';
 import Interface from '../interface';
@@ -53,6 +53,7 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
             if (isInterfaceReflection(item)) {
                 return (
                     <Interface
+                        key={ item.id }
                         iface={ item }
                     />
                 );

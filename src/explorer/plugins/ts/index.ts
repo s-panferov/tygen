@@ -1,8 +1,8 @@
-import { Module, ModuleKind } from 'docscript/src/doc';
+import { Module, ModuleKind } from '../../../doc';
 import PluginRegistry, {
     ModuleComponentCtor,
     ModulePlugin as ModulePluginInterface,
-} from 'docscript/src/explorer/plugins';
+} from '../../plugins';
 
 import ModuleComponent from './module';
 

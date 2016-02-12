@@ -16,14 +16,7 @@
     "compileOnSave": false,
     "filesGlob": [
         "./**/*.ts",
-        "./**/*.tsx",
-        "!./old/**/*.ts",
-        "!./old/**/*.tsx",
-        "!./doc/old/**/*.ts",
-        "!./doc/old/**/*.tsx",
-        "!./node_modules/**/*.ts",
-        "!./node_modules/**/*.tsx",
-        "../node_modules/typescript/lib/typescriptServices.d.ts"
+        "./**/*.tsx"
     ],
     "files": [
         "./doc/ast/class.ts",
@@ -82,20 +75,19 @@
         "./explorer/components/path/index.tsx",
         "./explorer/components/smart-link/index.tsx",
         "./explorer/index.tsx",
+        "./explorer/plugins/ts/brackets/index.tsx",
         "./explorer/plugins/ts/interface/index.tsx",
         "./explorer/plugins/ts/list/index.tsx",
         "./explorer/plugins/ts/module/index.tsx",
         "./explorer/plugins/ts/property/index.tsx",
         "./explorer/plugins/ts/type-core/index.tsx",
         "./explorer/plugins/ts/type-ref/index.tsx",
-        "./explorer/plugins/ts/type.tsx",
-        "../node_modules/typescript/lib/typescriptServices.d.ts"
+        "./explorer/plugins/ts/type.tsx"
     ],
     "exclude": [
         "node_modules",
         "bower_components",
-        "example",
-        "dist"
+        "example"
     ],
     "atom": {
         "rewriteTsconfig": true

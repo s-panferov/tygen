@@ -19,7 +19,8 @@ interface SmartLinkReduxProps extends DispatchProps {
 }
 
 export interface SmartLinkProps extends SmartLinkReduxProps, LinkProps, DispatchProps {
-    route: Route;
+    route?: Route;
+    id?: string;
 }
 
 export interface SmartLinkState {}
@@ -31,11 +32,15 @@ export default class SmartLink extends React.Component<SmartLinkProps, SmartLink
     finalRoute: Route;
 
     componentWillMount() {
-        this.finalRoute = this.props.service.getFullRoute(this.props.route);
+        this.finalRoute = this.props.service.getFullRoute(
+            this.props.route || { id: this.props.id }
+        );
     }
 
     componentWillUpdate() {
-        this.finalRoute = this.props.service.getFullRoute(this.props.route);
+        this.finalRoute = this.props.service.getFullRoute(
+            this.props.route || { id: this.props.id }
+        );
     }
 
     getClassName() {
@@ -62,7 +67,7 @@ export default class SmartLink extends React.Component<SmartLinkProps, SmartLink
         e.preventDefault();
 
         this.props.dispatch(
-            actions.navigate(this.props.route)
+            actions.navigate(this.finalRoute)
         );
     }
 }

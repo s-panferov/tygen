@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as theme from 'docscript/src/explorer/components/theme';
+import * as theme from '../../../components/theme';
 
 const block = theme.block('ts-type-core');
 

@@ -1,13 +1,14 @@
 import * as React from 'react';
-import * as theme from 'docscript/src/explorer/components/theme';
+import * as theme from '../../../components/theme';
 
 import {
     TypeReferenceReflection,
     isTypeReferenceReflection,
-} from 'docscript/src/doc/ast/type';
+} from '../../../../doc/ast/type';
 
-import SmartLink from 'docscript/src/explorer/components/smart-link';
-import Paper from 'docscript/src/explorer/components/paper';
+import SmartLink from '../../../components/smart-link';
+import Paper from '../../../components/paper';
+import Brackets from '../brackets';
 
 import Type from '../type';
 
@@ -51,13 +52,13 @@ export default class TypeRef extends React.Component<TypeRefProps, TypeRefState>
         );
     }
 
-    renderTypeArguments() {
+    renderTypeArguments(): React.ReactChild {
         let typeArguments = this.props.typeRef.typeArguments;
         if (!typeArguments) {
-            return;
+            return null;
         }
 
-        let result: React.ReactNode[] = ['<'];
+        let result: React.ReactChild[] = [];
 
         typeArguments.forEach((typeArg, i) => {
             result.push(<Type type={ typeArg } />);
@@ -66,7 +67,6 @@ export default class TypeRef extends React.Component<TypeRefProps, TypeRefState>
             }
         });
 
-        result.push('>');
-        return result;
+        return <Brackets>{ result }</Brackets>;
     }
 }
