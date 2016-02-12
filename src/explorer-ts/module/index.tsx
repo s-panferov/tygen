@@ -5,9 +5,11 @@ import Layout from '../../explorer/components/layout';
 import Heading from '../../explorer/components/heading';
 import { Module as ModuleRef } from '../../doc';
 import { isInterfaceReflection } from '../../doc/ast/interface';
+import { isClassReflection } from '../../doc/ast/class';
 
 import List from '../list';
 import Interface from '../interface';
+import Class from '../class';
 
 require('./index.css');
 const block = theme.block('ts-module');
@@ -54,7 +56,14 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
                 return (
                     <Interface
                         key={ item.id }
-                        iface={ item }
+                        item={ item }
+                    />
+                );
+            } else if (isClassReflection(item)) {
+                return (
+                    <Class
+                        key={ item.id }
+                        item={ item }
                     />
                 );
             }
