@@ -1,13 +1,17 @@
 import * as React from 'react';
 import * as theme from '../../explorer/components/theme';
 
-import { InterfaceReflection } from '../../doc/ast/interface';
+import {
+    InterfaceReflection,
+} from '../../doc/ast/interface';
+
 import Heading from '../../explorer/components/heading';
 import SmartLink from '../../explorer/components/smart-link';
 import Paper from '../../explorer/components/paper';
 
 import TypeParameters from '../type-parameters';
 import TypeMembers from '../type-members';
+import InterfaceHeritage from '../interface-heritage';
 
 require('./index.css');
 const block = theme.block('ts-interface');
@@ -40,6 +44,8 @@ export default class Interface<P extends InterfaceProps> extends React.Component
                     { iface.typeParameters &&
                         <TypeParameters typeParameters={ iface.typeParameters }/> }
                 </Heading>
+                { iface.heritageClauses &&
+                    <InterfaceHeritage clauses={ iface.heritageClauses }/> }
                 { iface.comment }
                 { iface.members &&
                     <TypeMembers members={ iface.members } /> }

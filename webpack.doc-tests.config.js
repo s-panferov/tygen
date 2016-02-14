@@ -77,12 +77,12 @@ var config = {
         new MochaPlugin(),
         new webpack.BannerPlugin('require("source-map-support").install();',
             { raw: true, entryOnly: false }),
-        new webpack.DllReferencePlugin({
-            context: __dirname,
-            manifest: require("./dist/manifest.json"),
-            name: "require('./docscript.js')",
-            sourceType: "commonsjs2",
-        })
+        // new webpack.DllReferencePlugin({
+        //     context: __dirname,
+        //     manifest: require("./dist/manifest.json"),
+        //     name: "require('./docscript.js')",
+        //     sourceType: "commonsjs2",
+        // })
     ]
 };
 

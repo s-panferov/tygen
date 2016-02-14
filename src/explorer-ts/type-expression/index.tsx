@@ -3,6 +3,7 @@ import * as theme from '../../explorer/components/theme';
 
 import {
     ExpressionWithTypeArgumentsReflection,
+    isTypeReferenceReflection
 } from '../../doc/ast/type';
 
 import SmartLink from '../../explorer/components/smart-link';
@@ -31,10 +32,24 @@ export default class TypeExpression extends React.Component<TypeExpressionProps,
 
         return (
             <Paper className={ this.getClassName() }>
-                TODO
+                { this.renderType() }
                 { expr.typeArguments &&
                     <TypeArguments typeArguments={ expr.typeArguments }/> }
             </Paper>
         );
+    }
+
+    renderType() {
+        let expression = this.props.expr.expression;
+        let type = expression.type;
+        if (isTypeReferenceReflection(type)) {
+            return (
+                <SmartLink id={ type.ref }>
+                    { expression.name }
+                </SmartLink>
+            );
+        } else {
+            return <span>TODO</span>;
+        }
     }
 }

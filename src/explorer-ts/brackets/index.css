@@ -3,4 +3,10 @@
 .ts-brackets {
     display: inline-flex;
     font-family: var(--mono);
+
+    &__bracket {
+        &_hover {
+            color: red;
+        }
+    }
 }

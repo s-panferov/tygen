@@ -67,6 +67,7 @@
         "./loader-plugin/index.ts",
         "./explorer-ts/brackets/index.tsx",
         "./explorer-ts/class/index.tsx",
+        "./explorer-ts/interface-heritage/index.tsx",
         "./explorer-ts/interface/index.tsx",
         "./explorer-ts/list/index.tsx",
         "./explorer-ts/module/index.tsx",
