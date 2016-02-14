@@ -1,6 +1,7 @@
 @import 'theme';
 
 .ts-type-members {
-    display: inline-flex;;
+    display: flex;
+    flex-direction: column;
     font-family: var(--mono);
 }

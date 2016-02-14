@@ -6,8 +6,21 @@ import autobind from '../../lib/autobind';
 require('./index.css');
 const block = theme.block('ts-brackets');
 
+export enum BracketsType {
+    Angle = 'angle' as any,
+    Round = 'round' as any,
+    Curly = 'curly' as any
+}
+
+const BracketsMap = {
+    [BracketsType.Angle]: ['<', '>'],
+    [BracketsType.Round]: ['(', ')'],
+    [BracketsType.Curly]: ['{', '}']
+};
+
 export interface BracketsProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
+    type?: BracketsType;
 }
 
 export interface BracketsState {
@@ -16,6 +29,9 @@ export interface BracketsState {
 
 export default class Brackets extends React.Component<BracketsProps, BracketsState> {
     static contextTypes = theme.themeContext;
+    static defaultProps: BracketsProps = {
+        type: BracketsType.Angle
+    };
 
     constructor(props, context) {
         super(props, context);
@@ -37,11 +53,14 @@ export default class Brackets extends React.Component<BracketsProps, BracketsSta
                 hover: this.state.hover
             })
         };
+
+        let braces: [string, string] = BracketsMap[this.props.type];
+
         return (
             <span className={ this.props.className }>
-                <span key='left' { ...bracketProps }>{ '<' }</span>
+                <span key='left' { ...bracketProps }>{ braces[0] }</span>
                 { this.props.children }
-                <span key='right' { ...bracketProps }>{ '>' }</span>
+                <span key='right' { ...bracketProps }>{ braces[1] }</span>
             </span>
         );
     }

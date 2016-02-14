@@ -1,0 +1,5 @@
+@import 'theme';
+
+.ts-signature-param {
+    font-family: var(--mono);
+}
