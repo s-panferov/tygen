@@ -29,8 +29,6 @@ export class DocWriter {
             for (let key in obj) {
                 if (obj.hasOwnProperty(key)) {
                     let o = obj[key];
-                    console.log(o);
-
                     if (o != null &&
                         typeof o === 'object' &&
                         (Array.isArray(o) ||

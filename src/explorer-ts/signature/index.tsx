@@ -14,15 +14,24 @@ import SignatureParam from '../signature-param';
 require('./index.css');
 const block = theme.block('ts-signature');
 
+export enum SignatureTypeStyle {
+    Arrow = 'arrow' as any,
+    Colon = 'colon' as any,
+}
+
 export interface SignatureProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     signature: SignatureReflection;
+    typeStyle?: SignatureTypeStyle;
 }
 
 export interface SignatureState {}
 
 export default class Signature extends React.Component<SignatureProps, SignatureState> {
     static contextTypes = theme.themeContext;
+    static defaultProps = {
+        typeStyle: SignatureTypeStyle.Arrow
+    };
 
     getClassName() {
         return block(theme.resolveTheme(this)).mix(this.props.className);
@@ -32,6 +41,7 @@ export default class Signature extends React.Component<SignatureProps, Signature
         let { signature } = this.props;
         return (
             <div className={ this.getClassName() }>
+                { signature.name }
                 { signature.typeParameters &&
                     <TypeParameters typeParameters={ signature.typeParameters }/>
                 }
@@ -44,9 +54,11 @@ export default class Signature extends React.Component<SignatureProps, Signature
                         }
                     </Join>
                 </Brackets>
-                <span>=></span>
                 { signature.type &&
-                    <Type type={ signature.type } />
+                    [
+                        <span>{ this.props.typeStyle == SignatureTypeStyle.Arrow ? '=>' : ':' }</span>,
+                        <Type type={ signature.type } />
+                    ]
                 }
             </div>
         );

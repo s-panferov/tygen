@@ -30,7 +30,9 @@ describe('class:constructor', () => {
 
             let constr = cls.members[0];
 
-            if (!isConstructorDeclarationReflection(constr)) {
+            if (isConstructorDeclarationReflection(constr)) {
+                expect(constr.name).equal('constructor');
+            } else {
                 expect(false).to.true;
             }
         } else {

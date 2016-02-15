@@ -12,5 +12,17 @@ interface UserName extends Test<Promise<string>, string> {
  * Simple class to describe SuperName
  */
 class SuperName extends Promise<string> {
+    constructor(a: any) {
+        super(a);
+    }
 
+    method(x: Test<Promise<string>, number>): Test<any, any> {
+        return null;
+    }
+
+    get name(): string {
+        return null;
+    }
+    set name(val: string) {
+    }
 }

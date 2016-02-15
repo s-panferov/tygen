@@ -584,6 +584,7 @@ export function visitConstructorDeclaration(
     let signatureRefl = visitSignature(decl, ctx);
 
     return Object.assign(signatureRefl, {
+        name: 'constructor',
         itemType: ItemType.ConstructorDeclaration,
     });
 }
