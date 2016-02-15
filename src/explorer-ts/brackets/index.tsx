@@ -9,13 +9,15 @@ const block = theme.block('ts-brackets');
 export enum BracketsType {
     Angle = 'angle' as any,
     Round = 'round' as any,
-    Curly = 'curly' as any
+    Curly = 'curly' as any,
+    Square = 'square' as any,
 }
 
 const BracketsMap = {
     [BracketsType.Angle]: ['<', '>'],
     [BracketsType.Round]: ['(', ')'],
-    [BracketsType.Curly]: ['{', '}']
+    [BracketsType.Curly]: ['{', '}'],
+    [BracketsType.Square]: ['[', ']']
 };
 
 export interface BracketsProps extends React.CommonProps {

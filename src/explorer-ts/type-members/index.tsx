@@ -11,6 +11,8 @@ import {
     GetAccessorDeclarationReflection,
     SetAccessorDeclarationReflection,
     MethodDeclarationReflection,
+    IndexSignatureReflection,
+    CallSignatureReflection,
     isPropertySignatureReflection,
     isPropertyDeclarationReflection,
     isConstructorDeclarationReflection,
@@ -18,12 +20,16 @@ import {
     isMethodSignatureReflection,
     isGetAccessorDeclarationReflection,
     isSetAccessorDeclarationReflection,
+    isIndexSignatureReflection,
+    isCallSignatureReflection,
 } from '../../doc/ast/type';
 
 import Property from '../property';
 import Method from '../method';
 import Constructor from '../constructor';
 import Accessor from '../accessor';
+import IndexSignature from '../index-signature';
+import CallSignature from '../call-signature';
 
 require('./index.css');
 const block = theme.block('ts-type-members');
@@ -48,13 +54,19 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
 
     render() {
         let members = this.props.members;
+        let indexes: IndexSignatureReflection[] = [];
+        let calls: CallSignatureReflection[] = [];
         let properties: PropertyDeclarationReflection[] = [];
         let constructors: ConstructorDeclarationReflection[] = [];
         let methods: MethodDeclarationReflection[] = [];
         let accessors: Accessors = { };
 
         members.forEach(member => {
-            if (isPropertySignatureReflection(member)
+            if (isCallSignatureReflection(member)) {
+                calls.push(member);
+            } else if (isIndexSignatureReflection(member)) {
+                indexes.push(member);
+            } else if (isPropertySignatureReflection(member)
                 || isPropertyDeclarationReflection(member)) {
                 properties.push(member);
             } else if (isMethodDeclarationReflection(member)
@@ -79,12 +91,26 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
 
         return (
             <div className={ this.getClassName() }>
+                { this.renderIndexes(indexes) }
+                { this.renderCalls(calls) }
                 { this.renderProperties(properties) }
                 { this.renderConstructors(constructors) }
                 { this.renderMethods(methods) }
                 { this.renderAccessors(accessors) }
             </div>
         );
+    }
+
+    renderIndexes(signature: IndexSignatureReflection[]) {
+        return signature.map(sig => {
+            return <IndexSignature signature={ sig } />;
+        });
+    }
+
+    renderCalls(signature: CallSignatureReflection[]) {
+        return signature.map(sig => {
+            return <CallSignature signature={ sig } />;
+        });
     }
 
     renderProperties(properties: PropertyDeclarationReflection[]) {

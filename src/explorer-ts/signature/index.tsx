@@ -11,6 +11,8 @@ import Type from '../type';
 import TypeParameters from '../type-parameters';
 import SignatureParam from '../signature-param';
 
+export { BracketsType };
+
 require('./index.css');
 const block = theme.block('ts-signature');
 
@@ -23,6 +25,7 @@ export interface SignatureProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     signature: SignatureReflection;
     typeStyle?: SignatureTypeStyle;
+    bracketsType?: BracketsType;
 }
 
 export interface SignatureState {}
@@ -30,7 +33,8 @@ export interface SignatureState {}
 export default class Signature extends React.Component<SignatureProps, SignatureState> {
     static contextTypes = theme.themeContext;
     static defaultProps = {
-        typeStyle: SignatureTypeStyle.Arrow
+        typeStyle: SignatureTypeStyle.Arrow,
+        bracketsType: BracketsType.Round
     };
 
     getClassName() {
@@ -45,7 +49,7 @@ export default class Signature extends React.Component<SignatureProps, Signature
                 { signature.typeParameters &&
                     <TypeParameters typeParameters={ signature.typeParameters }/>
                 }
-                <Brackets type={ BracketsType.Round }>
+                <Brackets type={ this.props.bracketsType }>
                     <Join>
                         {
                             signature.parameters.map(param => {

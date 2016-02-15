@@ -1,11 +1,11 @@
-import { Test } from './test';
+import { Generic } from './test';
 import { Test2 } from './test2';
 
 /**
  * Simple interface to describe UserName
  */
-interface UserName extends Test<Promise<string>, string> {
-    test: Test<Promise<string>, Test<Promise<string>, number>>;
+interface UserName extends Generic<Promise<string>, string> {
+    test: Generic<Promise<string>, Generic<Promise<string>, number>>;
     foo: <T>(a: T, b: number) => Promise<T>;
 }
 
@@ -17,7 +17,7 @@ class SuperName extends Promise<string> {
         super(a);
     }
 
-    method(x: Test<Promise<string>, number>): Test2 {
+    method(x: Generic<Promise<string>, number>): Test2 {
         return null;
     }
 
