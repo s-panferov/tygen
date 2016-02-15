@@ -1,6 +1,6 @@
 @import 'theme';
 
 .ts-type-parameters {
-    display: inline-flex;;
+    display: inline-flex;
     font-family: var(--mono);
 }

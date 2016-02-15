@@ -10,8 +10,8 @@ export enum ItemType {
     ExpressionWithTypeArguments = 'ExpressionWithTypeArguments' as any,
     LeftHandSideExpression = 'LeftHandSideExpression' as any,
     IndexSignature = 'IndexSignature' as any,
-    Parameter = 'Parameter' as any,
     CallSignature = 'CallSignature' as any,
+    Parameter = 'Parameter' as any,
     Signature = 'Signature' as any,
     CoreTypeReference = 'CoreTypeReference' as any, // synthetic
     TypeReference = 'TypeReference' as any,

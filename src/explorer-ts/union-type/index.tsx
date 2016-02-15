@@ -3,35 +3,41 @@ import * as theme from '../../explorer/components/theme';
 import Join from '../../explorer/components/join';
 
 import {
-    TypeReflection,
+    UnionTypeReflection,
 } from '../../doc/ast/type';
 
 import Brackets from '../brackets';
 import Type from '../type';
 
 require('./index.css');
-const block = theme.block('ts-type-arguments');
+const block = theme.block('ts-union');
 
-export interface TypeArgumentsProps extends React.CommonProps {
+export interface UnionTypeProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
-    typeArguments: TypeReflection[];
+    type: UnionTypeReflection;
 }
 
-export interface TypeArgumentsState {}
+export interface UnionTypeState {}
 
-export default class TypeArguments extends React.Component<TypeArgumentsProps, TypeArgumentsState> {
+const SEPARATOR = (idx: number) => <span key={ `sep-${ idx }` }>|</span>;
+
+export default class UnionType extends React.Component<UnionTypeProps, UnionTypeState> {
     static contextTypes = theme.themeContext;
+
+    getSeparator() {
+        return SEPARATOR;
+    }
 
     getClassName() {
         return block(theme.resolveTheme(this)).mix(this.props.className);
     }
 
     render() {
-        let typeArguments = this.props.typeArguments;
+        let types = this.props.type.types;
         return <Brackets>
-            <Join>
+            <Join separator={ this.getSeparator() }>
                 {
-                    typeArguments.map((typeArg, i) => {
+                    types.map((typeArg, i) => {
                         return <Type type={ typeArg } />;
                     })
                 }

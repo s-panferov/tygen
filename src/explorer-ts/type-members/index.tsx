@@ -6,14 +6,16 @@ import {
 } from '../../doc/items';
 
 import {
-    PropertySignatureReflection,
+    PropertyDeclarationReflection,
     ConstructorDeclarationReflection,
     GetAccessorDeclarationReflection,
     SetAccessorDeclarationReflection,
     MethodDeclarationReflection,
     isPropertySignatureReflection,
+    isPropertyDeclarationReflection,
     isConstructorDeclarationReflection,
     isMethodDeclarationReflection,
+    isMethodSignatureReflection,
     isGetAccessorDeclarationReflection,
     isSetAccessorDeclarationReflection,
 } from '../../doc/ast/type';
@@ -46,15 +48,17 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
 
     render() {
         let members = this.props.members;
-        let propertySignatures: PropertySignatureReflection[] = [];
+        let properties: PropertyDeclarationReflection[] = [];
         let constructors: ConstructorDeclarationReflection[] = [];
         let methods: MethodDeclarationReflection[] = [];
         let accessors: Accessors = { };
 
         members.forEach(member => {
-            if (isPropertySignatureReflection(member)) {
-                propertySignatures.push(member);
-            } else if (isMethodDeclarationReflection(member)) {
+            if (isPropertySignatureReflection(member)
+                || isPropertyDeclarationReflection(member)) {
+                properties.push(member);
+            } else if (isMethodDeclarationReflection(member)
+                || isMethodSignatureReflection(member)) {
                 methods.push(member);
             } else if (isConstructorDeclarationReflection(member)) {
                 constructors.push(member);
@@ -75,7 +79,7 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
 
         return (
             <div className={ this.getClassName() }>
-                { this.renderPropertySignatures(propertySignatures) }
+                { this.renderProperties(properties) }
                 { this.renderConstructors(constructors) }
                 { this.renderMethods(methods) }
                 { this.renderAccessors(accessors) }
@@ -83,8 +87,8 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
         );
     }
 
-    renderPropertySignatures(propertySignatures: PropertySignatureReflection[]) {
-        return propertySignatures.map(sig => {
+    renderProperties(properties: PropertyDeclarationReflection[]) {
+        return properties.map(sig => {
             return <Property property={ sig } />;
         });
     }

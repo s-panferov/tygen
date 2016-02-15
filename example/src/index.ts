@@ -1,4 +1,5 @@
 import { Test } from './test';
+import { Test2 } from './test2';
 
 /**
  * Simple interface to describe UserName
@@ -16,7 +17,7 @@ class SuperName extends Promise<string> {
         super(a);
     }
 
-    method(x: Test<Promise<string>, number>): Test<any, any> {
+    method(x: Test<Promise<string>, number>): Test2 {
         return null;
     }
 

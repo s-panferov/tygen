@@ -1,6 +1,6 @@
 @import 'theme';
 
-.ts-type-arguments {
+.ts-intersection-type {
     display: inline-flex;
     font-family: var(--mono);
 }
