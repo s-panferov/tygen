@@ -20,6 +20,7 @@
     ],
     "files": [
         "./doc/ast/class.ts",
+        "./doc/ast/enum.ts",
         "./doc/ast/interface.ts",
         "./doc/ast/type.ts",
         "./doc/defines.d.ts",
@@ -31,6 +32,9 @@
         "./doc/tests/class-constructor.ts",
         "./doc/tests/class-heritage.ts",
         "./doc/tests/class-simple.ts",
+        "./doc/tests/enum-initializers.ts",
+        "./doc/tests/enum-ref.ts",
+        "./doc/tests/enum-simple.ts",
         "./doc/tests/index.ts",
         "./doc/tests/interface-call.ts",
         "./doc/tests/interface-doc.ts",

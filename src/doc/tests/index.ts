@@ -10,5 +10,7 @@ import './class-simple';
 import './class-accessors';
 import './class-constructor';
 import './class-heritage';
+import './enum-simple';
+import './enum-initializers';
 //
 console.log('tests loaded');

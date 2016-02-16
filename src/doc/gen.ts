@@ -5,6 +5,7 @@ import {
 import { Context } from './index';
 import * as iface from './ast/interface';
 import * as cls from './ast/class';
+import * as en from './ast/enum';
 
 export function processSourceFile(source: SourceFile, ctx: Context) {
     source.statements.forEach(statement => {
@@ -15,6 +16,10 @@ export function processSourceFile(source: SourceFile, ctx: Context) {
         } else if (cls.isClasDeclaration(statement)) {
             ctx.currentModule.items.push(
                 cls.visitClass(statement, ctx)
+            );
+        } else if (en.isEnumDeclaration(statement)) {
+            ctx.currentModule.items.push(
+                en.visitEnum(statement, ctx)
             );
         }
     });

@@ -22,6 +22,8 @@ export enum ItemType {
     ConstructorDeclaration = 'ConstructorDeclaration' as any,
     GetAccessorDeclaration = 'GetAccessorDeclaration' as any,
     SetAccessorDeclaration = 'SetAccessorDeclaration' as any,
+    EnumDeclaration = 'EnumDeclaration' as any,
+    EnumMember = 'EnumMember' as any,
 }
 
 export interface Item {
