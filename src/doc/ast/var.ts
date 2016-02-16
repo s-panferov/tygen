@@ -8,8 +8,11 @@ import {
 import {
     TypeReflection,
     visitTypeNode,
-    extractTypeReference,
 } from './type';
+
+import {
+    extractTypeReference,
+} from './type-utils';
 
 import { Context } from '../index';
 import { Item, ItemType } from '../items';

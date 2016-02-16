@@ -15,5 +15,6 @@ import './enum-initializers';
 import './type-alias-simple';
 import './var-simple';
 import './var-context-type';
+import './var-context-complex';
 //
 console.log('tests loaded');

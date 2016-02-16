@@ -24,6 +24,7 @@ import {
     SignatureDeclaration,
     FunctionTypeNode,
     Signature,
+    SymbolFlags,
     ClassElement,
     PropertyDeclaration,
     MethodDeclaration,
@@ -36,6 +37,10 @@ import {
     CoreType,
     getCoreType
 } from '../tools';
+
+import {
+    extractTypeReference
+} from './type-utils';
 
 import { Context } from '../index';
 import { Item, ItemType } from '../items';
@@ -253,21 +258,6 @@ export function visitTypeNode(node: TypeNode, ctx: Context): TypeReflection {
 
 export interface CoreTypeReferenceReflection extends TypeReflection {
     coreType: CoreType;
-}
-
-export function extractTypeReference(type: Type, ctx: Context): TypeReflection {
-    let coreType = getCoreType(type);
-    if (coreType) {
-        return {
-            itemType: ItemType.CoreTypeReference,
-            coreType
-        } as CoreTypeReferenceReflection;
-    } else {
-        return {
-            ref: ctx.id(type),
-            itemType: ItemType.TypeReference,
-        } as TypeReferenceReflection;
-    }
 }
 
 export function visitTypeLiteral(node: TypeLiteralNode, type: Type, ctx: Context): TypeLiteralReflection {
