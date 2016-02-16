@@ -24,7 +24,8 @@ export enum ItemType {
     SetAccessorDeclaration = 'SetAccessorDeclaration' as any,
     EnumDeclaration = 'EnumDeclaration' as any,
     EnumMember = 'EnumMember' as any,
-    TypeAlias = 'TypeAlias' as any
+    TypeAlias = 'TypeAlias' as any,
+    VariableDeclaration = 'VariableDeclaration' as any,
 }
 
 export interface Item {

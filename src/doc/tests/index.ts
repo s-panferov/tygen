@@ -13,5 +13,7 @@ import './class-heritage';
 import './enum-simple';
 import './enum-initializers';
 import './type-alias-simple';
+import './var-simple';
+import './var-context-type';
 //
 console.log('tests loaded');

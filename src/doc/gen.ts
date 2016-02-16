@@ -7,6 +7,7 @@ import * as iface from './ast/interface';
 import * as cls from './ast/class';
 import * as en from './ast/enum';
 import * as typeAlias from './ast/type-alias';
+import * as variable from './ast/var';
 
 export function processSourceFile(source: SourceFile, ctx: Context) {
     source.statements.forEach(statement => {
@@ -26,6 +27,17 @@ export function processSourceFile(source: SourceFile, ctx: Context) {
             ctx.currentModule.items.push(
                 typeAlias.visitTypeAliasDeclaration(statement, ctx)
             );
+        } else if (typeAlias.isTypeAliasDeclaration(statement)) {
+            ctx.currentModule.items.push(
+                typeAlias.visitTypeAliasDeclaration(statement, ctx)
+            );
+        } else if (variable.isVariableStatement(statement)) {
+            // concat because visitVariableStatement returs array
+            ctx.currentModule.items = ctx.currentModule.items.concat(
+                variable.visitVariableStatement(statement, ctx)
+            );
+        } else {
+            return statement
         }
     });
 }
