@@ -6,6 +6,7 @@ import { Context } from './index';
 import * as iface from './ast/interface';
 import * as cls from './ast/class';
 import * as en from './ast/enum';
+import * as typeAlias from './ast/type-alias';
 
 export function processSourceFile(source: SourceFile, ctx: Context) {
     source.statements.forEach(statement => {
@@ -20,6 +21,10 @@ export function processSourceFile(source: SourceFile, ctx: Context) {
         } else if (en.isEnumDeclaration(statement)) {
             ctx.currentModule.items.push(
                 en.visitEnum(statement, ctx)
+            );
+        } else if (typeAlias.isTypeAliasDeclaration(statement)) {
+            ctx.currentModule.items.push(
+                typeAlias.visitTypeAliasDeclaration(statement, ctx)
             );
         }
     });

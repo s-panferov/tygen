@@ -12,5 +12,6 @@ import './class-constructor';
 import './class-heritage';
 import './enum-simple';
 import './enum-initializers';
+import './type-alias-simple';
 //
 console.log('tests loaded');
