@@ -50,13 +50,10 @@ history.listen(location => {
     currentLocation = location;
     if (location.action === 'POP') {
         if (location.pathname === '/') {
-            let mainPackage = service.getMainPackageName();
-            history.replaceState(null, `/${mainPackage}/`);
-
             store.dispatch(
                 actions.navigate({
-                    pkg: mainPackage,
-                    path: location.pathname
+                    pkg: null,
+                    path: ''
                 })
             );
         } else {

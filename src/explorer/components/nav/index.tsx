@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as theme from '../theme';
 
 import Link from '../link';
+import SmartLink from '../smart-link';
 import File from '../file';
 import Service from '../../service';
 import { Route } from '../../state';
@@ -45,11 +46,11 @@ export default class Nav extends React.Component<NavProps, NavState> {
 
     renderLogo() {
         return (
-            <Link htmlProps={{ href: '#' }}>
+            <SmartLink route={{ pkg: '', path: '' }}>
                 <div className={ block('logo') }>
                     {'//'}DocScript
                 </div>
-            </Link>
+            </SmartLink>
         );
     }
 
