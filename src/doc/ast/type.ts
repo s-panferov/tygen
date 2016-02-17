@@ -417,8 +417,6 @@ export function visitConstructorTypeNode(
     type: Type,
     ctx: Context
 ): ConstructorTypeReflection {
-    // TODO regiser inline types globally?
-
     return {
         id: ctx.id(type),
         itemType: ItemType.ConstructorType,
@@ -501,7 +499,7 @@ export function visitParenthesizedTypeNode(
 ): ParenthesizedTypeReflection {
     return {
         id: ctx.id(type),
-        itemType: ItemType.TypePredicate,
+        itemType: ItemType.ParenthesizedType,
         type: visitTypeNode(node.type, ctx)
     };
 }

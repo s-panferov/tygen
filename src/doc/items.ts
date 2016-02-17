@@ -32,6 +32,7 @@ export enum ItemType {
     TupleType = 'TupleType' as any,
     ParenthesizedType = 'ParenthesizedType' as any,
     TypePredicate = 'TypePredicate' as any,
+    FunctionDeclaration = 'FunctionDeclaration' as any,
 }
 
 export interface Item {

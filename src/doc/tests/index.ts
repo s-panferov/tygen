@@ -16,5 +16,11 @@ import './type-alias-simple';
 import './var-simple';
 import './var-context-type';
 import './var-context-complex';
+import './string-literal-type';
+import './array-type';
+import './tuple-type';
+import './type-predicate';
+import './parenthesized-type';
+import './constructor-type';
 //
 console.log('tests loaded');
