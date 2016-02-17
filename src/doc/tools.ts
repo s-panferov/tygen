@@ -7,6 +7,7 @@ export enum CoreType {
     Number = 'number' as any,
     Boolean = 'boolean' as any,
     Void = 'void' as any,
+    Symbol = 'symbol' as any
 }
 
 export function getCoreType(type: Type): CoreType {
@@ -20,6 +21,8 @@ export function getCoreType(type: Type): CoreType {
         return CoreType.Boolean;
     } else if (type.flags & TypeFlags.Void) {
         return CoreType.Void;
+    } else if (type.flags & TypeFlags.ESSymbol) {
+        return CoreType.Symbol;
     }
 }
 

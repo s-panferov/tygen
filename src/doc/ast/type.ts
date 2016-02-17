@@ -31,6 +31,12 @@ import {
     ConstructorDeclaration,
     GetAccessorDeclaration,
     SetAccessorDeclaration,
+    StringLiteralTypeNode,
+    ConstructorTypeNode,
+    ArrayTypeNode,
+    TupleTypeNode,
+    ParenthesizedTypeNode,
+    TypePredicateNode
 } from 'typescript';
 
 import {
@@ -214,6 +220,30 @@ export function isFunctionTypeNode(node: TypeNode): node is FunctionTypeNode {
     return node.kind == SyntaxKind.FunctionType;
 }
 
+export function isStringLiteralTypeNode(node: TypeNode): node is StringLiteralTypeNode {
+    return node.kind == SyntaxKind.StringLiteralType;
+}
+
+export function isConstructorTypeNode(node: TypeNode): node is ConstructorTypeNode {
+    return node.kind == SyntaxKind.ConstructorType;
+}
+
+export function isArrayTypeNode(node: TypeNode): node is ArrayTypeNode {
+    return node.kind == SyntaxKind.ArrayType;
+}
+
+export function isTupleTypeNode(node: TypeNode): node is TupleTypeNode {
+    return node.kind == SyntaxKind.TupleType;
+}
+
+export function isParenthesizedTypeNode(node: TypeNode): node is ParenthesizedTypeNode {
+    return node.kind == SyntaxKind.ParenthesizedType;
+}
+
+export function isTypePredicateNode(node: TypeNode): node is TypePredicateNode {
+    return node.kind == SyntaxKind.TypePredicate;
+}
+
 export function matchCoreType(node: TypeNode): CoreType {
     switch(node.kind) {
         case SyntaxKind.StringKeyword: return CoreType.String;
@@ -222,6 +252,7 @@ export function matchCoreType(node: TypeNode): CoreType {
         case SyntaxKind.VoidKeyword: return CoreType.Void;
         case SyntaxKind.VoidKeyword: return CoreType.Void;
         case SyntaxKind.AnyKeyword: return CoreType.Any;
+        case SyntaxKind.SymbolKeyword: return CoreType.Symbol;
         default: return null;
     }
 }
@@ -232,6 +263,15 @@ export function isStringKeyword(node: TypeNode): boolean {
 
 export function visitTypeNode(node: TypeNode, ctx: Context): TypeReflection {
     let type = ctx.checker.getTypeAtLocation(node);
+
+    let coreType = matchCoreType(node);
+    if (coreType) {
+        return {
+            id: ctx.id(type),
+            itemType: ItemType.CoreTypeReference,
+            coreType
+        } as CoreTypeReferenceReflection;
+    }
 
     if (isTypeLiteral(node)) {
         return visitTypeLiteral(node, type, ctx);
@@ -253,6 +293,31 @@ export function visitTypeNode(node: TypeNode, ctx: Context): TypeReflection {
         return visitFunctionTypeNode(node, type, ctx);
     }
 
+    if (isStringLiteralTypeNode(node)) {
+        return visitStringLiteralTypeNode(node, type, ctx);
+    }
+
+    if (isConstructorTypeNode(node)) {
+        return visitConstructorTypeNode(node, type, ctx);
+    }
+
+    if (isArrayTypeNode(node)) {
+        return visitArrayTypeNode(node, type, ctx);
+    }
+
+    if (isTupleTypeNode(node)) {
+        return visitTupleTypeNode(node, type, ctx);
+    }
+
+    if (isParenthesizedTypeNode(node)) {
+        return visitParenthesizedTypeNode(node, type, ctx);
+    }
+
+    if (isTypePredicateNode(node)) {
+        return visitTypePredicateNode(node, type, ctx);
+    }
+
+    console.warn('Unknown type node', node.kind, node.getText());
     return extractTypeReference(type, ctx);
 }
 
@@ -336,6 +401,130 @@ export function visitFunctionTypeNode(
         id: ctx.id(type),
         itemType: ItemType.FunctionType,
         signature: visitSignature(node, ctx)
+    };
+}
+
+export interface ConstructorTypeReflection extends TypeReflection {
+    signature: SignatureReflection;
+}
+
+export function isConstructorTypeReflection(item: Item): item is ConstructorTypeReflection {
+    return item.itemType == ItemType.ConstructorType;
+}
+
+export function visitConstructorTypeNode(
+    node: FunctionTypeNode,
+    type: Type,
+    ctx: Context
+): ConstructorTypeReflection {
+    // TODO regiser inline types globally?
+
+    return {
+        id: ctx.id(type),
+        itemType: ItemType.ConstructorType,
+        signature: visitSignature(node, ctx)
+    };
+}
+
+export interface StringLiteralTypeReflection extends TypeReflection {
+    text: string;
+}
+
+export function isStringLiteralTypeReflection(item: Item): item is StringLiteralTypeReflection {
+    return item.itemType == ItemType.StringLiteralType;
+}
+
+export function visitStringLiteralTypeNode(
+    node: StringLiteralTypeNode,
+    type: Type,
+    ctx: Context
+): StringLiteralTypeReflection {
+    return {
+        id: ctx.id(type),
+        text: node.text,
+        itemType: ItemType.StringLiteralType
+    };
+}
+
+export interface ArrayTypeReflection extends TypeReflection {
+    elementType: TypeReflection;
+}
+
+export function isArrayTypeReflection(item: Item): item is ArrayTypeReflection {
+    return item.itemType == ItemType.ArrayType;
+}
+
+export function visitArrayTypeNode(
+    node: ArrayTypeNode,
+    type: Type,
+    ctx: Context
+): ArrayTypeReflection {
+    return {
+        id: ctx.id(type),
+        itemType: ItemType.ArrayType,
+        elementType: visitTypeNode(node.elementType, ctx)
+    };
+}
+
+export interface TupleTypeReflection extends TypeReflection {
+    elementTypes: TypeReflection[];
+}
+
+export function isTupleTypeReflection(item: Item): item is TupleTypeReflection {
+    return item.itemType == ItemType.TupleType;
+}
+
+export function visitTupleTypeNode(
+    node: TupleTypeNode,
+    type: Type,
+    ctx: Context
+): TupleTypeReflection {
+    return {
+        id: ctx.id(type),
+        itemType: ItemType.TupleType,
+        elementTypes: node.elementTypes.map(et => visitTypeNode(et, ctx))
+    };
+}
+
+export interface ParenthesizedTypeReflection extends TypeReflection {
+    type: TypeReflection;
+}
+
+export function isParenthesizedTypeReflection(item: Item): item is ParenthesizedTypeReflection {
+    return item.itemType == ItemType.ParenthesizedType;
+}
+
+export function visitParenthesizedTypeNode(
+    node: ParenthesizedTypeNode,
+    type: Type,
+    ctx: Context
+): ParenthesizedTypeReflection {
+    return {
+        id: ctx.id(type),
+        itemType: ItemType.TypePredicate,
+        type: visitTypeNode(node.type, ctx)
+    };
+}
+
+export interface TypePredicateReflection extends TypeReflection {
+    type: TypeReflection;
+    parameterName: string;
+}
+
+export function isTypePredicateReflection(item: Item): item is TypePredicateReflection {
+    return item.itemType == ItemType.TypePredicate;
+}
+
+export function visitTypePredicateNode(
+    node: TypePredicateNode,
+    type: Type,
+    ctx: Context
+): TypePredicateReflection {
+    return {
+        id: ctx.id(type),
+        itemType: ItemType.TypePredicate,
+        parameterName: node.parameterName.getText(),
+        type: visitTypeNode(node.type, ctx)
     };
 }
 

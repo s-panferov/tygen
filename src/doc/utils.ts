@@ -37,5 +37,7 @@ export function getFileInfo(fileName: string, pkg: Package): FileInfo {
 }
 
 export function logNode(node) {
-    return console.log(node);
+    let obj = Object.assign({}, node);
+    delete obj.parent;
+    return console.log(obj);
 }

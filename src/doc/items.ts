@@ -26,6 +26,12 @@ export enum ItemType {
     EnumMember = 'EnumMember' as any,
     TypeAlias = 'TypeAlias' as any,
     VariableDeclaration = 'VariableDeclaration' as any,
+    StringLiteralType = 'StringLiteralType' as any,
+    ConstructorType = 'ConstructorType' as any,
+    ArrayType = 'ArrayType' as any,
+    TupleType = 'TupleType' as any,
+    ParenthesizedType = 'ParenthesizedType' as any,
+    TypePredicate = 'TypePredicate' as any,
 }
 
 export interface Item {
