@@ -62,6 +62,7 @@ export function visitVariableStatement(
         }
 
         return {
+            id: ctx.id(variable),
             name: variable.name.getText(),
             itemType: ItemType.VariableDeclaration,
             varType,

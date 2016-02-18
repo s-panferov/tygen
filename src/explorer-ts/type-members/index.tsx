@@ -103,31 +103,31 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
 
     renderIndexes(signature: IndexSignatureReflection[]) {
         return signature.map(sig => {
-            return <IndexSignature signature={ sig } />;
+            return <IndexSignature key={ sig.id } signature={ sig } />;
         });
     }
 
     renderCalls(signature: CallSignatureReflection[]) {
         return signature.map(sig => {
-            return <CallSignature signature={ sig } />;
+            return <CallSignature key={ sig.id } signature={ sig } />;
         });
     }
 
     renderProperties(properties: PropertyDeclarationReflection[]) {
         return properties.map(sig => {
-            return <Property property={ sig } />;
+            return <Property key={ sig.id } property={ sig } />;
         });
     }
 
     renderMethods(methods: MethodDeclarationReflection[]) {
         return methods.map(method => {
-            return <Method method={ method } />;
+            return <Method key={ method.id } method={ method } />;
         });
     }
 
     renderConstructors(constructors: ConstructorDeclarationReflection[]) {
         return constructors.map(ctor => {
-            return <Constructor ctor={ ctor } />;
+            return <Constructor key={ ctor.id } ctor={ ctor } />;
         });
     }
 
@@ -135,8 +135,8 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
         return Object.keys(accessors).map(name => {
             let [getter, setter] = accessors[name];
             return [
-                <Accessor getter={ getter } />,
-                <Accessor setter={ setter } />
+                <Accessor key={ getter.id } getter={ getter } />,
+                <Accessor key={ setter.id } setter={ setter } />
             ];
         });
     }

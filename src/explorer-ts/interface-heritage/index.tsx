@@ -33,12 +33,12 @@ export default class InterfaceHeritage<P extends InterfaceHeritageProps>
                 {
                     clauses.map(clause => {
                         return (
-                            <div className={ block('heritage') }>
+                            <div key={ clause.id } className={ block('heritage') }>
                                 <span>{ clause.clause }:</span>
                                 {
                                     clause.types.map(expr => {
                                         return (
-                                            <TypeExpression expr={ expr } />
+                                            <TypeExpression key={ expr.id } expr={ expr } />
                                         );
                                     })
                                 }

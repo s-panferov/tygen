@@ -65,6 +65,7 @@
         "./explorer/actions.ts",
         "./explorer/components/theme.ts",
         "./explorer/defines.d.ts",
+        "./explorer/id.ts",
         "./explorer/plugins.ts",
         "./explorer/reducers/index.ts",
         "./explorer/redux.ts",

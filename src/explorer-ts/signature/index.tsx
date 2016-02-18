@@ -45,23 +45,23 @@ export default class Signature extends React.Component<SignatureProps, Signature
         let { signature } = this.props;
         return (
             <div className={ this.getClassName() }>
-                { signature.name }
+                <span key='name'>{ signature.name }</span>
                 { signature.typeParameters &&
-                    <TypeParameters typeParameters={ signature.typeParameters }/>
+                    <TypeParameters key='typeParameters' typeParameters={ signature.typeParameters }/>
                 }
                 <Brackets type={ this.props.bracketsType }>
                     <Join>
                         {
                             signature.parameters.map(param => {
-                                return <SignatureParam param={ param }/>;
+                                return <SignatureParam key={ param.id } param={ param }/>;
                             })
                         }
                     </Join>
                 </Brackets>
                 { signature.type &&
                     [
-                        <span>{ this.props.typeStyle == SignatureTypeStyle.Arrow ? '=>' : ':' }</span>,
-                        <Type type={ signature.type } />
+                        <span key='sep'>{ this.props.typeStyle == SignatureTypeStyle.Arrow ? '=>' : ':' }</span>,
+                        <Type key='type' type={ signature.type } />
                     ]
                 }
             </div>

@@ -32,6 +32,7 @@ export function visitFunctionDeclaration(
 ): FunctionDeclarationReflection {
     let signature = visitSignature(func, ctx);
     return Object.assign(signature, {
+        id: ctx.id(func),
         itemType: ItemType.FunctionDeclaration,
         name: func.name.getText(),
         generator: !!func.asteriskToken

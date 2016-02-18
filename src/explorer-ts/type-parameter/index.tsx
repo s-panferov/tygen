@@ -36,7 +36,7 @@ export default class TypeParameter extends React.Component<TypeParameterProps, T
 
         return (
             <Paper id={ typeParam.id} className={ this.getClassName() }>
-                <SmartLink route={ route }>{ typeParam.name }</SmartLink>
+                <SmartLink key='link' route={ route }>{ typeParam.name }</SmartLink>
                 { typeParam.constraint &&
                     this.renderConstraint() }
             </Paper>
@@ -48,9 +48,9 @@ export default class TypeParameter extends React.Component<TypeParameterProps, T
         let view: React.ReactNode;
 
         if (isTypeReferenceReflection(constraint)) {
-            view = <TypeRef typeRef={ constraint } />;
+            view = <TypeRef key='ref' typeRef={ constraint } />;
         } else if (isExpressionWithTypeArgumentsReflection(constraint)) {
-            view = <TypeExpression expr={ constraint } />;
+            view = <TypeExpression key='expr' expr={ constraint } />;
         } else {
             view = null;
         }

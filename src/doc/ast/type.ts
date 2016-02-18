@@ -164,8 +164,8 @@ export function visitPropertySignature(
 ): PropertySignatureReflection {
     let name = prop.name.getText();
     return ctx.dive(name, () => {
-        console.log(ctx.currentStack)
         return {
+            id: ctx.id(prop),
             semanticId: ctx.semanticId(),
             itemType: ItemType.PropertySignature,
             name,
@@ -562,7 +562,7 @@ export function visitTypeReference(
 
     return {
         // if we have targetType — it's generic that has own id and can be referenced
-        id: targetTypeRef ? id : null,
+        id: targetTypeRef ? id : ctx.id(node),
         ref: !targetTypeRef ? id : null,
         itemType: ItemType.TypeReference,
         typeName: node.typeName.getText(),
@@ -602,6 +602,7 @@ export function isExpressionWithTypeArgumentsReflection(item: TypeReflection): i
 
 export function visitExpressionWithTypeArguments(expr: ExpressionWithTypeArguments, ctx: Context) {
     return {
+        id: ctx.id(expr),
         itemType: ItemType.ExpressionWithTypeArguments,
         typeArguments: expr.typeArguments &&
             expr.typeArguments.map(ta => visitTypeNode(ta, ctx)),
@@ -629,6 +630,7 @@ export function visitLeftHandSideExpression(
     }
 
     return {
+        id: ctx.id(expr),
         itemType: ItemType.LeftHandSideExpression,
         name: type.symbol.name,
         type: extractTypeReference(targetType, ctx)
@@ -651,6 +653,7 @@ export function visitParameter(
     ctx: Context
 ): ParameterReflection {
     return {
+        id: ctx.id(param),
         itemType: ItemType.Parameter,
         name: param.name.getText(),
         optional: !!param.questionToken,
@@ -672,6 +675,7 @@ export function visitIndexSignature(
     ctx: Context
 ): IndexSignatureReflection {
     return {
+        id: ctx.id(sig),
         itemType: ItemType.IndexSignature,
         parameters: sig.parameters &&
             sig.parameters.map(p => visitParameter(p, ctx)),
@@ -688,6 +692,7 @@ export interface SignatureReflection extends Item {
 
 export function visitSignature(sig: SignatureDeclaration, ctx: Context): SignatureReflection {
     return {
+        id: ctx.id(sig),
         itemType: ItemType.Signature,
         name: sig.name && sig.name.getText(),
         typeParameters: sig.typeParameters &&

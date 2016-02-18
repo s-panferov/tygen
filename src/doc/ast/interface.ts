@@ -93,6 +93,7 @@ export interface HeritageClauseReflection extends Item {
 
 function visitHeritageClause(hc: HeritageClause, ctx: Context): HeritageClauseReflection {
     return {
+        id: ctx.id(hc),
         itemType: ItemType.HeritageClause,
         clause: HeritageClauseTypeTsMapping[hc.token],
         types: hc.types &&
