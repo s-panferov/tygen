@@ -1,7 +1,6 @@
 import {
     Statement,
     ClassDeclaration,
-    InterfaceDeclaration,
     SyntaxKind
 } from 'typescript';
 
@@ -35,13 +34,15 @@ export function visitClass(
     cls: ClassDeclaration,
     ctx: Context
 ): ClassReflection {
-    let basicInfo = visitBasicInfo(cls, ctx);
+    return ctx.dive(cls.name.getText(), () => {
+        let basicInfo = visitBasicInfo(cls, ctx);
 
-    return Object.assign(basicInfo, {
-        itemType: ItemType.Class,
-        members: cls.members && visitClassElements(
-            cls.members,
-            ctx
-        )
+        return Object.assign(basicInfo, {
+            itemType: ItemType.Class,
+            members: cls.members && visitClassElements(
+                cls.members,
+                ctx
+            )
+        });
     });
 }

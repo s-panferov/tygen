@@ -14,9 +14,18 @@ let block = theme.block('join');
 const SEPARATOR = (idx: number) => <span key={ `sep-${idx}` } className={ block('sep') }>,</span>;
 
 export default class Join extends React.Component<JoinProps, JoinState> {
+    static contextTypes = theme.themeContext;
     static defaultProps = {
         separator: SEPARATOR
     };
+
+    getClassName() {
+        return block(
+            theme.resolveTheme(this),
+            {
+            }
+        ).mix(this.props.className);
+    }
 
     joinChildren() {
         let resultChildren: React.ReactNode[] = [];
@@ -34,7 +43,7 @@ export default class Join extends React.Component<JoinProps, JoinState> {
 
     render() {
         return (
-            <span>{ this.joinChildren() }</span>
+            <span className={ this.getClassName() }>{ this.joinChildren() }</span>
         );
     }
 }

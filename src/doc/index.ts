@@ -47,16 +47,22 @@ export interface ModuleInfo {
 export interface IdMap {
     [key: string]: {
         id: string;
+        semanticId: string;
         pkg: string;
         path: string;
         nesting: string[];
     };
 }
 
+export interface SemanticIdMap {
+    [pkg: string]: {[path: string]: {[semanticId: string]: string}};
+}
+
 export interface DocRegistry {
     mainPackage: string;
     files: Dictionary<ModuleInfo>;
     idMap: IdMap;
+    semanticIdMap: SemanticIdMap;
 }
 
 /**
@@ -69,15 +75,37 @@ export class Context {
     program: Program;
 
     currentModule: Module;
+    currentStack: string[];
+    currentId: number;
+
     ids: WeakMap<any, string>;
 
     constructor() {
         this.ids = new WeakMap();
+        this.currentStack = [];
+        this.currentId = 1;
+    }
+
+    dive<T>(level: string, func: () => T): T {
+        this.currentStack.push(level);
+        let result = func();
+        this.currentStack.pop();
+
+        return result;
+    }
+
+    semanticId(level?: string): string {
+        let currentStack = this.currentStack;
+        if (level) {
+            currentStack = currentStack.concat(level);
+        }
+        return currentStack.join('.');
     }
 
     id(object: any): string {
         if (!this.ids.has(object)) {
-            this.ids.set(object, uuid.v1());
+            this.ids.set(object, (this.currentId++).toString());
+            // this.ids.set(object, uuid.v1());
         }
 
         return this.ids.get(object);

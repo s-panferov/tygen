@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import { Context, IdMap } from './index';
+import { Context, IdMap, SemanticIdMap } from './index';
 import { extractPackage } from './utils';
 
 let fse = require('fs-extra');
@@ -12,18 +12,29 @@ export class DocWriter {
         this.context = context;
     }
 
-    generateIdMap(): IdMap {
+    generateIdMap(): [IdMap, SemanticIdMap] {
         let idMap = {} as IdMap;
+        let semanticIdMap = {} as SemanticIdMap;
 
         function walkObject(obj: any, pkg: string, path: string, nesting: string[] = []) {
             if (obj.id) {
                 nesting = nesting.concat(obj.id);
                 idMap[obj.id] = {
                     id: obj.id,
+                    semanticId: obj.semanticId,
                     pkg,
                     path,
                     nesting
                 };
+
+                if (obj.semanticId) {
+                    if (!semanticIdMap[pkg]) { semanticIdMap[pkg] = {}; };
+                    if (!semanticIdMap[pkg][path]) { semanticIdMap[pkg][path] = {}; };
+                    if (!semanticIdMap[pkg][path][obj.semanticId]) { semanticIdMap[pkg][path][obj.semanticId] = obj.id; }
+                    else {
+                        throw new Error('Duplicate semantic id ' + obj.semanticId);
+                    }
+                }
             }
 
             for (let key in obj) {
@@ -47,7 +58,7 @@ export class DocWriter {
             });
         });
 
-        return idMap;
+        return [idMap, semanticIdMap];
     }
 
     writeModules(dir: string) {
@@ -65,10 +76,12 @@ export class DocWriter {
     }
 
     generateRegistryModule(dir: string): string {
+        let idMap = this.generateIdMap();
         let buf = `
 module.exports = {\n
     mainPackage: '${extractPackage(dir).info.name}',
-    idMap: ${ JSON.stringify(this.generateIdMap(), null, 4) },
+    idMap: ${ JSON.stringify(idMap[0], null, 4) },
+    semanticIdMap: ${ JSON.stringify(idMap[1], null, 4) },
     files: {
         `;
 

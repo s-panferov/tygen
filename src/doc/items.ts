@@ -37,6 +37,7 @@ export enum ItemType {
 
 export interface Item {
     id?: string;
+    semanticId?: string;
     name?: string;
     comment?: string;
     itemType?: ItemType;

@@ -48,6 +48,7 @@ export function visitBasicInfo(
 
     return {
         id: ctx.id(type),
+        semanticId: ctx.semanticId(),
         name: iface.name.text,
         comment: comment && comment.map(c => c.text).join(''),
         typeParameters: iface.typeParameters &&
@@ -62,14 +63,16 @@ export function visitInterface(
     iface: InterfaceDeclaration,
     ctx: Context
 ): InterfaceReflection {
-    let basicInfo = visitBasicInfo(iface, ctx);
+    return ctx.dive(iface.name.text, () => {
+        let basicInfo = visitBasicInfo(iface, ctx);
 
-    return Object.assign(basicInfo, {
-        itemType: ItemType.Interface,
-        members: iface.members && visitTypeElements(
-            iface.members,
-            ctx
-        )
+        return Object.assign(basicInfo, {
+            itemType: ItemType.Interface,
+            members: iface.members && visitTypeElements(
+                iface.members,
+                ctx
+            )
+        });
     });
 }
 

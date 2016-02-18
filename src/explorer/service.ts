@@ -8,6 +8,7 @@ export interface Route {
     pkg?: string;
     path?: string;
     id?: string;
+    semanticId?: string;
     nesting?: string[];
 }
 

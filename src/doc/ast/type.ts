@@ -162,12 +162,17 @@ export function visitPropertySignature(
     prop: PropertySignature | PropertyDeclaration,
     ctx: Context
 ): PropertySignatureReflection {
-    return {
-        itemType: ItemType.PropertySignature,
-        name: prop.name.getText(),
-        optional: !!prop.questionToken,
-        type: visitTypeNode(prop.type, ctx)
-    } as PropertySignatureReflection;
+    let name = prop.name.getText();
+    return ctx.dive(name, () => {
+        console.log(ctx.currentStack)
+        return {
+            semanticId: ctx.semanticId(),
+            itemType: ItemType.PropertySignature,
+            name,
+            optional: !!prop.questionToken,
+            type: visitTypeNode(prop.type, ctx)
+        } as PropertySignatureReflection;
+    });
 }
 
 export interface PropertyDeclarationReflection extends PropertySignatureReflection {

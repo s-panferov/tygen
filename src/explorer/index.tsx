@@ -29,7 +29,9 @@ export function pathFromRoute(route: Route): string {
     let routeUrl = `/${route.pkg}${route.path}`;
     routeUrl = routeUrl.replace('.', '~~');
 
-    if (route.id) {
+    if (route.semanticId) {
+        routeUrl += '?sid=' + route.semanticId;
+    } else if (route.id) {
         routeUrl += '?id=' + route.id;
     }
 
@@ -41,6 +43,7 @@ function routeFromPath(urlPath: string, query: any): Route {
     return {
         pkg: parts[0],
         path: '/' + parts.slice(1).join('/').replace('~~', '.'),
+        semanticId: query.sid,
         id: query.id
     };
 }

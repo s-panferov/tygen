@@ -20,9 +20,22 @@ export default class Breadcrumbs extends React.Component<BreadcrumbsProps, Bread
         separator: SEPARATOR
     };
 
+    getClassName() {
+        return block(
+            theme.resolveTheme(this),
+            {
+            }
+        ).mix(this.props.className);
+    }
+
     render() {
         return (
-            <Join separator={ this.props.separator }>{ this.props.children }</Join>
+            <Join
+                className={ this.getClassName() }
+                separator={ this.props.separator }
+            >
+                { this.props.children }
+            </Join>
         );
     }
 }
