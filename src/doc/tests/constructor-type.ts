@@ -19,9 +19,9 @@ describe('constructor-type', () => {
         if (isTypeAliasDeclarationReflection(alias)) {
             let type = alias.type;
             if (isConstructorTypeReflection(type)) {
-                expect(type.signature.typeParameters).lengthOf(1);
-                expect(type.signature.parameters).lengthOf(1);
-                expect(type.signature.type).ok;
+                expect(type.typeParameters).lengthOf(1);
+                expect(type.parameters).lengthOf(1);
+                expect(type.type).ok;
             } else {
                 expect(false).to.true;
             }

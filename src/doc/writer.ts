@@ -32,7 +32,7 @@ export class DocWriter {
                     if (!semanticIdMap[pkg][path]) { semanticIdMap[pkg][path] = {}; };
                     if (!semanticIdMap[pkg][path][obj.semanticId]) { semanticIdMap[pkg][path][obj.semanticId] = obj.id; }
                     else {
-                        throw new Error('Duplicate semantic id ' + obj.semanticId);
+                        console.error('Duplicate semantic id ' + obj.semanticId);
                     }
                 }
             }

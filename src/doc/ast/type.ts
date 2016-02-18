@@ -409,8 +409,7 @@ export function visitFunctionTypeNode(
     };
 }
 
-export interface ConstructorTypeReflection extends TypeReflection {
-    signature: SignatureReflection;
+export interface ConstructorTypeReflection extends SignatureReflection {
 }
 
 export function isConstructorTypeReflection(item: Item): item is ConstructorTypeReflection {
@@ -422,11 +421,13 @@ export function visitConstructorTypeNode(
     type: Type,
     ctx: Context
 ): ConstructorTypeReflection {
-    return {
-        id: ctx.id(type),
+    let signature = visitSignature(node, ctx);
+
+    return Object.assign(signature, {
+        name: 'new',
+        id: ctx.id(node),
         itemType: ItemType.ConstructorType,
-        signature: visitSignature(node, ctx)
-    };
+    });
 }
 
 export interface StringLiteralTypeReflection extends TypeReflection {

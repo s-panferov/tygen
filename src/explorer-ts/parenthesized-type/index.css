@@ -1,0 +1,6 @@
+@import 'theme';
+
+.ts-parenthesized-type {
+    display: inline-flex;
+    font-family: var(--mono);
+}

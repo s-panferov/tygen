@@ -43,6 +43,8 @@ export function visitEnum(
 
 export function visitEnumMember(member: EnumMember, ctx: Context): EnumMemberReflection {
     return {
+        id: ctx.id(member),
+        itemType: ItemType.EnumMember,
         name: member.name && member.name.getText(),
         initializer: member.initializer && member.initializer.getText()
     };

@@ -1,0 +1,6 @@
+@import 'theme';
+
+.ts-variable {
+    display: flex;
+    flex-direction: column;
+}

@@ -7,6 +7,12 @@ import {
     isFunctionTypeReflection,
     isUnionTypeReflection,
     isIntersectionTypeReflection,
+    isArrayTypeReflection,
+    isStringLiteralTypeReflection,
+    isTupleTypeReflection,
+    isConstructorTypeReflection,
+    isTypePredicateReflection,
+    isTypeLiteralReflection
 } from '../doc/ast/type';
 
 import TypeRef from './type-ref';
@@ -14,6 +20,12 @@ import TypeCore from './type-core';
 import FunctionType from './function-type';
 import UnionType from './union-type';
 import IntersectionType from './intersection-type';
+import StringLiteralType from './string-literal-type';
+import ArrayType from './array-type';
+import TupleType from './tuple-type';
+import ConstructorType from './constructor-type';
+import TypePredicate from './type-predicate';
+import TypeLiteral from './type-literal';
 
 export interface TypeProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
@@ -33,6 +45,23 @@ export default class Type extends React.Component<TypeProps, void> {
             return <UnionType { ...this.props } type={ type } />;
         } else if (isIntersectionTypeReflection(type)) {
             return <IntersectionType { ...this.props } type={ type } />;
+        } else if (isStringLiteralTypeReflection(type)) {
+            return <StringLiteralType { ...this.props } type={ type } />;
+        } else if (isArrayTypeReflection(type)) {
+            return <ArrayType { ...this.props } type={ type } />;
+        } else if (isTupleTypeReflection(type)) {
+            return <TupleType { ...this.props } type={ type } />;
+        } else if (isConstructorTypeReflection(type)) {
+            return <ConstructorType { ...this.props } type={ type } />;
+        } else if (isTypePredicateReflection(type)) {
+            return <TypePredicate { ...this.props } predicate={ type } />;
+        } else if (isTypeLiteralReflection(type)) {
+            return <TypeLiteral { ...this.props } type={ type } />;
+        } else {
+            return <div>
+                Unknown type
+                { JSON.stringify(type) }
+            </div>;
         }
     }
 }

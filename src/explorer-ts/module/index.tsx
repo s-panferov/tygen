@@ -6,10 +6,18 @@ import Heading from '../../explorer/components/heading';
 import { Module as ModuleRef } from '../../doc';
 import { isInterfaceReflection } from '../../doc/ast/interface';
 import { isClassReflection } from '../../doc/ast/class';
+import { isFunctionDeclarationReflection } from '../../doc/ast/function';
+import { isEnumDeclarationReflection } from '../../doc/ast/enum';
+import { isVariableDeclarationReflection } from '../../doc/ast/var';
+import { isTypeAliasDeclarationReflection } from '../../doc/ast/type-alias';
 
 import List from '../list';
 import Interface from '../interface';
 import Class from '../class';
+import Function from '../function';
+import Enum from '../enum';
+import Variable from '../variable';
+import TypeAlias from '../type-alias';
 
 require('./index.css');
 const block = theme.block('ts-module');
@@ -66,6 +74,39 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
                         item={ item }
                     />
                 );
+            } else if (isFunctionDeclarationReflection(item)) {
+                return (
+                    <Function
+                        key={ item.id }
+                        item={ item }
+                    />
+                );
+            } else if (isEnumDeclarationReflection(item)) {
+                return (
+                    <Enum
+                        key={ item.id }
+                        item={ item }
+                    />
+                );
+            } else if (isVariableDeclarationReflection(item)) {
+                return (
+                    <Variable
+                        key={ item.id }
+                        item={ item }
+                    />
+                );
+            } else if (isTypeAliasDeclarationReflection(item)) {
+                return (
+                    <TypeAlias
+                        key={ item.id }
+                        item={ item }
+                    />
+                );
+            } else {
+                return <div>
+                    Unknown item
+                    { JSON.stringify(item) }
+                </div>;
             }
         });
     }

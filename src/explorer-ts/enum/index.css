@@ -1,0 +1,10 @@
+@import 'theme';
+
+.ts-enum {
+    display: flex;
+    flex-direction: column;
+
+    &__layout {
+        flex: 1 1;
+    }
+}
