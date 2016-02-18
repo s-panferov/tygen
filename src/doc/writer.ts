@@ -54,7 +54,7 @@ export class DocWriter {
         Object.keys(modules).forEach(moduleKey => {
             let module = modules[moduleKey];
             module.items.forEach(item => {
-                walkObject(item, module.pkg.info.name, module.fileInfo.relativeToPackage);
+                walkObject(item, module.pkgName, module.fileInfo.relativeToPackage);
             });
         });
 
@@ -80,6 +80,7 @@ export class DocWriter {
         let buf = `
 module.exports = {\n
     mainPackage: '${extractPackage(dir).info.name}',
+    packages: ${ JSON.stringify(this.context.packages, null, 4) },
     idMap: ${ JSON.stringify(idMap[0], null, 4) },
     semanticIdMap: ${ JSON.stringify(idMap[1], null, 4) },
     files: {

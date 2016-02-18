@@ -1,5 +1,5 @@
 import MemoryFileSystem from 'memory-fs';
-import { DocRegistry, PackageInfo, Module } from '../doc/index';
+import { DocRegistry, PackageInfo, ModuleInfo } from '../doc/index';
 import { Maybe } from 'tsmonad';
 
 import * as path from 'path';
@@ -25,7 +25,7 @@ interface FileStructure {
 
 export interface PackageService {
     info: PackageInfo;
-    files: Dictionary<Module>;
+    files: Dictionary<ModuleInfo>;
     fs: MemoryFileSystem;
 }
 
@@ -58,16 +58,16 @@ export default class Service {
         return this.packages;
     }
 
-    getModule(route: Route): Maybe<Module> {
+    getModule(route: Route): Maybe<ModuleInfo> {
         if (!route.pkg) {
-            return Maybe.nothing<Module>();
+            return Maybe.nothing<ModuleInfo>();
         } else {
             let pkg = this.getPackage(route.pkg);
             let module = pkg.files[route.path];
             if (module) {
                 return Maybe.just(module);
             } else {
-                return Maybe.nothing<Module>();
+                return Maybe.nothing<ModuleInfo>();
             }
         }
     }
@@ -127,20 +127,22 @@ export default class Service {
 function readPackages(registry: DocRegistry): Packages {
     let packages: Packages = {};
 
-    Object.keys(registry.files).forEach(key => {
-        let module = registry.files[key];
-        let pkg;
-        let name = module.pkg.info.name;
-        if (!packages[name]) {
-            pkg = packages[name] = <any>{
+    Object.keys(registry.packages).forEach(packageName => {
+        if (!packages[packageName]) {
+            let packageInfo = registry.packages[packageName];
+            packages[packageName] = <any>{
                 files: {},
+                info: packageInfo,
                 fs: new MemoryFileSystem()
             };
-        } else {
-            pkg = packages[name];
         }
+    });
 
-        pkg.info = module.pkg.info;
+    Object.keys(registry.files).forEach(key => {
+        let module = registry.files[key];
+        let pkgName = module.pkgName;
+        let pkg = packages[pkgName];
+
         pkg.files[module.fileInfo.relativeToPackage] = module;
         pkg.fs.mkdirpSync(path.dirname(module.fileInfo.relativeToPackage));
         pkg.fs.writeFileSync(module.fileInfo.relativeToPackage, JSON.stringify(module.fileInfo));

@@ -39,7 +39,7 @@ export enum ModuleKind {
 export interface ModuleInfo {
     kind: ModuleKind;
     text: string;
-    pkg: Package;
+    pkgName: string;
     fileInfo: FileInfo;
     items: Item[];
 }
@@ -63,6 +63,7 @@ export interface DocRegistry {
     files: Dictionary<ModuleInfo>;
     idMap: IdMap;
     semanticIdMap: SemanticIdMap;
+    packages: Dictionary<PackageInfo>;
 }
 
 /**
@@ -73,6 +74,8 @@ export class Context {
     ts = typescript;
     checker: TypeChecker = null;
     program: Program;
+
+    packages: Dictionary<PackageInfo> = {};
 
     currentModule: Module;
     currentStack: string[];
@@ -127,8 +130,9 @@ export class Context {
 
     private generateModule(fileName: string, source: SourceFile): Module {
         let pkg = extractPackage(fileName);
+        this.packages[pkg.info.name] = pkg.info;
         let fileInfo = getFileInfo(fileName, pkg);
-        let doc = new Module(source, pkg, fileInfo);
+        let doc = new Module(source, pkg.info.name, fileInfo);
 
         this.currentModule = doc;
         processSourceFile(source, this);
@@ -141,19 +145,19 @@ export class Context {
 export class Module implements ModuleInfo {
     kind = ModuleKind.TypeScript;
     text: string;
-    pkg: Package;
+    pkgName: string;
     fileInfo: FileInfo;
 
     items: Item[] = [];
 
-    constructor(sourceFile: SourceFile, pkg: Package, fileInfo: FileInfo) {
+    constructor(sourceFile: SourceFile, pkgName: string, fileInfo: FileInfo) {
         this.text = sourceFile.text;
-        this.pkg = pkg;
+        this.pkgName = pkgName;
         this.fileInfo = fileInfo;
     }
 
     toJSON() {
-        let { text, pkg, fileInfo, items, kind } = this;
-        return { pkg, fileInfo, text, items, kind };
+        let { text, pkgName, fileInfo, items, kind } = this;
+        return { pkgName, fileInfo, text, items, kind };
     }
 }
