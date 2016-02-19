@@ -72,6 +72,10 @@ export default class Service {
         }
     }
 
+    getIdBySemanticId(pkg: string, path: string, semanticId: string): string {
+        return this.registry.semanticIdMap[pkg][path][semanticId];
+    }
+
     getFullRoute(route: Route): Route {
         if (route.id && !route.pkg) {
             // know only id, need to fill all other info

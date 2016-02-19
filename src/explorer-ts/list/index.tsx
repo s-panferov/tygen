@@ -3,12 +3,7 @@ import * as theme from '../../explorer/components/theme';
 
 import { Module as ModuleRef } from '../../doc';
 import { Item } from '../../doc/items';
-import {
-    isInterfaceReflection,
-    InterfaceReflection
-} from '../../doc/ast/interface';
-
-import Link from '../../explorer/components/link';
+import ListSection from '../list-section';
 
 require('./index.css');
 const block = theme.block('ts-list');
@@ -39,28 +34,19 @@ export default class List extends React.Component<ListProps, ListState> {
 
     renderItems() {
         let items = this.props.module.items;
-        let interfaces: InterfaceReflection[] = [];
+
+        let groups = {} as {[itemType: string]: Item[]};
         items.forEach(item => {
-            if (isInterfaceReflection(item)) {
-                interfaces.push(item);
-            }
+            if (!groups[item.itemType]) { groups[item.itemType] = []; }
+            groups[item.itemType].push(item);
         });
 
-        let sections = [];
-        sections.push(
-            <div className={ block('section') }>
-                <div className={ block('heading') }>
-                    Interfaces
-                </div>
-                {
-                    interfaces.map(iface => {
-                        return <Link className={ block('item') }>
-                            { iface.name }
-                        </Link>;
-                    })
-                }
-            </div>
-        );
+        let sections = Object.keys(groups).map(itemType => {
+            let items = groups[itemType];
+            return (
+                <ListSection key={ itemType } itemType={ itemType } items={ items } />
+            );
+        });
 
         return sections;
     }

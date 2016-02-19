@@ -27,7 +27,7 @@ let store = createStore(rootReducer, prevState);
 
 export function pathFromRoute(route: Route): string {
     let routeUrl = `/${route.pkg}${route.path}`;
-    routeUrl = routeUrl.replace('.', '~~');
+    routeUrl = routeUrl.replace(/[.]/g, '~~');
 
     if (route.semanticId) {
         routeUrl += '?sid=' + route.semanticId;
@@ -40,12 +40,19 @@ export function pathFromRoute(route: Route): string {
 
 function routeFromPath(urlPath: string, query: any): Route {
     let parts = urlPath.split('/').filter(Boolean);
-    return {
-        pkg: parts[0],
-        path: '/' + parts.slice(1).join('/').replace('~~', '.'),
-        semanticId: query.sid,
-        id: query.id
-    };
+    let routePkg = parts[0];
+    let routePath = '/' + parts.slice(1).join('/').replace(/~~/g, '.');
+    let id = query.id || (query.sid &&
+                service.getIdBySemanticId(routePkg, routePath, query.sid));
+
+    if (id) {
+        return service.getFullRoute({ id });
+    } else {
+        return {
+            pkg: routePkg,
+            path: routePath
+        };
+    }
 }
 
 let currentLocation: Location;

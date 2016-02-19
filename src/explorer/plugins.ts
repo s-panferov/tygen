@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Module } from '../doc';
+import { Route } from './service';
 
 export interface Plugin {
     (reg: PluginRegistry): void;
@@ -7,6 +8,7 @@ export interface Plugin {
 
 export interface ModuleComponentProps extends React.CommonProps {
     module: Module;
+    route: Route;
 }
 
 export type ModuleComponentCtor = React.ReactCtor<ModuleComponentProps, any>;

@@ -3,6 +3,8 @@ import * as theme from '../../explorer/components/theme';
 
 import Layout from '../../explorer/components/layout';
 import Heading from '../../explorer/components/heading';
+import { Route } from '../../explorer/service';
+import { Item } from '../../doc/items';
 import { Module as ModuleRef } from '../../doc';
 import { isInterfaceReflection } from '../../doc/ast/interface';
 import { isClassReflection } from '../../doc/ast/class';
@@ -25,6 +27,7 @@ const block = theme.block('ts-module');
 export interface ModuleProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     module: ModuleRef;
+    route: Route;
 }
 
 export interface ModuleState {}
@@ -50,15 +53,33 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
                         <Heading>
                             Module { this.props.module.fileInfo.relativeToPackage }
                         </Heading>
-                        { this.renderItems() }
+                        { this.renderContent() }
                     </div>
                 </Layout>
             </div>
         );
     }
 
-    renderItems() {
+    renderContent() {
         let items = this.props.module.items;
+        if (items.length < 100) {
+            return this.renderItems(items);
+        } else {
+            let route = this.props.route;
+            if (route.id) {
+                let filteredItems = items.filter(item => {
+                    return item.id == route.id ||
+                        (route.nesting && route.nesting.indexOf(item.id) !== -1);
+                });
+
+                return this.renderItems(filteredItems);
+            } else {
+                return null;
+            }
+        }
+    }
+
+    renderItems(items: Item[]) {
         return items.map(item => {
             if (isInterfaceReflection(item)) {
                 return (

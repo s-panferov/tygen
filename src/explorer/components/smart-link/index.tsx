@@ -31,6 +31,15 @@ export default class SmartLink extends React.Component<SmartLinkProps, SmartLink
 
     finalRoute: Route;
 
+    shouldComponentUpdate(nextProps: SmartLinkProps) {
+        if (this.props.route !== nextProps.route
+            || this.props.id !== nextProps.id) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     componentWillMount() {
         this.finalRoute = this.props.service.getFullRoute(
             this.props.route || { id: this.props.id }

@@ -1,0 +1,18 @@
+@import 'theme';
+
+.ts-list-section {
+    &__heading {
+        height: 40px;
+        display: flex;
+        align-items: center;
+
+        border-bottom: 1px solid #eee;
+        margin-bottom: 10px;
+    }
+
+    &__item {
+        height: 26px;
+        display: flex;
+        align-items: center;
+    }
+}

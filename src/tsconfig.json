@@ -98,6 +98,7 @@
         "./explorer-ts/interface-heritage/index.tsx",
         "./explorer-ts/interface/index.tsx",
         "./explorer-ts/intersection-type/index.tsx",
+        "./explorer-ts/list-section/index.tsx",
         "./explorer-ts/list/index.tsx",
         "./explorer-ts/method/index.tsx",
         "./explorer-ts/module/index.tsx",

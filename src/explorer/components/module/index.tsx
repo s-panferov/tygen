@@ -51,6 +51,7 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
                 return (
                     <Component
                         className={ block('view') }
+                        route={ this.props.route }
                         module={ module }
                     />
                 );
