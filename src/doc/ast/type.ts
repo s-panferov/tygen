@@ -653,13 +653,19 @@ export function visitParameter(
     param: ParameterDeclaration,
     ctx: Context
 ): ParameterReflection {
+    let paramType = param.type && visitTypeNode(param.type, ctx);
+    if (!paramType) {
+        let type = ctx.checker.getTypeAtLocation(param);
+        paramType = extractTypeReference(type, ctx);
+    }
+
     return {
         id: ctx.id(param),
         itemType: ItemType.Parameter,
         name: param.name.getText(),
         optional: !!param.questionToken,
         spread: !!param.dotDotDotToken,
-        type: visitTypeNode(param.type, ctx)
+        type: paramType
     } as ParameterReflection;
 }
 
@@ -692,6 +698,14 @@ export interface SignatureReflection extends Item {
 }
 
 export function visitSignature(sig: SignatureDeclaration, ctx: Context): SignatureReflection {
+    let returnType = sig.type && visitTypeNode(sig.type, ctx);
+    if (!returnType) {
+        // get return type from the checker
+        let sigType = ctx.checker.getSignatureFromDeclaration(sig);
+        let type = ctx.checker.getReturnTypeOfSignature(sigType);
+        returnType = extractTypeReference(type, ctx);
+    }
+
     return {
         id: ctx.id(sig),
         itemType: ItemType.Signature,
@@ -700,8 +714,7 @@ export function visitSignature(sig: SignatureDeclaration, ctx: Context): Signatu
             sig.typeParameters.map(tp => visitTypeParameter(tp, ctx)),
         parameters: sig.parameters &&
             sig.parameters.map(p => visitParameter(p, ctx)),
-        type: sig.type &&
-            visitTypeNode(sig.type, ctx)
+        type: returnType
     } as SignatureReflection;
 }
 

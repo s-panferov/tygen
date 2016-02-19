@@ -22,7 +22,9 @@ export function _compile(fileNames: string[], options: typescript.CompilerOption
 export function generateFiles(fileNames: string[]): Context {
     let ctx = new Context();
     let program = _compile(fileNames, {
-        target: typescript.ScriptTarget.Latest
+        target: typescript.ScriptTarget.Latest,
+        allowJs: true,
+        noEmit: true,
     });
 
     ctx.setProgram(program);

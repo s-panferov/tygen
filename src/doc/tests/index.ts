@@ -22,5 +22,6 @@ import './tuple-type';
 import './type-predicate';
 import './parenthesized-type';
 import './constructor-type';
+import './salsa-function';
 //
 console.log('tests loaded');

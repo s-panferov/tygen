@@ -50,6 +50,7 @@
         "./doc/tests/interface-literal.ts",
         "./doc/tests/interface-simple.ts",
         "./doc/tests/parenthesized-type.ts",
+        "./doc/tests/salsa-function.ts",
         "./doc/tests/string-literal-type.ts",
         "./doc/tests/tuple-type.ts",
         "./doc/tests/type-alias-simple.ts",

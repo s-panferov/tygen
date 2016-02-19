@@ -57,10 +57,10 @@ export function rmDir(dirPath) {
     }
 };
 
-export function generateInline(source: string) {
+export function generateInline(source: string, extension = '.ts') {
     let tmpDir = path.join(process.cwd(), 'tmp');
     rmDir(tmpDir);
-    let tmpPath = path.join(tmpDir, uuid.v1() + '.ts');
+    let tmpPath = path.join(tmpDir, uuid.v1() + extension);
     fs.writeFileSync(tmpPath, source);
 
     return generateModule(tmpPath);
