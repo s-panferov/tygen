@@ -18,7 +18,7 @@ describe('interface-index', () => {
     let iface = module.items[0];
 
     if (isInterfaceReflection(iface)) {
-        let index = iface.members[0];
+        let index = iface.indexSignatures[0];
         if (isIndexSignatureReflection(index)) {
             it ('reflection', () => {
                 expect(index.parameters[0].name).equal('key');

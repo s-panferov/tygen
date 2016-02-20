@@ -13,7 +13,6 @@ describe('class:accessors', () => {
             get name(): Test {
                 return null;
             }
-
             set name(a: Test) {
 
             }
@@ -33,9 +32,9 @@ describe('class:accessors', () => {
 
     it('members', () => {
         if (isClassReflection(cls)) {
-            expect(cls.members).lengthOf(2);
+            expect(cls.properties).lengthOf(2);
 
-            let getter = cls.members[0];
+            let getter = cls.properties[0];
 
             if (isGetAccessorDeclarationReflection(getter)) {
                 expect(getter.name).to.equal('name');
@@ -44,7 +43,7 @@ describe('class:accessors', () => {
                 expect(false).to.true;
             }
 
-            let setter = cls.members[1];
+            let setter = cls.properties[1];
 
             if (isSetAccessorDeclarationReflection(setter)) {
                 expect(setter.name).to.equal('name');

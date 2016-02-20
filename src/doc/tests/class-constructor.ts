@@ -9,7 +9,8 @@ import {
 describe('class:constructor', () => {
     let module = generateInline(`
         class Test {
-            constructor(a: Test) { }
+            constructor(a: Test)
+            constructor(b: any) { }
         }
     `);
 
@@ -26,9 +27,9 @@ describe('class:constructor', () => {
 
     it('members', () => {
         if (isClassReflection(cls)) {
-            expect(cls.members).lengthOf(1);
+            expect(cls.constructSignatures).lengthOf(2);
 
-            let constr = cls.members[0];
+            let constr = cls.constructSignatures[0];
 
             if (isConstructorDeclarationReflection(constr)) {
                 expect(constr.name).equal('constructor');

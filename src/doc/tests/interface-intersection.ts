@@ -22,10 +22,10 @@ describe('interface-intersection', () => {
 
     it('union type property', () => {
         if (isInterfaceReflection(iface)) {
-            expect(iface.members).lengthOf(2);
+            expect(iface.properties).lengthOf(2);
 
             {
-                let member = iface.members[0];
+                let member = iface.properties[0];
 
                 if (isPropertySignatureReflection(member)) {
                     let type = member.type;
@@ -44,7 +44,7 @@ describe('interface-intersection', () => {
             }
 
             {
-                let member = iface.members[1];
+                let member = iface.properties[1];
 
                 if (isPropertySignatureReflection(member)) {
                     let type = member.type;

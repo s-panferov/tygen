@@ -20,7 +20,7 @@ describe('interface-generic', () => {
 
     if (isInterfaceReflection(iface)) {
         it('members', () => {
-            expect(iface.members).lengthOf(2);
+            expect(iface.properties).lengthOf(2);
         });
 
         it('type parameters', () => {
@@ -33,7 +33,7 @@ describe('interface-generic', () => {
             expect(tp.name).equal('T');
             expect(tp.itemType).equal(ItemType.TypeParameter);
 
-            let member = iface.members[0];
+            let member = iface.properties[0];
             if (isPropertySignatureReflection(member)) {
                 expect(typeRef(member.type)).equal(tp.id);
             }
@@ -45,7 +45,7 @@ describe('interface-generic', () => {
             expect(tp.name).equal('A');
             expect(tp.itemType).equal(ItemType.TypeParameter);
 
-            let member = iface.members[1];
+            let member = iface.properties[1];
             if (isPropertySignatureReflection(member)) {
                 expect(typeRef(member.type)).equal(tp.id);
             }

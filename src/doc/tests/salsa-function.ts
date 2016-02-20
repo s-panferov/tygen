@@ -1,6 +1,6 @@
 import { generateInline, expect, coreType } from './utils';
 import { CoreType } from '../tools';
-import { isFunctionDeclarationReflection } from '../ast/function';
+import { isFunctionReflection } from '../ast/function';
 
 describe('salsa:simple', () => {
     let module = generateInline(`
@@ -20,10 +20,11 @@ describe('salsa:simple', () => {
         expect(func).to.ok;
         expect(func.name).equal('foo');
 
-        if (isFunctionDeclarationReflection(func)) {
-            expect(coreType(func.parameters[0].type)).equals(CoreType.String);
-            expect(coreType(func.parameters[1].type)).equals(CoreType.Number);
-            expect(coreType(func.type)).equals(CoreType.String);
+        if (isFunctionReflection(func)) {
+            let signature = func.callSignatures[0];
+            expect(coreType(signature.parameters[0].type)).equals(CoreType.String);
+            expect(coreType(signature.parameters[1].type)).equals(CoreType.Number);
+            expect(coreType(signature.type)).equals(CoreType.String);
         } else {
             expect(false).to.true;
         }

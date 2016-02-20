@@ -22,9 +22,9 @@ describe('interface-literal', () => {
 
     it('literal type property', () => {
         if (isInterfaceReflection(iface)) {
-            expect(iface.members).lengthOf(1);
+            expect(iface.properties).lengthOf(1);
 
-            let first = iface.members[0];
+            let first = iface.properties[0];
 
             if (isPropertySignatureReflection(first)) {
                 expect(first.name).to.equal('p0');

@@ -26,9 +26,9 @@ describe('class:simple', () => {
 
     it('members', () => {
         if (isClassReflection(cls)) {
-            expect(cls.members).lengthOf(1);
+            expect(cls.properties).lengthOf(1);
 
-            let first = cls.members[0];
+            let first = cls.properties[0];
 
             if (isPropertyDeclarationReflection(first)) {
                 expect(first.name).to.equal('prop');

@@ -1,7 +1,7 @@
 import { generateInline, expect, coreType } from './utils';
 import { CoreType } from '../tools';
 import {
-    isFunctionDeclarationReflection
+    isFunctionReflection
 } from '../ast/function';
 
 import {
@@ -18,8 +18,9 @@ describe('type-predicate', () => {
     let func = module.items[0];
 
     it('reflection', () => {
-        if (isFunctionDeclarationReflection(func)) {
-            let type = func.type;
+        if (isFunctionReflection(func)) {
+            let signature = func.callSignatures[0];
+            let type = signature.type;
             if (isTypePredicateReflection(type)) {
                 expect(coreType(type.type)).equal(CoreType.String);
                 expect(type.parameterName).equal('name');

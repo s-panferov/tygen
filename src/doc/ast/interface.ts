@@ -10,7 +10,9 @@ import {
     MethodSignature,
     HeritageClause,
     TypeFlags,
-    IndexSignatureDeclaration
+    IndexSignatureDeclaration,
+    SymbolFlags,
+    ConstructorDeclaration
 } from 'typescript';
 
 import { Context } from '../index';
@@ -24,7 +26,8 @@ import {
     isIndexSignatureDeclaration,
     CallSignatureReflection,
     ConstructorDeclarationReflection,
-    IndexSignatureReflection
+    IndexSignatureReflection,
+    isConstructorDeclaration
 } from './type';
 
 import {
@@ -73,6 +76,7 @@ export function visitBasicInfo(
     let symbol = type.getSymbol();
     let declarations = type.symbol.getDeclarations();
     let typeIndexSignatures: IndexSignatureDeclaration[] = [];
+    let constructorDeclarations: ConstructorDeclaration[] = [];
 
     (declarations as any).forEach((declaration: Declaration) => {
         ctx.visit(declaration);
@@ -83,6 +87,10 @@ export function visitBasicInfo(
                 if (isIndexSignatureDeclaration(member)) {
                     typeIndexSignatures.push(member);
                 }
+
+                if (isConstructorDeclaration(member)) {
+                    constructorDeclarations.push(member);
+                }
             });
         }
     });
@@ -92,8 +100,16 @@ export function visitBasicInfo(
             return visitHeritageClause(clause, ctx);
         });
 
-    let typeProperties = type.getProperties().map(prop => {
-        return prop.declarations[0];
+    let typeProperties: Declaration[] = [];
+    type.getProperties().forEach(prop => {
+        let declaration = prop.declarations[0];
+        typeProperties.push(declaration);
+        if ((prop.flags & SymbolFlags.GetAccessor) || (prop.flags & SymbolFlags.SetAccessor)) {
+            // push second declaraion too
+            if (prop.declarations[1]) {
+                typeProperties.push(prop.declarations[1]);
+            }
+        }
     });
 
     let typeCallSignatures = type.getCallSignatures().map(sig => {
@@ -108,7 +124,12 @@ export function visitBasicInfo(
     properties = properties.concat(visitDeclarations(restDeclarations as any, ctx));
 
     let callSignatures = visitDeclarations(typeCallSignatures as any, ctx);
+
     let constructSignatures = visitDeclarations(typeConstructSignatures as any, ctx);
+    constructSignatures = constructSignatures.concat(
+        visitDeclarations(constructorDeclarations as any, ctx)
+    );
+
     let indexSignatures = visitDeclarations(typeIndexSignatures as any, ctx);
 
     let comment = symbol.getDocumentationComment();

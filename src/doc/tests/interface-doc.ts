@@ -3,7 +3,7 @@ import {
     isInterfaceReflection,
 } from '../ast/interface';
 
-describe('interface-call', () => {
+describe('interface-doc', () => {
     let module = generateInline(`
         /**
          * Doc comment example

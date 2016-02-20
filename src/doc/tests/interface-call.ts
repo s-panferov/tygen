@@ -14,6 +14,10 @@ import {
     SignatureReflection
 } from '../ast/type';
 
+import {
+    isMethodReflection,
+} from '../ast/function';
+
 describe('interface-call', () => {
     let module = generateInline(`
         interface Test<T> {
@@ -26,7 +30,7 @@ describe('interface-call', () => {
     let iface = module.items[0];
 
     if (isInterfaceReflection(iface)) {
-        let callSig = iface.members[0];
+        let callSig = iface.callSignatures[0];
         if (isCallSignatureReflection(callSig)) {
             it ('call signature reflection', () => {
                 testSignature(iface, callSig);
@@ -35,17 +39,17 @@ describe('interface-call', () => {
             expect(false).to.true;
         }
 
-        let methodSig = iface.members[1];
-        if (isMethodSignatureReflection(methodSig)) {
+        let methodSig = iface.properties[0];
+        if (isMethodReflection(methodSig)) {
             it ('method signature reflection', () => {
                 expect(methodSig.name).equal('method');
-                testSignature(iface, methodSig);
+                testSignature(iface, methodSig.callSignatures[0]);
             });
         } else {
             expect(false).to.true;
         }
 
-        let propertySig = iface.members[2];
+        let propertySig = iface.properties[1];
         if (isPropertySignatureReflection(propertySig)) {
             it ('property signature with function type reflection', () => {
                 expect(propertySig.name).equal('property');

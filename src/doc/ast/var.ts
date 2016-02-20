@@ -37,7 +37,7 @@ export function isVariableDeclarationReflection(item: Item): item is VariableDec
 export function isVariableDeclaration(statement: Declaration)
     : statement is VariableDeclaration
 {
-    return statement.kind == SyntaxKind.VariableStatement;
+    return statement.kind == SyntaxKind.VariableDeclaration;
 }
 
 export function isBindingElement(statement: Declaration)
