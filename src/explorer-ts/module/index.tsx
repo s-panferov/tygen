@@ -5,10 +5,10 @@ import Layout from '../../explorer/components/layout';
 import Heading from '../../explorer/components/heading';
 import { Route } from '../../explorer/service';
 import { Item } from '../../doc/items';
-import { Module as ModuleRef } from '../../doc';
+import { ModuleInfo } from '../../doc';
 import { isInterfaceReflection } from '../../doc/ast/interface';
 import { isClassReflection } from '../../doc/ast/class';
-import { isFunctionDeclarationReflection } from '../../doc/ast/function';
+import { isFunctionReflection } from '../../doc/ast/function';
 import { isEnumDeclarationReflection } from '../../doc/ast/enum';
 import { isVariableDeclarationReflection } from '../../doc/ast/var';
 import { isTypeAliasDeclarationReflection } from '../../doc/ast/type-alias';
@@ -26,7 +26,8 @@ const block = theme.block('ts-module');
 
 export interface ModuleProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
-    module: ModuleRef;
+    module: ModuleInfo;
+    item: Item;
     route: Route;
 }
 
@@ -61,74 +62,59 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
     }
 
     renderContent() {
-        let items = this.props.module.items;
-        if (items.length < 100) {
-            return this.renderItems(items);
-        } else {
-            let route = this.props.route;
-            if (route.id) {
-                let filteredItems = items.filter(item => {
-                    return item.id == route.id ||
-                        (route.nesting && route.nesting.indexOf(item.id) !== -1);
-                });
-
-                return this.renderItems(filteredItems);
-            } else {
-                return null;
-            }
+        if (this.props.item) {
+            return this.renderItem(this.props.item);
         }
     }
 
-    renderItems(items: Item[]) {
-        return items.map(item => {
-            if (isInterfaceReflection(item)) {
-                return (
-                    <Interface
-                        key={ item.id }
-                        item={ item }
-                    />
-                );
-            } else if (isClassReflection(item)) {
-                return (
-                    <Class
-                        key={ item.id }
-                        item={ item }
-                    />
-                );
-            } else if (isFunctionDeclarationReflection(item)) {
-                return (
-                    <Function
-                        key={ item.id }
-                        item={ item }
-                    />
-                );
-            } else if (isEnumDeclarationReflection(item)) {
-                return (
-                    <Enum
-                        key={ item.id }
-                        item={ item }
-                    />
-                );
-            } else if (isVariableDeclarationReflection(item)) {
-                return (
-                    <Variable
-                        key={ item.id }
-                        item={ item }
-                    />
-                );
-            } else if (isTypeAliasDeclarationReflection(item)) {
-                return (
-                    <TypeAlias
-                        key={ item.id }
-                        item={ item }
-                    />
-                );
-            } else {
-                return <div>
-                    Unknown item
-                    { JSON.stringify(item) }
-                </div>;
-            }
-        });
+    renderItem(item: Item) {
+        if (isInterfaceReflection(item)) {
+            return (
+                <Interface
+                    key={ item.id }
+                    item={ item }
+                />
+            );
+        } else if (isClassReflection(item)) {
+            return (
+                <Class
+                    key={ item.id }
+                    item={ item }
+                />
+            );
+        } else if (isFunctionReflection(item)) {
+            return (
+                <Function
+                    key={ item.id }
+                    item={ item }
+                />
+            );
+        } else if (isEnumDeclarationReflection(item)) {
+            return (
+                <Enum
+                    key={ item.id }
+                    item={ item }
+                />
+            );
+        } else if (isVariableDeclarationReflection(item)) {
+            return (
+                <Variable
+                    key={ item.id }
+                    item={ item }
+                />
+            );
+        } else if (isTypeAliasDeclarationReflection(item)) {
+            return (
+                <TypeAlias
+                    key={ item.id }
+                    item={ item }
+                />
+            );
+        } else {
+            return <div>
+                Unknown item
+                { JSON.stringify(item) }
+            </div>;
+        }
     }
 }

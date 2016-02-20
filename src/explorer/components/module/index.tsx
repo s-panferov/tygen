@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as theme from '../theme';
-import { Maybe } from 'tsmonad';
 
 import { Route, PluginRegistry } from '../../state';
-import { Module as ModuleRef } from '../../../doc/index';
+import { ModuleInfo } from '../../../doc/index';
+import { Item } from '../../../doc/items';
 
 import Breadcrumbs from '../breadcrumbs';
 import File from '../file';
@@ -14,7 +14,8 @@ const block = theme.block('module');
 export interface ModuleProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     route: Route;
-    module: Maybe<ModuleRef>;
+    module: ModuleInfo;
+    item: Item;
     plugins: PluginRegistry;
 
     onNavigate: (route: Route) => void;
@@ -45,19 +46,18 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
 
     renderView(): React.ReactNode {
         let { module, plugins } = this.props;
-        return module.caseOf({
-            just: (module) => {
-                let Component = plugins.getModuleComponent(module);
-                return (
-                    <Component
-                        className={ block('view') }
-                        route={ this.props.route }
-                        module={ module }
-                    />
-                );
-            },
-            nothing: () => <div/>
-        });
+
+        if (this.props.module) {
+            let Component = plugins.getModuleComponent(module);
+            return (
+                <Component
+                    className={ block('view') }
+                    route={ this.props.route }
+                    item={ this.props.item }
+                    module={ module }
+                />
+            );
+        }
     }
 
     renderRoute() {

@@ -3,7 +3,7 @@ import { compose } from 'redux';
 export { Provider } from 'react-redux';
 
 import {
-    Action as ReduxAction,
+    FSA,
     Store as ReduxStore,
     Dispatch as ReduxDispatch,
     createStore as createStore_,
@@ -24,14 +24,15 @@ export { ActionType, actions };
 import { State } from './state';
 export { State };
 
-export type Action = ReduxAction<ActionType>;
-export type Store = ReduxStore<State, Action>;
-export type Dispatch = ReduxDispatch<State, Action>;
+export type Action<P, M> = FSA<ActionType, P, M>;
+export type Store = ReduxStore<State, Action<any, any>>;
+export type Dispatch = ReduxDispatch<State, Action<any, any>>;
 export type ActionCreators = typeof actions;
-export type DispatchProps = ReduxDispatchProps<State, Action>;
-export type RootReducer = Reducer<State, Action>;
+export type DispatchProps = ReduxDispatchProps<State, Action<any, any>>;
+export type RootReducer = Reducer<State, Action<any, any>>;
+export type GetState = () => State;
 
-export let connect: Connect<State, Action, Dispatch> = reduxConnect;
+export let connect: Connect<State, Action<any, any>, Dispatch> = reduxConnect;
 
 let prevState = null;
 const logger = store => next => action => {

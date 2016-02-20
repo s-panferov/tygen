@@ -1,4 +1,4 @@
-import { Module, ModuleKind } from '../doc';
+import { ModuleInfo, ModuleKind } from '../doc';
 import PluginRegistry, {
     ModuleComponentCtor,
     ModulePlugin as ModulePluginInterface,
@@ -11,7 +11,7 @@ export default function register(reg: PluginRegistry) {
 }
 
 class ModulePlugin implements ModulePluginInterface {
-    isAcceptableModule(module: Module): boolean {
+    isAcceptableModule(module: ModuleInfo): boolean {
         return module.kind == ModuleKind.TypeScript;
     }
 

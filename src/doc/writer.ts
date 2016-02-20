@@ -19,13 +19,7 @@ export class DocWriter {
         function walkObject(obj: any, pkg: string, path: string, nesting: string[] = []) {
             if (obj.id) {
                 nesting = nesting.concat(obj.id);
-                idMap[obj.id] = {
-                    id: obj.id,
-                    semanticId: obj.semanticId,
-                    pkg,
-                    path,
-                    nesting
-                };
+                idMap[obj.id] = [obj.semanticId, pkg, path, [nesting[nesting.length-1]]];
 
                 if (obj.semanticId) {
                     if (!semanticIdMap[pkg]) { semanticIdMap[pkg] = {}; };
@@ -53,7 +47,8 @@ export class DocWriter {
         let modules = this.context.modules;
         Object.keys(modules).forEach(moduleKey => {
             let module = modules[moduleKey];
-            module.items.forEach(item => {
+            Object.keys(module.items).forEach(itemId => {
+                let item = module.items[itemId];
                 walkObject(item, module.pkgName, module.fileInfo.relativeToPackage);
             });
         });
@@ -70,35 +65,41 @@ export class DocWriter {
             let module = modules[moduleKey];
             let metaPath = path.join(dir, module.fileInfo.metaName);
             fs.writeFileSync(metaPath, JSON.stringify(module, null, 4));
+
+            let itemsPath = metaPath.replace('.json', '');
+            fse.ensureDirSync(itemsPath);
+            Object.keys(module.items).forEach(itemId => {
+                let itemPath = path.join(itemsPath, itemId + '.json');
+                fs.writeFileSync(itemPath, JSON.stringify(module.items[itemId], null, 4));
+            });
         });
 
         this.writeRegistryModule(dir);
     }
 
     generateRegistryModule(dir: string): string {
-        let idMap = this.generateIdMap();
-        let buf = `
-module.exports = {\n
-    mainPackage: '${extractPackage(dir).info.name}',
-    packages: ${ JSON.stringify(this.context.packages, null, 4) },
-    idMap: ${ JSON.stringify(idMap[0], null, 4) },
-    semanticIdMap: ${ JSON.stringify(idMap[1], null, 4) },
-    files: {
-        `;
-
+        let [idMap, semanticIdMap] = this.generateIdMap();
         let modules = this.context.modules;
+        let files: any = {};
         Object.keys(modules).forEach(moduleKey => {
             let module = modules[moduleKey];
-            buf += `    '${module.fileInfo.relativeToPackage}': require('./${ module.fileInfo.metaName }'),\n`;
+            files[module.fileInfo.withPackage] = module.fileInfo.metaName;
         });
 
-        buf += '}}';
+        let buf = `
+{\n
+    "mainPackage": "${extractPackage(dir).info.name}",
+    "packages": ${ JSON.stringify(this.context.packages, null, 4) },
+    "files": ${ JSON.stringify(files, null, 4) },
+    "idMap": ${ JSON.stringify(idMap) },
+    "semanticIdMap": ${ JSON.stringify(semanticIdMap) }
+}`;
 
         return buf;
     }
 
     writeRegistryModule(dir: string) {
         let registryModule = this.generateRegistryModule(dir);
-        fs.writeFileSync(path.join(dir, 'registry.js'), registryModule);
+        fs.writeFileSync(path.join(dir, 'registry.json'), registryModule);
     }
 }

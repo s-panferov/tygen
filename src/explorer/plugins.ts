@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Module } from '../doc';
+import { ModuleInfo } from '../doc';
+import { Item } from '../doc/items';
 import { Route } from './service';
 
 export interface Plugin {
@@ -7,14 +8,15 @@ export interface Plugin {
 }
 
 export interface ModuleComponentProps extends React.CommonProps {
-    module: Module;
     route: Route;
+    module: ModuleInfo;
+    item: Item;
 }
 
 export type ModuleComponentCtor = React.ReactCtor<ModuleComponentProps, any>;
 
 export interface ModulePlugin {
-    isAcceptableModule(module: Module): boolean;
+    isAcceptableModule(module: ModuleInfo): boolean;
     getModuleComponent(): ModuleComponentCtor;
 }
 
@@ -29,7 +31,7 @@ export default class PluginRegistry {
         this.modulePlugins.push(plugin);
     }
 
-    getModuleComponent(module: Module): ModuleComponentCtor {
+    getModuleComponent(module: ModuleInfo): ModuleComponentCtor {
         return this.modulePlugins
             .find(plugin => plugin.isAcceptableModule(module))
             .getModuleComponent();

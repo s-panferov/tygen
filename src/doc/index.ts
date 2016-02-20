@@ -5,7 +5,6 @@ require('source-map-support').install();
 import { extractPackage, getFileInfo } from './utils';
 import { processSourceFile } from './gen';
 import { Item } from './items';
-import * as uuid from 'node-uuid';
 
 import {
     TypeChecker,
@@ -41,17 +40,11 @@ export interface ModuleInfo {
     text: string;
     pkgName: string;
     fileInfo: FileInfo;
-    items: Item[];
+    items: [string, string, string][];
 }
 
 export interface IdMap {
-    [key: string]: {
-        id: string;
-        semanticId: string;
-        pkg: string;
-        path: string;
-        nesting: string[];
-    };
+    [key: string]: [string, string, string, string[]];
 }
 
 export interface SemanticIdMap {
@@ -60,7 +53,7 @@ export interface SemanticIdMap {
 
 export interface DocRegistry {
     mainPackage: string;
-    files: Dictionary<ModuleInfo>;
+    files: Dictionary<string>;
     idMap: IdMap;
     semanticIdMap: SemanticIdMap;
     packages: Dictionary<PackageInfo>;
@@ -152,13 +145,13 @@ export class Context {
     }
 }
 
-export class Module implements ModuleInfo {
+export class Module {
     kind = ModuleKind.TypeScript;
     text: string;
     pkgName: string;
     fileInfo: FileInfo;
 
-    items: Item[] = [];
+    items: { [id: string]: Item } = {};
 
     constructor(sourceFile: SourceFile, pkgName: string, fileInfo: FileInfo) {
         this.text = sourceFile.text;
@@ -168,6 +161,10 @@ export class Module implements ModuleInfo {
 
     toJSON() {
         let { text, pkgName, fileInfo, items, kind } = this;
-        return { pkgName, fileInfo, text, items, kind };
+        let shortItems = Object.keys(items).map(itemId => {
+            let item = items[itemId];
+            return [itemId, item.itemType, item.name];
+        });
+        return { kind, pkgName, fileInfo, items: shortItems, text };
     }
 }

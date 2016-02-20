@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as theme from '../../explorer/components/theme';
 
 import {
-    FunctionDeclarationReflection
+    FunctionReflection
 } from '../../doc/ast/function';
 
 import Signature, { SignatureTypeStyle } from '../signature';
@@ -12,7 +12,7 @@ const block = theme.block('ts-function');
 
 export interface FunctionProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
-    item: FunctionDeclarationReflection;
+    item: FunctionReflection;
 }
 
 export interface FunctionState {}
@@ -32,7 +32,7 @@ export default class Function extends React.Component<FunctionProps, FunctionSta
                 { func.name }
                 <Signature
                     typeStyle={ SignatureTypeStyle.Colon }
-                    signature={ func }
+                    signature={ func.callSignatures[0] }
                 />
             </div>
         );

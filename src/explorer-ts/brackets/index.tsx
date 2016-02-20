@@ -13,7 +13,7 @@ export enum BracketsType {
     Square = 'square' as any,
 }
 
-const BracketsMap = {
+const BracketsMap: { [key: string]: [string, string] } = {
     [BracketsType.Angle]: ['<', '>'],
     [BracketsType.Round]: ['(', ')'],
     [BracketsType.Curly]: ['{', '}'],

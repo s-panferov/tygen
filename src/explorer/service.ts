@@ -25,7 +25,7 @@ interface FileStructure {
 
 export interface PackageService {
     info: PackageInfo;
-    files: Dictionary<ModuleInfo>;
+    files: Dictionary<string>;
     fs: MemoryFileSystem;
 }
 
@@ -58,17 +58,12 @@ export default class Service {
         return this.packages;
     }
 
-    getModule(route: Route): Maybe<ModuleInfo> {
+    getModuleMetaName(route: Route): Maybe<string> {
         if (!route.pkg) {
-            return Maybe.nothing<ModuleInfo>();
+            return Maybe.nothing();
         } else {
             let pkg = this.getPackage(route.pkg);
-            let module = pkg.files[route.path];
-            if (module) {
-                return Maybe.just(module);
-            } else {
-                return Maybe.nothing<ModuleInfo>();
-            }
+            return Maybe.maybe(pkg.files[route.path]);
         }
     }
 
@@ -82,7 +77,14 @@ export default class Service {
             let finalRoute = this.registry.idMap[route.id];
 
             if (finalRoute) {
-                return finalRoute;
+                let [semanticId, pkg, path, nesting] = finalRoute;
+                return {
+                    id: route.id,
+                    semanticId,
+                    pkg,
+                    path,
+                    nesting
+                };
             } else {
                 console.error(`Unknown id ${ route.id }`);
                 return {
@@ -143,13 +145,14 @@ function readPackages(registry: DocRegistry): Packages {
     });
 
     Object.keys(registry.files).forEach(key => {
-        let module = registry.files[key];
-        let pkgName = module.pkgName;
-        let pkg = packages[pkgName];
+        let moduleMetaName = registry.files[key];
 
-        pkg.files[module.fileInfo.relativeToPackage] = module;
-        pkg.fs.mkdirpSync(path.dirname(module.fileInfo.relativeToPackage));
-        pkg.fs.writeFileSync(module.fileInfo.relativeToPackage, JSON.stringify(module.fileInfo));
+        let [pkgName, relativeToPackage] = key.split('://');
+
+        let pkg = packages[pkgName];
+        pkg.files[relativeToPackage] = moduleMetaName;
+        pkg.fs.mkdirpSync(path.dirname(relativeToPackage));
+        pkg.fs.writeFileSync(relativeToPackage, moduleMetaName);
     });
 
     return packages;

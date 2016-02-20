@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as theme from '../../explorer/components/theme';
 
-import { Module as ModuleRef } from '../../doc';
+import { ModuleInfo } from '../../doc';
 import { Item } from '../../doc/items';
 import ListSection from '../list-section';
 
@@ -10,7 +10,7 @@ const block = theme.block('ts-list');
 
 export interface ListProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
-    module: ModuleRef;
+    module: ModuleInfo;
 }
 
 export interface ListState {}
@@ -35,10 +35,10 @@ export default class List extends React.Component<ListProps, ListState> {
     renderItems() {
         let items = this.props.module.items;
 
-        let groups = {} as {[itemType: string]: Item[]};
-        items.forEach(item => {
-            if (!groups[item.itemType]) { groups[item.itemType] = []; }
-            groups[item.itemType].push(item);
+        let groups = {} as {[itemType: string]: [string, string][]};
+        items.forEach(([id, itemType, name]) => {
+            if (!groups[itemType]) { groups[itemType] = []; }
+            groups[itemType].push([id, name]);
         });
 
         let sections = Object.keys(groups).map(itemType => {

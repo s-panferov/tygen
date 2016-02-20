@@ -11,6 +11,9 @@ import { PluginRegistry } from '../../state';
 const block = theme.block('app');
 require('./index.css');
 
+import { ModuleInfo } from '../../../doc';
+import { Item } from '../../../doc/items';
+
 import Layout from '../layout';
 import Module from '../module';
 import Nav from '../nav';
@@ -19,14 +22,17 @@ interface AppReduxProps extends DispatchProps {
     service?: Service;
     route?: Route;
     plugins?: PluginRegistry;
+
+    module?: ModuleInfo;
+    item?: Item;
 }
 
 interface AppProps extends AppReduxProps {
     history: History;
 }
 
-@connect(({ service, route, plugins }): AppReduxProps => {
-    return { service, route, plugins };
+@connect(({ service, route, plugins, module, item }): AppReduxProps => {
+    return { service, route, plugins, module, item };
 })
 export default class App extends React.Component<AppProps, void> {
     static contextTypes = theme.themeContext;
@@ -39,7 +45,6 @@ export default class App extends React.Component<AppProps, void> {
     }
 
     render() {
-        let module = this.props.service.getModule(this.props.route);
         return (
             <div className={ this.getClassName() }>
                 <Layout
@@ -53,7 +58,8 @@ export default class App extends React.Component<AppProps, void> {
                     <Module
                         plugins={ this.props.plugins }
                         route={ this.props.route }
-                        module={ module }
+                        module={ this.props.module }
+                        item={ this.props.item }
                         onNavigate={ this.onNavigate }
                     />
                 </Layout>

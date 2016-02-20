@@ -3,12 +3,18 @@ declare module 'redux' {
         type: T;
     }
 
-    interface ActionFunction<S, A> {
-        (dispatch: Dispatch<S, A>, getState: () => S): void;
+    interface FSA<T, P, M> extends Action<T> {
+        payload: P | Error;
+        error?: boolean;
+        meta?: M;
+    }
+
+    interface ActionFunction<S, A, R> {
+        (dispatch: Dispatch<S, A>, getState: () => S): R;
     }
 
     interface ActionCreator<S, A> {
-        (...args: any[]): A | ActionFunction<S, A>;
+        (...args: any[]): A | ActionFunction<S, A, any>;
     }
 
     interface ActionCreators<S, A> {
@@ -24,7 +30,8 @@ declare module 'redux' {
     }
 
     interface Dispatch<S, A> {
-        (action: A | ActionFunction<S, A>): A;
+        (action: A): A;
+        <R>(action: ActionFunction<S, A, R>): R;
     }
 
     interface StoreMethods<S, A> {

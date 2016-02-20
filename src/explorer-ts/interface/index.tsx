@@ -47,8 +47,8 @@ export default class Interface<P extends InterfaceProps> extends React.Component
                 { iface.heritageClauses &&
                     <InterfaceHeritage clauses={ iface.heritageClauses }/> }
                 { iface.comment }
-                { iface.members &&
-                    <TypeMembers members={ iface.members } /> }
+                { iface.properties &&
+                    <TypeMembers members={ iface.properties } /> }
             </Paper>
         );
     }

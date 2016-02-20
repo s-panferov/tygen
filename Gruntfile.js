@@ -7,6 +7,10 @@ module.exports = function(grunt) {
                 src: '.',
                 dest: 'node_modules/docscript'
             },
+            doc: {
+                src: './example/doc',
+                dest: 'dist/doc'
+            },
         }
     });
 };

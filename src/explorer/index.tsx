@@ -21,10 +21,6 @@ import tsPlugin from '../explorer-ts';
 let plugins = new PluginRegistry();
 plugins.register(tsPlugin);
 
-let service = new Service(require('../../example/doc/registry.js'));
-let prevState = defaultState(service, plugins);
-let store = createStore(rootReducer, prevState);
-
 export function pathFromRoute(route: Route): string {
     let routeUrl = `/${route.pkg}${route.path}`;
     routeUrl = routeUrl.replace(/[.]/g, '~~');
@@ -38,7 +34,7 @@ export function pathFromRoute(route: Route): string {
     return routeUrl;
 }
 
-function routeFromPath(urlPath: string, query: any): Route {
+export function routeFromPath(urlPath: string, query: any, service: Service): Route {
     let parts = urlPath.split('/').filter(Boolean);
     let routePkg = parts[0];
     let routePath = '/' + parts.slice(1).join('/').replace(/~~/g, '.');
@@ -55,44 +51,51 @@ function routeFromPath(urlPath: string, query: any): Route {
     }
 }
 
-let currentLocation: Location;
-history.listen(location => {
-    currentLocation = location;
-    if (location.action === 'POP') {
-        if (location.pathname === '/') {
-            store.dispatch(
-                actions.navigate({
-                    pkg: null,
-                    path: ''
-                })
-            );
-        } else {
-            store.dispatch(
-                actions.navigate(routeFromPath(location.pathname, location.query))
-            );
-        }
-    }
-});
-
-store.subscribe(() => {
-    let state = store.getState();
-
-    if (!equal(prevState.route, state.route)) {
-        let newPathName = pathFromRoute(state.route);
-        if (!currentLocation || (currentLocation && currentLocation.pathname !== newPathName)) {
-            history.push({
-                pathname: newPathName
-            });
-        }
-    }
-
-    prevState = state;
-});
-
-export function runApp() {
+export function createAppContainer() {
     let reactApp = document.createElement('div');
     reactApp.id = 'react-app';
     document.body.appendChild(reactApp);
+    return reactApp;
+}
+
+function run(registry, appContainer) {
+    let service = new Service(registry);
+    let prevState = defaultState(service, plugins);
+    let store = createStore(rootReducer, prevState);
+
+    let currentLocation: Location;
+    history.listen(location => {
+        currentLocation = location;
+        if (location.action === 'POP') {
+            if (location.pathname === '/') {
+                store.dispatch(
+                    actions.navigate({
+                        pkg: null,
+                        path: ''
+                    })
+                );
+            } else {
+                store.dispatch(
+                    actions.navigate(routeFromPath(location.pathname, location.query, service))
+                );
+            }
+        }
+    });
+
+    store.subscribe(() => {
+        let state = store.getState();
+
+        if (!equal(prevState.route, state.route)) {
+            let newPathName = pathFromRoute(state.route);
+            if (!currentLocation || (currentLocation && currentLocation.pathname !== newPathName)) {
+                history.push({
+                    pathname: newPathName
+                });
+            }
+        }
+
+        prevState = state;
+    });
 
     ReactDOM.render(
         <Provider store={ store }>
@@ -100,8 +103,13 @@ export function runApp() {
                 <App history={ history } />
             </ThemeProvider>
         </Provider>,
-        reactApp
+        appContainer
     );
 }
 
-document.addEventListener('DOMContentLoaded', runApp, false);
+fetch('/doc/registry.json')
+    .then(res => res.json())
+    .then((registry) => {
+        let appContainer = createAppContainer();
+        run(registry, appContainer);
+    })
