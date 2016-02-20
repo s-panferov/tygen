@@ -1,6 +1,8 @@
 import {
     FunctionDeclaration,
-    Statement,
+    Declaration,
+    MethodDeclaration,
+    MethodSignature,
     SyntaxKind
 } from 'typescript';
 
@@ -8,33 +10,48 @@ import { Context } from '../index';
 import { Item, ItemType } from '../items';
 
 import {
-    SignatureReflection,
-    visitSignature
-} from './type';
+    InterfaceReflection,
+    visitBasicInfo
+} from './interface';
 
-export interface FunctionDeclarationReflection extends SignatureReflection {
-    generator: boolean;
+export interface FunctionReflection extends InterfaceReflection {
 }
 
-export function isFunctionDeclarationReflection(item: Item): item is FunctionDeclarationReflection {
-    return item.itemType == ItemType.FunctionDeclaration;
+export function isFunctionReflection(item: Item): item is FunctionReflection {
+    return item.itemType == ItemType.Function;
 }
 
-export function isFunctionDeclaration(statement: Statement)
+export function isMethodReflection(item: Item): item is FunctionReflection {
+    return item.itemType == ItemType.Method;
+}
+
+export function isFunctionDeclaration(statement: Declaration)
     : statement is FunctionDeclaration
 {
     return statement.kind == SyntaxKind.FunctionDeclaration;
 }
 
-export function visitFunctionDeclaration(
-    func: FunctionDeclaration,
+export function isMethodDeclaration(statement: Declaration)
+    : statement is FunctionDeclaration
+{
+    return statement.kind == SyntaxKind.MethodDeclaration;
+}
+
+export function isMethodSignature(statement: Declaration)
+    : statement is FunctionDeclaration
+{
+    return statement.kind == SyntaxKind.MethodSignature;
+}
+
+export function visitFunctionLikeDeclaration(
+    func: FunctionDeclaration | MethodSignature,
+    itemType: ItemType,
     ctx: Context
-): FunctionDeclarationReflection {
-    let signature = visitSignature(func, ctx);
-    return Object.assign(signature, {
-        id: ctx.id(func),
-        itemType: ItemType.FunctionDeclaration,
-        name: func.name.getText(),
-        generator: !!func.asteriskToken
+): FunctionReflection {
+    return ctx.dive(func.name.getText(), () => {
+        let basicInfo = visitBasicInfo(func, ctx);
+        return Object.assign(basicInfo, {
+            itemType
+        });
     });
 }

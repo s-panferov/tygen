@@ -20,6 +20,7 @@
     ],
     "files": [
         "./doc/ast/class.ts",
+        "./doc/ast/declaration.ts",
         "./doc/ast/enum.ts",
         "./doc/ast/function.ts",
         "./doc/ast/interface.ts",
@@ -49,6 +50,9 @@
         "./doc/tests/interface-intersection.ts",
         "./doc/tests/interface-literal.ts",
         "./doc/tests/interface-simple.ts",
+        "./doc/tests/merge-class-interface.ts",
+        "./doc/tests/merge-function-namespace.ts",
+        "./doc/tests/merge-interface-interface.ts",
         "./doc/tests/parenthesized-type.ts",
         "./doc/tests/salsa-function.ts",
         "./doc/tests/string-literal-type.ts",

@@ -1,5 +1,5 @@
 import {
-    Statement,
+    Declaration,
     EnumDeclaration,
     EnumMember,
     SyntaxKind
@@ -20,7 +20,7 @@ export function isEnumDeclarationReflection(item: Item): item is EnumDeclaration
     return item.itemType == ItemType.EnumDeclaration;
 }
 
-export function isEnumDeclaration(statement: Statement)
+export function isEnumDeclaration(statement: Declaration)
     : statement is EnumDeclaration
 {
     return statement.kind == SyntaxKind.EnumDeclaration;

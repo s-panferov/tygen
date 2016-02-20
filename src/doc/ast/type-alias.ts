@@ -1,5 +1,5 @@
 import {
-    Statement,
+    Declaration,
     TypeAliasDeclaration,
     SyntaxKind
 } from 'typescript';
@@ -23,7 +23,7 @@ export function isTypeAliasDeclarationReflection(item: Item): item is TypeAliasD
     return item.itemType == ItemType.TypeAlias;
 }
 
-export function isTypeAliasDeclaration(statement: Statement)
+export function isTypeAliasDeclaration(statement: Declaration)
     : statement is TypeAliasDeclaration
 {
     return statement.kind == SyntaxKind.TypeAliasDeclaration;

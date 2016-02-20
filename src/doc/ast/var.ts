@@ -1,8 +1,9 @@
 import {
-    Statement,
-    VariableStatement,
+    Declaration,
     SyntaxKind,
-    NodeFlags
+    NodeFlags,
+    VariableDeclaration,
+    BindingElement
 } from 'typescript';
 
 import {
@@ -33,17 +34,23 @@ export function isVariableDeclarationReflection(item: Item): item is VariableDec
     return item.itemType == ItemType.VariableDeclaration;
 }
 
-export function isVariableStatement(statement: Statement)
-    : statement is VariableStatement
+export function isVariableDeclaration(statement: Declaration)
+    : statement is VariableDeclaration
 {
     return statement.kind == SyntaxKind.VariableStatement;
 }
 
-export function visitVariableStatement(
-    variable: VariableStatement,
+export function isBindingElement(statement: Declaration)
+    : statement is BindingElement
+{
+    return statement.kind == SyntaxKind.BindingElement;
+}
+
+export function visitVariableDeclaration(
+    variable: VariableDeclaration,
     ctx: Context
-): VariableDeclarationReflection[] {
-    let list = variable.declarationList;
+): VariableDeclarationReflection {
+    let list = variable.parent;
     let varType = VariableDeclarationType.Var;
     if (list.flags & NodeFlags.Let) {
         varType = VariableDeclarationType.Let;
@@ -51,24 +58,50 @@ export function visitVariableStatement(
         varType = VariableDeclarationType.Const;
     }
 
-    return list.declarations.map(variable => {
-        let type: TypeReflection;
+    let type: TypeReflection;
 
-        if (variable.type) {
-            type = visitTypeNode(variable.type, ctx);
-        } else {
-            let checkerType = ctx.checker.getTypeAtLocation(variable);
-            type = extractTypeReference(checkerType, ctx);
-        }
+    if (variable.type) {
+        type = visitTypeNode(variable.type, ctx);
+    } else {
+        let checkerType = ctx.checker.getTypeAtLocation(variable);
+        type = extractTypeReference(checkerType, ctx);
+    }
 
-        return {
-            id: ctx.id(variable),
-            name: variable.name.getText(),
-            itemType: ItemType.VariableDeclaration,
-            varType,
-            type,
-            initializer: variable.initializer &&
-                variable.initializer.getText()
-        } as VariableDeclarationReflection;
-    });
+    return {
+        id: ctx.id(variable),
+        name: variable.name.getText(),
+        itemType: ItemType.VariableDeclaration,
+        varType,
+        type,
+        initializer: variable.initializer &&
+            variable.initializer.getText()
+    } as VariableDeclarationReflection;
+}
+
+export function visitBindingElement(
+    variable: BindingElement,
+    ctx: Context
+): VariableDeclarationReflection {
+
+    let list = variable.parent;
+    let varType = VariableDeclarationType.Var;
+    if (list.flags & NodeFlags.Let) {
+        varType = VariableDeclarationType.Let;
+    } else if (list.flags & NodeFlags.Const) {
+        varType = VariableDeclarationType.Const;
+    }
+
+    let type: TypeReflection;
+    let checkerType = ctx.checker.getTypeAtLocation(variable);
+    type = extractTypeReference(checkerType, ctx);
+
+    return {
+        id: ctx.id(variable),
+        name: variable.name.getText(),
+        itemType: ItemType.VariableDeclaration,
+        varType,
+        type,
+        initializer: variable.initializer &&
+            variable.initializer.getText()
+    } as VariableDeclarationReflection;
 }

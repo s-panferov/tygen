@@ -1,5 +1,5 @@
 import {
-    Statement,
+    Declaration,
     ClassDeclaration,
     SyntaxKind
 } from 'typescript';
@@ -12,10 +12,6 @@ import {
     visitBasicInfo,
 } from './interface';
 
-import {
-    visitClassElements
-} from './type';
-
 export interface ClassReflection extends InterfaceReflection {
 
 }
@@ -24,7 +20,7 @@ export function isClassReflection(item: Item): item is InterfaceReflection {
     return item.itemType == ItemType.Class;
 }
 
-export function isClasDeclaration(statement: Statement)
+export function isClassDeclaration(statement: Declaration)
     : statement is ClassDeclaration
 {
     return statement.kind == SyntaxKind.ClassDeclaration;
@@ -38,11 +34,7 @@ export function visitClass(
         let basicInfo = visitBasicInfo(cls, ctx);
 
         return Object.assign(basicInfo, {
-            itemType: ItemType.Class,
-            members: cls.members && visitClassElements(
-                cls.members,
-                ctx
-            )
+            itemType: ItemType.Class
         });
     });
 }

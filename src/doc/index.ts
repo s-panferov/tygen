@@ -82,9 +82,11 @@ export class Context {
     currentId: number;
 
     ids: WeakMap<any, string>;
+    _visited: WeakMap<any, boolean>;
 
     constructor() {
         this.ids = new WeakMap();
+        this._visited = new WeakMap();
         this.currentStack = [];
         this.currentId = 1;
     }
@@ -95,6 +97,14 @@ export class Context {
         this.currentStack.pop();
 
         return result;
+    }
+
+    visit(obj: any) {
+        this._visited.set(obj, true);
+    }
+
+    isVisited(obj: any): boolean {
+        return this._visited.get(obj);
     }
 
     semanticId(level?: string): string {
@@ -135,7 +145,7 @@ export class Context {
         let doc = new Module(source, pkg.info.name, fileInfo);
 
         this.currentModule = doc;
-        processSourceFile(source, this);
+        processSourceFile(source as any, this);
         this.currentModule = null;
 
         return doc;

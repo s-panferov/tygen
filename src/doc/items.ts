@@ -15,10 +15,11 @@ export enum ItemType {
     Signature = 'Signature' as any,
     CoreTypeReference = 'CoreTypeReference' as any, // synthetic
     TypeReference = 'TypeReference' as any,
+    Method = 'Method' as any, // top level
     MethodSignature = 'MethodSignature' as any,
+    MethodDeclaration = 'MethodDeclaration' as any,
     FunctionType = 'FunctionType' as any,
     Class = 'Class' as any,
-    MethodDeclaration = 'MethodDeclaration' as any,
     ConstructorDeclaration = 'ConstructorDeclaration' as any,
     GetAccessorDeclaration = 'GetAccessorDeclaration' as any,
     SetAccessorDeclaration = 'SetAccessorDeclaration' as any,
@@ -32,6 +33,7 @@ export enum ItemType {
     TupleType = 'TupleType' as any,
     ParenthesizedType = 'ParenthesizedType' as any,
     TypePredicate = 'TypePredicate' as any,
+    Function = 'Function' as any, // top level
     FunctionDeclaration = 'FunctionDeclaration' as any,
 }
 

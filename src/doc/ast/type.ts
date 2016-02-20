@@ -1,5 +1,4 @@
 import {
-    TypeFlags,
     NodeFlags,
     SyntaxKind,
     NodeArray,
@@ -10,7 +9,7 @@ import {
     Type,
     UnionType,
     IntersectionType,
-    TypeElement,
+    Declaration,
     PropertySignature,
     TypeParameterDeclaration,
     ExpressionWithTypeArguments,
@@ -23,9 +22,6 @@ import {
     MethodSignature,
     SignatureDeclaration,
     FunctionTypeNode,
-    Signature,
-    SymbolFlags,
-    ClassElement,
     PropertyDeclaration,
     MethodDeclaration,
     ConstructorDeclaration,
@@ -36,7 +32,8 @@ import {
     ArrayTypeNode,
     TupleTypeNode,
     ParenthesizedTypeNode,
-    TypePredicateNode
+    TypePredicateNode,
+    FunctionDeclaration
 } from 'typescript';
 
 import {
@@ -61,23 +58,23 @@ export function isPropertySignatureReflection(item: Item): item is PropertySigna
     return item.itemType == ItemType.PropertySignature;
 }
 
-export function isPropertySignature(node: TypeElement): node is PropertySignature {
+export function isPropertySignature(node: Declaration): node is PropertySignature {
     return node.kind == SyntaxKind.PropertySignature;
 }
 
-export function isConstructorDeclaration(elem: ClassElement): elem is ConstructorDeclaration {
+export function isConstructorDeclaration(elem: Declaration): elem is ConstructorDeclaration {
     return elem.kind === SyntaxKind.Constructor;
 }
 
-export function isGetAccessorDeclaration(elem: ClassElement): elem is GetAccessorDeclaration {
+export function isGetAccessorDeclaration(elem: Declaration): elem is GetAccessorDeclaration {
     return elem.kind === SyntaxKind.GetAccessor;
 }
 
-export function isSetAccessorDeclaration(elem: ClassElement): elem is SetAccessorDeclaration {
+export function isSetAccessorDeclaration(elem: Declaration): elem is SetAccessorDeclaration {
     return elem.kind === SyntaxKind.SetAccessor;
 }
 
-export function isCallSignature(node: TypeElement): node is CallSignatureDeclaration {
+export function isCallSignature(node: Declaration): node is CallSignatureDeclaration {
     return node.kind == SyntaxKind.CallSignature;
 }
 
@@ -85,12 +82,12 @@ export function isTypeReferenceNode(node: TypeNode): node is TypeReferenceNode {
     return node.kind == SyntaxKind.TypeReference;
 }
 
-export function isMethodSignature(node: TypeElement): node is MethodSignature {
+export function isMethodSignature(node: Declaration): node is MethodSignature {
     return node.kind == SyntaxKind.MethodSignature;
 }
 
-export function visitTypeElements(
-    members: NodeArray<TypeElement>,
+export function visitDeclarations(
+    members: NodeArray<Declaration>,
     ctx: Context
 ): Item[] {
     let reflections: Item[] = [];
@@ -112,27 +109,7 @@ export function visitTypeElements(
             reflections.push(
                 visitMethodSignature(member, ctx)
             );
-        }
-    }
-
-    return reflections;
-}
-
-export function isPropertyDeclaration(element: ClassElement): element is PropertyDeclaration {
-    return element.kind == SyntaxKind.PropertyDeclaration;
-}
-export function isMethodDeclaration(element: ClassElement): element is MethodDeclaration {
-    return element.kind == SyntaxKind.MethodDeclaration;
-}
-
-export function visitClassElements(
-    members: NodeArray<ClassElement>,
-    ctx: Context
-): Item[] {
-    let reflections: Item[] = [];
-
-    for (let [, member] of members.entries()) {
-        if (isPropertyDeclaration(member)) {
+        } else if (isPropertyDeclaration(member)) {
             reflections.push(
                 visitPropertyDeclaration(member, ctx)
             );
@@ -152,10 +129,48 @@ export function visitClassElements(
             reflections.push(
                 visitSetAccessorDeclaration(member, ctx)
             );
+        } else if (isFunctionDeclaration(member)) {
+            reflections.push(
+                visitFunctionDeclaration(member, ctx)
+            );
         }
     }
 
     return reflections;
+}
+
+export interface FunctionDeclarationReflection extends SignatureReflection {
+    generator: boolean;
+}
+
+export function isFunctionDeclarationReflection(item: Item): item is FunctionDeclarationReflection {
+    return item.itemType == ItemType.FunctionDeclaration;
+}
+
+export function isFunctionDeclaration(statement: Declaration)
+    : statement is FunctionDeclaration
+{
+    return statement.kind == SyntaxKind.FunctionDeclaration;
+}
+
+export function visitFunctionDeclaration(
+    func: FunctionDeclaration,
+    ctx: Context
+): FunctionDeclarationReflection {
+    let signature = visitSignature(func, ctx);
+    return Object.assign(signature, {
+        id: ctx.id(func),
+        itemType: ItemType.FunctionDeclaration,
+        name: func.name.getText(),
+        generator: !!func.asteriskToken
+    });
+}
+
+export function isPropertyDeclaration(element: Declaration): element is PropertyDeclaration {
+    return element.kind == SyntaxKind.PropertyDeclaration;
+}
+export function isMethodDeclaration(element: Declaration): element is MethodDeclaration {
+    return element.kind == SyntaxKind.MethodDeclaration;
 }
 
 export function visitPropertySignature(
@@ -193,7 +208,7 @@ export function visitPropertyDeclaration(
     });
 }
 
-export function isIndexSignatureDeclaration(node: TypeElement): node is IndexSignatureDeclaration {
+export function isIndexSignatureDeclaration(node: Declaration): node is IndexSignatureDeclaration {
     return node.kind == SyntaxKind.IndexSignature;
 }
 
@@ -336,7 +351,7 @@ export function visitTypeLiteral(node: TypeLiteralNode, type: Type, ctx: Context
     return {
         id: ctx.id(type),
         itemType: ItemType.TypeLiteral,
-        members: node.members && visitTypeElements(
+        members: node.members && visitDeclarations(
             node.members,
             ctx
         )
@@ -746,6 +761,8 @@ export function visitMethodSignature(
     sig: MethodSignature,
     ctx: Context
 ): MethodSignatureReflection {
+    let type = ctx.checker.getTypeAtLocation(sig);
+    console.log(type.getCallSignatures().length);
     return Object.assign(visitSignature(sig, ctx), {
         itemType: ItemType.MethodSignature
     });

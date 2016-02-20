@@ -1,26 +1,49 @@
 import {
     InterfaceDeclaration,
     ClassDeclaration,
-    Statement,
+    ModuleDeclaration,
+    FunctionDeclaration,
+    EnumDeclaration,
+    InterfaceType,
+    Declaration,
     SyntaxKind,
-    HeritageClause
+    MethodSignature,
+    HeritageClause,
+    TypeFlags,
+    IndexSignatureDeclaration
 } from 'typescript';
-
-import * as assert from 'assert';
 
 import { Context } from '../index';
 import { Item, ItemType } from '../items';
 
 import {
-    visitTypeElements,
     TypeParameterReflection,
     visitTypeParameter,
     visitExpressionWithTypeArguments,
     ExpressionWithTypeArgumentsReflection,
+    isIndexSignatureDeclaration,
+    CallSignatureReflection,
+    ConstructorDeclarationReflection,
+    IndexSignatureReflection
 } from './type';
 
+import {
+    isClassDeclaration,
+} from './class';
+
+import {
+    visitDeclarations
+} from './type';
+
+import {
+    visitTopLevelDeclarations
+} from './declaration';
+
 export interface InterfaceReflection extends Item {
-    members: Item[];
+    properties: Item[];
+    callSignatures: CallSignatureReflection[];
+    constructSignatures: ConstructorDeclarationReflection[];
+    indexSignatures?: IndexSignatureReflection[];
     typeParameters?: TypeParameterReflection[];
     heritageClauses?: HeritageClauseReflection[];
 }
@@ -29,33 +52,84 @@ export function isInterfaceReflection(item: Item): item is InterfaceReflection {
     return item.itemType == ItemType.Interface;
 }
 
-export function isInterfaceDeclaration(statement: Statement)
+export function isInterfaceDeclaration(statement: Declaration)
     : statement is InterfaceDeclaration
 {
     return statement.kind == SyntaxKind.InterfaceDeclaration;
 }
 
 export function visitBasicInfo(
-    iface: InterfaceDeclaration | ClassDeclaration,
+    base: InterfaceDeclaration | ClassDeclaration | FunctionDeclaration | EnumDeclaration | ModuleDeclaration | MethodSignature,
     ctx: Context
 ): InterfaceReflection {
-    let type = ctx.checker.getTypeAtLocation(iface);
+    let type = ctx.checker.getTypeAtLocation(base) as InterfaceType;
 
-    assert.ok(type, 'Expect type to exist');
+    let typeParameters = type.typeParameters &&
+        type.typeParameters.map(tp => {
+            return visitTypeParameter(tp.symbol.declarations[0] as any, ctx);
+        });
 
+    let typeHeritageClauses: HeritageClause[] = [];
     let symbol = type.getSymbol();
+    let declarations = type.symbol.getDeclarations();
+    let typeIndexSignatures: IndexSignatureDeclaration[] = [];
+
+    (declarations as any).forEach((declaration: Declaration) => {
+        ctx.visit(declaration);
+
+        if (isInterfaceDeclaration(declaration) || isClassDeclaration(declaration)) {
+            typeHeritageClauses = typeHeritageClauses.concat(declaration.heritageClauses || []);
+            (declaration.members.forEach as any)(member => {
+                if (isIndexSignatureDeclaration(member)) {
+                    typeIndexSignatures.push(member);
+                }
+            });
+        }
+    });
+
+    let heritageClauses = typeHeritageClauses
+        .map(clause => {
+            return visitHeritageClause(clause, ctx);
+        });
+
+    let typeProperties = type.getProperties().map(prop => {
+        return prop.declarations[0];
+    });
+
+    let typeCallSignatures = type.getCallSignatures().map(sig => {
+        return sig.declaration;
+    });
+
+    let typeConstructSignatures = type.getConstructSignatures().map(sig => {
+        return sig.declaration;
+    });
+
+    let [properties, restDeclarations] = visitTopLevelDeclarations(typeProperties as any, ctx);
+    properties = properties.concat(visitDeclarations(restDeclarations as any, ctx));
+
+    let callSignatures = visitDeclarations(typeCallSignatures as any, ctx);
+    let constructSignatures = visitDeclarations(typeConstructSignatures as any, ctx);
+    let indexSignatures = visitDeclarations(typeIndexSignatures as any, ctx);
+
     let comment = symbol.getDocumentationComment();
+
+    let itemType = ItemType.Interface;
+    if (type.flags & TypeFlags.Class) {
+        itemType = ItemType.Class;
+    }
 
     return {
         id: ctx.id(type),
         semanticId: ctx.semanticId(),
-        name: iface.name.text,
+        itemType,
+        name: base.name.getText(),
+        typeParameters,
+        heritageClauses,
+        callSignatures: callSignatures as any,
+        indexSignatures: indexSignatures as any,
+        constructSignatures: constructSignatures as any,
+        properties,
         comment: comment && comment.map(c => c.text).join(''),
-        typeParameters: iface.typeParameters &&
-            iface.typeParameters.map(tp => visitTypeParameter(tp, ctx)),
-        heritageClauses: iface.heritageClauses &&
-            iface.heritageClauses.map(hc => visitHeritageClause(hc, ctx)),
-        members: []
     };
 }
 
@@ -67,11 +141,6 @@ export function visitInterface(
         let basicInfo = visitBasicInfo(iface, ctx);
 
         return Object.assign(basicInfo, {
-            itemType: ItemType.Interface,
-            members: iface.members && visitTypeElements(
-                iface.members,
-                ctx
-            )
         });
     });
 }
