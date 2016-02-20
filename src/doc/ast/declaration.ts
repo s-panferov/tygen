@@ -1,5 +1,4 @@
 import {
-    SourceFile,
     Declaration
 } from 'typescript';
 
@@ -12,7 +11,7 @@ import * as typeAlias from './type-alias';
 import * as variable from './var';
 import * as func from './function';
 
-export function visitTopLevelDeclarations(declarations: Declaration[], ctx: Context): [Item[], Declaration[]] {
+export function visitTopLevelDeclarations(declarations: Declaration[], ctx: Context, logFailures = true): [Item[], Declaration[]] {
     let items: Item[] = [];
     let rest = declarations.slice().filter(declaration => {
         if (iface.isInterfaceDeclaration(declaration)) {
@@ -61,7 +60,9 @@ export function visitTopLevelDeclarations(declarations: Declaration[], ctx: Cont
             );
             return false;
         } else {
-            console.log('Unknown declaration', declaration.getText(), declaration.kind);
+            if (logFailures) {
+                console.log('Unknown declaration', declaration.getText(), declaration.kind);
+            }
             return true;
         }
     });

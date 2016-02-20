@@ -120,7 +120,7 @@ export function visitBasicInfo(
         return sig.declaration;
     });
 
-    let [properties, restDeclarations] = visitTopLevelDeclarations(typeProperties as any, ctx);
+    let [properties, restDeclarations] = visitTopLevelDeclarations(typeProperties as any, ctx, false);
     properties = properties.concat(visitDeclarations(restDeclarations as any, ctx));
 
     let callSignatures = visitDeclarations(typeCallSignatures as any, ctx);

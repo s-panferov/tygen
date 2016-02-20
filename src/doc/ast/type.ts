@@ -761,8 +761,6 @@ export function visitMethodSignature(
     sig: MethodSignature,
     ctx: Context
 ): MethodSignatureReflection {
-    let type = ctx.checker.getTypeAtLocation(sig);
-    console.log(type.getCallSignatures().length);
     return Object.assign(visitSignature(sig, ctx), {
         itemType: ItemType.MethodSignature
     });
