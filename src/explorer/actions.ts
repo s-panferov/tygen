@@ -27,11 +27,12 @@ export function navigate(route: Route) {
             }
         } as Action<Navigate, void>);
 
-        let { service, items, modules } = getState();
+        let { activity, service, items, modules } = getState();
         let moduleMetaName = service.getModuleMetaName(route);
 
-        moduleMetaName.caseOf<void>({
+        let promise = moduleMetaName.caseOf({
             just: (moduleMetaName) => {
+                let promises: Promise<any>[] = [];
                 if (route.id) {
                     // load current selected item
                     let itemId = Object.keys(service.registry.idMap).find(id => {
@@ -47,7 +48,7 @@ export function navigate(route: Route) {
                             }
                         } as Action<LoadItem, void>);
                     } else {
-                        fetch(`/doc/${moduleMetaName.replace('.json', '')}/${itemId}.json`)
+                        let promise = fetch(`/doc/${moduleMetaName.replace('.json', '')}/${itemId}.json`)
                             .then(res => res.json())
                             .then((item: Item) => {
                                 dispatch({
@@ -57,6 +58,7 @@ export function navigate(route: Route) {
                                     }
                                 } as Action<LoadItem, void>);
                             });
+                        promises.push(promise);
                     }
                 }
 
@@ -69,7 +71,7 @@ export function navigate(route: Route) {
                     } as Action<LoadModule, void>);
                 } else {
                     // load module meta info
-                    fetch(`/doc/${moduleMetaName}`)
+                    let promise = fetch(`/doc/${moduleMetaName}`)
                         .then(res => res.json())
                         .then((moduleInfo: ModuleInfo) => {
                             dispatch({
@@ -79,9 +81,14 @@ export function navigate(route: Route) {
                                 }
                             } as Action<LoadModule, void>);
                         });
+                    promises.push(promise);
                 }
+
+                return Promise.all(promises) as Promise<any>;
             },
             nothing: () => Promise.resolve()
         });
+
+        activity.watch(promise);
     };
 }

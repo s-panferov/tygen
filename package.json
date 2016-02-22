@@ -48,6 +48,7 @@
     "mocha": "^2.2.5",
     "mocha-loader": "^0.7.1",
     "node-uuid": "^1.4.7",
+    "nprogress": "^0.2.0",
     "pkg-up": "^1.0.0",
     "postcss-cssnext": "^2.4.0",
     "postcss-font-magician": "^1.4.0",

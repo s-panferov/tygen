@@ -5,7 +5,10 @@ import { Item } from '../doc/items';
 
 export { Route, PluginRegistry }
 
+import ActivityManager from './activity';
+
 export interface State {
+    activity?: ActivityManager;
     service?: Service;
     route?: Route;
     module?: ModuleInfo;
@@ -17,6 +20,7 @@ export interface State {
 
 export function defaultState(service: Service, plugins: PluginRegistry): State {
     return {
+        activity: new ActivityManager(),
         service,
         plugins,
         modules: {},

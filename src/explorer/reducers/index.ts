@@ -24,7 +24,9 @@ function navigate(state: State, { payload }: Action<Navigate, void>): State {
         let { route } = payload;
         return Object.assign({}, state,
             {
-                route: state.service.getFullRoute(route)
+                route: state.service.getFullRoute(route),
+                item: null,
+                module: null
             }
         );
     } else {

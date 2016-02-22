@@ -17,8 +17,11 @@ import { Item } from '../../../doc/items';
 import Layout from '../layout';
 import Module from '../module';
 import Nav from '../nav';
+import NProgress from '../nprogress';
+import ActivityManager from '../../activity';
 
 interface AppReduxProps extends DispatchProps {
+    activity?: ActivityManager;
     service?: Service;
     route?: Route;
     plugins?: PluginRegistry;
@@ -31,8 +34,8 @@ interface AppProps extends AppReduxProps {
     history: History;
 }
 
-@connect(({ service, route, plugins, module, item }): AppReduxProps => {
-    return { service, route, plugins, module, item };
+@connect(({ activity, service, route, plugins, module, item }): AppReduxProps => {
+    return { activity, service, route, plugins, module, item };
 })
 export default class App extends React.Component<AppProps, void> {
     static contextTypes = theme.themeContext;
@@ -47,6 +50,7 @@ export default class App extends React.Component<AppProps, void> {
     render() {
         return (
             <div className={ this.getClassName() }>
+                <NProgress activity={ this.props.activity }/>
                 <Layout
                     className={ block('layout') }
                     sidebar={ <Nav
