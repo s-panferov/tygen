@@ -2,24 +2,34 @@ import * as React from 'react';
 import * as theme from '../../explorer/components/theme';
 
 import { ModuleInfo } from '../../doc';
-import { Item } from '../../doc/items';
-import ListSection from '../list-section';
+import ListSection, { ListSectionView } from '../list-section';
 
 require('./index.css');
 const block = theme.block('ts-list');
 
+export enum ListView {
+    Sidebar = 'sidebar' as any,
+    Reference = 'reference' as any
+};
+
 export interface ListProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     module: ModuleInfo;
+    view?: ListView;
 }
 
 export interface ListState {}
 
 export default class List extends React.Component<ListProps, ListState> {
     static contextTypes = theme.themeContext;
+    static defaultProps = {
+        view: ListView.Sidebar
+    };
 
     getClassName() {
-        return block(theme.resolveTheme(this)).mix(this.props.className);
+        return block(theme.resolveTheme(this), {
+            view: this.props.view
+        }).mix(this.props.className);
     }
 
     render() {
@@ -41,10 +51,19 @@ export default class List extends React.Component<ListProps, ListState> {
             groups[itemType].push([id, name]);
         });
 
+        let view = this.props.view === ListView.Reference
+            ? ListSectionView.Row
+            : ListSectionView.Column;
+
         let sections = Object.keys(groups).map(itemType => {
             let items = groups[itemType];
             return (
-                <ListSection key={ itemType } itemType={ itemType } items={ items } />
+                <ListSection
+                    key={ itemType }
+                    view={ view }
+                    itemType={ itemType }
+                    items={ items }
+                />
             );
         });
 

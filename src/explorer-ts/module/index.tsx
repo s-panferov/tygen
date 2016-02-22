@@ -13,7 +13,7 @@ import { isEnumDeclarationReflection } from '../../doc/ast/enum';
 import { isVariableDeclarationReflection } from '../../doc/ast/var';
 import { isTypeAliasDeclarationReflection } from '../../doc/ast/type-alias';
 
-import List from '../list';
+import List, { ListView } from '../list';
 import Interface from '../interface';
 import Class from '../class';
 import Function from '../function';
@@ -47,7 +47,7 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
                     className={ block('layout') }
                     reverse={ true }
                     sidebar={
-                        <List module={ this.props.module }/>
+                        this.props.item && <List module={ this.props.module }/>
                     }
                 >
                     <div>
@@ -64,6 +64,10 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
     renderContent() {
         if (this.props.item) {
             return this.renderItem(this.props.item);
+        } else {
+            return (
+                <List module={ this.props.module } view={ ListView.Reference }/>
+            );
         }
     }
 

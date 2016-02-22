@@ -12,7 +12,21 @@
 
     &__item {
         height: 26px;
-        display: flex;
         align-items: center;
+        margin-right: 20px;
+    }
+
+    &_view_row {
+        .ts-list-section__items {
+            display: flex;
+            flex-wrap: wrap;
+        }
+    }
+
+    &_view_column {
+        .ts-list-section__items {
+            display: flex;
+            flex-direction: column;
+        }
     }
 }

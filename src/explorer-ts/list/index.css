@@ -1,11 +1,6 @@
 @import 'theme';
 
 .ts-list {
-    display: flex;
-    flex-direction: column;
+    display: column;
     font-family: var(--sans-serif);
-
-    &__layout {
-        flex: 1 1;
-    }
 }
