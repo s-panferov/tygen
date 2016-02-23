@@ -13,6 +13,7 @@ const block = theme.block('ts-call-signature');
 export interface CallSignatureProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     signature: CallSignatureReflection;
+    inline: boolean;
 }
 
 export interface CallSignatureState {}

@@ -13,6 +13,7 @@ const block = theme.block('ts-index-signature');
 export interface IndexSignatureProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     signature: IndexSignatureReflection;
+    inline: boolean;
 }
 
 export interface IndexSignatureState {}

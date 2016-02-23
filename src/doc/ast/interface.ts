@@ -31,6 +31,10 @@ import {
 } from './type';
 
 import {
+    visitComment
+} from './comment';
+
+import {
     isClassDeclaration,
 } from './class';
 
@@ -132,8 +136,6 @@ export function visitBasicInfo(
 
     let indexSignatures = visitDeclarations(typeIndexSignatures as any, ctx);
 
-    let comment = symbol.getDocumentationComment();
-
     let itemType = ItemType.Interface;
     if (type.flags & TypeFlags.Class) {
         itemType = ItemType.Class;
@@ -150,7 +152,7 @@ export function visitBasicInfo(
         indexSignatures: indexSignatures as any,
         constructSignatures: constructSignatures as any,
         properties,
-        comment: comment && comment.map(c => c.text).join(''),
+        comment: visitComment(base, ctx),
     };
 }
 

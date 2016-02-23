@@ -24,6 +24,11 @@ import {
     isCallSignatureReflection,
 } from '../../doc/ast/type';
 
+import {
+    isMethodReflection,
+    FunctionReflection
+} from '../../doc/ast/function';
+
 import Property from '../property';
 import Method from '../method';
 import Constructor from '../constructor';
@@ -37,6 +42,7 @@ const block = theme.block('ts-type-members');
 export interface TypeMembersProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     members: Item[];
+    inline?: boolean;
 }
 
 export interface TypeMembersState {}
@@ -58,7 +64,7 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
         let calls: CallSignatureReflection[] = [];
         let properties: PropertyDeclarationReflection[] = [];
         let constructors: ConstructorDeclarationReflection[] = [];
-        let methods: MethodDeclarationReflection[] = [];
+        let methods: FunctionReflection[] = [];
         let accessors: Accessors = { };
 
         members.forEach(member => {
@@ -69,8 +75,7 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
             } else if (isPropertySignatureReflection(member)
                 || isPropertyDeclarationReflection(member)) {
                 properties.push(member);
-            } else if (isMethodDeclarationReflection(member)
-                || isMethodSignatureReflection(member)) {
+            } else if (isMethodReflection(member)) {
                 methods.push(member);
             } else if (isConstructorDeclarationReflection(member)) {
                 constructors.push(member);
@@ -92,9 +97,10 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
         return (
             <div className={ this.getClassName() }>
                 { this.renderIndexes(indexes) }
-                { this.renderCalls(calls) }
-                { this.renderProperties(properties) }
                 { this.renderConstructors(constructors) }
+                { this.renderCalls(calls) }
+
+                { this.renderProperties(properties) }
                 { this.renderMethods(methods) }
                 { this.renderAccessors(accessors) }
             </div>
@@ -103,31 +109,53 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
 
     renderIndexes(signature: IndexSignatureReflection[]) {
         return signature.map(sig => {
-            return <IndexSignature key={ sig.id } signature={ sig } />;
+            return <IndexSignature
+                inline={ this.props.inline }
+                key={ sig.id }
+                signature={ sig }
+            />;
         });
     }
 
     renderCalls(signature: CallSignatureReflection[]) {
         return signature.map(sig => {
-            return <CallSignature key={ sig.id } signature={ sig } />;
+            return <CallSignature
+                inline={ this.props.inline }
+                key={ sig.id }
+                signature={ sig }
+            />;
         });
     }
 
     renderProperties(properties: PropertyDeclarationReflection[]) {
         return properties.map(sig => {
-            return <Property key={ sig.id } property={ sig } />;
+            return <Property
+                inline={ this.props.inline }
+                className={ block('member') }
+                key={ sig.id }
+                property={ sig }
+            />;
         });
     }
 
-    renderMethods(methods: MethodDeclarationReflection[]) {
+    renderMethods(methods: FunctionReflection[]) {
         return methods.map(method => {
-            return <Method key={ method.id } method={ method } />;
+            return <Method
+                inline={ this.props.inline }
+                className={ block('member') }
+                key={ method.id }
+                method={ method }
+            />;
         });
     }
 
     renderConstructors(constructors: ConstructorDeclarationReflection[]) {
         return constructors.map(ctor => {
-            return <Constructor key={ ctor.id } ctor={ ctor } />;
+            return <Constructor
+                inline={ this.props.inline }
+                key={ ctor.id }
+                ctor={ ctor }
+            />;
         });
     }
 
@@ -135,8 +163,18 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
         return Object.keys(accessors).map(name => {
             let [getter, setter] = accessors[name];
             return [
-                <Accessor key={ getter.id } getter={ getter } />,
-                <Accessor key={ setter.id } setter={ setter } />
+                <Accessor
+                    inline={ this.props.inline }
+                    className={ block('member') }
+                    key={ getter.id }
+                    getter={ getter }
+                />,
+                <Accessor
+                    inline={ this.props.inline }
+                    className={ block('member') }
+                    key={ setter.id }
+                    setter={ setter }
+                />
             ];
         });
     }

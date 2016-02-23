@@ -6,8 +6,10 @@ import {
 } from '../../doc/ast/type';
 
 import Paper from '../../explorer/components/paper';
-
+import Figure from '../../explorer/components/figure';
 import Type from '../type';
+import Comment from '../comment';
+import Section from '../section';
 
 require('./index.css');
 const block = theme.block('ts-property');
@@ -15,6 +17,7 @@ const block = theme.block('ts-property');
 export interface PropertyProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     property: PropertySignatureReflection;
+    inline: boolean;
 }
 
 export interface PropertyState {}
@@ -27,16 +30,36 @@ export default class Property extends React.Component<PropertyProps, PropertySta
     }
 
     render() {
+        if (this.props.inline) {
+            return this.renderSignature();
+        } else {
+            let property = this.props.property;
+            return (
+                <Paper className={ this.getClassName() }>
+                    <Section title={ property.name }>
+                        <Figure className={ block('figure') }>
+                            { this.renderSignature() }
+                        </Figure>
+                        { property.comment &&
+                            <Comment>
+                                { property.comment }
+                            </Comment>
+                        }
+                    </Section>
+                </Paper>
+            );
+        }
+    }
+
+    renderSignature() {
         let property = this.props.property;
         return (
-            <Paper className={ this.getClassName() }>
-                <div className={ block('signature') }>
-                    { property.name }
-                    { property.optional ? '?' : '' }
-                    :
-                    <Type className={ block('type') } type={ property.type }/>
-                </div>
-            </Paper>
+            <span className={ block('signature') }>
+                { property.name }
+                { property.optional ? '?' : '' }
+                <span>: </span>
+                <Type className={ block('type') } type={ property.type }/>
+            </span>
         );
     }
 }

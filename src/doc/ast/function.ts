@@ -1,7 +1,6 @@
 import {
     FunctionDeclaration,
     Declaration,
-    MethodDeclaration,
     MethodSignature,
     SyntaxKind
 } from 'typescript';

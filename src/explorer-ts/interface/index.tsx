@@ -13,6 +13,7 @@ import TypeParameters from '../type-parameters';
 import TypeMembers from '../type-members';
 import InterfaceHeritage from '../interface-heritage';
 import Comment from '../comment';
+import Section from '../section';
 
 require('./index.css');
 const block = theme.block('ts-interface');
@@ -42,8 +43,8 @@ export default class Interface<P extends InterfaceProps> extends React.Component
                 return !!tp.constraint;
             });
         return (
-            <Paper id={ iface.id } className={ this.getClassName() }>
-                <Heading lvl={ 2 }>
+            <div className={ this.getClassName() }>
+                <Heading lvl={ 1 }>
                     <span>{ this.getHeader() } </span>
                     <SmartLink id={ iface.id }>{ iface.name }</SmartLink>
                     { iface.typeParameters &&
@@ -64,12 +65,18 @@ export default class Interface<P extends InterfaceProps> extends React.Component
                     { iface.heritageClauses &&
                         <InterfaceHeritage clauses={ iface.heritageClauses }/> }
                 </div>
-                <Comment className={ block('comment') }>
-                    { iface.comment }
-                </Comment>
-                { iface.properties &&
-                    <TypeMembers members={ iface.properties } /> }
-            </Paper>
+                { iface.comment &&
+                    <Comment className={ block('comment') }>
+                        { iface.comment }
+                    </Comment>
+                }
+                { iface.properties && !!iface.properties.length &&
+                    <Section title='Properties'>
+                        { iface.properties &&
+                            <TypeMembers members={ iface.properties } /> }
+                    </Section>
+                }
+            </div>
         );
     }
 }

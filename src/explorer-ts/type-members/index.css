@@ -4,4 +4,8 @@
     display: flex;
     flex-direction: column;
     font-family: var(--sans-serif);
+
+    &__member {
+        margin-bottom: 10px;
+    }
 }

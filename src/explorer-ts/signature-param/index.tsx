@@ -31,7 +31,7 @@ export default class SignatureParam extends React.Component<SignatureParamProps,
                 { param.spread ? <span key='spread'>...</span> : null }
                 <span key='name'>{ param.name }</span>
                 { param.optional ? <span key='optional'>?</span> : null }
-                <span key='sep'>:</span>
+                <span key='sep'>: </span>
                 <Type key='type' className={ block('type') } type={ param.type }/>
             </span>
         );

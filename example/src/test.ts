@@ -9,6 +9,12 @@
 export interface Generic
     <A extends Promise<string>, B>
     extends Promise<string>, Array<A> {
+
+    /**
+     * The visitNode function is used to visit single-node
+     * branches of a tree. It also provides a facility
+     * for converting an array of nodes
+     */
     someProperty: A;
     someOtherProperty: B;
 }

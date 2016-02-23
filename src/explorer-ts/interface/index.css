@@ -3,7 +3,6 @@
 .ts-interface {
     display: flex;
     flex-direction: column;
-    padding: 5px;
     box-sizing: border-box;
 
     &__constraints {

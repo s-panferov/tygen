@@ -1,12 +1,9 @@
 @import 'theme';
 
 .ts-property {
-    display: flex;
-    flex-direction: column;
-
     font-family: var(--sans-serif);
 
-    &__signature {
-        
+    &__figure {
+        margin-bottom: 10px;
     }
 }

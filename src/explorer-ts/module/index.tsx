@@ -51,9 +51,11 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
                     }
                 >
                     <div>
-                        <Heading>
-                            Module { this.props.module.fileInfo.relativeToPackage }
-                        </Heading>
+                        { !this.props.item &&
+                            <Heading>
+                                Module { this.props.module.fileInfo.relativeToPackage }
+                            </Heading>
+                        }
                         { this.renderContent() }
                     </div>
                 </Layout>

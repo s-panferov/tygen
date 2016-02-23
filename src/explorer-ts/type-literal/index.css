@@ -1,6 +1,9 @@
 @import 'theme';
 
 .ts-type-literal {
-    display: flex;
-    flex-direction: column;
+    &__body {
+        margin: 0 10px;
+        display: inline-flex;
+        flex-direction: column;
+    }
 }

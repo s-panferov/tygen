@@ -15,6 +15,7 @@ export interface AccessorProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     getter?: GetAccessorDeclarationReflection;
     setter?: SetAccessorDeclarationReflection;
+    inline: boolean;
 }
 
 export interface AccessorState {}

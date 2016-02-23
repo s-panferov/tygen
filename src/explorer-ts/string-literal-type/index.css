@@ -1,6 +1,6 @@
 @import 'theme';
 
-.ts-function-type {
+.ts-string-literal-type {
     display: inline-flex;
     font-family: var(--sans-serif);
 }

@@ -12,7 +12,7 @@ require('./index.css');
 
 let block = theme.block('join');
 
-const SEPARATOR = (idx: number) => <span key={ `sep-${idx}` } className={ block('sep') }>,</span>;
+const SEPARATOR = (idx: number) => <span key={ `sep-${idx}` } className={ block('sep') }>, </span>;
 
 export default class Join extends React.Component<JoinProps, JoinState> {
     static contextTypes = theme.themeContext;

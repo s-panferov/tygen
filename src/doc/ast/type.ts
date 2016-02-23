@@ -45,6 +45,11 @@ import {
     extractTypeReference
 } from './type-utils';
 
+import {
+    visitComment,
+    visitCommentInSignature
+} from './comment';
+
 import { Context } from '../index';
 import { Item, ItemType } from '../items';
 
@@ -185,7 +190,8 @@ export function visitPropertySignature(
             itemType: ItemType.PropertySignature,
             name,
             optional: !!prop.questionToken,
-            type: visitTypeNode(prop.type, ctx)
+            type: visitTypeNode(prop.type, ctx),
+            comment: visitComment(prop, ctx)
         } as PropertySignatureReflection;
     });
 }
@@ -714,9 +720,9 @@ export interface SignatureReflection extends Item {
 
 export function visitSignature(sig: SignatureDeclaration, ctx: Context): SignatureReflection {
     let returnType = sig.type && visitTypeNode(sig.type, ctx);
+    let sigType = ctx.checker.getSignatureFromDeclaration(sig);
     if (!returnType) {
         // get return type from the checker
-        let sigType = ctx.checker.getSignatureFromDeclaration(sig);
         let type = ctx.checker.getReturnTypeOfSignature(sigType);
         returnType = extractTypeReference(type, ctx);
     }
@@ -729,7 +735,8 @@ export function visitSignature(sig: SignatureDeclaration, ctx: Context): Signatu
             sig.typeParameters.map(tp => visitTypeParameter(tp, ctx)),
         parameters: sig.parameters &&
             sig.parameters.map(p => visitParameter(p, ctx)),
-        type: returnType
+        type: returnType,
+        comment: visitCommentInSignature(sigType, ctx)
     } as SignatureReflection;
 }
 

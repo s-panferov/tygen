@@ -1,0 +1,14 @@
+@import 'theme';
+
+.ts-section {
+    font-family: var(--sans-serif);
+
+    &__heading {
+        font-weight: bold;
+        margin: 10px 0;
+    }
+
+    &__content {
+        margin-left: 20px;
+    }
+}

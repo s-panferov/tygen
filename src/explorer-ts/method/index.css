@@ -1,6 +1,17 @@
 @import 'theme';
 
 .ts-method {
-    display: flex;
     font-family: var(--sans-serif);
+
+    &__signature {
+        display: block;
+    }
+
+    &__figure {
+        margin-bottom: 10px;
+    }
+
+    &__signature-section + &__signature-section {
+        margin-top: 20px;
+    }
 }

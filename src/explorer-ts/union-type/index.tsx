@@ -19,7 +19,7 @@ export interface UnionTypeProps extends React.CommonProps {
 
 export interface UnionTypeState {}
 
-const SEPARATOR = (idx: number) => <span key={ `sep-${ idx }` }>|</span>;
+const SEPARATOR = (idx: number) => <span key={ `sep-${ idx }` }> | </span>;
 
 export default class UnionType extends React.Component<UnionTypeProps, UnionTypeState> {
     static contextTypes = theme.themeContext;

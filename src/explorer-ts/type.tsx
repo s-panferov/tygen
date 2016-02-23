@@ -12,7 +12,8 @@ import {
     isTupleTypeReflection,
     isConstructorTypeReflection,
     isTypePredicateReflection,
-    isTypeLiteralReflection
+    isTypeLiteralReflection,
+    isParenthesizedTypeReflection
 } from '../doc/ast/type';
 
 import TypeRef from './type-ref';
@@ -26,6 +27,7 @@ import TupleType from './tuple-type';
 import ConstructorType from './constructor-type';
 import TypePredicate from './type-predicate';
 import TypeLiteral from './type-literal';
+import ParenthesizedType from './parenthesized-type';
 
 export interface TypeProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
@@ -57,6 +59,8 @@ export default class Type extends React.Component<TypeProps, void> {
             return <TypePredicate { ...this.props } predicate={ type } />;
         } else if (isTypeLiteralReflection(type)) {
             return <TypeLiteral { ...this.props } type={ type } />;
+        } else if (isParenthesizedTypeReflection(type)) {
+            return <ParenthesizedType { ...this.props } type={ type } />;
         } else {
             return <div>
                 Unknown type

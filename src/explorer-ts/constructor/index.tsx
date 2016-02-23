@@ -13,6 +13,7 @@ const block = theme.block('ts-method');
 export interface ConstructorProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     ctor: ConstructorDeclarationReflection;
+    inline: boolean;
 }
 
 export interface ConstructorState {}

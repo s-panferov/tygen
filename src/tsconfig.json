@@ -20,6 +20,7 @@
     ],
     "files": [
         "./doc/ast/class.ts",
+        "./doc/ast/comment.ts",
         "./doc/ast/declaration.ts",
         "./doc/ast/enum.ts",
         "./doc/ast/function.ts",
@@ -111,6 +112,7 @@
         "./explorer-ts/module/index.tsx",
         "./explorer-ts/parenthesized-type/index.tsx",
         "./explorer-ts/property/index.tsx",
+        "./explorer-ts/section/index.tsx",
         "./explorer-ts/signature-param/index.tsx",
         "./explorer-ts/signature/index.tsx",
         "./explorer-ts/string-literal-type/index.tsx",
@@ -130,6 +132,7 @@
         "./explorer-ts/variable/index.tsx",
         "./explorer/components/app/index.tsx",
         "./explorer/components/breadcrumbs/index.tsx",
+        "./explorer/components/figure/index.tsx",
         "./explorer/components/file/index.tsx",
         "./explorer/components/heading/index.tsx",
         "./explorer/components/join/index.tsx",
