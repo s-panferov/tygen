@@ -94,6 +94,7 @@
         "./explorer-ts/brackets/index.tsx",
         "./explorer-ts/call-signature/index.tsx",
         "./explorer-ts/class/index.tsx",
+        "./explorer-ts/comment/index.tsx",
         "./explorer-ts/constructor-type/index.tsx",
         "./explorer-ts/constructor/index.tsx",
         "./explorer-ts/enum-member/index.tsx",

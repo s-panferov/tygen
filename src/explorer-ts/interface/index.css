@@ -3,8 +3,18 @@
 .ts-interface {
     display: flex;
     flex-direction: column;
+    padding: 5px;
+    box-sizing: border-box;
 
-    &__layout {
-        flex: 1 1;
+    &__constraints {
+        margin-left: 20px;
+    }
+
+    &__heritage {
+        margin-left: 20px;
+    }
+
+    &__comment {
+        margin: 20px 0;
     }
 }

@@ -2,6 +2,6 @@
 
 .ts-type-core {
     display: inline-flex;
-    font-family: var(--mono);
-    color: rgb(198, 120, 221);
+    font-family: var(--sans-serif);
+    color: #e96900;
 }

@@ -1,8 +1,7 @@
 @import 'theme';
 
 .ts-brackets {
-    display: inline-flex;
-    font-family: var(--mono);
+    font-family: var(--sans-serif);
 
     &__bracket {
         &_hover {

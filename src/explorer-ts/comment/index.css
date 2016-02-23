@@ -1,6 +1,5 @@
 @import 'theme';
 
-.ts-signature {
-    display: inline-flex;
+.ts-comment {
     font-family: var(--sans-serif);
 }

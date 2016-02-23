@@ -1,10 +1,10 @@
 @import 'theme';
 
 .ts-interface-heritage {
-    display: flex;
-    flex-direction: column;
+    font-family: var(--sans-serif);
 
-    &__layout {
-        flex: 1 1;
+    &__heritage-types {
+        display: inline-flex;
+        flex-direction: column;
     }
 }

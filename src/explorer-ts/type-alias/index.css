@@ -2,5 +2,5 @@
 
 .ts-type-alias {
     display: flex;
-    font-family: var(--mono);
+    font-family: var(--sans-serif);
 }

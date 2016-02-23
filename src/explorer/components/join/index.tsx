@@ -3,6 +3,7 @@ import * as theme from '../theme';
 
 export interface JoinProps extends React.CommonProps {
     separator?: (idx: number) => React.ReactNode;
+    multiline?: boolean;
 }
 
 export interface JoinState { }
@@ -16,13 +17,15 @@ const SEPARATOR = (idx: number) => <span key={ `sep-${idx}` } className={ block(
 export default class Join extends React.Component<JoinProps, JoinState> {
     static contextTypes = theme.themeContext;
     static defaultProps = {
-        separator: SEPARATOR
+        separator: SEPARATOR,
+        multiline: false
     };
 
     getClassName() {
         return block(
             theme.resolveTheme(this),
             {
+                multiline: this.props.multiline
             }
         ).mix(this.props.className);
     }
@@ -35,6 +38,9 @@ export default class Join extends React.Component<JoinProps, JoinState> {
             resultChildren.push(child);
             if (idx < maxIdx) {
                 resultChildren.push(this.props.separator(idx));
+                if (this.props.multiline) {
+                    resultChildren.push(<br />);
+                }
             }
         });
 

@@ -4,5 +4,5 @@
     display: flex;
     flex-direction: column;
 
-    font-family: var(--mono);
+    font-family: var(--sans-serif);
 }

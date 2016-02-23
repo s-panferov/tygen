@@ -1,5 +1,5 @@
 @import 'theme';
 
 .ts-signature-param {
-    font-family: var(--mono);
+    font-family: var(--sans-serif);
 }

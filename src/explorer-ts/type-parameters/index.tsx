@@ -15,6 +15,7 @@ const block = theme.block('ts-type-parameters');
 export interface TypeParametersProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     typeParameters: TypeParameterReflection[];
+    asConstraint?: boolean;
 }
 
 export interface TypeParametersState {}
@@ -23,7 +24,9 @@ export default class TypeParameters extends React.Component<TypeParametersProps,
     static contextTypes = theme.themeContext;
 
     getClassName() {
-        return block(theme.resolveTheme(this)).mix(this.props.className);
+        return block(theme.resolveTheme(this), {
+            constraint: this.props.asConstraint
+        }).mix(this.props.className);
     }
 
     render() {
@@ -32,16 +35,38 @@ export default class TypeParameters extends React.Component<TypeParametersProps,
             return null;
         }
 
+        if (this.props.asConstraint) {
+            return (
+                <div className={ this.getClassName() }>
+                    <span>where </span>
+                    <div className={ block('constraints') }>
+                        { this.renderContraints() }
+                    </div>
+                </div>
+            );
+        } else {
+            return (
+                <Brackets className={ this.getClassName() }>
+                    { this.renderContraints() }
+                </Brackets>
+            );
+        }
+    }
+
+    renderContraints() {
+        let typeParameters = this.props.typeParameters;
         return (
-            <Brackets>
-                <Join>
-                    {
-                        typeParameters.map(typeParam => {
-                            return <TypeParameter key={ typeParam.id } typeParam={ typeParam } />;
-                        })
-                    }
-                </Join>
-            </Brackets>
+            <Join multiline={ this.props.asConstraint }>
+                {
+                    typeParameters.map(typeParam => {
+                        return <TypeParameter
+                            asConstraint={ this.props.asConstraint}
+                            key={ typeParam.id }
+                            typeParam={ typeParam }
+                        />;
+                    })
+                }
+            </Join>
         );
     }
 }

@@ -87,7 +87,7 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
                         name={ segment }
                         pkg={ route.pkg }
                         path={ currentPath }
-                        active={ i == parts.length - 1 }
+                        active={ i == parts.length - 1 && !route.id && !route.semanticId }
                         className={ block('struct-item') }
                         navigate={ this.props.onNavigate }
                     />

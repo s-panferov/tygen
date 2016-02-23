@@ -19,6 +19,7 @@ const block = theme.block('ts-type-parameter');
 export interface TypeParameterProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     typeParam: TypeParameterReflection;
+    asConstraint?: boolean;
 }
 
 export interface TypeParameterState {}
@@ -37,7 +38,7 @@ export default class TypeParameter extends React.Component<TypeParameterProps, T
         return (
             <Paper id={ typeParam.id} className={ this.getClassName() }>
                 <SmartLink key='link' route={ route }>{ typeParam.name }</SmartLink>
-                { typeParam.constraint &&
+                { this.props.asConstraint && typeParam.constraint &&
                     this.renderConstraint() }
             </Paper>
         );
@@ -56,7 +57,7 @@ export default class TypeParameter extends React.Component<TypeParameterProps, T
         }
 
         return [
-            'extends',
+            <span> extends </span>,
             view
         ];
     }

@@ -49,12 +49,12 @@ export default class Paper extends React.Component<PaperProps, PaperState> {
 
     render() {
         return (
-            <div
+            <span
                 { ...this.props.htmlProps }
                 className={ this.getClassName() }
             >
                 { this.props.children }
-            </div>
+            </span>
         );
     }
 }

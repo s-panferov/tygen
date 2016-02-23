@@ -12,6 +12,7 @@ import Paper from '../../explorer/components/paper';
 import TypeParameters from '../type-parameters';
 import TypeMembers from '../type-members';
 import InterfaceHeritage from '../interface-heritage';
+import Comment from '../comment';
 
 require('./index.css');
 const block = theme.block('ts-interface');
@@ -36,17 +37,36 @@ export default class Interface<P extends InterfaceProps> extends React.Component
 
     render() {
         let iface = this.props.item;
+        let tpWithConstraint = iface.typeParameters &&
+            iface.typeParameters.filter(tp => {
+                return !!tp.constraint;
+            });
         return (
             <Paper id={ iface.id } className={ this.getClassName() }>
                 <Heading lvl={ 2 }>
-                    { this.getHeader() }
+                    <span>{ this.getHeader() } </span>
                     <SmartLink id={ iface.id }>{ iface.name }</SmartLink>
                     { iface.typeParameters &&
-                        <TypeParameters typeParameters={ iface.typeParameters }/> }
+                        <TypeParameters
+                            asConstraint={ false }
+                            typeParameters={ iface.typeParameters }
+                            />
+                    }
                 </Heading>
-                { iface.heritageClauses &&
-                    <InterfaceHeritage clauses={ iface.heritageClauses }/> }
-                { iface.comment }
+                <div className={ block('constraints') }>
+                    { tpWithConstraint && !!tpWithConstraint.length &&
+                        <TypeParameters
+                            asConstraint={ true }
+                            typeParameters={ tpWithConstraint }/>
+                    }
+                </div>
+                <div className={ block('heritage') }>
+                    { iface.heritageClauses &&
+                        <InterfaceHeritage clauses={ iface.heritageClauses }/> }
+                </div>
+                <Comment className={ block('comment') }>
+                    { iface.comment }
+                </Comment>
                 { iface.properties &&
                     <TypeMembers members={ iface.properties } /> }
             </Paper>
