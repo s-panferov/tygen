@@ -39,11 +39,11 @@ export default class Interface<P extends InterfaceProps> extends React.Component
         return (
             <Paper id={ iface.id } className={ this.getClassName() }>
                 <Heading lvl={ 2 }>
-                    <span className={ block('header') }>{ this.getHeader() } </span>
+                    { this.getHeader() }
                     <SmartLink id={ iface.id }>{ iface.name }</SmartLink>
+                    { iface.typeParameters &&
+                        <TypeParameters typeParameters={ iface.typeParameters }/> }
                 </Heading>
-                { iface.typeParameters &&
-                    <TypeParameters typeParameters={ iface.typeParameters }/> }
                 { iface.heritageClauses &&
                     <InterfaceHeritage clauses={ iface.heritageClauses }/> }
                 { iface.comment }

@@ -33,8 +33,7 @@ export default class TypeParameters extends React.Component<TypeParametersProps,
         }
 
         return (
-            <div className={ this.getClassName() }>
-                Type parameters: 
+            <Brackets>
                 <Join>
                     {
                         typeParameters.map(typeParam => {
@@ -42,7 +41,7 @@ export default class TypeParameters extends React.Component<TypeParametersProps,
                         })
                     }
                 </Join>
-            </div>
+            </Brackets>
         );
     }
 }
