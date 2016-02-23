@@ -70,12 +70,9 @@ export default class Interface<P extends InterfaceProps> extends React.Component
                         { iface.comment }
                     </Comment>
                 }
-                { iface.properties && !!iface.properties.length &&
-                    <Section title='Properties'>
-                        { iface.properties &&
-                            <TypeMembers members={ iface.properties } /> }
-                    </Section>
-                }
+                { iface.properties &&
+                    <TypeMembers
+                        properties={ iface.properties } /> }
             </div>
         );
     }

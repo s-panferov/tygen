@@ -33,7 +33,11 @@ export default class TypeLiteral<P extends TypeLiteralProps> extends React.Compo
                 <Brackets type={ BracketsType.Curly }>
                     <div className={ block('body') }>
                         { type.members &&
-                            <TypeMembers inline={ true } members={ type.members } /> }
+                            <TypeMembers
+                                inline={ true }
+                                properties={ type.members }
+                            />
+                        }
                     </div>
                 </Brackets>
             </Paper>
