@@ -28,7 +28,7 @@ export default class IndexSignature extends React.Component<IndexSignatureProps,
     render() {
         let { signature } = this.props;
         return (
-            <div className={ this.getClassName() }>
+            <div id={ this.props.signature.id } className={ this.getClassName() }>
                 <Signature
                     typeStyle={ SignatureTypeStyle.Colon }
                     bracketsType={ BracketsType.Square }

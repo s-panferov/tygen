@@ -1,14 +1,9 @@
 html, body {
-    all: initial;
-    height: 100%;
-}
-
-#react-app {
-    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .app {
-    min-height: 100%;
     display: flex;
     flex-direction: column;
 

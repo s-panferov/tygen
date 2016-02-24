@@ -28,7 +28,7 @@ export default class Constructor extends React.Component<ConstructorProps, Const
     render() {
         let ctor = this.props.ctor;
         return (
-            <div className={ this.getClassName() }>
+            <div id={ this.props.ctor.id } className={ this.getClassName() }>
                 <Signature signature={ ctor } />
             </div>
         );

@@ -5,7 +5,7 @@ const block = theme.block('layout');
 require('./index.css');
 
 interface LayoutProps extends React.CommonProps {
-    sidebar: React.ReactNode;
+    sidebar?: React.ReactNode;
     reverse?: boolean;
 }
 
@@ -20,9 +20,12 @@ export default class Layout extends React.Component<LayoutProps, any> {
     render() {
         return (
             <div className={ this.getClassName() }>
-                <div className={ block('sidebar') }>
-                    { this.props.sidebar }
-                </div>
+                {
+                    this.props.sidebar &&
+                        <div className={ block('sidebar') }>
+                            { this.props.sidebar }
+                        </div>
+                }
                 <div className={ block('content') }>
                     {
                         React.Children.map(this.props.children, child => {

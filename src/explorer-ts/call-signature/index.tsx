@@ -28,7 +28,7 @@ export default class CallSignature extends React.Component<CallSignatureProps, C
     render() {
         let { signature } = this.props;
         return (
-            <div className={ this.getClassName() }>
+            <div id={ this.props.signature.id } className={ this.getClassName() }>
                 <Signature
                     typeStyle={ SignatureTypeStyle.Colon }
                     signature={ signature }

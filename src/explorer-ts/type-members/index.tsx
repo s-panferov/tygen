@@ -30,6 +30,7 @@ import Accessor from '../accessor';
 import IndexSignature from '../index-signature';
 import CallSignature from '../call-signature';
 import Section from '../section';
+import TypeNav from '../type-nav';
 
 require('./index.css');
 const block = theme.block('ts-type-members');
@@ -85,19 +86,26 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
 
         return (
             <div className={ this.getClassName() }>
-                { this.props.constructSignatures &&
-                    this.renderConstructors(this.props.constructSignatures)
-                }
-                { this.props.indexSignatures &&
-                    this.renderIndexes(this.props.indexSignatures)
-                }
-                { this.props.callSignatures &&
-                    this.renderCalls(this.props.callSignatures)
-                }
+                <div key='body' className={ block('body') }>
+                    { this.props.constructSignatures &&
+                        this.renderConstructors(this.props.constructSignatures)
+                    }
+                    { this.props.indexSignatures &&
+                        this.renderIndexes(this.props.indexSignatures)
+                    }
+                    { this.props.callSignatures &&
+                        this.renderCalls(this.props.callSignatures)
+                    }
 
-                { this.renderProperties(properties) }
-                { this.renderMethods(methods) }
-                { this.renderAccessors(accessors) }
+                    { this.renderProperties(properties) }
+                    { this.renderMethods(methods) }
+                    { this.renderAccessors(accessors) }
+                </div>
+                {
+                    !this.props.inline &&
+                        this.renderNav(properties, methods)
+
+                }
             </div>
         );
     }
@@ -190,5 +198,17 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
                 />
             ];
         });
+    }
+
+    renderNav(properties: Item[], methods: Item[]) {
+        let items: Item[] = [].concat(
+            this.props.constructSignatures || [],
+            this.props.indexSignatures || [],
+            this.props.callSignatures || [],
+            properties,
+            methods
+        );
+
+        return <TypeNav items={ items } />;
     }
 }

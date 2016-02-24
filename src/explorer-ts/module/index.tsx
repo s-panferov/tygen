@@ -46,9 +46,6 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
                 <Layout
                     className={ block('layout') }
                     reverse={ true }
-                    sidebar={
-                        this.props.item && <List module={ this.props.module }/>
-                    }
                 >
                     <div>
                         { !this.props.item &&

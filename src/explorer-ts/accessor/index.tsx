@@ -34,7 +34,7 @@ export default class Accessor extends React.Component<AccessorProps, AccessorSta
             : 'set';
 
         return (
-            <div className={ this.getClassName() }>
+            <div id={ method.id } className={ this.getClassName() }>
                 { type }
                 { ' ' }
                 <Signature

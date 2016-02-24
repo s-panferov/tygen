@@ -50,6 +50,7 @@ export default class Paper extends React.Component<PaperProps, PaperState> {
     render() {
         return (
             <span
+                id={ this.props.id }
                 { ...this.props.htmlProps }
                 className={ this.getClassName() }
             >

@@ -1,24 +1,10 @@
 @import 'theme';
 
-.ts-type-members {
-    display: flex;
-    font-family: var(--sans-serif);
-
-    &__member {
-        margin-bottom: 10px;
-    }
+.ts-type-nav {
+    flex: 0 0 250px;
+    position: relative;
 
     &__body {
-        flex: 1 1 auto;
-        margin-right: 20px;
-    }
-
-    &__nav {
-        flex: 0 0 250px;
-        position: relative;
-    }
-
-    &__nav-body {
         width: 250px;
         position: fixed;
         right: 0;
@@ -28,7 +14,7 @@
         overflow: scroll;
     }
 
-    &__nav-item {
+    &__item {
         border-left: 3px solid #ccc;
         padding: 5px 0 5px 10px;
         transition: all 100ms ease;

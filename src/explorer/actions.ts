@@ -89,6 +89,7 @@ export function navigate(route: Route) {
             nothing: () => Promise.resolve()
         });
 
+        promise = promise.catch(e => { console.error(e.toString()); throw e; });
         activity.watch(promise);
     };
 }
