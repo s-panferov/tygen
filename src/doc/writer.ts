@@ -1,9 +1,20 @@
 import * as path from 'path';
 import * as fs from 'fs';
+import { ItemType } from './items';
 import { Context, IdMap, SemanticIdMap } from './index';
 import { extractPackage } from './utils';
 
 let fse = require('fs-extra');
+
+let INCLUDE_ITEMS = {
+    [ItemType.Interface]: true,
+    [ItemType.Class]: true,
+    [ItemType.EnumDeclaration]: true,
+    [ItemType.TypeAlias]: true,
+    [ItemType.Function]: true,
+    [ItemType.Method]: true,
+    [ItemType.PropertyDeclaration]: true,
+};
 
 export class DocWriter {
     context: Context;
@@ -12,14 +23,19 @@ export class DocWriter {
         this.context = context;
     }
 
-    generateIdMap(): [IdMap, SemanticIdMap] {
+    generateIdMap(): [IdMap, SemanticIdMap, any[]] {
         let idMap = {} as IdMap;
         let semanticIdMap = {} as SemanticIdMap;
+        let flatItems: any[] = [];
 
         function walkObject(obj: any, pkg: string, path: string, nesting: string[] = []) {
             if (obj.id) {
                 nesting = nesting.concat(obj.id);
                 idMap[obj.id] = [obj.semanticId, pkg, path, [nesting[0]]];
+
+                if (INCLUDE_ITEMS[obj.itemType]) {
+                    flatItems.push(obj);
+                }
 
                 if (obj.semanticId) {
                     if (!semanticIdMap[pkg]) { semanticIdMap[pkg] = {}; };
@@ -53,7 +69,7 @@ export class DocWriter {
             });
         });
 
-        return [idMap, semanticIdMap];
+        return [idMap, semanticIdMap, flatItems];
     }
 
     writeModules(dir: string) {
@@ -74,11 +90,52 @@ export class DocWriter {
             });
         });
 
-        this.writeRegistryModule(dir);
+        let [regModule, flatItems] = this.generateRegistryModule(dir);
+        fs.writeFileSync(path.join(dir, 'registry.json'), regModule);
+
+        this.generateSearchIndex(dir, flatItems, () => {});
     }
 
-    generateRegistryModule(dir: string): string {
-        let [idMap, semanticIdMap] = this.generateIdMap();
+    generateSearchIndex(dir: string, flatItems: any[], cb: () => void) {
+        let SearchIndex = require('search-index');
+        let options = {
+            deletable: false,
+            fieldedSearch: true,
+            indexPath: 'si',
+            logLevel: 'error',
+            nGramLength: 1,
+            fieldsToStore: [ 'id', 'semanticId' ]
+        };
+
+        let indexOptions = {
+            batchName: 'items',
+            fieldOptions: [
+                {
+                    fieldName: 'name'
+                },
+                {
+                    fieldName: 'semanticId'
+                }
+            ]
+        };
+
+        SearchIndex(options, (err, index) => {
+            console.log('search index initialized');
+            index.add(flatItems, indexOptions, function(err) {
+                console.log('creating index snapshot...');
+                index.snapShot(function(readStream) {
+                    readStream.pipe(fs.createWriteStream(path.join(dir, 'index.gz')))
+                        .on('close', function() {
+                        console.log('snapshot completed');
+                        cb();
+                    });
+                });
+            });
+        });
+    }
+
+    generateRegistryModule(dir: string): [string, any[]] {
+        let [idMap, semanticIdMap, flatItems] = this.generateIdMap();
         let modules = this.context.modules;
         let files: any = {};
         Object.keys(modules).forEach(moduleKey => {
@@ -95,11 +152,7 @@ export class DocWriter {
     "semanticIdMap": ${ JSON.stringify(semanticIdMap) }
 }`;
 
-        return buf;
+        return [buf, flatItems];
     }
 
-    writeRegistryModule(dir: string) {
-        let registryModule = this.generateRegistryModule(dir);
-        fs.writeFileSync(path.join(dir, 'registry.json'), registryModule);
-    }
 }

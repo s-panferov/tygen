@@ -75,5 +75,7 @@
     "webpack": "^1.12.13",
     "webpack-dev-server": "^1.14.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "search-index": "^0.7.6"
+  }
 }

@@ -2,6 +2,8 @@
 /// <reference path="../../node_modules/typescript/lib/typescriptServices.d.ts"/>
 /// <reference path="../../typings/tsd.d.ts" />
 
+declare var __webpack_require__: WebpackRequire;
+
 declare module 'node-uuid' {
     export function v1(): string;
     export function v4(): string;
