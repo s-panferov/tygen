@@ -25,8 +25,10 @@ function navigate(state: State, { payload }: Action<Navigate, void>): State {
         return Object.assign({}, state,
             {
                 route: state.service.getFullRoute(route),
-                item: null,
-                module: null
+                item: (state.item && state.item.id == route.mainId) ? state.item : null,
+                module: (route.pkg == state.route.pkg && route.path == state.route.path)
+                    ? state.module
+                    : null
             }
         );
     } else {
@@ -55,7 +57,7 @@ function loadModule(state: State, { payload }: Action<LoadModule, void>): State 
         let { moduleInfo } = payload;
         return Object.assign({}, state,
             {
-                items: Object.assign(state.items, {
+                modules: Object.assign(state.modules, {
                     [ moduleInfo.fileInfo.metaName ]: moduleInfo
                 }),
                 module: moduleInfo

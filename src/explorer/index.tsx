@@ -10,7 +10,7 @@ let history: History = useQueries(createHistory)();
 import App from './components/app';
 import Service from './service';
 
-import { defaultState, Route } from './state';
+import { defaultState, Route, State } from './state';
 import { Provider, createStore, actions } from './redux';
 import { ThemeProvider, ThemeType } from './components/theme';
 import equal from '../lib/equal';
@@ -58,6 +58,22 @@ export function createAppContainer() {
     return reactApp;
 }
 
+function waitForEl(id: string, cb: (el: HTMLElement) => any, attempts = 0) {
+    function worker() {
+        let el = document.getElementById(id);
+        if (el) {
+            cb(el);
+        } else {
+            if (attempts > 50) {
+                throw new Error('Cant wait for id more than 500ms ' + id);
+            } else {
+                setTimeout(worker, 100 + attempts * 10);
+            }
+        }
+    }
+    setTimeout(worker, 100);
+}
+
 function run(registry, appContainer) {
     let service = new Service(registry);
     let prevState = defaultState(service, plugins);
@@ -85,6 +101,14 @@ function run(registry, appContainer) {
     store.subscribe(() => {
         let state = store.getState();
 
+        if (prevState.item !== state.item) {
+            scroll(state);
+        }
+
+        if (prevState.module !== state.module) {
+            scroll(state);
+        }
+
         if (!equal(prevState.route, state.route)) {
             let newPathName = pathFromRoute(state.route);
             if (!currentLocation || (currentLocation && currentLocation.pathname !== newPathName)) {
@@ -92,6 +116,8 @@ function run(registry, appContainer) {
                     pathname: newPathName
                 });
             }
+
+            scroll(state);
         }
 
         prevState = state;
@@ -107,9 +133,21 @@ function run(registry, appContainer) {
     );
 }
 
+function scroll(state: State) {
+    if (state.route.id) {
+        waitForEl(state.route.id, (el) => {
+            if (el) {
+                window.scrollTo(0, el.offsetTop);
+            }
+        });
+    } else {
+        window.scrollTo(0, 0);
+    }
+}
+
 fetch('/doc/registry.json')
     .then(res => res.json())
     .then((registry) => {
         let appContainer = createAppContainer();
         run(registry, appContainer);
-    })
+    });

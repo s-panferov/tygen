@@ -34,10 +34,7 @@ export function navigate(route: Route) {
             just: (moduleMetaName) => {
                 let promises: Promise<any>[] = [];
                 if (route.id) {
-                    // load current selected item
-                    let itemId = Object.keys(service.registry.idMap).find(id => {
-                        return id == route.id || route.nesting.indexOf(id) !== -1;
-                    });
+                    let itemId = route.mainId || route.id;
 
                     if (items[itemId]) {
                         dispatch({

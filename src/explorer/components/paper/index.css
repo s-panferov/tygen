@@ -1,7 +1,14 @@
 @import 'theme';
 
 .paper {
+    display: inline;
+
+    &_block {
+        display: block;
+    }
+
     &_active {
+        outline: 10px solid #FFFDEE;
         background: #FFFDEE;
     }
 }

@@ -19,7 +19,7 @@ export class DocWriter {
         function walkObject(obj: any, pkg: string, path: string, nesting: string[] = []) {
             if (obj.id) {
                 nesting = nesting.concat(obj.id);
-                idMap[obj.id] = [obj.semanticId, pkg, path, [nesting[nesting.length-1]]];
+                idMap[obj.id] = [obj.semanticId, pkg, path, [nesting[0]]];
 
                 if (obj.semanticId) {
                     if (!semanticIdMap[pkg]) { semanticIdMap[pkg] = {}; };

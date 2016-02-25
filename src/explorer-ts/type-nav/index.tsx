@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import * as theme from '../../explorer/components/theme';
 
 import Sticky from '../../explorer/components/sticky';
+import SmartLink from '../../explorer/components/smart-link';
 import ScrollSpy from 'rscrollspy';
 
 import {
@@ -61,7 +62,9 @@ export default class TypeNav extends React.Component<TypeNavProps, TypeNavState>
                     className={ className }
                     key={ item.id }
                 >
-                    { item.name }
+                    <SmartLink id={ item.id } className={ block('link') }>
+                        { item.name }
+                    </SmartLink>
                 </div>
             );
         });

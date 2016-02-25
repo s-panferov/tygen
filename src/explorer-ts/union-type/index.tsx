@@ -1,13 +1,11 @@
 import * as React from 'react';
 import * as theme from '../../explorer/components/theme';
 import Join from '../../explorer/components/join';
+import Type from '../type';
 
 import {
     UnionTypeReflection,
 } from '../../doc/ast/type';
-
-import Brackets from '../brackets';
-import Type from '../type';
 
 require('./index.css');
 const block = theme.block('ts-union');
@@ -34,7 +32,7 @@ export default class UnionType extends React.Component<UnionTypeProps, UnionType
 
     render() {
         let types = this.props.type.types;
-        return <Brackets>
+        return (
             <Join separator={ this.getSeparator() }>
                 {
                     types.map((type, i) => {
@@ -42,6 +40,6 @@ export default class UnionType extends React.Component<UnionTypeProps, UnionType
                     })
                 }
             </Join>
-        </Brackets>;
+        );
     }
 }

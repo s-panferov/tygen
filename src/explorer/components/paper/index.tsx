@@ -15,6 +15,8 @@ interface PaperReduxProps extends DispatchProps {
 export interface PaperProps extends PaperReduxProps, React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     id?: string;
+    block?: boolean;
+    highlight?: boolean;
 }
 
 export interface PaperState {
@@ -23,6 +25,9 @@ export interface PaperState {
 @connect(({ route, service }) => { return { route, service } as PaperReduxProps; })
 export default class Paper extends React.Component<PaperProps, PaperState> {
     static contextTypes = theme.themeContext;
+    static defaultProps = {
+        highlight: true
+    };
 
     isActive(): boolean {
         if (!this.props.id) {
@@ -43,19 +48,20 @@ export default class Paper extends React.Component<PaperProps, PaperState> {
 
     getClassName() {
         return block(theme.resolveTheme(this), {
-            active: this.isActive()
+            active: this.props.highlight ? this.isActive() : false,
+            block: this.props.block
         }).mix(this.props.className);
     }
 
     render() {
         return (
-            <span
+            <div
                 id={ this.props.id }
                 { ...this.props.htmlProps }
                 className={ this.getClassName() }
             >
                 { this.props.children }
-            </span>
+            </div>
         );
     }
 }

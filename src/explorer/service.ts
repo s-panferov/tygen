@@ -8,6 +8,7 @@ export interface Route {
     pkg?: string;
     path?: string;
     id?: string;
+    mainId?: string;
     semanticId?: string;
     nesting?: string[];
 }
@@ -80,6 +81,7 @@ export default class Service {
                 let [semanticId, pkg, path, nesting] = finalRoute;
                 return {
                     id: route.id,
+                    mainId: nesting[0],
                     semanticId,
                     pkg,
                     path,

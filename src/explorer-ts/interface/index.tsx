@@ -43,7 +43,7 @@ export default class Interface<P extends InterfaceProps> extends React.Component
                 return !!tp.constraint;
             });
         return (
-            <div className={ this.getClassName() }>
+            <Paper id={ iface.id } block={ true } highlight={ false } className={ this.getClassName() }>
                 <Heading lvl={ 1 }>
                     <span>{ this.getHeader() } </span>
                     <SmartLink id={ iface.id }>{ iface.name }</SmartLink>
@@ -73,7 +73,7 @@ export default class Interface<P extends InterfaceProps> extends React.Component
                 { iface.properties &&
                     <TypeMembers
                         properties={ iface.properties } /> }
-            </div>
+            </Paper>
         );
     }
 }

@@ -1,8 +1,13 @@
 @import 'theme';
 
 .ts-type-nav {
-    flex: 0 0 250px;
+    flex: 0 0 auto;
+    width: 250px;
     position: relative;
+
+    &__link {
+        word-break: break-all;
+    }
 
     &__body {
         width: 250px;
