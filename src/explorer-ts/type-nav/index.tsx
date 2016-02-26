@@ -56,6 +56,9 @@ export default class TypeNav extends React.Component<TypeNavProps, TypeNavState>
             let className = block('item', {
                 active: inView.indexOf(item.id) !== -1
             });
+
+            console.log(item)
+
             return (
                 <div
                     id={ `nav-${item.id}` }

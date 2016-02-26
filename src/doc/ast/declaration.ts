@@ -41,13 +41,13 @@ export function visitTopLevelDeclarations(declarations: Declaration[], ctx: Cont
             return false;
         } else if (func.isFunctionDeclaration(declaration)) {
             items.push(
-                func.visitFunctionLikeDeclaration(declaration, ItemType.Function, ctx)
+                func.visitFunctionLikeDeclaration(declaration, ItemType.Function, false, ctx)
             );
             return false;
         } else if (func.isMethodSignature(declaration)
             || func.isMethodDeclaration(declaration)) {
             items.push(
-                func.visitFunctionLikeDeclaration(declaration, ItemType.Method, ctx)
+                func.visitFunctionLikeDeclaration(declaration, ItemType.Method, true, ctx)
             );
         } else if (variable.isVariableDeclaration(declaration)) {
             items.push(

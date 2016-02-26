@@ -50,6 +50,7 @@
         "./doc/tests/interface-index.ts",
         "./doc/tests/interface-intersection.ts",
         "./doc/tests/interface-literal.ts",
+        "./doc/tests/interface-properties.ts",
         "./doc/tests/interface-simple.ts",
         "./doc/tests/merge-class-interface.ts",
         "./doc/tests/merge-function-namespace.ts",

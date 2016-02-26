@@ -63,8 +63,7 @@ export class DocWriter {
         let modules = this.context.modules;
         Object.keys(modules).forEach(moduleKey => {
             let module = modules[moduleKey];
-            Object.keys(module.items).forEach(itemId => {
-                let item = module.items[itemId];
+            module.items.forEach(item => {
                 walkObject(item, module.pkgName, module.fileInfo.relativeToPackage);
             });
         });
@@ -84,9 +83,9 @@ export class DocWriter {
 
             let itemsPath = metaPath.replace('.json', '');
             fse.ensureDirSync(itemsPath);
-            Object.keys(module.items).forEach(itemId => {
+            Object.keys(module.itemsIndex).forEach(itemId => {
                 let itemPath = path.join(itemsPath, itemId + '.json');
-                fs.writeFileSync(itemPath, JSON.stringify(module.items[itemId], null, 4));
+                fs.writeFileSync(itemPath, JSON.stringify(module.itemsIndex[itemId], null, 4));
             });
         });
 

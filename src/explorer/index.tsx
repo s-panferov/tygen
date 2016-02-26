@@ -123,6 +123,8 @@ function run(registry, appContainer) {
         prevState = state;
     });
 
+    (window as any).__store = store;
+
     ReactDOM.render(
         <Provider store={ store }>
             <ThemeProvider theme={ ThemeType.White }>

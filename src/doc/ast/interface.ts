@@ -78,13 +78,12 @@ export function visitBasicInfo(
 
     let typeHeritageClauses: HeritageClause[] = [];
     let symbol = type.getSymbol();
+
     let declarations = type.symbol.getDeclarations();
     let typeIndexSignatures: IndexSignatureDeclaration[] = [];
     let constructorDeclarations: ConstructorDeclaration[] = [];
 
     (declarations as any).forEach((declaration: Declaration) => {
-        ctx.visit(declaration);
-
         if (isInterfaceDeclaration(declaration) || isClassDeclaration(declaration)) {
             typeHeritageClauses = typeHeritageClauses.concat(declaration.heritageClauses || []);
             (declaration.members.forEach as any)(member => {
@@ -160,7 +159,7 @@ export function visitInterface(
     iface: InterfaceDeclaration,
     ctx: Context
 ): InterfaceReflection {
-    return ctx.dive(iface.name.text, () => {
+    return ctx.dive(iface, () => {
         let basicInfo = visitBasicInfo(iface, ctx);
 
         return Object.assign(basicInfo, {

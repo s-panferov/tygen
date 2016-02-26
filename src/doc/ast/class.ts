@@ -30,7 +30,7 @@ export function visitClass(
     cls: ClassDeclaration,
     ctx: Context
 ): ClassReflection {
-    return ctx.dive(cls.name.getText(), () => {
+    return ctx.dive(cls, () => {
         let basicInfo = visitBasicInfo(cls, ctx);
 
         return Object.assign(basicInfo, {

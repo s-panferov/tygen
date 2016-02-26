@@ -53,7 +53,7 @@ import {
 import { Context } from '../index';
 import { Item, ItemType } from '../items';
 
-export interface PropertySignatureReflection extends Item {
+export interface PropertySignatureReflection extends Item, TypeMemberReflection {
     name: string;
     optional: boolean;
     type: TypeReflection;
@@ -144,6 +144,12 @@ export function visitDeclarations(
     return reflections;
 }
 
+export interface TypeMemberReflection {
+    inherited: boolean;
+    originId: string;
+    originParentId: string;
+}
+
 export interface FunctionDeclarationReflection extends SignatureReflection {
     generator: boolean;
 }
@@ -178,22 +184,35 @@ export function isMethodDeclaration(element: Declaration): element is MethodDecl
     return element.kind == SyntaxKind.MethodDeclaration;
 }
 
+export function visitInherenceInfo(item: Declaration, ctx: Context): TypeMemberReflection {
+    let parentType = ctx.checker.getTypeAtLocation(item.parent);
+    let symbol = parentType.getSymbol();
+    let inherited = !ctx.inCurrentContext(symbol);
+
+    return {
+        inherited,
+        originId: inherited ? ctx.id(item) : null,
+        originParentId: inherited ? ctx.id(parentType) : null,
+    };
+}
+
 export function visitPropertySignature(
     prop: PropertySignature | PropertyDeclaration,
     ctx: Context
 ): PropertySignatureReflection {
     let name = prop.name.getText();
-    return ctx.dive(name, () => {
-        return {
-            id: ctx.id(prop),
-            semanticId: ctx.semanticId(),
+    let inherenceInfo = visitInherenceInfo(prop, ctx);
+    return Object.assign(inherenceInfo,
+        {
+            id: inherenceInfo.inherited ? ctx.id() : ctx.id(prop),
+            semanticId: ctx.semanticId(name),
             itemType: ItemType.PropertySignature,
             name,
             optional: !!prop.questionToken,
             type: visitTypeNode(prop.type, ctx),
             comment: visitComment(prop, ctx)
-        } as PropertySignatureReflection;
-    });
+        }
+    ) as PropertySignatureReflection;
 }
 
 export interface PropertyDeclarationReflection extends PropertySignatureReflection {

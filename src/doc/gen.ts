@@ -21,7 +21,7 @@ export function processSourceFile(source: SourceFile & WithLocals, ctx: Context)
     });
 
     let indexed = {} as {[id: string]: Item};
-    let [items] = visitTopLevelDeclarations(declarations, ctx);
+    let [ items ] = visitTopLevelDeclarations(declarations, ctx);
 
     items.forEach(item => {
         if (!item.id) {
@@ -31,5 +31,6 @@ export function processSourceFile(source: SourceFile & WithLocals, ctx: Context)
         indexed[item.id] = item;
     });
 
-    ctx.currentModule.items = indexed;
+    ctx.currentModule.items = items;
+    ctx.currentModule.itemsIndex = indexed;
 }

@@ -66,7 +66,7 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
         members.forEach(member => {
             if (isPropertySignatureReflection(member)
                 || isPropertyDeclarationReflection(member)) {
-                properties.push(member);
+                    properties.push(member);
             } else if (isMethodReflection(member)) {
                 methods.push(member);
             } else if (isGetAccessorDeclarationReflection(member)) {

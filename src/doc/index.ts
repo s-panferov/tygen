@@ -9,7 +9,9 @@ import { Item } from './items';
 import {
     TypeChecker,
     Program,
-    SourceFile
+    SourceFile,
+    Symbol,
+    Node
 } from 'typescript';
 
 import * as typescript from 'typescript';
@@ -59,6 +61,10 @@ export interface DocRegistry {
     packages: Dictionary<PackageInfo>;
 }
 
+function isNode(node: Symbol | Node): node is Node {
+    return !!(node as any).kind;
+}
+
 /**
  * Contains all documents
  */
@@ -71,7 +77,7 @@ export class Context {
     packages: Dictionary<PackageInfo> = {};
 
     currentModule: Module;
-    currentStack: string[];
+    currentStack: Symbol[];
     currentId: number;
 
     ids: WeakMap<any, string>;
@@ -84,8 +90,28 @@ export class Context {
         this.currentId = 1;
     }
 
-    dive<T>(level: string, func: () => T): T {
-        this.currentStack.push(level);
+    inCurrentContext(symbol: Symbol): boolean {
+        return this.currentStack.indexOf(symbol) !== -1;
+    }
+
+    dive<T>(level: Symbol | Node, func: () => T): T {
+        let symbol: Symbol;
+        if (isNode(level)) {
+            symbol = this.checker.getTypeAtLocation(level).getSymbol();
+        } else {
+            symbol = level;
+        }
+
+        if (!symbol) {
+            console.error(level);
+            throw new Error(`Can't find the symbol`);
+        }
+
+        symbol.declarations.forEach(decl => {
+            this.visit(decl);
+        });
+
+        this.currentStack.push(symbol);
         let result = func();
         this.currentStack.pop();
 
@@ -101,20 +127,24 @@ export class Context {
     }
 
     semanticId(level?: string): string {
-        let currentStack = this.currentStack;
+        let currentStack = this.currentStack.map(sym => sym.name);
         if (level) {
             currentStack = currentStack.concat(level);
         }
         return currentStack.join('.');
     }
 
-    id(object: any): string {
-        if (!this.ids.has(object)) {
-            this.ids.set(object, (this.currentId++).toString());
-            // this.ids.set(object, uuid.v1());
-        }
+    id(object?: any): string {
+        if (object) {
+            if (!this.ids.has(object)) {
+                this.ids.set(object, (this.currentId++).toString());
+                // this.ids.set(object, uuid.v1());
+            }
 
-        return this.ids.get(object);
+            return this.ids.get(object);
+        } else {
+            return (this.currentId++).toString();
+        }
     }
 
     setProgram(program: Program) {
@@ -151,7 +181,8 @@ export class Module {
     pkgName: string;
     fileInfo: FileInfo;
 
-    items: { [id: string]: Item } = {};
+    items: Item[] = [];
+    itemsIndex: { [id: string]: Item } = {};
 
     constructor(sourceFile: SourceFile, pkgName: string, fileInfo: FileInfo) {
         this.text = sourceFile.text;
@@ -160,9 +191,9 @@ export class Module {
     }
 
     toJSON() {
-        let { text, pkgName, fileInfo, items, kind } = this;
-        let shortItems = Object.keys(items).map(itemId => {
-            let item = items[itemId];
+        let { text, pkgName, fileInfo, itemsIndex, kind } = this;
+        let shortItems = Object.keys(itemsIndex).map(itemId => {
+            let item = itemsIndex[itemId];
             return [itemId, item.itemType, item.name];
         });
         return { kind, pkgName, fileInfo, items: shortItems, text };
