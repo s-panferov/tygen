@@ -46,9 +46,10 @@ export interface TypeMembersProps extends React.CommonProps {
 
 export interface TypeMembersState {}
 
-type Accessors = {[key: string]:
-    [GetAccessorDeclarationReflection, SetAccessorDeclarationReflection]
-};
+type Accessors = [
+    GetAccessorDeclarationReflection,
+    SetAccessorDeclarationReflection
+][];
 
 export default class TypeMembers extends React.Component<TypeMembersProps, TypeMembersState> {
     static contextTypes = theme.themeContext;
@@ -61,7 +62,7 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
         let members = this.props.properties;
         let properties: PropertyDeclarationReflection[] = [];
         let methods: FunctionReflection[] = [];
-        let accessors: Accessors = { };
+        let accessors: Accessors = [];
 
         members.forEach(member => {
             if (isPropertySignatureReflection(member)
@@ -70,16 +71,18 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
             } else if (isMethodReflection(member)) {
                 methods.push(member);
             } else if (isGetAccessorDeclarationReflection(member)) {
-                if (!accessors[member.name]) {
-                    accessors[member.name] = [member, null];
+                let accessor = accessors.find(acc => acc[1].name == member.name);
+                if (accessor) {
+                    accessor[0] = member;
                 } else {
-                    accessors[member.name] = [member, accessors[member.name][1]];
+                    accessors.push([member, null]);
                 }
             } else if (isSetAccessorDeclarationReflection(member)) {
-                if (!accessors[member.name]) {
-                    accessors[member.name] = [null, member];
+                let accessor = accessors.find(acc => acc[0].name == member.name);
+                if (accessor) {
+                    accessor[1] = member;
                 } else {
-                    accessors[member.name] = [accessors[member.name][0], member];
+                    accessors.push([null, member]);
                 }
             }
         });
@@ -87,19 +90,34 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
         return (
             <div className={ this.getClassName() }>
                 <div key='body' className={ block('body') }>
-                    { this.props.constructSignatures &&
-                        this.renderConstructors(this.props.constructSignatures)
-                    }
-                    { this.props.indexSignatures &&
-                        this.renderIndexes(this.props.indexSignatures)
-                    }
-                    { this.props.callSignatures &&
-                        this.renderCalls(this.props.callSignatures)
+                    {
+                        this.props.constructSignatures && !!this.props.constructSignatures.length &&
+                            this.renderConstructors(this.props.constructSignatures)
                     }
 
-                    { this.renderProperties(properties) }
-                    { this.renderMethods(methods) }
-                    { this.renderAccessors(accessors) }
+                    {
+                        this.props.indexSignatures && !!this.props.indexSignatures.length &&
+                            this.renderIndexes(this.props.indexSignatures)
+                    }
+
+                    {
+                        this.props.callSignatures && !!this.props.callSignatures.length &&
+                            this.renderCalls(this.props.callSignatures)
+                    }
+
+                    {
+                        !!properties.length &&
+                            this.renderProperties(properties)
+                    }
+
+                    {
+                        !!methods.length &&
+                            this.renderMethods(methods)
+                    }
+
+                    {
+                        this.renderAccessors(accessors)
+                    }
                 </div>
                 {
                     !this.props.inline &&
@@ -110,24 +128,44 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
         );
     }
 
-    renderIndexes(signature: IndexSignatureReflection[]) {
-        return signature.map(sig => {
+    renderIndexes(signature: IndexSignatureReflection[]): React.ReactNode {
+        let renderedIndexSignatures = signature.map(sig => {
             return <IndexSignature
                 inline={ this.props.inline }
                 key={ sig.id }
                 signature={ sig }
             />;
         });
+
+        if (this.props.inline) {
+            return renderedIndexSignatures;
+        } else {
+            return (
+                <Section title='Index signatures'>
+                    { renderedIndexSignatures }
+                </Section>
+            );
+        }
     }
 
-    renderCalls(signature: CallSignatureReflection[]) {
-        return signature.map(sig => {
+    renderCalls(signature: CallSignatureReflection[]): React.ReactNode {
+        let renderedCallSignatures = signature.map(sig => {
             return <CallSignature
                 inline={ this.props.inline }
                 key={ sig.id }
                 signature={ sig }
             />;
         });
+
+        if (this.props.inline) {
+            return renderedCallSignatures;
+        } else {
+            return (
+                <Section title='Call signatures'>
+                    { renderedCallSignatures }
+                </Section>
+            );
+        }
     }
 
     renderProperties(properties: PropertyDeclarationReflection[]): React.ReactNode {
@@ -170,27 +208,36 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
         }
     }
 
-    renderConstructors(constructors: ConstructorDeclarationReflection[]) {
-        return constructors.map(ctor => {
+    renderConstructors(constructors: ConstructorDeclarationReflection[]): React.ReactNode {
+        let renderedConstructors = constructors.map(ctor => {
             return <Constructor
                 inline={ this.props.inline }
                 key={ ctor.id }
                 ctor={ ctor }
             />;
         });
+
+        if (this.props.inline) {
+            return renderedConstructors;
+        } else {
+            return (
+                <Section title='Constructors'>
+                    { renderedConstructors }
+                </Section>
+            );
+        }
     }
 
-    renderAccessors(accessors: Accessors) {
-        return Object.keys(accessors).map(name => {
-            let [getter, setter] = accessors[name];
+    renderAccessors(accessors: Accessors): React.ReactNode {
+        let renderedAccessors = accessors.map(([ getter, setter ]) => {
             return [
-                <Accessor
+                getter && <Accessor
                     inline={ this.props.inline }
                     className={ block('member') }
                     key={ getter.id }
                     getter={ getter }
                 />,
-                <Accessor
+                setter && <Accessor
                     inline={ this.props.inline }
                     className={ block('member') }
                     key={ setter.id }
@@ -198,13 +245,20 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
                 />
             ];
         });
+
+        if (this.props.inline) {
+            return renderedAccessors;
+        } else {
+            return (
+                <Section title='Accessors'>
+                    { renderedAccessors }
+                </Section>
+            );
+        }
     }
 
     renderNav(properties: Item[], methods: Item[]) {
         let items: Item[] = [].concat(
-            this.props.constructSignatures || [],
-            this.props.indexSignatures || [],
-            this.props.callSignatures || [],
             properties,
             methods
         );

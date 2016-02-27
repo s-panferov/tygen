@@ -9,7 +9,7 @@ export interface StickyProps {
     className?: ClassName;
     type?: string;
 
-    onStickyStateChange?: () => void;
+    onStickyStateChange?: (state: boolean) => void;
 }
 
 let Sticky: React.ReactCtor<StickyProps, void> = require('react-sticky');

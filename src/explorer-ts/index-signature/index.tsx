@@ -1,6 +1,11 @@
 import * as React from 'react';
 import * as theme from '../../explorer/components/theme';
 
+import Paper from '../../explorer/components/paper';
+import Figure from '../../explorer/components/figure';
+import Comment from '../comment';
+import Section from '../section';
+
 import {
     IndexSignatureReflection
 } from '../../doc/ast/type';
@@ -25,16 +30,40 @@ export default class IndexSignature extends React.Component<IndexSignatureProps,
         return block(theme.resolveTheme(this)).mix(this.props.className);
     }
 
-    render() {
+    render(): React.ReactElement<any> {
+        let { signature } = this.props;
+        if (this.props.inline) {
+            return (
+                <div id={ signature.id } className={ this.getClassName() }>
+                    { this.renderSignature() }
+                </div>
+            );
+        } else {
+            return (
+                <Paper id={ signature.id } block={ true } className={ this.getClassName() }>
+                    <Section title={ signature.name }>
+                        <Figure className={ block('figure') }>
+                            { this.renderSignature() }
+                        </Figure>
+                        { signature.comment &&
+                            <Comment>
+                                { signature.comment }
+                            </Comment>
+                        }
+                    </Section>
+                </Paper>
+            );
+        }
+    }
+
+    renderSignature() {
         let { signature } = this.props;
         return (
-            <div id={ this.props.signature.id } className={ this.getClassName() }>
-                <Signature
-                    typeStyle={ SignatureTypeStyle.Colon }
-                    bracketsType={ BracketsType.Square }
-                    signature={ signature }
-                />
-            </div>
+            <Signature
+                typeStyle={ SignatureTypeStyle.Colon }
+                bracketsType={ BracketsType.Square }
+                signature={ signature }
+            />
         );
     }
 }

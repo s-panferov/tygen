@@ -70,9 +70,15 @@ export default class Interface<P extends InterfaceProps> extends React.Component
                         { iface.comment }
                     </Comment>
                 }
-                { iface.properties &&
-                    <TypeMembers
-                        properties={ iface.properties } /> }
+                {
+                    iface.properties &&
+                        <TypeMembers
+                            properties={ iface.properties }
+                            indexSignatures={ iface.indexSignatures }
+                            callSignatures={ iface.callSignatures }
+                            constructSignatures={ iface.constructSignatures }
+                        />
+                }
             </Paper>
         );
     }

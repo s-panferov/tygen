@@ -71,7 +71,7 @@
     "style-loader": "^0.13.0",
     "tslint": "^3.3.0-dev.2",
     "tsmonad": "^0.3.7",
-    "typescript": "^1.9.0-dev.20160219",
+    "typescript": "^1.9.0-dev.20160227",
     "webpack": "^1.12.13",
     "webpack-dev-server": "^1.14.1"
   },

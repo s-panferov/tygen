@@ -35,6 +35,7 @@ export enum ItemType {
     TypePredicate = 'TypePredicate' as any,
     Function = 'Function' as any, // top level
     FunctionDeclaration = 'FunctionDeclaration' as any,
+    AccessorReflection = 'AccessorReflection' as any,
 }
 
 export interface Item {
