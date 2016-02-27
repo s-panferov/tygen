@@ -7,6 +7,14 @@ export enum ActionType {
     Navigate = 'Navigate' as any,
     LoadModule = 'LoadModule' as any,
     LoadItem = 'LoadItem' as any,
+    ToggleSearch = 'ToggleSearch' as any,
+}
+
+export function toggleSearch() {
+    return {
+        type: ActionType.ToggleSearch,
+        payload: null
+    };
 }
 
 export interface Navigate {

@@ -16,10 +16,12 @@ export interface State {
     items?: { [key: string]: Item };
     modules?: { [key: string]: ModuleInfo };
     plugins?: PluginRegistry;
+    searchActive?: boolean;
 }
 
 export function defaultState(service: Service, plugins: PluginRegistry): State {
     return {
+        searchActive: false,
         activity: new ActivityManager(),
         service,
         plugins,

@@ -116,7 +116,8 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
                     }
 
                     {
-                        this.renderAccessors(accessors)
+                        !!accessors.length &&
+                            this.renderAccessors(accessors)
                     }
                 </div>
                 {

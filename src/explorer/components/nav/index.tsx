@@ -29,7 +29,6 @@ export default class Nav extends React.Component<NavProps, NavState> {
 
         return (
             <div { ...this.props } className={ this.getClassName() }>
-                { this.renderLogo() }
                 <div key='section' className={ block('section') }>
                     { route.pkg ? route.pkg : 'Packages' }
                 </div>
@@ -41,16 +40,6 @@ export default class Nav extends React.Component<NavProps, NavState> {
                     }
                 </div>
             </div>
-        );
-    }
-
-    renderLogo() {
-        return (
-            <SmartLink route={{ pkg: '', path: '' }}>
-                <div className={ block('logo') }>
-                    {'//'}DocScript
-                </div>
-            </SmartLink>
         );
     }
 

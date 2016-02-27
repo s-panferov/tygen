@@ -87,9 +87,6 @@ module.exports = {
             {
                 test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                 loader: "file-loader",
-                exclude: [
-                    /csp-iconset/
-                ]
             },
             {
                 test: /\.(jpe?g|png|gif)(\?v=.*)?$/i,
@@ -97,13 +94,13 @@ module.exports = {
                     'file-loader?hash=sha512&digest=hex&name=[hash].[ext]'
                 ]
             },
-            {
-                test: /\.svg$/,
-                loader: 'svg-sprite-loader',
-                include: [
-                    /csp-iconset/
-                ]
-            },
+            // {
+            //     test: /\.svg$/,
+            //     loader: 'svg-sprite-loader',
+            //     include: [
+            //         /csp-iconset/
+            //     ]
+            // },
             {
                 test: /\.json?$/,
                 loader: "json-loader"

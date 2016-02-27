@@ -5,9 +5,6 @@ import { Route, PluginRegistry } from '../../state';
 import { ModuleInfo } from '../../../doc/index';
 import { Item } from '../../../doc/items';
 
-import Breadcrumbs from '../breadcrumbs';
-import File from '../file';
-
 require('./index.css');
 const block = theme.block('module');
 
@@ -32,11 +29,7 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
     render() {
         return (
             <div className={ this.getClassName() }>
-                <div className={ block('header') }>
-                    <Breadcrumbs>
-                        { this.renderRoute() }
-                    </Breadcrumbs>
-                </div>
+
                 <div className={ block('content') }>
                     { this.renderView() }
                 </div>
@@ -58,44 +51,5 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
                 />
             );
         }
-    }
-
-    renderRoute() {
-        let files = [];
-        let route = this.props.route;
-
-        files.push(
-            <File
-                key={ route.pkg }
-                folder={ true }
-                name={ route.pkg }
-                pkg={ route.pkg }
-                path={ '/' }
-                className={ block('struct-item') }
-                navigate={ this.props.onNavigate }
-            />
-        );
-
-        if (this.props.route.path !== '/') {
-            let parts = this.props.route.path.split('/').filter(Boolean);
-            parts.reduce((p: string, segment: string, i: number): string => {
-                let currentPath = `${ p }/${ segment }`;
-                files.push(
-                    <File
-                        key={ `${route.pkg}-${segment}` }
-                        folder={ true }
-                        name={ segment }
-                        pkg={ route.pkg }
-                        path={ currentPath }
-                        active={ i == parts.length - 1 && !route.id && !route.semanticId }
-                        className={ block('struct-item') }
-                        navigate={ this.props.onNavigate }
-                    />
-                );
-                return currentPath;
-            }, '');
-        }
-
-        return files;
     }
 }

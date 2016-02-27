@@ -7,7 +7,12 @@ html, body {
     display: flex;
     flex-direction: column;
 
+    &__hotkeys:focus {
+        outline: none;
+    }
+
     &__layout {
         flex: 1 1 auto;
+        margin-top: 50px;
     }
 }

@@ -15,15 +15,20 @@ export default class Section extends React.Component<SectionProps, SectionState>
     static contextTypes = theme.themeContext;
 
     getClassName() {
-        return block(theme.resolveTheme(this)).mix(this.props.className);
+        return block(theme.resolveTheme(this), {
+            'with-heading': !!this.props.title
+        }).mix(this.props.className);
     }
 
     render() {
         return (
             <div className={ this.getClassName() }>
-                <div className={ block('heading') }>
-                    { this.props.title }
-                </div>
+                {
+                    this.props.title &&
+                        <div className={ block('heading') }>
+                            { this.props.title }
+                        </div>
+                }
                 <div className={ block('content') }>
                     { this.props.children }
                 </div>

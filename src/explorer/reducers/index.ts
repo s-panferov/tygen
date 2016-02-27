@@ -14,6 +14,8 @@ export default function root(state: State, action: Action<any, any>): State {
             return loadItem(state, action as any);
         case ActionType.LoadModule:
             return loadModule(state, action as any);
+        case ActionType.ToggleSearch:
+            return toggleSearch(state, action as any);
         default:
             return state;
     }
@@ -66,4 +68,12 @@ function loadModule(state: State, { payload }: Action<LoadModule, void>): State 
     } else {
         return state;
     }
+}
+
+function toggleSearch(state: State, action: Action<any, void>): State {
+    return Object.assign({}, state,
+        {
+            searchActive: !state.searchActive
+        }
+    );
 }

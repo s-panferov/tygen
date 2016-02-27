@@ -22,6 +22,6 @@ module.exports.postcss = function(webpack) {
         //     reset: 'inherited' // reset only inherited rules
         // }),
         require('postcss-font-magician'),
-        require('colorguard')
+        // require('colorguard')
     ];
 };

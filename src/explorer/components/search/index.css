@@ -1,0 +1,47 @@
+@import 'theme';
+
+.search {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    cursor: pointer;
+
+    width: 80px;
+    height: 40px;
+
+    &__icon {
+        width: 18px;
+        height: 18px;
+        z-index: 100;
+    }
+
+    &__main {
+        position: fixed;
+        top: 0;
+        width: 500px;
+        height: 100vh;
+        right: 0;
+
+        background-color: white;
+        box-shadow:
+            0 1px 6px 0 rgba(0, 0, 0, .25),
+            0 2px 10px rgba(0, 0, 0, .1);
+    }
+
+    &__input {
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    &__control {
+        outline: none;
+        border: none;
+        height: 37px;
+        width: 100%;
+        font-size: 20px;
+        line-height: 40px;
+        font-family: var(--sans-serif);
+        border-bottom: 1px solid #ccc;
+    }
+}
