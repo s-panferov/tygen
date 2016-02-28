@@ -62,7 +62,7 @@ module.exports = {
                 loaders: [
                     !STANDALONE ? "react-hot" : null,
                     "awesome-typescript-loader?compiler=typescript&+useBabel&+useCache&+forkChecker&tsconfig=./src/explorer/tsconfig.json"
-                ].filter(Boolean)
+                ]
             },
             {
                 test: /\.css$/,

@@ -8,12 +8,26 @@ export enum ActionType {
     LoadModule = 'LoadModule' as any,
     LoadItem = 'LoadItem' as any,
     ToggleSearch = 'ToggleSearch' as any,
+    ChangeSearchQuery = 'ChangeSearchQuery' as any,
+    SearchIndexLoaded = 'SearchIndexLoaded' as any
 }
 
 export function toggleSearch() {
     return {
         type: ActionType.ToggleSearch,
         payload: null
+    };
+}
+
+export interface ChangeSearchQuery {
+    query: string;
+}
+export function changeSearchQuery(query: string): Action<ChangeSearchQuery, void> {
+    return {
+        type: ActionType.ChangeSearchQuery,
+        payload: {
+            query
+        }
     };
 }
 

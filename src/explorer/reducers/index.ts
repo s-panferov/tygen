@@ -1,5 +1,10 @@
 import { State, Action, ActionType } from '../redux';
-import { Navigate, LoadItem, LoadModule } from '../actions';
+import {
+    Navigate,
+    LoadItem,
+    LoadModule,
+    ChangeSearchQuery
+} from '../actions';
 
 // helper
 function isError<T>(payload: Error | T): payload is Error {
@@ -16,6 +21,8 @@ export default function root(state: State, action: Action<any, any>): State {
             return loadModule(state, action as any);
         case ActionType.ToggleSearch:
             return toggleSearch(state, action as any);
+        case ActionType.ChangeSearchQuery:
+            return changeSearchQuery(state, action as any);
         default:
             return state;
     }
@@ -76,4 +83,17 @@ function toggleSearch(state: State, action: Action<any, void>): State {
             searchActive: !state.searchActive
         }
     );
+}
+
+function changeSearchQuery(state: State, { payload }: Action<ChangeSearchQuery, void>): State {
+    if (!isError(payload)) {
+        return Object.assign({}, state,
+            {
+                searchQuery: payload.query
+            }
+        );
+    } else {
+        return state;
+    }
+
 }

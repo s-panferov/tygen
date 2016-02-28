@@ -55,6 +55,17 @@ export default class App extends React.Component<AppProps, void> {
         };
     }
 
+    shouldComponentUpdate(nextProps: AppProps): boolean {
+        if (this.props.route !== nextProps.route
+            || this.props.module !== nextProps.module
+            || this.props.item !== nextProps.item
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     getClassName() {
         return block(theme.resolveTheme(this));
     }

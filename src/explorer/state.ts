@@ -17,11 +17,17 @@ export interface State {
     modules?: { [key: string]: ModuleInfo };
     plugins?: PluginRegistry;
     searchActive?: boolean;
+    searchQuery?: string;
+    searchIndex?: any;
+    searchIndexReady?: boolean;
 }
 
 export function defaultState(service: Service, plugins: PluginRegistry): State {
     return {
         searchActive: false,
+        searchQuery: '',
+        // searchIndex: si,
+        searchIndexReady: false,
         activity: new ActivityManager(),
         service,
         plugins,

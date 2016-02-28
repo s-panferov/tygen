@@ -20,7 +20,7 @@ export function _compile(fileNames: string[], options: typescript.CompilerOption
 }
 
 export function generateFiles(fileNames: string[]): Context {
-    let ctx = new Context();
+    let ctx = new Context('docscript');
     let program = _compile(fileNames, {
         target: typescript.ScriptTarget.Latest,
         allowJs: true,

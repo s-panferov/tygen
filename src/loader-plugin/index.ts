@@ -6,6 +6,7 @@ module.exports = init;
 
 interface Options {
     output: string;
+    mainPackage: string;
 }
 
 function init(options: Options) {
@@ -20,7 +21,7 @@ class Plugin {
     }
 
     processProgram(program: Program) {
-        let ctx = new Context();
+        let ctx = new Context(this.options.mainPackage);
         ctx.setProgram(program);
 
         let files = program.getSourceFiles();
@@ -29,6 +30,8 @@ class Plugin {
                 ctx.addModule(file.fileName, file);
             // }
         });
+
+        ctx.generateForeignModules();
 
         let writer = new DocWriter(ctx);
         writer.writeModules(this.options.output);

@@ -32,8 +32,10 @@ export function extractTypeReference(type: Type, ctx: Context): TypeReflection {
                 case !!(type.symbol.flags & SymbolFlags.TypeAlias):
                 case !!(type.symbol.flags & SymbolFlags.Enum):
                 case !!(type.symbol.flags & SymbolFlags.TypeParameter):
+                    let id = ctx.id(type);
+                    ctx.include(id);
                     return {
-                        ref: ctx.id(type),
+                        ref: id,
                         typeName: type.symbol.name,
                         itemType: ItemType.TypeReference,
                     } as TypeReferenceReflection;

@@ -40,7 +40,8 @@ var config = {
             {
                 file: path.resolve(path.join(base, 'dist', 'loader-plugin.js')),
                 options: {
-                    output: path.resolve(path.join(__dirname, 'doc'))
+                    output: path.resolve(path.join(__dirname, 'doc')),
+                    mainPackage: 'example'
                 }
             }
         ]

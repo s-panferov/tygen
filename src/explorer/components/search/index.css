@@ -3,16 +3,25 @@
 .search {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    cursor: pointer;
 
-    width: 80px;
-    height: 40px;
+    &__toggle {
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        cursor: pointer;
+        width: 80px;
+        height: 40px;
+    }
+
+    &__hotkeys:focus {
+        outline: none;
+    }
 
     &__icon {
         width: 18px;
         height: 18px;
-        z-index: 100;
     }
 
     &__main {

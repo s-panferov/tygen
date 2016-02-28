@@ -600,6 +600,7 @@ export function visitTypeReference(
         && extractTypeReference(targetType, ctx);
 
     let id = ctx.id(type);
+    ctx.include(!targetTypeRef ? id : null);
 
     return {
         // if we have targetType — it's generic that has own id and can be referenced

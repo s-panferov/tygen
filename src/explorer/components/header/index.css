@@ -1,6 +1,7 @@
 @import 'theme';
 
 .header {
+    z-index: 100;
     flex: 0 0;
     height: 40px;
     display: flex;

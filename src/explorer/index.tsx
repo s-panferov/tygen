@@ -74,10 +74,21 @@ function waitForEl(id: string, cb: (el: HTMLElement) => any, attempts = 0) {
     setTimeout(worker, 100);
 }
 
+let worker = new Worker('/assets/search-index.js');
+worker.addEventListener('message', (e) => {
+    console.log(e);
+});
+worker.addEventListener('error', (e) => {
+    console.log(e);
+});
+
 function run(registry, appContainer) {
     let service = new Service(registry);
     let prevState = defaultState(service, plugins);
     let store = createStore(rootReducer, prevState);
+
+    // searchPromise.then(() => {
+    // });
 
     let currentLocation: Location;
     history.listen(location => {
@@ -145,6 +156,19 @@ function scroll(state: State) {
     } else {
         window.scrollTo(0, 0);
     }
+}
+
+function requireScript(src: string): Promise<Event> {
+    let s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.async = true;
+    s.src = src;
+
+    return new Promise((resolve, reject) => {
+        s.addEventListener('load', function (e: Event) { resolve(e); }, false);
+        let head = document.getElementsByTagName('head')[0];
+        head.appendChild(s);
+    });
 }
 
 fetch('/doc/registry.json')

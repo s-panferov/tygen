@@ -12,6 +12,7 @@ const block = theme.block('search');
 
 export interface SearchReduxProps extends DispatchProps {
     searchActive?: boolean;
+    searchQuery?: string;
 }
 
 export interface SearchProps extends React.CommonProps {
@@ -19,8 +20,8 @@ export interface SearchProps extends React.CommonProps {
     route: Route;
 }
 
-@connect(({ searchActive }): SearchReduxProps => {
-    return { searchActive };
+@connect(({ searchActive, searchQuery }): SearchReduxProps => {
+    return { searchActive, searchQuery };
 })
 export default class Search extends React.Component<SearchProps & SearchReduxProps, void> {
     static contextTypes = theme.themeContext;
@@ -30,6 +31,7 @@ export default class Search extends React.Component<SearchProps & SearchReduxPro
     constructor(props, context) {
         super(props, context);
         this.toggleSearch = this.toggleSearch.bind(this);
+        this.onChange = this.onChange.bind(this);
         this.handlers = {
 
         };
@@ -42,26 +44,42 @@ export default class Search extends React.Component<SearchProps & SearchReduxPro
 
     render() {
         return (
-            <Hotkeys handlers={ this.handlers }>
+            <Hotkeys className={ block('hotkeys') } handlers={ this.handlers }>
                 <div
                     className={ this.getClassName() }
                 >
-                    <img
-                        className={ block('icon') }
-                        src={ require('./icon.svg') }
+                    <div
+                        className={ block('toggle') }
                         onClick={ this.toggleSearch }
-                    />
+                    >
+                        <img
+                            className={ block('icon') }
+                            src={ require('./icon.svg') }
+                        />
+                    </div>
                     {
                         this.props.searchActive &&
                             <div className={ block('main') }>
                                 <div className={ block('input') }>
-                                    <input className={ block('control') } autoFocus={ true }>
+                                    <input
+                                        className={ block('control') }
+                                        autoFocus={ true }
+                                        value={ this.props.searchQuery }
+                                        onChange={ this.onChange }
+                                    >
                                     </input>
                                 </div>
                             </div>
                     }
                 </div>
             </Hotkeys>
+        );
+    }
+
+    onChange(e: React.FormEvent) {
+        let val = (e.target as any).value;
+        this.props.dispatch(
+            actions.changeSearchQuery(val)
         );
     }
 

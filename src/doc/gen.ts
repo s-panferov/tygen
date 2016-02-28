@@ -11,7 +11,7 @@ interface WithLocals {
     locals: {[key: string]: Symbol};
 }
 
-export function processSourceFile(source: SourceFile & WithLocals, ctx: Context) {
+export function processSourceFile(source: SourceFile & WithLocals, ctx: Context, foreign = false) {
     let declarations: any[] = [];
 
     Object.keys(source.locals).forEach(symbolName => {
@@ -23,12 +23,16 @@ export function processSourceFile(source: SourceFile & WithLocals, ctx: Context)
     let indexed = {} as {[id: string]: Item};
     let [ items ] = visitTopLevelDeclarations(declarations, ctx);
 
-    items.forEach(item => {
-        if (!item.id) {
-            console.error(item);
-            throw new Error('item dont have id');
+    items = items.filter(item => {
+        console.log(foreign, item.name, item.id, ctx.included(item.id))
+        if ((foreign && ctx.included(item.id)) || !foreign) {
+            if (!item.id) {
+                console.error(item);
+                throw new Error('item dont have id');
+            }
+            indexed[item.id] = item;
+            return true;
         }
-        indexed[item.id] = item;
     });
 
     ctx.currentModule.items = items;

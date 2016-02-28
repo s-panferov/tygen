@@ -93,6 +93,7 @@
         "./lib/autobind.ts",
         "./lib/equal.ts",
         "./loader-plugin/index.ts",
+        "./search-index/index.ts",
         "./explorer-ts/accessor/index.tsx",
         "./explorer-ts/array-type/index.tsx",
         "./explorer-ts/brackets/index.tsx",

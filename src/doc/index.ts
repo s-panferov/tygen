@@ -1,5 +1,3 @@
-/// <reference path="./defines.d.ts" />
-
 require('source-map-support').install();
 
 import { extractPackage, getFileInfo } from './utils';
@@ -74,6 +72,7 @@ export class Context {
     checker: TypeChecker = null;
     program: Program;
 
+    mainPackage: string;
     packages: Dictionary<PackageInfo> = {};
 
     currentModule: Module;
@@ -83,15 +82,30 @@ export class Context {
     ids: WeakMap<any, string>;
     _visited: WeakMap<any, boolean>;
 
-    constructor() {
+    includeAllowed: boolean = true;
+    foreignItems: { [itemId: string]: boolean } = {};
+    foreignModules: { [fileName: string]: [SourceFile, Package] } = {};
+
+    constructor(mainPackage: string) {
         this.ids = new WeakMap();
         this._visited = new WeakMap();
         this.currentStack = [];
         this.currentId = 1;
+        this.mainPackage = mainPackage;
     }
 
     inCurrentContext(symbol: Symbol): boolean {
         return this.currentStack.indexOf(symbol) !== -1;
+    }
+
+    include(id: string) {
+        if (this.includeAllowed) {
+            this.foreignItems[id] = true;
+        }
+    }
+
+    included(id: string): boolean {
+        return !!this.foreignItems[id];
     }
 
     dive<T>(level: Symbol | Node, func: () => T): T {
@@ -153,22 +167,37 @@ export class Context {
     }
 
     addModule(fileName, sourceFile: SourceFile) {
-        let module = this.generateModule(fileName, sourceFile);
-        this.modules[fileName] = module;
+        let pkg = extractPackage(fileName);
+        let name = pkg.info.name;
+        this.packages[name] = pkg.info;
+
+        if (name === this.mainPackage) {
+            let module = this.generateModule(fileName, sourceFile, pkg);
+            this.modules[fileName] = module;
+        } else {
+            this.foreignModules[fileName] = [sourceFile, pkg];
+        }
+    }
+
+    generateForeignModules() {
+        this.includeAllowed = false;
+        Object.keys(this.foreignModules).forEach(fileName => {
+            let [sourceFile, pkg] = this.foreignModules[fileName];
+            let module = this.generateModule(fileName, sourceFile, pkg, true);
+            this.modules[fileName] = module;
+        });
     }
 
     getModule(fileName): Module {
         return this.modules[fileName];
     }
 
-    private generateModule(fileName: string, source: SourceFile): Module {
-        let pkg = extractPackage(fileName);
-        this.packages[pkg.info.name] = pkg.info;
+    private generateModule(fileName: string, source: SourceFile, pkg: Package, foreign = false): Module {
         let fileInfo = getFileInfo(fileName, pkg);
         let doc = new Module(source, pkg.info.name, fileInfo);
 
         this.currentModule = doc;
-        processSourceFile(source as any, this);
+        processSourceFile(source as any, this, foreign);
         this.currentModule = null;
 
         return doc;
