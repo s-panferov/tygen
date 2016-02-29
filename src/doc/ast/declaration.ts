@@ -10,6 +10,7 @@ import * as en from './enum';
 import * as typeAlias from './type-alias';
 import * as variable from './var';
 import * as func from './function';
+import * as module from './module';
 
 export function visitTopLevelDeclarations(declarations: Declaration[], ctx: Context, logFailures = true): [Item[], Declaration[]] {
     let items: Item[] = [];
@@ -58,6 +59,9 @@ export function visitTopLevelDeclarations(declarations: Declaration[], ctx: Cont
             items.push(
                 variable.visitBindingElement(declaration, ctx)
             );
+            return false;
+        } else if (module.isModuleDeclaration(declaration)) {
+            module.visitModuleDeclaration(declaration, ctx);
             return false;
         } else {
             if (logFailures) {

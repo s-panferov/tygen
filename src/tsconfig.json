@@ -16,7 +16,8 @@
     "compileOnSave": false,
     "filesGlob": [
         "./**/*.ts",
-        "./**/*.tsx"
+        "./**/*.tsx",
+        "!./doc/tests/**/*.d.ts"
     ],
     "files": [
         "./doc/ast/class.ts",
@@ -25,6 +26,7 @@
         "./doc/ast/enum.ts",
         "./doc/ast/function.ts",
         "./doc/ast/interface.ts",
+        "./doc/ast/module.ts",
         "./doc/ast/type-alias.ts",
         "./doc/ast/type-utils.ts",
         "./doc/ast/type.ts",
@@ -55,6 +57,8 @@
         "./doc/tests/merge-class-interface.ts",
         "./doc/tests/merge-function-namespace.ts",
         "./doc/tests/merge-interface-interface.ts",
+        "./doc/tests/namespaces/_module.ts",
+        "./doc/tests/namespaces/index.ts",
         "./doc/tests/parenthesized-type.ts",
         "./doc/tests/salsa-function.ts",
         "./doc/tests/string-literal-type.ts",

@@ -1,5 +1,4 @@
 import {
-    SourceFile,
     Symbol,
 } from 'typescript';
 
@@ -11,7 +10,7 @@ interface WithLocals {
     locals: {[key: string]: Symbol};
 }
 
-export function processSourceFile(source: SourceFile & WithLocals, ctx: Context, foreign = false) {
+export function processSourceFile(source: WithLocals, ctx: Context, foreign = false) {
     let declarations: any[] = [];
 
     Object.keys(source.locals).forEach(symbolName => {
@@ -24,7 +23,6 @@ export function processSourceFile(source: SourceFile & WithLocals, ctx: Context,
     let [ items ] = visitTopLevelDeclarations(declarations, ctx);
 
     items = items.filter(item => {
-        console.log(foreign, item.name, item.id, ctx.included(item.id))
         if ((foreign && ctx.included(item.id)) || !foreign) {
             if (!item.id) {
                 console.error(item);

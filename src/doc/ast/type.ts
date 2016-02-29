@@ -609,7 +609,7 @@ export function visitTypeReference(
         itemType: ItemType.TypeReference,
         typeName: node.typeName.getText(),
         targetType: targetTypeRef ? targetTypeRef : null,
-        typeArguments: type.typeArguments &&
+        typeArguments: node.typeArguments &&
             node.typeArguments.map(ta => visitTypeNode(ta, ctx))
     };
 }
@@ -674,7 +674,7 @@ export function visitLeftHandSideExpression(
     return {
         id: ctx.id(expr),
         itemType: ItemType.LeftHandSideExpression,
-        name: type.symbol.name,
+        name: expr.getText(),
         type: extractTypeReference(targetType, ctx)
     };
 }

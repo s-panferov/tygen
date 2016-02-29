@@ -5,12 +5,12 @@ import {
 
 describe('class-interface-merge', () => {
     let module = generateInline(`
-        interface Test<T, A, G> {
+        interface Test<A, B, C> {
             prop: string
             foo(name: 'string')
         }
 
-        class Test<T, A, B, C> {
+        class Test<A, B, C> {
             prop2: string;
             foo(name: string) { }
         }
@@ -25,7 +25,7 @@ describe('class-interface-merge', () => {
 
         if (isClassReflection(cls)) {
             expect(cls.properties).lengthOf(3);
-            expect(cls.typeParameters).lengthOf(5);
+            expect(cls.typeParameters).lengthOf(3);
         } else {
             expect(false).to.true;
         }

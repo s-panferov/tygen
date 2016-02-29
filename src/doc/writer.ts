@@ -98,6 +98,7 @@ export class DocWriter {
     generateSearchIndex(dir: string, flatItems: any[], cb: () => void) {
         let SearchIndex = require('search-index');
         let options = {
+            db: require('memdown'),
             deletable: false,
             fieldedSearch: true,
             indexPath: 'si',
@@ -142,10 +143,15 @@ export class DocWriter {
             files[module.fileInfo.withPackage] = module.fileInfo.metaName;
         });
 
+        let packagesInfo = {};
+        for (let key of Object.keys(this.context.packages)) {
+            packagesInfo[key] = this.context.packages[key];
+        }
+
         let buf = `
 {\n
     "mainPackage": "${extractPackage(dir).info.name}",
-    "packages": ${ JSON.stringify(this.context.packages, null, 4) },
+    "packages": ${ JSON.stringify(packagesInfo, null, 4) },
     "files": ${ JSON.stringify(files, null, 4) },
     "idMap": ${ JSON.stringify(idMap) },
     "semanticIdMap": ${ JSON.stringify(semanticIdMap) }
