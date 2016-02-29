@@ -11,6 +11,7 @@ export interface FileProps extends React.CommonProps {
     pkg: string;
     name: string;
     path: string;
+    icon?: string;
 
     pseudo?: boolean;
     folder?: boolean;
@@ -44,12 +45,20 @@ export default class File extends React.Component<FileProps, FileState> {
                     }}
                     className={ className }
                 >
+                    {
+                        this.props.icon &&
+                            <img className={ block('icon') } src={ this.props.icon }/>
+                    }
                     { this.props.name }
                 </Link>
             );
         } else {
             return (
                 <div className={ className }>
+                    {
+                        this.props.icon &&
+                            <img className={ block('icon') } src={ this.props.icon }/>
+                    }
                     { this.props.name }
                 </div>
             );

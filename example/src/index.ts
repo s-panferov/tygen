@@ -1,5 +1,6 @@
 import { Generic } from './test';
 import { Test2 } from './test2';
+import { } from './ns';
 
 /**
  * Simple interface to describe UserName

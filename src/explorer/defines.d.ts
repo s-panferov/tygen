@@ -9,7 +9,7 @@
 /// <reference path="./typings/redux-thunk.d.ts"/>
 
 declare module 'memory-fs' {
-    interface MemoryFsStat {
+    export interface MemoryFsStat {
         isFile: () => boolean;
         isDirectory: () => boolean;
         isSymbolicLink: () => boolean;

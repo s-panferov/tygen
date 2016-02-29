@@ -1,6 +1,7 @@
 import MemoryFileSystem from 'memory-fs';
 import { DocRegistry, PackageInfo, ModuleInfo } from '../doc/index';
 import { Maybe } from 'tsmonad';
+import { MemoryFsStat } from 'memory-fs';
 
 import * as path from 'path';
 
@@ -154,7 +155,13 @@ function readPackages(registry: DocRegistry): Packages {
         let pkg = packages[pkgName];
         pkg.files[relativeToPackage] = moduleMetaName;
         pkg.fs.mkdirpSync(path.dirname(relativeToPackage));
-        pkg.fs.writeFileSync(relativeToPackage, moduleMetaName);
+
+        let modulePath = relativeToPackage;
+        try {
+            pkg.fs.writeFileSync(modulePath, moduleMetaName);
+        } catch (e) {
+
+        }
     });
 
     return packages;

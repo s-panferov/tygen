@@ -150,11 +150,11 @@ function scroll(state: State) {
     if (state.route.id) {
         waitForEl(state.route.id, (el) => {
             if (el) {
-                window.scrollTo(0, el.offsetTop);
+                window.scrollTo(0, el.offsetTop - 50);
             }
         });
     } else {
-        window.scrollTo(0, 0);
+        window.scrollTo(0, 0 - 50);
     }
 }
 

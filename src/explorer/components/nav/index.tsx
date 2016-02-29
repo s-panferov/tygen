@@ -67,10 +67,11 @@ export default class Nav extends React.Component<NavProps, NavState> {
             files.push(
                 <File
                     key={ `${ pkgName }-${ structure.prevPath }`}
+                    icon={ require('./left-arrow.svg') }
                     pkg={ pkgName }
                     pseudo={ true }
                     folder={ true }
-                    name={ structure.prevName || '/' }
+                    name={ structure.prevName || pkgName }
                     path={ structure.prevPath }
                     className={ block('struct-item') }
                     navigate={ this.props.onNavigate }

@@ -225,7 +225,7 @@ export class Context {
     }
 
     generateForeignModules() {
-        this.includeAllowed = false;
+        this.includeAllowed = true;
         this.foreign = true;
         Object.keys(this.foreignModules).forEach(fileName => {
             let [sourceFile, pkg] = this.foreignModules[fileName];

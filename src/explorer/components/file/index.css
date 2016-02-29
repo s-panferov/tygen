@@ -4,6 +4,12 @@
 
     font-weight: lighter;
     transition: all 250ms;
+
+    &__icon {
+        margin-right: 5px;
+        height: 14px;
+        width: 14px;
+    }
 }
 
 .file_folder {
