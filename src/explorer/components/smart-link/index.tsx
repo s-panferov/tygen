@@ -21,6 +21,8 @@ interface SmartLinkReduxProps extends DispatchProps {
 export interface SmartLinkProps extends SmartLinkReduxProps, LinkProps, DispatchProps {
     route?: Route;
     id?: string;
+
+    render?: (route: Route, linkProps: React.HTMLAttributes) => React.ReactElement<any>;
 }
 
 export interface SmartLinkState {}
@@ -62,13 +64,17 @@ export default class SmartLink extends React.Component<SmartLinkProps, SmartLink
             href: pathFromRoute(this.finalRoute)
         });
 
-        return (
-            <Link
-                { ...this.props }
-                { ... { htmlProps } }
-                className={ this.getClassName() }
-            />
-        );
+        if (this.props.render) {
+            return this.props.render(this.finalRoute, htmlProps);
+        } else {
+            return (
+                <Link
+                    { ...this.props }
+                    { ... { htmlProps } }
+                    className={ this.getClassName() }
+                />
+            );
+        }
     }
 
     @autobind

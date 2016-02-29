@@ -3,7 +3,8 @@ import {
     Navigate,
     LoadItem,
     LoadModule,
-    ChangeSearchQuery
+    ChangeSearchQuery,
+    Search
 } from '../actions';
 
 // helper
@@ -23,6 +24,10 @@ export default function root(state: State, action: Action<any, any>): State {
             return toggleSearch(state, action as any);
         case ActionType.ChangeSearchQuery:
             return changeSearchQuery(state, action as any);
+        case ActionType.SearchIndexReady:
+            return searchIndexReady(state, action as any);
+        case ActionType.Search:
+            return search(state, action as any);
         default:
             return state;
     }
@@ -85,6 +90,14 @@ function toggleSearch(state: State, action: Action<any, void>): State {
     );
 }
 
+function searchIndexReady(state: State, action: Action<any, void>): State {
+    return Object.assign({}, state,
+        {
+            searchIndexReady: true
+        }
+    );
+}
+
 function changeSearchQuery(state: State, { payload }: Action<ChangeSearchQuery, void>): State {
     if (!isError(payload)) {
         return Object.assign({}, state,
@@ -92,6 +105,24 @@ function changeSearchQuery(state: State, { payload }: Action<ChangeSearchQuery, 
                 searchQuery: payload.query
             }
         );
+    } else {
+        return state;
+    }
+
+}
+
+function search(state: State, { payload }: Action<Search, void>): State {
+    if (!isError(payload)) {
+        let { searchResults } = payload;
+        if (searchResults) {
+            return Object.assign({}, state,
+                {
+                    searchResults
+                }
+            );
+        } else {
+            return state;
+        }
     } else {
         return state;
     }

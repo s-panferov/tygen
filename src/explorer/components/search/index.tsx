@@ -1,9 +1,10 @@
 import * as React from 'react';
 import * as theme from '../theme';
 
-import { Route } from '../../state';
+import { Route, SearchResult } from '../../state';
 import SmartLink from '../smart-link';
 import Hotkeys from '../hotkeys';
+import Link from '../link';
 
 import { connect, DispatchProps, actions } from '../../redux';
 
@@ -13,6 +14,7 @@ const block = theme.block('search');
 export interface SearchReduxProps extends DispatchProps {
     searchActive?: boolean;
     searchQuery?: string;
+    searchResults?: SearchResult;
 }
 
 export interface SearchProps extends React.CommonProps {
@@ -20,8 +22,8 @@ export interface SearchProps extends React.CommonProps {
     route: Route;
 }
 
-@connect(({ searchActive, searchQuery }): SearchReduxProps => {
-    return { searchActive, searchQuery };
+@connect(({ searchActive, searchQuery, searchResults }): SearchReduxProps => {
+    return { searchActive, searchQuery, searchResults };
 })
 export default class Search extends React.Component<SearchProps & SearchReduxProps, void> {
     static contextTypes = theme.themeContext;
@@ -69,11 +71,43 @@ export default class Search extends React.Component<SearchProps & SearchReduxPro
                                     >
                                     </input>
                                 </div>
+                                <div className={ block('results') }>
+                                    {
+                                        this.props.searchResults &&
+                                            this.renderSearchResults()
+                                    }
+                                </div>
                             </div>
                     }
                 </div>
             </Hotkeys>
         );
+    }
+
+    renderSearchResults() {
+        let { searchResults } = this.props;
+        return searchResults.hits.map(hit => {
+            return (
+                <div key={ hit.id } className={ block('result') }>
+                    <SmartLink id={ hit.id }
+                        render={
+                            (route: Route, linkProps) => {
+                                return (
+                                    <div className={ block('result-inner') }>
+                                        <Link htmlProps={ linkProps } className={ block('result-link') }>
+                                            { hit.document.semanticId }
+                                        </Link>
+                                        <div className={ block('result-hint') }>
+                                            from { route.pkg }:{'//'}{ route.path }
+                                        </div>
+                                    </div>
+                                );
+                            }
+                        }
+                    />
+                </div>
+            );
+        });
     }
 
     onChange(e: React.FormEvent) {

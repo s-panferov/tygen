@@ -7,6 +7,10 @@ export { Route, PluginRegistry }
 
 import ActivityManager from './activity';
 
+export interface SearchResult {
+    hits: { id: string, document: { semanticId: string } }[];
+}
+
 export interface State {
     activity?: ActivityManager;
     service?: Service;
@@ -18,15 +22,16 @@ export interface State {
     plugins?: PluginRegistry;
     searchActive?: boolean;
     searchQuery?: string;
-    searchIndex?: any;
+    searchIndex?: Worker;
     searchIndexReady?: boolean;
+    searchResults?: SearchResult;
 }
 
-export function defaultState(service: Service, plugins: PluginRegistry): State {
+export function defaultState(service: Service, plugins: PluginRegistry, searchIndex: Worker): State {
     return {
         searchActive: false,
         searchQuery: '',
-        // searchIndex: si,
+        searchIndex,
         searchIndexReady: false,
         activity: new ActivityManager(),
         service,

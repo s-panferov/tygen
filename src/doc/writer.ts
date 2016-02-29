@@ -104,7 +104,7 @@ export class DocWriter {
             indexPath: 'si',
             logLevel: 'error',
             nGramLength: 1,
-            fieldsToStore: [ 'id', 'semanticId' ]
+            fieldsToStore: [ 'semanticId' ]
         };
 
         let indexOptions = {

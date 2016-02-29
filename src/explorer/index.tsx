@@ -74,21 +74,20 @@ function waitForEl(id: string, cb: (el: HTMLElement) => any, attempts = 0) {
     setTimeout(worker, 100);
 }
 
-let worker = new Worker('/assets/search-index.js');
-worker.addEventListener('message', (e) => {
-    console.log(e);
-});
-worker.addEventListener('error', (e) => {
-    console.log(e);
-});
-
 function run(registry, appContainer) {
     let service = new Service(registry);
-    let prevState = defaultState(service, plugins);
+
+    let search = new Worker('/assets/search-index.js');
+
+    let prevState = defaultState(service, plugins, search);
     let store = createStore(rootReducer, prevState);
 
-    // searchPromise.then(() => {
-    // });
+    search.addEventListener('message', (e: MessageEvent) => {
+        store.dispatch(e.data);
+    });
+    search.addEventListener('error', (e) => {
+        console.log(e);
+    });
 
     let currentLocation: Location;
     history.listen(location => {

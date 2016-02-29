@@ -9,7 +9,8 @@ export enum ActionType {
     LoadItem = 'LoadItem' as any,
     ToggleSearch = 'ToggleSearch' as any,
     ChangeSearchQuery = 'ChangeSearchQuery' as any,
-    SearchIndexLoaded = 'SearchIndexLoaded' as any
+    SearchIndexReady = 'SearchIndexReady' as any,
+    Search = 'Search' as any
 }
 
 export function toggleSearch() {
@@ -22,12 +23,33 @@ export function toggleSearch() {
 export interface ChangeSearchQuery {
     query: string;
 }
-export function changeSearchQuery(query: string): Action<ChangeSearchQuery, void> {
-    return {
-        type: ActionType.ChangeSearchQuery,
-        payload: {
-            query
-        }
+export function changeSearchQuery(query: string) {
+    return (dispatch: Dispatch, getState: GetState) => {
+        dispatch({
+            type: ActionType.ChangeSearchQuery,
+            payload: {
+                query
+            }
+        } as Action<ChangeSearchQuery, void>);
+
+        dispatch(search(query));
+    };
+}
+
+export interface Search {
+    query: string;
+    searchResults?: any[];
+}
+export function search(query: string) {
+    return (dispatch: Dispatch, getState: GetState) => {
+        let initAction = {
+            type: ActionType.Search,
+            payload: {
+                query
+            }
+        } as Action<Search, void>;
+        dispatch(initAction);
+        getState().searchIndex.postMessage(initAction);
     };
 }
 
