@@ -24,6 +24,7 @@ export interface State {
     searchQuery?: string;
     searchIndex?: Worker;
     searchIndexReady?: boolean;
+    searchInProgress?: boolean;
     searchResults?: SearchResult;
 }
 
@@ -32,6 +33,7 @@ export function defaultState(service: Service, plugins: PluginRegistry, searchIn
         searchActive: false,
         searchQuery: '',
         searchIndex,
+        searchInProgress: false,
         searchIndexReady: false,
         activity: new ActivityManager(),
         service,

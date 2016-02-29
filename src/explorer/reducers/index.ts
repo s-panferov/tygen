@@ -117,11 +117,16 @@ function search(state: State, { payload }: Action<Search, void>): State {
         if (searchResults) {
             return Object.assign({}, state,
                 {
+                    searchInProgress: false,
                     searchResults
                 }
             );
         } else {
-            return state;
+            return Object.assign({}, state,
+                {
+                    searchInProgress: true,
+                }
+            );
         }
     } else {
         return state;

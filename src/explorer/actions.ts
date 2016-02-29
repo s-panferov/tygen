@@ -2,6 +2,7 @@ import { Action, Dispatch, GetState } from './redux';
 import { Route } from './state';
 import { ModuleInfo } from '../doc/index';
 import { Item } from '../doc/items';
+import { debounce } from '../lib/utils';
 
 export enum ActionType {
     Navigate = 'Navigate' as any,
@@ -20,22 +21,6 @@ export function toggleSearch() {
     };
 }
 
-export interface ChangeSearchQuery {
-    query: string;
-}
-export function changeSearchQuery(query: string) {
-    return (dispatch: Dispatch, getState: GetState) => {
-        dispatch({
-            type: ActionType.ChangeSearchQuery,
-            payload: {
-                query
-            }
-        } as Action<ChangeSearchQuery, void>);
-
-        dispatch(search(query));
-    };
-}
-
 export interface Search {
     query: string;
     searchResults?: any[];
@@ -50,6 +35,28 @@ export function search(query: string) {
         } as Action<Search, void>;
         dispatch(initAction);
         getState().searchIndex.postMessage(initAction);
+    };
+}
+
+export var debouncedSearch = debounce((dispatch: Dispatch, query) => {
+    dispatch(search(query));
+}, 300);
+
+export interface ChangeSearchQuery {
+    query: string;
+}
+export function changeSearchQuery(query: string) {
+    return (dispatch: Dispatch, getState: GetState) => {
+        dispatch({
+            type: ActionType.ChangeSearchQuery,
+            payload: {
+                query
+            }
+        } as Action<ChangeSearchQuery, void>);
+
+        if (!getState().searchInProgress) {
+            debouncedSearch(dispatch, query);
+        }
     };
 }
 

@@ -15,6 +15,8 @@ export interface SearchReduxProps extends DispatchProps {
     searchActive?: boolean;
     searchQuery?: string;
     searchResults?: SearchResult;
+    searchInProgress?: boolean;
+    searchIndexReady?: boolean;
 }
 
 export interface SearchProps extends React.CommonProps {
@@ -22,8 +24,8 @@ export interface SearchProps extends React.CommonProps {
     route: Route;
 }
 
-@connect(({ searchActive, searchQuery, searchResults }): SearchReduxProps => {
-    return { searchActive, searchQuery, searchResults };
+@connect(({ searchActive, searchQuery, searchResults, searchInProgress, searchIndexReady }): SearchReduxProps => {
+    return { searchActive, searchQuery, searchResults, searchInProgress, searchIndexReady };
 })
 export default class Search extends React.Component<SearchProps & SearchReduxProps, void> {
     static contextTypes = theme.themeContext;
@@ -111,10 +113,12 @@ export default class Search extends React.Component<SearchProps & SearchReduxPro
     }
 
     onChange(e: React.FormEvent) {
-        let val = (e.target as any).value;
-        this.props.dispatch(
-            actions.changeSearchQuery(val)
-        );
+        if (!this.props.searchInProgress && this.props.searchIndexReady) {
+            let val = (e.target as any).value;
+            this.props.dispatch(
+                actions.changeSearchQuery(val)
+            );
+        }
     }
 
     toggleSearch() {
