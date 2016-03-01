@@ -20,6 +20,7 @@ module.exports = {
     externals: {
         // "react": "React",
         // "react-dom": "ReactDOM"
+        "docscript": "commonjs2 docscript"
     },
 
     bail: false,

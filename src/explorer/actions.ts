@@ -96,7 +96,7 @@ export function navigate(route: Route) {
                             }
                         } as Action<LoadItem, void>);
                     } else {
-                        let promise = fetch(`/doc/${moduleMetaName.replace('.json', '')}/${itemId}.json`)
+                        let promise = fetch(`/doc/generated/${moduleMetaName.replace('.json', '')}/${itemId}.json`)
                             .then(res => res.json())
                             .then((item: Item) => {
                                 dispatch({
@@ -119,7 +119,7 @@ export function navigate(route: Route) {
                     } as Action<LoadModule, void>);
                 } else {
                     // load module meta info
-                    let promise = fetch(`/doc/${moduleMetaName}`)
+                    let promise = fetch(`/doc/generated/${moduleMetaName}`)
                         .then(res => res.json())
                         .then((moduleInfo: ModuleInfo) => {
                             dispatch({

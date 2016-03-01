@@ -6,7 +6,7 @@ import { Search } from '../explorer/actions';
 
 importScripts('/assets/search-index-lib.js');
 let { buffer, stream, level, si } = (window as any).__search_index_lib__;
-let searchIndex = fetch('/doc/index.gz').then(res => res.arrayBuffer());
+let searchIndex = fetch('/doc/generated/search-index.gz').then(res => res.arrayBuffer());
 
 function emit<T>(action: Action<any, any>) {
     self.postMessage(action, null);

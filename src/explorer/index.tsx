@@ -3,7 +3,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import { createHistory, History, Location }  from 'history';
+import { History, Location }  from 'history';
+let createHistory  = require('history/lib/createHashHistory');
 let useQueries = require('history/lib/useQueries');
 let history: History = useQueries(createHistory)();
 
@@ -170,7 +171,7 @@ function requireScript(src: string): Promise<Event> {
     });
 }
 
-fetch('/doc/registry.json')
+fetch('/doc/generated/registry.json')
     .then(res => res.json())
     .then((registry) => {
         let appContainer = createAppContainer();

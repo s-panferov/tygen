@@ -71,9 +71,13 @@ export class DocWriter {
         return [idMap, semanticIdMap, flatItems];
     }
 
-    writeModules(dir: string) {
+    ensureDir(dir: string) {
         fse.removeSync(dir);
         fse.ensureDirSync(dir);
+    }
+
+    writeModules(dir: string): Promise<any> {
+        this.ensureDir(dir);
 
         let modules = this.context.modules;
         Object.keys(modules).forEach(moduleKey => {
@@ -92,10 +96,10 @@ export class DocWriter {
         let [regModule, flatItems] = this.generateRegistryModule(dir);
         fs.writeFileSync(path.join(dir, 'registry.json'), regModule);
 
-        this.generateSearchIndex(dir, flatItems, () => {});
+        return this.generateSearchIndex(dir, flatItems, () => {});
     }
 
-    generateSearchIndex(dir: string, flatItems: any[], cb: () => void) {
+    generateSearchIndex(dir: string, flatItems: any[], cb: () => void): Promise<any> {
         let SearchIndex = require('search-index');
         let options = {
             db: require('memdown'),
@@ -119,15 +123,18 @@ export class DocWriter {
             ]
         };
 
-        SearchIndex(options, (err, index) => {
-            console.log('search index initialized');
-            index.add(flatItems, indexOptions, function(err) {
-                console.log('creating index snapshot...');
-                index.snapShot(function(readStream) {
-                    readStream.pipe(fs.createWriteStream(path.join(dir, 'index.gz')))
-                        .on('close', function() {
-                        console.log('snapshot completed');
-                        cb();
+        return new Promise((resolve, reject) => {
+            SearchIndex(options, (err, index) => {
+                console.log('search index initialized');
+                index.add(flatItems, indexOptions, function(err) {
+                    console.log('creating index snapshot...');
+                    index.snapShot(function(readStream) {
+                        readStream.pipe(fs.createWriteStream(path.join(dir, 'search-index.gz')))
+                            .on('close', function() {
+                            console.log('snapshot completed');
+                            cb();
+                            resolve();
+                        });
                     });
                 });
             });

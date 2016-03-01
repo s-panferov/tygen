@@ -27,6 +27,9 @@ var config = {
     entry: {
         'loader-plugin': [
             './src/loader-plugin/index.ts'
+        ],
+        'standalone-generator': [
+            './src/standalone-generator/index.ts'
         ]
     },
 

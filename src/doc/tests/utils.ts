@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import { generateModule } from '../test';
+import { generateModule } from '../../standalone-generator/helpers';
 
 export { expect } from 'chai';
 export { inspect } from '../tools';
@@ -37,14 +37,14 @@ export function filePath(file: string) {
 }
 
 export function generate(file: string) {
-    return generateModule(filePath(file));
+    return generateModule(filePath(file), 'docscript');
 }
 
 export function rmDir(dirPath) {
     let files = [];
     files = fs.readdirSync(dirPath);
     if (files.length > 0) {
-        for (var i = 0; i < files.length; i++) {
+        for (let i = 0; i < files.length; i++) {
             let filePath = dirPath + '/' + files[i];
             if (fs.statSync(filePath).isFile()) {
                 if (filePath.indexOf('gitkeep') === -1) {
@@ -63,5 +63,5 @@ export function generateInline(source: string, extension = '.ts') {
     let tmpPath = path.join(tmpDir, uuid.v1() + extension);
     fs.writeFileSync(tmpPath, source);
 
-    return generateModule(tmpPath);
+    return generateModule(tmpPath, 'docscript');
 }

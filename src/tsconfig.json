@@ -17,6 +17,7 @@
     "filesGlob": [
         "./**/*.ts",
         "./**/*.tsx",
+        "../typings/tsd.d.ts",
         "!./doc/tests/**/*.d.ts"
     ],
     "files": [
@@ -35,7 +36,6 @@
         "./doc/gen.ts",
         "./doc/index.ts",
         "./doc/items.ts",
-        "./doc/test.ts",
         "./doc/tests/array-type.ts",
         "./doc/tests/class-accessors.ts",
         "./doc/tests/class-constructor.ts",
@@ -96,8 +96,11 @@
         "./explorer/typings/redux.d.ts",
         "./lib/autobind.ts",
         "./lib/equal.ts",
+        "./lib/utils.ts",
         "./loader-plugin/index.ts",
         "./search-index/index.ts",
+        "./standalone-generator/helpers.ts",
+        "./standalone-generator/index.ts",
         "./explorer-ts/accessor/index.tsx",
         "./explorer-ts/array-type/index.tsx",
         "./explorer-ts/brackets/index.tsx",
@@ -156,7 +159,8 @@
         "./explorer/components/path/index.tsx",
         "./explorer/components/search/index.tsx",
         "./explorer/components/smart-link/index.tsx",
-        "./explorer/index.tsx"
+        "./explorer/index.tsx",
+        "../typings/tsd.d.ts"
     ],
     "exclude": [
         "node_modules",

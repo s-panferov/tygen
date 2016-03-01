@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "Documentation generator for TypeScript built with ReactJS",
   "main": "./dist/docscript.js",
+  "bin" : {
+      "docscript": "./dist/standalone-generator.js"
+  },
   "scripts": {
     "doc": "./node_modules/.bin/webpack --config webpack.doc.config.js --watch --progress",
     "doc-tests": "./node_modules/.bin/webpack --config webpack.doc-tests.config.js --watch --progress",
@@ -55,6 +58,7 @@
     "lodash": "^4.2.1",
     "memdown": "^1.1.2",
     "memory-fs": "^0.2.0",
+    "minimist": "^1.2.0",
     "mocha": "^2.2.5",
     "mocha-loader": "^0.7.1",
     "node-uuid": "^1.4.7",
@@ -81,6 +85,7 @@
     "shelljs": "^0.5.3",
     "source-map-support": "^0.4.0",
     "style-loader": "^0.13.0",
+    "tsconfig": "^2.2.0",
     "tslint": "^3.3.0-dev.2",
     "tsmonad": "^0.3.7",
     "typescript": "^1.9.0-dev.20160227",

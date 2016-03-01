@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { Context, Module } from '../..';
 import { expect } from '../utils';
-import { generateFiles } from '../../test';
+import { generateFiles } from '../../../standalone-generator/helpers';
 
 function findModule(pathWithPackage: string, ctx: Context): Module {
     for (let key of Object.keys(ctx.modules)) {
@@ -16,7 +16,7 @@ describe('definitions', () => {
     let ctx = generateFiles([
         path.join(process.cwd(), 'src', 'doc', 'tests', 'namespaces', '_module.ts'),
         path.join(process.cwd(), 'src', 'doc', 'tests', 'namespaces', 'typings', 'react.d.ts'),
-    ]);
+    ], 'docscript');
 
     it('compiles', () => {
         expect(ctx).ok;
