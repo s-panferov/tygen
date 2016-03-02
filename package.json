@@ -13,7 +13,8 @@
     "search-index": "./node_modules/.bin/webpack --config webpack.search-index.config.js --watch --progress",
     "search-index-lib": "NODE_ENV=production ./node_modules/.bin/browserify -i leveldown -t brfs -g envify -g uglifyify src/search-index/lib.js > dist/assets/search-index-lib.js",
     "explorer": "./node_modules/.bin/webpack-dev-server --hot --inline --config webpack.explorer.config.js --progress --history-api-fallback",
-    "explorer-build": "./node_modules/.bin/webpack --config webpack.explorer.config.js --progress"
+    "explorer-build": "./node_modules/.bin/webpack --config webpack.explorer.config.js --progress",
+    "explorer-watch": "./node_modules/.bin/webpack --config webpack.explorer.config.js --progress --watch"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,5 @@
 var webpack = require('webpack');
 var path = require("path");
-var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 var webpackConfig = require('./webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -31,8 +30,7 @@ module.exports = {
 
     output: {
         path: path.join(__dirname, 'dist/assets'),
-        filename: '[name].js',
-        publicPath: '/assets',
+        filename: '[name].js'
     },
 
     resolveLoader: {
@@ -120,7 +118,9 @@ module.exports = {
         // }),
         new HtmlWebpackPlugin({
             title: 'DocScript Explorer',
-            filename: '../index.html'
+            template: './index.html',
+            filename: '../index.html',
+            inject: false
         }),
         new ForkCheckerPlugin(),
         new webpack.ProvidePlugin({
