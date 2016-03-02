@@ -55,14 +55,18 @@ export default class SmartLink extends React.Component<SmartLinkProps, SmartLink
     }
 
     getClassName() {
-        return block(theme.resolveTheme(this)).mix(this.props.className);
+        return block(theme.resolveTheme(this), {
+            invalid: this.finalRoute.invalid
+        }).mix(this.props.className);
     }
 
     render() {
-        let htmlProps = Object.assign({}, this.props.htmlProps, {
-            onClick: this.onClick,
-            href: pathFromRoute(this.finalRoute)
-        });
+        let htmlProps = Object.assign({}, this.props.htmlProps);
+
+        if (!this.finalRoute.invalid) {
+            htmlProps.onClick = this.onClick;
+            htmlProps.href = pathFromRoute(this.finalRoute);
+        }
 
         if (this.props.render) {
             return this.props.render(this.finalRoute, htmlProps);

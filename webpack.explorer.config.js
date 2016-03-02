@@ -30,7 +30,8 @@ module.exports = {
 
     output: {
         path: path.join(__dirname, 'dist/assets'),
-        filename: '[name].js'
+        filename: '[name].js',
+        publicPath: STANDALONE ? undefined : '/assets/'
     },
 
     resolveLoader: {

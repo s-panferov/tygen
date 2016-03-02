@@ -8,7 +8,7 @@
     }
 
     &_active {
-        outline: 10px solid #FFFDEE;
-        background: #FFFDEE;
+        outline: 10px solid rgba(246, 225, 65, 0.5);
+        background: rgba(246, 225, 65, 0.5);
     }
 }

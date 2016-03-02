@@ -36,8 +36,8 @@ export function generateFiles(
 
     ctx.setProgram(program);
 
-    fileNames.forEach(fileName => {
-        ctx.addModule(fileName, program.getSourceFile(fileName));
+    program.getSourceFiles().forEach(sourceFile => {
+        ctx.addModule(sourceFile.fileName, sourceFile);
     });
 
     return ctx;

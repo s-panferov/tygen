@@ -9,6 +9,7 @@ export interface Route {
     pkg?: string;
     path?: string;
     id?: string;
+    invalid?: boolean;
     mainId?: string;
     semanticId?: string;
     nesting?: string[];
@@ -89,10 +90,10 @@ export default class Service {
                     nesting
                 };
             } else {
-                console.error(`Unknown id ${ route.id }`);
                 return {
                     pkg: this.getMainPackageName(),
-                    path: '/'
+                    path: '/',
+                    invalid: true
                 };
             }
         } else {

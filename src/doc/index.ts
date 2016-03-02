@@ -12,7 +12,8 @@ import {
     Program,
     SourceFile,
     Symbol,
-    Node
+    Node,
+    LanguageService
 } from 'typescript';
 
 import * as typescript from 'typescript';

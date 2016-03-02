@@ -73,7 +73,7 @@ export default class TypeNav extends React.Component<TypeNavProps, TypeNavState>
     }
 
     renderItems(inView: string, outView: string) {
-        return this.props.items.map(item => {
+        let items = this.props.items.map(item => {
             let className = block('item', {
                 active: inView.indexOf(item.id) !== -1
             });
@@ -95,6 +95,12 @@ export default class TypeNav extends React.Component<TypeNavProps, TypeNavState>
                 </div>
             );
         });
+
+        return (
+            <div>
+                { items }
+            </div>
+        );
     }
 
     onScroll(e: React.UIEvent) {

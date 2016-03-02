@@ -28,12 +28,18 @@ export class DocWriter {
         let semanticIdMap = {} as SemanticIdMap;
         let flatItems: any[] = [];
 
-        function walkObject(obj: any, pkg: string, path: string, nesting: string[] = []) {
+        function walkObject(
+            obj: any,
+            pkg: string,
+            path: string,
+            inMain: boolean,
+            nesting: string[] = []
+        ) {
             if (obj.id) {
                 nesting = nesting.concat(obj.id);
                 idMap[obj.id] = [obj.semanticId, pkg, path, [nesting[0]]];
 
-                if (INCLUDE_ITEMS[obj.itemType]) {
+                if (inMain && INCLUDE_ITEMS[obj.itemType]) {
                     flatItems.push(obj);
                 }
 
@@ -54,7 +60,7 @@ export class DocWriter {
                         typeof o === 'object' &&
                         (Array.isArray(o) ||
                         Object.prototype.toString.call(o) === '[object Object]')) {
-                            walkObject(o, pkg, path, nesting);
+                            walkObject(o, pkg, path, inMain, nesting);
                         }
                 }
             }
@@ -63,8 +69,15 @@ export class DocWriter {
         let modules = this.context.modules;
         Object.keys(modules).forEach(moduleKey => {
             let module = modules[moduleKey];
+            let inMain = module.pkgName == this.context.mainPackage;
+
             module.items.forEach(item => {
-                walkObject(item, module.pkgName, module.fileInfo.relativeToPackage);
+                walkObject(
+                    item,
+                    module.pkgName,
+                    module.fileInfo.relativeToPackage,
+                    inMain
+                );
             });
         });
 

@@ -19,8 +19,6 @@ if (!module.parent) {
     let tsconfigPath = tsconfig.resolveSync(argv.sourceDir);
     let { files, compilerOptions } = tsconfig.loadSync(tsconfigPath);
 
-    console.log(argv)
-
     let tsCompilerOptions = helpers.rawToTsCompilerOptions(compilerOptions, process.cwd(), ts);
     let ctx = helpers.generateFiles(files, argv.mainPackage, tsCompilerOptions);
 

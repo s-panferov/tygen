@@ -1,4 +1,9 @@
 @import 'theme';
 
 .smart-link {
+    &_invalid,
+    &_invalid:hover,
+    &_invalid:visited {
+        color: #333;
+    }
 }

@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "description": "Documentation generator for TypeScript built with ReactJS",
   "main": "./dist/docscript.js",
-  "bin" : {
-      "docscript": "./dist/standalone-generator.js"
+  "bin": {
+    "docscript": "./dist/standalone-generator.js"
   },
   "scripts": {
     "doc": "./node_modules/.bin/webpack --config webpack.doc.config.js --watch --progress",
@@ -82,7 +82,7 @@
     "react-sticky": "^3.0.0",
     "redux": "^3.3.0",
     "redux-thunk": "^1.0.3",
-    "rscrollspy": "0.0.4",
+    "rscrollspy": "0.0.6",
     "shelljs": "^0.5.3",
     "source-map-support": "^0.4.0",
     "style-loader": "^0.13.0",
