@@ -3,54 +3,29 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import { History, Location }  from 'history';
-let createHistory  = require('history/lib/createHashHistory');
-let useQueries = require('history/lib/useQueries');
-let history: History = useQueries(createHistory)();
-
-import App from './components/app';
-import Service from './service';
+import equal from '../lib/equal';
+import rootReducer from './reducers';
 
 import { defaultState, Route, State } from './state';
 import { Provider, createStore, actions } from './redux';
 import { ThemeProvider, ThemeType } from './components/theme';
-import equal from '../lib/equal';
-import rootReducer from './reducers';
+import { waitForEl } from './helpers';
+import { defaultSettings } from './settings';
+
+import App from './components/app';
+import Service, { routeFromPath, pathFromRoute } from './service';
+
+import { History, Location }  from 'history';
+let createHistory  = require('history/lib/createHashHistory');
+let useQueries = require('history/lib/useQueries');
+let history: History = useQueries(createHistory)();
 
 import PluginRegistry from './plugins';
 import tsPlugin from '../explorer-ts';
 let plugins = new PluginRegistry();
 plugins.register(tsPlugin);
 
-export function pathFromRoute(route: Route): string {
-    let routeUrl = `/${route.pkg}${route.path}`;
-    routeUrl = routeUrl.replace(/[.]/g, '~~');
-
-    if (route.semanticId) {
-        routeUrl += '?sid=' + route.semanticId;
-    } else if (route.id) {
-        routeUrl += '?id=' + route.id;
-    }
-
-    return routeUrl;
-}
-
-export function routeFromPath(urlPath: string, query: any, service: Service): Route {
-    let parts = urlPath.split('/').filter(Boolean);
-    let routePkg = parts[0];
-    let routePath = '/' + parts.slice(1).join('/').replace(/~~/g, '.');
-    let id = query.id || (query.sid &&
-                service.getIdBySemanticId(routePkg, routePath, query.sid));
-
-    if (id) {
-        return service.getFullRoute({ id });
-    } else {
-        return {
-            pkg: routePkg,
-            path: routePath
-        };
-    }
-}
+let settings = defaultSettings();
 
 export function createAppContainer() {
     let reactApp = document.createElement('div');
@@ -59,30 +34,15 @@ export function createAppContainer() {
     return reactApp;
 }
 
-function waitForEl(id: string, cb: (el: HTMLElement) => any, attempts = 0) {
-    function worker() {
-        let el = document.getElementById(id);
-        if (el) {
-            cb(el);
-        } else {
-            if (attempts > 50) {
-                throw new Error('Cant wait for id more than 500ms ' + id);
-            } else {
-                setTimeout(worker, 100 + attempts * 10);
-            }
-        }
-    }
-    setTimeout(worker, 100);
-}
-
 function run(registry, appContainer) {
     let service = new Service(registry);
 
-    let search = new Worker('/assets/search-index.js');
+    let search = new Worker(`${settings.assetsRoot}/search-index.js`);
 
-    let prevState = defaultState(service, plugins, search);
+    let prevState = defaultState(service, plugins, search, settings);
     let store = createStore(rootReducer, prevState);
 
+    search.postMessage(actions.initSearchIndex(settings));
     search.addEventListener('message', (e: MessageEvent) => {
         store.dispatch(e.data);
     });
@@ -158,20 +118,7 @@ function scroll(state: State) {
     }
 }
 
-function requireScript(src: string): Promise<Event> {
-    let s = document.createElement('script');
-    s.type = 'text/javascript';
-    s.async = true;
-    s.src = src;
-
-    return new Promise((resolve, reject) => {
-        s.addEventListener('load', function (e: Event) { resolve(e); }, false);
-        let head = document.getElementsByTagName('head')[0];
-        head.appendChild(s);
-    });
-}
-
-fetch('/doc/generated/registry.json')
+fetch(`${settings.docRoot}/registry.json`)
     .then(res => res.json())
     .then((registry) => {
         let appContainer = createAppContainer();

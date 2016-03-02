@@ -9,6 +9,6 @@ module.exports = MochaPlugin;
 
 MochaPlugin.prototype.apply = function(compiler) {
     compiler.plugin("done", function(stats) {
-        spawn("mocha", ["./dist"], {stdio: "inherit"});
+        spawn("mocha", ["./dist/tests"], {stdio: "inherit"});
     });
 };

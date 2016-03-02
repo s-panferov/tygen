@@ -12,7 +12,7 @@ import Service from '../../service';
 
 import {
     pathFromRoute
-} from '../../index';
+} from '../../service';
 
 interface SmartLinkReduxProps extends DispatchProps {
     service?: Service;

@@ -1,7 +1,7 @@
 import Service, { Route } from './service';
 import PluginRegistry from './plugins';
-import { ModuleInfo } from '../doc';
-import { Item } from '../doc/items';
+import { ModuleInfo, Item } from '../doc';
+import { Settings, defaultSettings } from './settings';
 
 export { Route, PluginRegistry }
 
@@ -26,10 +26,17 @@ export interface State {
     searchIndexReady?: boolean;
     searchInProgress?: boolean;
     searchResults?: SearchResult;
+    settings?: Settings;
 }
 
-export function defaultState(service: Service, plugins: PluginRegistry, searchIndex: Worker): State {
+export function defaultState(
+    service: Service,
+    plugins: PluginRegistry,
+    searchIndex: Worker,
+    settings: Settings
+): State {
     return {
+        settings,
         searchActive: false,
         searchQuery: '',
         searchIndex,

@@ -4,13 +4,10 @@ import {
     LoadItem,
     LoadModule,
     ChangeSearchQuery,
-    Search
+    Search,
+    isError,
+    InitSearchIndex
 } from '../actions';
-
-// helper
-function isError<T>(payload: Error | T): payload is Error {
-    return payload instanceof Error;
-}
 
 export default function root(state: State, action: Action<any, any>): State {
     switch (action.type) {
@@ -24,8 +21,8 @@ export default function root(state: State, action: Action<any, any>): State {
             return toggleSearch(state, action as any);
         case ActionType.ChangeSearchQuery:
             return changeSearchQuery(state, action as any);
-        case ActionType.SearchIndexReady:
-            return searchIndexReady(state, action as any);
+        case ActionType.InitSearchIndex:
+            return initSearchIndex(state, action as any);
         case ActionType.Search:
             return search(state, action as any);
         default:
@@ -90,12 +87,16 @@ function toggleSearch(state: State, action: Action<any, void>): State {
     );
 }
 
-function searchIndexReady(state: State, action: Action<any, void>): State {
-    return Object.assign({}, state,
-        {
-            searchIndexReady: true
-        }
-    );
+function initSearchIndex(state: State, { payload }: Action<InitSearchIndex, void>): State {
+    if (!isError(payload) && payload.ready) {
+        return Object.assign({}, state,
+            {
+                searchIndexReady: true
+            }
+        );
+    } else {
+        return state;
+    }
 }
 
 function changeSearchQuery(state: State, { payload }: Action<ChangeSearchQuery, void>): State {

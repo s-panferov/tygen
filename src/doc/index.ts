@@ -2,8 +2,10 @@ require('source-map-support').install();
 
 import { extractPackage, getFileInfo } from './utils';
 import { processSourceFile } from './gen';
-import { Item } from './items';
+import { Item, ItemType } from './items';
 import * as path from 'path';
+
+export { Item, ItemType }
 
 import {
     TypeChecker,

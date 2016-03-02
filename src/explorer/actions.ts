@@ -3,6 +3,7 @@ import { Route } from './state';
 import { ModuleInfo } from '../doc/index';
 import { Item } from '../doc/items';
 import { debounce } from '../lib/utils';
+import { Settings } from './settings';
 
 export enum ActionType {
     Navigate = 'Navigate' as any,
@@ -10,8 +11,26 @@ export enum ActionType {
     LoadItem = 'LoadItem' as any,
     ToggleSearch = 'ToggleSearch' as any,
     ChangeSearchQuery = 'ChangeSearchQuery' as any,
-    SearchIndexReady = 'SearchIndexReady' as any,
+    InitSearchIndex = 'InitSearchIndex' as any,
     Search = 'Search' as any
+}
+
+// helper
+export function isError<T>(payload: Error | T): payload is Error {
+    return payload instanceof Error;
+}
+
+export interface InitSearchIndex {
+    settings?: Settings;
+    ready?: boolean;
+}
+export function initSearchIndex(settings: Settings): Action<InitSearchIndex, void> {
+    return {
+        type: ActionType.InitSearchIndex,
+        payload: {
+            settings
+        }
+    };
 }
 
 export function toggleSearch() {
@@ -71,6 +90,7 @@ export interface LoadItem {
 }
 export function navigate(route: Route) {
     return (dispatch: Dispatch, getState: GetState) => {
+        let { settings } = getState();
         dispatch({
             type: ActionType.Navigate,
             payload: {
@@ -96,7 +116,7 @@ export function navigate(route: Route) {
                             }
                         } as Action<LoadItem, void>);
                     } else {
-                        let promise = fetch(`/doc/generated/${moduleMetaName.replace('.json', '')}/${itemId}.json`)
+                        let promise = fetch(`${settings.docRoot}/${moduleMetaName.replace('.json', '')}/${itemId}.json`)
                             .then(res => res.json())
                             .then((item: Item) => {
                                 dispatch({
@@ -119,7 +139,7 @@ export function navigate(route: Route) {
                     } as Action<LoadModule, void>);
                 } else {
                     // load module meta info
-                    let promise = fetch(`/doc/generated/${moduleMetaName}`)
+                    let promise = fetch(`${settings.docRoot}/${moduleMetaName}`)
                         .then(res => res.json())
                         .then((moduleInfo: ModuleInfo) => {
                             dispatch({
