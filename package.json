@@ -45,6 +45,7 @@
     "chai": "^3.2.0",
     "colorguard": "^1.0.1",
     "css-loader": "^0.23.1",
+    "doctrine": "^1.2.0",
     "envify": "^3.4.0",
     "file-loader": "^0.8.5",
     "fs-extra": "^0.23.1",

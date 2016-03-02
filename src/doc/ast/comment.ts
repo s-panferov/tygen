@@ -1,33 +1,30 @@
 import {
-    Declaration,
-    Signature,
-    SymbolDisplayPart
+    Node
 } from 'typescript';
 
-import {
-    Context
-} from '..';
+let doctrine = require('doctrine');
 
-function joinComment(doc: SymbolDisplayPart[]): string {
-    return doc.map(c => c.text).join('');
+export interface Tag {
+    title: string;
+    description?: string;
+    type?: any;
+    name?: any;
 }
 
-export function visitCommentInSignature(sig: Signature, ctx): string {
-    let docComment = sig.getDocumentationComment();
-    if (docComment) {
-        return joinComment(docComment);
-    }
+export interface Comment {
+    description: string;
+    tags: Tag[];
 }
 
-export function visitComment(node: Declaration, ctx: Context): string {
-    let type = ctx.checker.getTypeAtLocation(node);
-    if (type) {
-        let symbol = type.getSymbol();
-        if (symbol) {
-            let docComment = symbol.getDocumentationComment();
-            if (docComment) {
-                return joinComment(docComment);
-            }
-        }
-    }
+export function visitComment(node: Node): Comment {
+    let start = node.getStart();
+    let sourceFile = node.getSourceFile();
+    let getLeadingTriviaWidth = node.getLeadingTriviaWidth();
+    let trivia = sourceFile.getFullText().slice(
+        start - getLeadingTriviaWidth,
+        start
+    ).trim();
+
+    let jsdoc = doctrine.parse(trivia, { unwrap: true });
+    return jsdoc;
 }

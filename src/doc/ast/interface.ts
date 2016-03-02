@@ -151,7 +151,7 @@ export function visitBasicInfo(
         indexSignatures: indexSignatures as any,
         constructSignatures: constructSignatures as any,
         properties,
-        comment: visitComment(base, ctx),
+        comment: visitComment(base),
     };
 }
 

@@ -47,7 +47,6 @@ import {
 
 import {
     visitComment,
-    visitCommentInSignature
 } from './comment';
 
 import { Context } from '../index';
@@ -210,7 +209,7 @@ export function visitPropertySignature(
             name,
             optional: !!prop.questionToken,
             type: visitTypeNode(prop.type, ctx),
-            comment: visitComment(prop, ctx)
+            comment: visitComment(prop)
         }
     ) as PropertySignatureReflection;
 }
@@ -756,7 +755,7 @@ export function visitSignature(sig: SignatureDeclaration, ctx: Context): Signatu
         parameters: sig.parameters &&
             sig.parameters.map(p => visitParameter(p, ctx)),
         type: returnType,
-        comment: visitCommentInSignature(sigType, ctx)
+        comment: visitComment(sig)
     } as SignatureReflection;
 }
 

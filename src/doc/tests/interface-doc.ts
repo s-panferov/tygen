@@ -7,7 +7,6 @@ describe('interface-doc', () => {
     let module = generateInline(`
         /**
          * Doc comment example
-         * @example
          */
         interface Test<T> {
 
@@ -18,7 +17,10 @@ describe('interface-doc', () => {
 
     if (isInterfaceReflection(iface)) {
         it('doc comment', () => {
-            expect(iface.comment).equal('Doc comment example\n@example');
+            expect(iface.comment).deep.equal({
+                description: 'Doc comment example',
+                tags: []
+            });
         });
     } else {
         expect(false).to.true;

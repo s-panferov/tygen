@@ -1,3 +1,7 @@
+/**
+ * Do something interesting
+ * @param id Element id
+ */
 export function waitForEl(id: string, cb: (el: HTMLElement) => any, attempts = 0) {
     function worker() {
         let el = document.getElementById(id);

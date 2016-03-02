@@ -1,3 +1,5 @@
+import { Comment } from './ast/comment';
+
 export enum ItemType {
     Interface = 'Interface' as any,
     UnionType = 'UnionType' as any,
@@ -42,6 +44,6 @@ export interface Item {
     id?: string;
     semanticId?: string;
     name?: string;
-    comment?: string;
+    comment?: Comment;
     itemType?: ItemType;
 }
