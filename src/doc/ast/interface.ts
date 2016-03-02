@@ -21,14 +21,23 @@ import { Item, ItemType } from '../items';
 import {
     TypeParameterReflection,
     visitTypeParameter,
+} from './type/type-parameter';
+
+import {
     visitExpressionWithTypeArguments,
     ExpressionWithTypeArgumentsReflection,
-    isIndexSignatureDeclaration,
+} from './type/expression';
+
+import {
     CallSignatureReflection,
     ConstructorDeclarationReflection,
     IndexSignatureReflection,
-    isConstructorDeclaration
-} from './type';
+} from './type/signature';
+
+import {
+    isIndexSignatureDeclaration,
+    isConstructorDeclaration,
+} from './node-is';
 
 import {
     visitComment

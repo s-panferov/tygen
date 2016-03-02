@@ -3,7 +3,7 @@ import * as theme from '../../explorer/components/theme';
 
 import {
     ConstructorDeclarationReflection
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/signature';
 
 import Signature from '../signature';
 

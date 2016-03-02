@@ -4,7 +4,7 @@ import * as theme from '../../explorer/components/theme';
 import {
     TypeReferenceReflection,
     isTypeReferenceReflection,
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/type-reference';
 
 import SmartLink from '../../explorer/components/smart-link';
 import Paper from '../../explorer/components/paper';

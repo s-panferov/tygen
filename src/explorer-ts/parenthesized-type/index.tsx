@@ -3,7 +3,7 @@ import * as theme from '../../explorer/components/theme';
 
 import {
     ParenthesizedTypeReflection,
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/parenthesized';
 
 import Brackets, { BracketsType } from '../brackets';
 import Type from '../type';

@@ -3,7 +3,7 @@ import * as theme from '../../explorer/components/theme';
 
 import {
     StringLiteralTypeReflection
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/string-literal';
 
 require('./index.css');
 const block = theme.block('ts-string-literal-type');

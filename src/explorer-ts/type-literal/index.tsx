@@ -3,7 +3,7 @@ import * as theme from '../../explorer/components/theme';
 
 import {
     TypeLiteralReflection,
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/type-literal';
 
 import Paper from '../../explorer/components/paper';
 import TypeMembers from '../type-members';

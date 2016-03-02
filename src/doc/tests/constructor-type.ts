@@ -6,7 +6,7 @@ import {
 
 import {
     isConstructorTypeReflection,
-} from '../ast/type';
+} from '../ast/type/signature';
 
 describe('constructor-type', () => {
     let module = generateInline(`

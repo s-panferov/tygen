@@ -6,7 +6,7 @@ import {
 
 import {
     isTypePredicateReflection
-} from '../ast/type';
+} from '../ast/type/type-predicate';
 
 describe('type-predicate', () => {
     let module = generateInline(`

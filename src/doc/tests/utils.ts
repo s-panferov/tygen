@@ -10,9 +10,12 @@ import { CoreType } from '../tools';
 import * as uuid from 'node-uuid';
 
 import {
-    isTypeReferenceReflection,
     isCoreTypeReferenceReflection
 } from '../ast/type';
+
+import {
+        isTypeReferenceReflection,
+} from '../ast/type/type-reference';
 
 import { Item } from '../items';
 

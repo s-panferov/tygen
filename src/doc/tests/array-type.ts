@@ -6,7 +6,7 @@ import {
 
 import {
     isArrayTypeReflection
-} from '../ast/type';
+} from '../ast/type/array';
 
 describe('array-type', () => {
     let module = generateInline(`

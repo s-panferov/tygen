@@ -6,7 +6,7 @@ import {
 
 import {
     isPropertySignatureReflection,
-} from '../ast/type';
+} from '../ast/type/property';
 
 describe('interface-generic', () => {
     let module = generateInline(`

@@ -3,7 +3,7 @@ import * as theme from '../../explorer/components/theme';
 
 import {
     PropertySignatureReflection,
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/property';
 
 import Paper from '../../explorer/components/paper';
 import Figure from '../../explorer/components/figure';

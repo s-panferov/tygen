@@ -6,8 +6,10 @@ import {
 } from '../ast/var';
 import {
     isTypeLiteralReflection,
+} from '../ast/type/type-literal';
+import {
     isTypeReferenceReflection
-} from '../ast/type';
+} from '../ast/type/type-reference';
 
 describe('var:simple', () => {
     let module = generateInline(`

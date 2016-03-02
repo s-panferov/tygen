@@ -1,8 +1,7 @@
-import { generateInline, expect, coreType } from './utils';
-import { CoreType } from '../tools';
+import { generateInline, expect } from './utils';
 import { Item } from '../items';
 import { isInterfaceReflection } from '../ast/interface';
-import { isPropertySignatureReflection } from '../ast/type';
+import { isPropertySignatureReflection } from '../ast/type/property';
 
 function isInherited(item: Item): boolean {
     if (isPropertySignatureReflection(item)) {

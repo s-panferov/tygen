@@ -3,8 +3,11 @@ import * as theme from '../../explorer/components/theme';
 
 import {
     ExpressionWithTypeArgumentsReflection,
+} from '../../doc/ast/type/expression';
+
+import {
     isTypeReferenceReflection
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/type-reference';
 
 import SmartLink from '../../explorer/components/smart-link';
 import Paper from '../../explorer/components/paper';

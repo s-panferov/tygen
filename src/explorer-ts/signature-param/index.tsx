@@ -3,7 +3,7 @@ import * as theme from '../../explorer/components/theme';
 
 import {
     ParameterReflection
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/parameter';
 
 import Type from '../type';
 

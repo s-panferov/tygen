@@ -3,7 +3,7 @@ import * as theme from '../../explorer/components/theme';
 
 import {
     ArrayTypeReflection,
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/array';
 
 import Type from '../type';
 

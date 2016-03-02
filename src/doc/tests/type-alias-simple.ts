@@ -5,8 +5,11 @@ import {
 
 import {
     isUnionTypeReflection,
+} from '../ast/type/intersection-union';
+
+import {
     isTypeReferenceReflection
-} from '../ast/type';
+} from '../ast/type/type-reference';
 
 describe('type-alias:simple', () => {
     let module = generateInline(`

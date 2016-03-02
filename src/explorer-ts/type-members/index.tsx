@@ -6,17 +6,20 @@ import {
 } from '../../doc/items';
 
 import {
-    PropertyDeclarationReflection,
     ConstructorDeclarationReflection,
     GetAccessorDeclarationReflection,
     SetAccessorDeclarationReflection,
     IndexSignatureReflection,
     CallSignatureReflection,
-    isPropertySignatureReflection,
-    isPropertyDeclarationReflection,
     isGetAccessorDeclarationReflection,
     isSetAccessorDeclarationReflection,
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/signature';
+
+import {
+    PropertyDeclarationReflection,
+    isPropertySignatureReflection,
+    isPropertyDeclarationReflection,
+} from '../../doc/ast/type/property';
 
 import {
     isMethodReflection,

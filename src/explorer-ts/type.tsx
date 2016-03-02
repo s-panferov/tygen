@@ -2,19 +2,23 @@ import * as React from 'react';
 
 import {
     TypeReflection,
-    isTypeReferenceReflection,
     isCoreTypeReferenceReflection,
-    isFunctionTypeReflection,
-    isUnionTypeReflection,
-    isIntersectionTypeReflection,
-    isArrayTypeReflection,
-    isStringLiteralTypeReflection,
-    isTupleTypeReflection,
-    isConstructorTypeReflection,
-    isTypePredicateReflection,
-    isTypeLiteralReflection,
-    isParenthesizedTypeReflection
 } from '../doc/ast/type';
+
+import {
+    isUnionTypeReflection,
+    isIntersectionTypeReflection
+} from '../doc/ast/type/intersection-union';
+
+import { isTypeReferenceReflection } from '../doc/ast/type/type-reference';
+import { isFunctionTypeReflection } from '../doc/ast/type/signature';
+import { isArrayTypeReflection } from '../doc/ast/type/array';
+import { isStringLiteralTypeReflection } from '../doc/ast/type/string-literal';
+import { isTupleTypeReflection } from '../doc/ast/type/tuple';
+import { isConstructorTypeReflection } from '../doc/ast/type/signature';
+import { isTypeLiteralReflection } from '../doc/ast/type/type-literal';
+import { isTypePredicateReflection } from '../doc/ast/type/type-predicate';
+import { isParenthesizedTypeReflection } from '../doc/ast/type/parenthesized';
 
 import TypeRef from './type-ref';
 import TypeCore from './type-core';

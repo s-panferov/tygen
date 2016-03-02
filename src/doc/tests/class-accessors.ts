@@ -5,7 +5,7 @@ import {
 import {
     isGetAccessorDeclarationReflection,
     isSetAccessorDeclarationReflection,
-} from '../ast/type';
+} from '../ast/type/signature';
 
 describe('class:accessors', () => {
     let module = generateInline(`

@@ -1,7 +1,7 @@
 import { generateInline, expect, coreType } from './utils';
 import { CoreType } from '../tools';
 import { isInterfaceReflection } from '../ast/interface';
-import { isPropertySignatureReflection } from '../ast/type';
+import { isPropertySignatureReflection } from '../ast/type/property';
 
 describe('interface:simple', () => {
     let module = generateInline(`

@@ -4,7 +4,7 @@ import Join from '../../explorer/components/join';
 
 import {
     SignatureReflection
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/signature';
 
 import Brackets, { BracketsType } from '../brackets';
 import Type from '../type';

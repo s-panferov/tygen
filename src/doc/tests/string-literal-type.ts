@@ -6,7 +6,7 @@ import {
 
 import {
     isStringLiteralTypeReflection
-} from '../ast/type';
+} from '../ast/type/string-literal';
 
 describe('string-literal-type', () => {
     let module = generateInline(`

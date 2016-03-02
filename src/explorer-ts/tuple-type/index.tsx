@@ -4,7 +4,7 @@ import Join from '../../explorer/components/join';
 
 import {
     TupleTypeReflection,
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/tuple';
 
 import Brackets, { BracketsType } from '../brackets';
 import Type from '../type';

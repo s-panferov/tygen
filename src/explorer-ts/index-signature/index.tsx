@@ -8,7 +8,7 @@ import Section from '../section';
 
 import {
     IndexSignatureReflection
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/signature';
 
 import Signature, { SignatureTypeStyle, BracketsType } from '../signature';
 

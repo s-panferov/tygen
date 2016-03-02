@@ -5,7 +5,7 @@ import Type from '../type';
 
 import {
     UnionTypeReflection,
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/intersection-union';
 
 require('./index.css');
 const block = theme.block('ts-union');

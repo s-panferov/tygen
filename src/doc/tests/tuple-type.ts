@@ -6,7 +6,7 @@ import {
 
 import {
     isTupleTypeReflection
-} from '../ast/type';
+} from '../ast/type/tuple';
 
 describe('tuple-type', () => {
     let module = generateInline(`

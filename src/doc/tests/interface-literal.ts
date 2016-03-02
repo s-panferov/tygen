@@ -4,10 +4,11 @@ import {
 } from '../ast/interface';
 
 import {
-    isTypeLiteralReflection,
     isPropertySignatureReflection,
-    isTypeReferenceReflection
-} from '../ast/type';
+} from '../ast/type/property';
+import {
+    isTypeLiteralReflection,
+} from '../ast/type/type-literal';
 
 describe('interface-literal', () => {
     let module = generateInline(`

@@ -7,12 +7,17 @@ import {
 
 import {
     isCallSignatureReflection,
-    isTypeReferenceReflection,
-    isMethodSignatureReflection,
-    isPropertySignatureReflection,
     isFunctionTypeReflection,
     SignatureReflection
-} from '../ast/type';
+} from '../ast/type/signature';
+
+import {
+    isPropertySignatureReflection,
+} from '../ast/type/property';
+
+import {
+    isTypeReferenceReflection,
+} from '../ast/type/type-reference';
 
 import {
     isMethodReflection,

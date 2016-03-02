@@ -7,8 +7,11 @@ import {
 import {
     isIntersectionTypeReflection,
     isUnionTypeReflection,
+} from '../ast/type/intersection-union';
+
+import {
     isPropertySignatureReflection
-} from '../ast/type';
+} from '../ast/type/property';
 
 describe('interface-intersection', () => {
     let module = generateInline(`

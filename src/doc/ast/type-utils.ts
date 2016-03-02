@@ -6,11 +6,23 @@ import { logNode } from '../utils';
 import {
     TypeReflection,
     CoreTypeReferenceReflection,
-    TypeReferenceReflection,
-    visitTypeLiteral,
-    StringLiteralTypeReflection,
-    isTypeLiteral
 } from './type';
+
+import {
+    TypeReferenceReflection
+} from './type/type-reference';
+
+import {
+    visitTypeLiteral,
+} from './type/type-literal';
+
+import {
+    isTypeLiteral
+} from './node-is';
+
+import {
+    StringLiteralTypeReflection,
+} from './type/string-literal';
 
 export function isStringLiteralType(type: Type): type is StringLiteralType {
     return !!(type.flags & TypeFlags.StringLiteral);

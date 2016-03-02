@@ -3,7 +3,7 @@ import * as theme from '../../explorer/components/theme';
 
 import {
     TypeParameterReflection
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/type-parameter';
 
 import Brackets from '../brackets';
 import TypeParameter from '../type-parameter';

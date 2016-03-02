@@ -5,11 +5,14 @@ import {
 } from 'typescript';
 
 import {
-    TypeParameterReflection,
     TypeReflection,
-    visitTypeParameter,
     visitTypeNode
 } from './type';
+
+import {
+    TypeParameterReflection,
+    visitTypeParameter,
+} from './type/type-parameter';
 
 import { Context } from '../index';
 import { Item, ItemType } from '../items';

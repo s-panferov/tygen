@@ -6,7 +6,7 @@ import {
 
 import {
     isIndexSignatureReflection
-} from '../ast/type';
+} from '../ast/type/signature';
 
 describe('interface-index', () => {
     let module = generateInline(`

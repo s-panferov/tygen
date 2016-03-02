@@ -3,7 +3,7 @@ import * as theme from '../../explorer/components/theme';
 
 import {
     TypePredicateReflection,
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/type-predicate';
 
 import Type from '../type';
 

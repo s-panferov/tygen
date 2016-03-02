@@ -3,9 +3,13 @@ import * as theme from '../../explorer/components/theme';
 
 import {
     TypeParameterReflection,
+} from '../../doc/ast/type/type-parameter';
+import {
     isTypeReferenceReflection,
-    isExpressionWithTypeArgumentsReflection
-} from '../../doc/ast/type';
+} from '../../doc/ast/type/type-reference';
+import {
+    isExpressionWithTypeArgumentsReflection,
+} from '../../doc/ast/type/expression';
 
 import SmartLink from '../../explorer/components/smart-link';
 import Paper from '../../explorer/components/paper';

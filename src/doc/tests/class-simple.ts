@@ -4,7 +4,7 @@ import {
 } from '../ast/class';
 import {
     isPropertyDeclarationReflection
-} from '../ast/type';
+} from '../ast/type/property';
 
 describe('class:simple', () => {
     let module = generateInline(`

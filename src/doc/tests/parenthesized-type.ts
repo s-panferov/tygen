@@ -5,9 +5,12 @@ import {
 } from '../ast/type-alias';
 
 import {
-    isParenthesizedTypeReflection,
     isUnionTypeReflection
-} from '../ast/type';
+} from '../ast/type/intersection-union';
+
+import {
+    isParenthesizedTypeReflection,
+} from '../ast/type/parenthesized';
 
 describe('parenthesized-type', () => {
     let module = generateInline(`
