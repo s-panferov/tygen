@@ -48,9 +48,7 @@ export default class Accessor extends React.Component<AccessorProps, AccessorSta
                             { this.renderSignature(method, type) }
                         </Figure>
                         { method.comment &&
-                            <Comment>
-                                { method.comment }
-                            </Comment>
+                            <Comment comment={ method.comment }/>
                         }
                     </Section>
                 </Paper>

@@ -46,9 +46,7 @@ export default class IndexSignature extends React.Component<IndexSignatureProps,
                             { this.renderSignature() }
                         </Figure>
                         { signature.comment &&
-                            <Comment>
-                                { signature.comment }
-                            </Comment>
+                            <Comment comment={ signature.comment }/>
                         }
                     </Section>
                 </Paper>

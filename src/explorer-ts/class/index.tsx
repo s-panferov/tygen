@@ -2,12 +2,12 @@ import * as React from 'react';
 import * as theme from '../../explorer/components/theme';
 
 import { ClassReflection } from '../../doc/ast/class';
-import Interface from '../interface';
+import Interface, { InterfaceProps } from '../interface';
 
 require('./index.css');
 const block = theme.block('ts-class');
 
-export interface ClassProps extends React.CommonProps {
+export interface ClassProps extends InterfaceProps {
     htmlProps?: React.HTMLAttributes;
     item: ClassReflection;
 }

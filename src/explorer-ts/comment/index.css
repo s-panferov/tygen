@@ -2,4 +2,6 @@
 
 .ts-comment {
     font-family: var(--sans-serif);
+
+    max-width: 900px;
 }

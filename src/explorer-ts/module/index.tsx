@@ -81,6 +81,8 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
                 <Interface
                     key={ item.id }
                     item={ item }
+                    showInherited={ this.props.displaySettings.inherited }
+                    showNonPublic={ !this.props.displaySettings.public }
                 />
             );
         } else if (isClassReflection(item)) {
@@ -88,6 +90,8 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
                 <Class
                     key={ item.id }
                     item={ item }
+                    showInherited={ this.props.displaySettings.inherited }
+                    showNonPublic={ !this.props.displaySettings.public }
                 />
             );
         } else if (isFunctionReflection(item)) {

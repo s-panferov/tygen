@@ -45,9 +45,7 @@ export default class Method extends React.Component<MethodProps, MethodState> {
                                     />
                                 </Figure>
                                 { sig.comment &&
-                                    <Comment>
-                                        { sig.comment }
-                                    </Comment>
+                                    <Comment comment={ sig.comment }/>
                                 }
                             </div>;
                         })

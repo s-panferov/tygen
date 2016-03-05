@@ -40,6 +40,8 @@ const block = theme.block('ts-type-members');
 
 export interface TypeMembersProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
+    showInherited: boolean;
+    showNonPublic: boolean;
     properties: Item[];
     indexSignatures?: IndexSignatureReflection[];
     callSignatures?: CallSignatureReflection[];
@@ -70,9 +72,13 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
         members.forEach(member => {
             if (isPropertySignatureReflection(member)
                 || isPropertyDeclarationReflection(member)) {
-                    properties.push(member);
+                    if (!member.inherited || (member.inherited && this.props.showInherited)) {
+                        properties.push(member);
+                    }
             } else if (isMethodReflection(member)) {
-                methods.push(member);
+                if (!member.inherited || (member.inherited && this.props.showInherited)) {
+                    methods.push(member);
+                }
             } else if (isGetAccessorDeclarationReflection(member)) {
                 let accessor = accessors.find(acc => acc[1].name == member.name);
                 if (accessor) {

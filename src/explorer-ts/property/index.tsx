@@ -41,9 +41,7 @@ export default class Property extends React.Component<PropertyProps, PropertySta
                             { this.renderSignature() }
                         </Figure>
                         { property.comment &&
-                            <Comment>
-                                { property.comment }
-                            </Comment>
+                            <Comment comment={ property.comment } />
                         }
                     </Section>
                 </Paper>

@@ -36,6 +36,8 @@ export default class TypeLiteral<P extends TypeLiteralProps> extends React.Compo
                             <TypeMembers
                                 inline={ true }
                                 properties={ type.members }
+                                showInherited={ false }
+                                showNonPublic={ false }
                             />
                         }
                     </div>

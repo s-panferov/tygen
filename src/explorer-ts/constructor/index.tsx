@@ -46,9 +46,7 @@ export default class Constructor extends React.Component<ConstructorProps, Const
                             { this.renderSignature() }
                         </Figure>
                         { ctor.comment &&
-                            <Comment>
-                                { ctor.comment }
-                            </Comment>
+                            <Comment comment={ ctor.comment }/>
                         }
                     </Section>
                 </Paper>

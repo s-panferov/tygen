@@ -46,9 +46,7 @@ export default class CallSignature extends React.Component<CallSignatureProps, C
                             { this.renderSignature() }
                         </Figure>
                         { signature.comment &&
-                            <Comment>
-                                { signature.comment }
-                            </Comment>
+                            <Comment comment={ signature.comment }/>
                         }
                     </Section>
                 </Paper>

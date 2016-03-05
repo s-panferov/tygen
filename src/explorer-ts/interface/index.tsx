@@ -21,6 +21,8 @@ const block = theme.block('ts-interface');
 export interface InterfaceProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     item: InterfaceReflection;
+    showInherited: boolean;
+    showNonPublic: boolean;
 }
 
 export interface InterfaceState {}
@@ -66,15 +68,18 @@ export default class Interface<P extends InterfaceProps> extends React.Component
                         <InterfaceHeritage clauses={ iface.heritageClauses }/> }
                 </div>
                 { iface.comment &&
-                    <Comment className={ block('comment') }>
-                        { iface.comment }
-                    </Comment>
+                    <Comment
+                        className={ block('comment') }
+                        comment={ iface.comment }
+                    />
                 }
                 {
                     iface.properties &&
                         <TypeMembers
                             properties={ iface.properties }
                             indexSignatures={ iface.indexSignatures }
+                            showInherited={ this.props.showInherited }
+                            showNonPublic={ this.props.showNonPublic }
                             callSignatures={ iface.callSignatures }
                             constructSignatures={ iface.constructSignatures }
                         />
