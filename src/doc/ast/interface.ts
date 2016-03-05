@@ -80,14 +80,14 @@ export function visitBasicInfo(
 ): InterfaceReflection {
     let type = ctx.checker.getTypeAtLocation(base) as InterfaceType;
 
+    console.log(type);
+
     let typeParameters = type.typeParameters &&
         type.typeParameters.map(tp => {
             return visitTypeParameter(tp.symbol.declarations[0] as any, ctx);
         });
 
     let typeHeritageClauses: HeritageClause[] = [];
-    let symbol = type.getSymbol();
-
     let declarations = type.symbol.getDeclarations();
     let typeIndexSignatures: IndexSignatureDeclaration[] = [];
     let constructorDeclarations: ConstructorDeclaration[] = [];

@@ -70,6 +70,7 @@
         "./doc/tests/interface-properties.ts",
         "./doc/tests/interface-simple.ts",
         "./doc/tests/merge-class-interface.ts",
+        "./doc/tests/merge-enum-namespace.ts",
         "./doc/tests/merge-function-namespace.ts",
         "./doc/tests/merge-interface-interface.ts",
         "./doc/tests/namespaces/_module.ts",

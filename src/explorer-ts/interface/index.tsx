@@ -13,7 +13,6 @@ import TypeParameters from '../type-parameters';
 import TypeMembers from '../type-members';
 import InterfaceHeritage from '../interface-heritage';
 import Comment from '../comment';
-import Section from '../section';
 
 require('./index.css');
 const block = theme.block('ts-interface');
@@ -68,10 +67,7 @@ export default class Interface<P extends InterfaceProps> extends React.Component
                         <InterfaceHeritage clauses={ iface.heritageClauses }/> }
                 </div>
                 { iface.comment &&
-                    <Comment
-                        className={ block('comment') }
-                        comment={ iface.comment }
-                    />
+                    <Comment comment={ iface.comment } />
                 }
                 {
                     iface.properties &&

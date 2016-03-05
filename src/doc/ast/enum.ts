@@ -8,7 +8,12 @@ import {
 import { Context } from '../index';
 import { Item, ItemType } from '../items';
 
-export interface EnumDeclarationReflection extends Item {
+import {
+    InterfaceReflection,
+    visitBasicInfo,
+} from './interface';
+
+export interface EnumDeclarationReflection extends InterfaceReflection {
     members?: EnumMemberReflection[];
 }
 
@@ -31,14 +36,15 @@ export function visitEnum(
     ctx: Context
 ): EnumDeclarationReflection {
     let type = ctx.checker.getTypeAtLocation(en);
+    let basicInfo = visitBasicInfo(en, ctx);
 
-    return {
+    return Object.assign(basicInfo, {
         id: ctx.id(type),
         itemType: ItemType.EnumDeclaration,
         name: en.name && en.name.getText(),
         members: en.members
             && en.members.map(member => visitEnumMember(member, ctx)),
-    };
+    });
 }
 
 export function visitEnumMember(member: EnumMember, ctx: Context): EnumMemberReflection {

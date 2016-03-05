@@ -27,6 +27,7 @@ import './salsa-function';
 import './merge-class-interface';
 import './merge-interface-interface';
 import './merge-function-namespace';
+import './merge-enum-namespace';
 import './namespaces';
 
 console.log('tests loaded'); // WARN! BABEL HACK https://phabricator.babeljs.io/T7071
