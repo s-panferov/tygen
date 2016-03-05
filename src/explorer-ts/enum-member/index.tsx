@@ -6,6 +6,10 @@ import {
 } from '../../doc/ast/enum';
 
 import Paper from '../../explorer/components/paper';
+import Figure from '../../explorer/components/figure';
+
+import Section from '../section';
+import Comment from '../comment';
 
 require('./index.css');
 const block = theme.block('ts-enum-member');
@@ -28,12 +32,16 @@ export default class EnumMember extends React.Component<EnumMemberProps, EnumMem
         let member = this.props.member;
         return (
             <Paper className={ this.getClassName() }>
-                { member.name }
-                { member.initializer &&
-                    [
-                        '=',
-                        member.initializer
-                    ]
+                <Section title={ member.name } />
+                {
+                    member.initializer &&
+                        <Figure className={ block('figure') }>
+                            { member.initializer }
+                        </Figure>
+                }
+                {
+                    member.comment &&
+                        <Comment comment={ member.comment } />
                 }
             </Paper>
         );

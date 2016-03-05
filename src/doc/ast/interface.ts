@@ -80,8 +80,6 @@ export function visitBasicInfo(
 ): InterfaceReflection {
     let type = ctx.checker.getTypeAtLocation(base) as InterfaceType;
 
-    console.log(type);
-
     let typeParameters = type.typeParameters &&
         type.typeParameters.map(tp => {
             return visitTypeParameter(tp.symbol.declarations[0] as any, ctx);

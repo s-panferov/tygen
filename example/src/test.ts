@@ -25,3 +25,9 @@ export interface Index<A> {
 
     (b: Index<A>): Index<A>;
 }
+
+export enum Test {
+    One = 'One' as any,
+    Two = 'Two' as any,
+    Three = 'Three' as any,
+}
