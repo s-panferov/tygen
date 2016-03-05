@@ -36,7 +36,7 @@ export default class Method extends React.Component<MethodProps, MethodState> {
                 <Section title={ <span>fn { method.name }</span> }>
                     {
                         method.callSignatures.map(sig => {
-                            return <div className={ block('signature-section') } >
+                            return <div key={ sig.id } className={ block('signature-section') } >
                                 <Figure className={ block('figure') }>
                                     <Signature
                                         className={ block('signature') }

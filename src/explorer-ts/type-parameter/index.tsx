@@ -61,7 +61,7 @@ export default class TypeParameter extends React.Component<TypeParameterProps, T
         }
 
         return [
-            <span> extends </span>,
+            <span key='extends'> extends </span>,
             view
         ];
     }
