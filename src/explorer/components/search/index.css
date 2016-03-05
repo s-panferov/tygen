@@ -25,6 +25,7 @@
     }
 
     &__main {
+        z-index: 99;
         position: fixed;
         top: 0;
         width: 500px;
@@ -55,7 +56,6 @@
         font-size: 20px;
         line-height: 40px;
         font-family: var(--sans-serif);
-        border-bottom: 1px solid #ccc;
     }
 
     &__results {

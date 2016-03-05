@@ -4,6 +4,7 @@ import * as theme from '../../explorer/components/theme';
 import Layout from '../../explorer/components/layout';
 import Heading from '../../explorer/components/heading';
 import { Route } from '../../explorer/service';
+import { DisplaySettings } from '../../explorer/settings';
 import { Item } from '../../doc/items';
 import { ModuleInfo } from '../../doc';
 import { isInterfaceReflection } from '../../doc/ast/interface';
@@ -27,6 +28,7 @@ const block = theme.block('ts-module');
 export interface ModuleProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     module: ModuleInfo;
+    displaySettings: DisplaySettings;
     item: Item;
     route: Route;
 }
@@ -65,7 +67,10 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
             return this.renderItem(this.props.item);
         } else {
             return (
-                <List module={ this.props.module } view={ ListView.Reference }/>
+                <List
+                    module={ this.props.module }
+                    view={ ListView.Reference }
+                />
             );
         }
     }

@@ -20,7 +20,7 @@ export default class Comment extends React.Component<CommentProps, CommentState>
     render() {
         return (
             <div className={ this.getClassName() }>
-                { this.props.children }
+            
             </div>
         );
     }

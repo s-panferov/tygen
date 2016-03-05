@@ -3,10 +3,11 @@ import { Route } from './state';
 import { ModuleInfo } from '../doc/index';
 import { Item } from '../doc/items';
 import { debounce } from '../lib/utils';
-import { Settings } from './settings';
+import { Settings, DisplaySettings } from './settings';
 
 export enum ActionType {
     Navigate = 'Navigate' as any,
+    ChangeDisplaySettings = 'ChangeDisplaySettings' as any,
     LoadModule = 'LoadModule' as any,
     LoadItem = 'LoadItem' as any,
     ToggleSearch = 'ToggleSearch' as any,
@@ -55,6 +56,15 @@ export function search(query: string) {
         dispatch(initAction);
         getState().searchIndex.postMessage(initAction);
     };
+}
+
+export interface ChangeDisplaySettings extends DisplaySettings {
+}
+export function changeDisplaySettings(newSettings: DisplaySettings) {
+    return {
+        type: ActionType.ChangeDisplaySettings,
+        payload: newSettings
+    } as Action<ChangeDisplaySettings, void>;
 }
 
 export var debouncedSearch = debounce((dispatch: Dispatch, query) => {

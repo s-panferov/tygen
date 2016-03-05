@@ -1,7 +1,7 @@
 import MemoryFileSystem from 'memory-fs';
-import { DocRegistry, PackageInfo, ModuleInfo } from '../doc/index';
+import { DocRegistry, PackageInfo } from '../doc/index';
 import { Maybe } from 'tsmonad';
-import { MemoryFsStat } from 'memory-fs';
+import { Settings } from './settings';
 
 import * as path from 'path';
 
@@ -39,9 +39,11 @@ interface Packages {
 export default class Service {
     registry: DocRegistry;
     packages: Packages;
+    settings: Settings;
 
-    constructor(registry: DocRegistry) {
+    constructor(registry: DocRegistry, settings: Settings) {
         this.registry = registry;
+        this.settings = settings;
         this.packages = readPackages(registry);
     }
 
@@ -51,6 +53,22 @@ export default class Service {
 
     getMainPackage(): PackageService {
         return this.getPackage(this.getMainPackageName());
+    }
+
+    getDefaultRoute(): Route {
+        let mainPackage = this.getMainPackage();
+        let route = {
+            pkg: this.getMainPackageName(),
+            path: '/'
+        };
+
+        let docscript = mainPackage.info.docscript;
+        if (docscript) {
+            if (docscript.defaultPath) {
+                route.path = docscript.defaultPath;
+            }
+        }
+        return route;
     }
 
     getPackage(pkgName: string): PackageService {
@@ -170,7 +188,6 @@ function readPackages(registry: DocRegistry): Packages {
 
 export function pathFromRoute(route: Route): string {
     let routeUrl = `/${route.pkg}${route.path}`;
-    routeUrl = routeUrl.replace(/[.]/g, '~~');
 
     if (route.semanticId) {
         routeUrl += '?sid=' + route.semanticId;
@@ -184,7 +201,7 @@ export function pathFromRoute(route: Route): string {
 export function routeFromPath(urlPath: string, query: any, service: Service): Route {
     let parts = urlPath.split('/').filter(Boolean);
     let routePkg = parts[0];
-    let routePath = '/' + parts.slice(1).join('/').replace(/~~/g, '.');
+    let routePath = '/' + parts.slice(1).join('/');
     let id = query.id || (query.sid &&
                 service.getIdBySemanticId(routePkg, routePath, query.sid));
 

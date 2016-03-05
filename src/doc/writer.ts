@@ -165,7 +165,7 @@ export class DocWriter {
 
         let packagesInfo = {};
         for (let key of Object.keys(this.context.packages)) {
-            packagesInfo[key] = this.context.packages[key];
+            packagesInfo[key] = this.context.packages[key].info;
         }
 
         let buf = `

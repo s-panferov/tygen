@@ -35,8 +35,7 @@ export function createAppContainer() {
 }
 
 function run(registry, appContainer) {
-    let service = new Service(registry);
-
+    let service = new Service(registry, settings);
     let search = new Worker(`${settings.assetsRoot}/search-index.js`);
 
     let prevState = defaultState(service, plugins, search, settings);
@@ -56,10 +55,7 @@ function run(registry, appContainer) {
         if (location.action === 'POP') {
             if (location.pathname === '/') {
                 store.dispatch(
-                    actions.navigate({
-                        pkg: null,
-                        path: ''
-                    })
+                    actions.navigate(service.getDefaultRoute())
                 );
             } else {
                 store.dispatch(

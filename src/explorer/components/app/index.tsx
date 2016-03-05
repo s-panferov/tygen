@@ -13,6 +13,7 @@ require('./index.css');
 
 import { ModuleInfo } from '../../../doc';
 import { Item } from '../../../doc/items';
+import { DisplaySettings } from '../../settings';
 
 import Layout from '../layout';
 import Module from '../module';
@@ -28,6 +29,7 @@ interface AppReduxProps extends DispatchProps {
     service?: Service;
     route?: Route;
     plugins?: PluginRegistry;
+    displaySettings?: DisplaySettings;
 
     module?: ModuleInfo;
     item?: Item;
@@ -41,8 +43,8 @@ const KEY_MAP = {
     'toggleSearch': ['`', ']'],
 };
 
-@connect(({ activity, service, route, plugins, module, item }): AppReduxProps => {
-    return { activity, service, route, plugins, module, item };
+@connect(({ activity, service, route, plugins, module, item, displaySettings }): AppReduxProps => {
+    return { activity, service, route, plugins, module, item, displaySettings };
 })
 export default class App extends React.Component<AppProps, void> {
     static contextTypes = theme.themeContext;
@@ -59,6 +61,7 @@ export default class App extends React.Component<AppProps, void> {
         if (this.props.route !== nextProps.route
             || this.props.module !== nextProps.module
             || this.props.item !== nextProps.item
+            || this.props.displaySettings !== nextProps.displaySettings
         ) {
             return true;
         } else {
@@ -78,7 +81,9 @@ export default class App extends React.Component<AppProps, void> {
                         <NProgress activity={ this.props.activity }/>
                         <Header
                             route={ this.props.route }
+                            displaySettings={ this.props.displaySettings }
                             onNavigate={ this.onNavigate}
+                            onChangeDisplaySettings={ this.onChangeDisplaySettings }
                         />
                         <Layout
                             className={ block('layout') }
@@ -92,6 +97,7 @@ export default class App extends React.Component<AppProps, void> {
                                 plugins={ this.props.plugins }
                                 route={ this.props.route }
                                 module={ this.props.module }
+                                displaySettings={ this.props.displaySettings }
                                 item={ this.props.item }
                                 onNavigate={ this.onNavigate }
                             />
@@ -108,6 +114,13 @@ export default class App extends React.Component<AppProps, void> {
         );
 
         return false;
+    }
+
+    @autobind
+    onChangeDisplaySettings(settings: DisplaySettings) {
+        this.props.dispatch(
+            actions.changeDisplaySettings(settings)
+        );
     }
 
     @autobind

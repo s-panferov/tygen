@@ -27,6 +27,9 @@ export interface PackageInfo {
     name: string;
     version: string;
     description: string;
+    docscript?: {
+        defaultPath?: string
+    };
 }
 
 export interface FileInfo {

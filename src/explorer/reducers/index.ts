@@ -6,7 +6,8 @@ import {
     ChangeSearchQuery,
     Search,
     isError,
-    InitSearchIndex
+    InitSearchIndex,
+    ChangeDisplaySettings
 } from '../actions';
 
 export default function root(state: State, action: Action<any, any>): State {
@@ -25,6 +26,8 @@ export default function root(state: State, action: Action<any, any>): State {
             return initSearchIndex(state, action as any);
         case ActionType.Search:
             return search(state, action as any);
+        case ActionType.ChangeDisplaySettings:
+            return changeDisplaySettings(state, action as any);
         default:
             return state;
     }
@@ -72,6 +75,18 @@ function loadModule(state: State, { payload }: Action<LoadModule, void>): State 
                     [ moduleInfo.fileInfo.metaName ]: moduleInfo
                 }),
                 module: moduleInfo
+            }
+        );
+    } else {
+        return state;
+    }
+}
+
+function changeDisplaySettings(state: State, { payload }: Action<ChangeDisplaySettings, void>): State {
+    if (!isError(payload)) {
+        return Object.assign({}, state,
+            {
+                displaySettings: Object.assign({}, state.displaySettings, payload)
             }
         );
     } else {

@@ -1,7 +1,7 @@
 import Service, { Route } from './service';
 import PluginRegistry from './plugins';
 import { ModuleInfo, Item } from '../doc';
-import { Settings, defaultSettings } from './settings';
+import { Settings, DisplaySettings } from './settings';
 
 export { Route, PluginRegistry }
 
@@ -27,6 +27,7 @@ export interface State {
     searchInProgress?: boolean;
     searchResults?: SearchResult;
     settings?: Settings;
+    displaySettings?: DisplaySettings;
 }
 
 export function defaultState(
@@ -42,6 +43,11 @@ export function defaultState(
         searchIndex,
         searchInProgress: false,
         searchIndexReady: false,
+        displaySettings: {
+            inherited: false,
+            public: true,
+            exported: true
+        },
         activity: new ActivityManager(),
         service,
         plugins,

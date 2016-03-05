@@ -2,6 +2,7 @@ import * as React from 'react';
 import { ModuleInfo } from '../doc';
 import { Item } from '../doc/items';
 import { Route } from './service';
+import { DisplaySettings } from './settings';
 
 export interface Plugin {
     (reg: PluginRegistry): void;
@@ -10,6 +11,7 @@ export interface Plugin {
 export interface ModuleComponentProps extends React.CommonProps {
     route: Route;
     module: ModuleInfo;
+    displaySettings: DisplaySettings;
     item: Item;
 }
 

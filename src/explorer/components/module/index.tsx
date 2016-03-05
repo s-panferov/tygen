@@ -2,6 +2,8 @@ import * as React from 'react';
 import * as theme from '../theme';
 
 import { Route, PluginRegistry } from '../../state';
+import { DisplaySettings } from '../../settings';
+
 import { ModuleInfo } from '../../../doc/index';
 import { Item } from '../../../doc/items';
 
@@ -11,6 +13,7 @@ const block = theme.block('module');
 export interface ModuleProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     route: Route;
+    displaySettings: DisplaySettings;
     module: ModuleInfo;
     item: Item;
     plugins: PluginRegistry;
@@ -46,6 +49,7 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
                 <Component
                     className={ block('view') }
                     route={ this.props.route }
+                    displaySettings={ this.props.displaySettings }
                     item={ this.props.item }
                     module={ module }
                 />

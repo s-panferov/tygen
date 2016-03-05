@@ -38,6 +38,13 @@
     &__actions {
         flex: 0 0 auto;
         margin-right: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    &__toggle {
+        margin-right: 20px;
+        font-size: 14px;
     }
 
     &__logo {

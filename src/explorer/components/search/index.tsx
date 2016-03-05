@@ -8,6 +8,8 @@ import Link from '../link';
 
 import { connect, DispatchProps, actions } from '../../redux';
 
+let TextField = require('material-ui/lib/text-field');
+
 require('./index.css');
 const block = theme.block('search');
 
@@ -65,13 +67,15 @@ export default class Search extends React.Component<SearchProps & SearchReduxPro
                         this.props.searchActive &&
                             <div className={ block('main') }>
                                 <div className={ block('input') }>
-                                    <input
+                                    <TextField
+                                        placeholder='Type to search'
                                         className={ block('control') }
                                         autoFocus={ true }
+                                        fullWidth={ true }
                                         value={ this.props.searchQuery }
                                         onChange={ this.onChange }
                                     >
-                                    </input>
+                                    </TextField>
                                 </div>
                                 <div className={ block('results') }>
                                     {
