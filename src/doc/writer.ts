@@ -1,5 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
+import { spawn } from 'child_process';
 import { ItemType } from './items';
 import { Context, IdMap, SemanticIdMap } from './index';
 import { extractPackage } from './utils';
@@ -118,7 +119,30 @@ export class DocWriter {
         let [regModule, flatItems] = this.generateRegistryModule(dir);
         fs.writeFileSync(path.join(dir, 'registry.json'), regModule);
 
-        return this.generateSearchIndex(dir, flatItems, () => {});
+        return this.deflate(dir)
+            .then(() => {
+                return this.generateSearchIndex(dir, flatItems, () => {});
+            });
+    }
+
+    deflate(dir): Promise<any> {
+        return new Promise((resolve, reject) => {
+            console.log('spawn gzip');
+            let gzip = spawn('gzip', [ '-r', '-9', dir ]);
+
+            gzip.stdout.on('data', (data) => {
+              console.log(`stdout: ${data}`);
+            });
+
+            gzip.stderr.on('data', (data) => {
+              console.log(`stderr: ${data}`);
+            });
+
+            gzip.on('close', (code) => {
+              console.log(`gzip exited with code ${code}`);
+              resolve();
+            });
+        });
     }
 
     generateSearchIndex(dir: string, flatItems: any[], cb: () => void): Promise<any> {

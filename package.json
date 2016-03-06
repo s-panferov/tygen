@@ -100,7 +100,6 @@
     "style-loader": "^0.13.0",
     "tsconfig": "^2.2.0",
     "tslint": "3.5.0-dev.1",
-    "tsmonad": "^0.3.7",
     "typescript": "^1.9.0-dev.20160227",
     "uglifyify": "^3.0.1",
     "webpack": "^1.12.13",

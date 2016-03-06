@@ -1,5 +1,6 @@
 import { Action, Dispatch, GetState } from './redux';
 import { Route } from './state';
+import { inflateJson } from './inflate';
 import { ModuleInfo } from '../doc/index';
 import { Item } from '../doc/items';
 import { debounce } from '../lib/utils';
@@ -111,61 +112,61 @@ export function navigate(route: Route) {
         let { activity, service, items, modules } = getState();
         let moduleMetaName = service.getModuleMetaName(route);
 
-        let promise = moduleMetaName.caseOf({
-            just: (moduleMetaName) => {
-                let promises: Promise<any>[] = [];
-                if (route.id) {
-                    let itemId = route.mainId || route.id;
+        let promise: Promise<any>;
+        if (!moduleMetaName) {
+            promise = Promise.resolve();
+        } else {
+            let promises: Promise<any>[] = [];
+            if (route.id) {
+                let itemId = route.mainId || route.id;
 
-                    if (items[itemId]) {
-                        dispatch({
-                            type: ActionType.LoadItem,
-                            payload: {
-                                // item from cache
-                                item: items[itemId]
-                            }
-                        } as Action<LoadItem, void>);
-                    } else {
-                        let promise = fetch(`${settings.docRoot}/${moduleMetaName.replace('.json', '')}/${itemId}.json`)
-                            .then(res => res.json())
-                            .then((item: Item) => {
-                                dispatch({
-                                    type: ActionType.LoadItem,
-                                    payload: {
-                                        item
-                                    }
-                                } as Action<LoadItem, void>);
-                            });
-                        promises.push(promise);
-                    }
-                }
-
-                if (modules[moduleMetaName]) {
+                if (items[itemId]) {
                     dispatch({
-                        type: ActionType.LoadModule,
+                        type: ActionType.LoadItem,
                         payload: {
-                            moduleInfo: modules[moduleMetaName]
+                            // item from cache
+                            item: items[itemId]
                         }
-                    } as Action<LoadModule, void>);
+                    } as Action<LoadItem, void>);
                 } else {
-                    // load module meta info
-                    let promise = fetch(`${settings.docRoot}/${moduleMetaName}`)
-                        .then(res => res.json())
-                        .then((moduleInfo: ModuleInfo) => {
+                    let promise = fetch(`${settings.docRoot}/${moduleMetaName.replace('.json', '')}/${itemId}.json.gz`)
+                        .then(res => inflateJson(res))
+                        .then((item: Item) => {
                             dispatch({
-                                type: ActionType.LoadModule,
+                                type: ActionType.LoadItem,
                                 payload: {
-                                    moduleInfo
+                                    item
                                 }
-                            } as Action<LoadModule, void>);
+                            } as Action<LoadItem, void>);
                         });
                     promises.push(promise);
                 }
+            }
 
-                return Promise.all(promises) as Promise<any>;
-            },
-            nothing: () => Promise.resolve()
-        });
+            if (modules[moduleMetaName]) {
+                dispatch({
+                    type: ActionType.LoadModule,
+                    payload: {
+                        moduleInfo: modules[moduleMetaName]
+                    }
+                } as Action<LoadModule, void>);
+            } else {
+                // load module meta info
+                let promise = fetch(`${settings.docRoot}/${moduleMetaName}.gz`)
+                    .then(res => inflateJson(res))
+                    .then((moduleInfo) => {
+                        dispatch({
+                            type: ActionType.LoadModule,
+                            payload: {
+                                moduleInfo: moduleInfo as any
+                            }
+                        } as Action<LoadModule, void>);
+                    });
+                promises.push(promise);
+            }
+
+            promise = Promise.all(promises) as Promise<any>;
+        }
 
         promise = promise.catch(e => { console.error(e.toString()); throw e; });
         activity.watch(promise);

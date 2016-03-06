@@ -4,4 +4,3 @@
 /// <reference path="whatwg-fetch/whatwg-fetch.d.ts" />
 /// <reference path="tsconfig/tsconfig.d.ts" />
 /// <reference path="minimist/minimist.d.ts" />
-/// <reference path="../node_modules/tsmonad/dist/tsmonad.d.ts" />

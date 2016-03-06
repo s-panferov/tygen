@@ -97,6 +97,7 @@
         "./explorer/defines.d.ts",
         "./explorer/helpers.ts",
         "./explorer/id.ts",
+        "./explorer/inflate.ts",
         "./explorer/plugins.ts",
         "./explorer/reducers/index.ts",
         "./explorer/redux.ts",

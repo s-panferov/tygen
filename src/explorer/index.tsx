@@ -10,6 +10,7 @@ import { defaultState, Route, State } from './state';
 import { Provider, createStore, actions } from './redux';
 import { ThemeProvider, ThemeType } from './components/theme';
 import { waitForEl } from './helpers';
+import { inflateJson } from './inflate';
 import { defaultSettings } from './settings';
 
 import App from './components/app';
@@ -114,8 +115,8 @@ function scroll(state: State) {
     }
 }
 
-fetch(`${settings.docRoot}/registry.json`)
-    .then(res => res.json())
+fetch(`${settings.docRoot}/registry.json.gz`)
+    .then(res => inflateJson(res))
     .then((registry) => {
         let appContainer = createAppContainer();
         run(registry, appContainer);

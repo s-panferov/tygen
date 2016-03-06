@@ -1,6 +1,5 @@
 import MemoryFileSystem from 'memory-fs';
 import { DocRegistry, PackageInfo } from '../doc/index';
-import { Maybe } from 'tsmonad';
 import { Settings } from './settings';
 
 import * as path from 'path';
@@ -79,12 +78,12 @@ export default class Service {
         return this.packages;
     }
 
-    getModuleMetaName(route: Route): Maybe<string> {
+    getModuleMetaName(route: Route): string {
         if (!route.pkg) {
-            return Maybe.nothing();
+            return null;
         } else {
             let pkg = this.getPackage(route.pkg);
-            return Maybe.maybe(pkg.files[route.path]);
+            return pkg.files[route.path];
         }
     }
 

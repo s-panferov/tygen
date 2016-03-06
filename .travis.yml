@@ -8,6 +8,7 @@ script:
 - npm run search-index-lib
 - npm run explorer-build
 - npm run test
+- npm run gen-doc
 after_success: bash ./deploy-gh-pages.sh
 env:
   global:

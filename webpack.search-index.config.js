@@ -33,7 +33,8 @@ var config = {
 
     resolve: {
         root: [
-            path.join(__dirname, 'node_modules'),
+            path.join(__dirname, "node_modules"),
+            path.join(__dirname, "bower_components"),
         ],
         extensions: ['', '.ts', '.tsx', '.webpack.js', '.web.js', '.js'],
         alias: {
@@ -50,7 +51,11 @@ var config = {
         }]
     },
 
-    plugins: []
+    plugins: [
+        new webpack.ResolverPlugin(
+            new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
+        ),
+    ]
 };
 
 if (isProduction) {
