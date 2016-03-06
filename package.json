@@ -18,10 +18,10 @@
     "loader": "./node_modules/.bin/webpack --config webpack.loader.config.js --watch --progress",
     "loader-build": "./node_modules/.bin/webpack --config webpack.loader.config.js --progress --bail",
     "search-index": "./node_modules/.bin/webpack --config webpack.search-index.config.js --watch --progress",
-    "search-index-build": "./node_modules/.bin/webpack --config webpack.search-index.config.js --progress --bail",
+    "search-index-build": "./node_modules/.bin/webpack --config webpack.search-index.config.js --progress --bail -p",
     "search-index-lib": "NODE_ENV=production ./node_modules/.bin/browserify -i leveldown -t brfs -g envify -g uglifyify src/search-index/lib.js > dist/assets/search-index-lib.js",
     "explorer": "./node_modules/.bin/webpack-dev-server --hot --inline --config webpack.explorer.config.js --progress --history-api-fallback",
-    "explorer-build": "./node_modules/.bin/webpack --config webpack.explorer.config.js --progress --bail",
+    "explorer-build": "./node_modules/.bin/webpack --config webpack.explorer.config.js --progress --bail -p",
     "explorer-watch": "./node_modules/.bin/webpack --config webpack.explorer.config.js --progress --watch"
   },
   "repository": {

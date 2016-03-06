@@ -5,6 +5,7 @@ cache:
   directories:
   - node_modules
   - bower_components
+  - doc-repo
 before_script:
   - npm install -g bower
   - bower install

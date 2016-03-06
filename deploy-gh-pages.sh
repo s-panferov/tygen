@@ -2,8 +2,7 @@
 set -e # exit with nonzero exit code if anything fails
 
 if [[ $TRAVIS_BRANCH == 'master' ]]
-    rm -rf doc-repo
-    mkdir doc-repo
+    mkdir -p doc-repo
 
     cp -r doc doc-repo/
     cd doc-repo
