@@ -1,15 +1,12 @@
 #!/bin/bash
 set -e # exit with nonzero exit code if anything fails
 
-# clear and re-create the out directory
-rm -rf out || exit 0;
-mkdir out;
+rm -rf doc-repo
+mkdir doc-repo
 
-# run our compile script, discussed above
-./compile.sh
+cp -r doc doc-repo/
+cd doc-repo
 
-# go to the out directory and create a *new* Git repo
-cd out
 git init
 
 # inside this git repo we'll pretend to be a new user
