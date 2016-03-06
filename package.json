@@ -7,6 +7,9 @@
     "docscript": "./dist/standalone-generator.js"
   },
   "scripts": {
+    "show-example": "ln -s ../example/doc/generated ./dist/generated",
+    "show-self": "ln -s ../doc/generated ./dist/generated",
+    "gen-doc": "node ./dist/standalone-generator.js --sourceDir src --outDir doc --ui '.' --mainPackage docscript",
     "doc": "./node_modules/.bin/webpack --config webpack.doc.config.js --watch --progress",
     "doc-tests": "./node_modules/.bin/webpack --config webpack.doc-tests.config.js --watch --progress",
     "loader": "./node_modules/.bin/webpack --config webpack.loader.config.js --watch --progress",

@@ -11,6 +11,10 @@ import {
 } from '../type';
 
 import {
+    extractTypeReference
+} from '../type-utils';
+
+import {
     visitComment
 } from '../comment';
 
@@ -32,6 +36,11 @@ export function visitPropertySignature(
 ): PropertySignatureReflection {
     let name = prop.name.getText();
     let inherenceInfo = visitInherenceInfo(prop, ctx);
+
+    let type = prop.type
+        ? visitTypeNode(prop.type, ctx)
+        : extractTypeReference(ctx.checker.getTypeAtLocation(prop), ctx);
+
     return Object.assign(inherenceInfo,
         {
             id: inherenceInfo.inherited ? ctx.id() : ctx.id(prop),
@@ -39,7 +48,7 @@ export function visitPropertySignature(
             itemType: ItemType.PropertySignature,
             name,
             optional: !!prop.questionToken,
-            type: visitTypeNode(prop.type, ctx),
+            type,
             comment: visitComment(prop)
         }
     ) as PropertySignatureReflection;

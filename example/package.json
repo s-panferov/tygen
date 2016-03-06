@@ -4,7 +4,7 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "doc": "node ../dist/standalone-generator.js --sourceDir . --outDir doc --ui ".." --mainPackage example"
   },
   "author": "",
   "docscript": {
