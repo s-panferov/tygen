@@ -127,6 +127,24 @@ export interface TypeReflection extends Item {
 
 }
 
+export interface StatementReflection extends Item {
+    export: boolean;
+    default: boolean;
+}
+
+export enum FieldFlag {
+    Public = 'Public' as any,
+    Private = 'Private' as any,
+    Protected = 'Protected' as any,
+}
+
+export interface FieldReflection extends Item {
+    flag?: FieldFlag;
+    static: boolean;
+    readonly: boolean;
+    abstract: boolean;
+}
+
 export function matchCoreType(node: TypeNode): CoreType {
     switch(node.kind) {
         case SyntaxKind.StringKeyword: return CoreType.String;

@@ -59,6 +59,7 @@
         "./doc/tests/constructor-type.ts",
         "./doc/tests/enum-initializers.ts",
         "./doc/tests/enum-simple.ts",
+        "./doc/tests/export.ts",
         "./doc/tests/index.ts",
         "./doc/tests/interface-call.ts",
         "./doc/tests/interface-doc.ts",

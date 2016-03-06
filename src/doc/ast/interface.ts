@@ -12,7 +12,8 @@ import {
     TypeFlags,
     IndexSignatureDeclaration,
     SymbolFlags,
-    ConstructorDeclaration
+    ConstructorDeclaration,
+    NodeFlags
 } from 'typescript';
 
 import { Context } from '../index';
@@ -48,14 +49,15 @@ import {
 } from './class';
 
 import {
-    visitDeclarations
+    visitDeclarations,
+    StatementReflection
 } from './type';
 
 import {
     visitTopLevelDeclarations
 } from './declaration';
 
-export interface InterfaceReflection extends Item {
+export interface InterfaceReflection extends Item, StatementReflection {
     properties: Item[];
     callSignatures: CallSignatureReflection[];
     constructSignatures: ConstructorDeclarationReflection[];
@@ -154,6 +156,8 @@ export function visitBasicInfo(
         name: base.name.getText(),
         typeParameters,
         heritageClauses,
+        export: !!(base.flags & NodeFlags.Export),
+        default: !!(base.flags & NodeFlags.Default),
         callSignatures: callSignatures as any,
         indexSignatures: indexSignatures as any,
         constructSignatures: constructSignatures as any,

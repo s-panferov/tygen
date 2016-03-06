@@ -9,6 +9,7 @@ import {
 import {
     TypeReflection,
     visitTypeNode,
+    StatementReflection
 } from './type';
 
 import {
@@ -24,7 +25,7 @@ export enum VariableDeclarationType {
     Let = 'let' as any,
 }
 
-export interface VariableDeclarationReflection extends Item {
+export interface VariableDeclarationReflection extends Item, StatementReflection {
     varType: VariableDeclarationType;
     type: TypeReflection;
     initializer: string;
@@ -71,6 +72,8 @@ export function visitVariableDeclaration(
         id: ctx.id(variable),
         name: variable.name.getText(),
         itemType: ItemType.VariableDeclaration,
+        export: !!(list.parent.flags & NodeFlags.Export),
+        default: !!(list.parent.flags & NodeFlags.Default),
         varType,
         type,
         initializer: variable.initializer &&
@@ -99,6 +102,8 @@ export function visitBindingElement(
         id: ctx.id(variable),
         name: variable.name.getText(),
         itemType: ItemType.VariableDeclaration,
+        export: !!(list.parent.flags & NodeFlags.Export),
+        default: !!(list.parent.flags & NodeFlags.Default),
         varType,
         type,
         initializer: variable.initializer &&

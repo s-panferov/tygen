@@ -29,5 +29,6 @@ import './merge-interface-interface';
 import './merge-function-namespace';
 import './merge-enum-namespace';
 import './namespaces';
+import './export';
 
 console.log('tests loaded'); // WARN! BABEL HACK https://phabricator.babeljs.io/T7071

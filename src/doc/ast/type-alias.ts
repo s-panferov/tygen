@@ -1,12 +1,14 @@
 import {
     Declaration,
     TypeAliasDeclaration,
-    SyntaxKind
+    SyntaxKind,
+    NodeFlags
 } from 'typescript';
 
 import {
     TypeReflection,
-    visitTypeNode
+    visitTypeNode,
+    StatementReflection
 } from './type';
 
 import {
@@ -17,7 +19,7 @@ import {
 import { Context } from '../index';
 import { Item, ItemType } from '../items';
 
-export interface TypeAliasDeclarationReflection extends Item {
+export interface TypeAliasDeclarationReflection extends Item, StatementReflection {
     typeParameters: TypeParameterReflection[];
     type: TypeReflection;
 }
@@ -46,6 +48,8 @@ export function visitTypeAliasDeclaration(
     return {
         id: ctx.id(symbol),
         semanticId: ctx.semanticId(name),
+        export: !!(alias.flags & NodeFlags.Export),
+        default: !!(alias.flags & NodeFlags.Default),
         itemType: ItemType.TypeAlias,
         name,
         typeParameters: alias.typeParameters &&
