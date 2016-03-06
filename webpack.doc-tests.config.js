@@ -74,7 +74,7 @@ var config = {
     externals: nodeModules,
 
     plugins: [
-        new MochaPlugin(),
+        process.env.NODE_ENV === 'development' && new MochaPlugin(),
         new webpack.BannerPlugin('require("source-map-support").install();',
             { raw: true, entryOnly: false }),
         // new webpack.DllReferencePlugin({
@@ -83,7 +83,7 @@ var config = {
         //     name: "require('./docscript.js')",
         //     sourceType: "commonsjs2",
         // })
-    ]
+    ].filter(Boolean)
 };
 
 if (isProduction) {

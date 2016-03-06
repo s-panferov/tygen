@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+- '4.1'
+script:
+- npm run doc-build
+- npm run loader-build
+- npm run search-index-build
+- npm run search-index-lib
+- npm run explorer-build
+- npm run test
+after_success: bash ./deploy-gh-pages.sh
+env:
+  global:
+  - GH_REF: github.com/docscript/docscript.git
+  - secure: d9yqHU5ie2pUcQNOphNbLEUi5lB55EybtGBAXf4Aox7GVTy3b1OB41pzoFh9K3zA51PtGV2xqabVh4GkQQw9Qvj0OmXu5th3lL2lbOMYEnQO+BQDxXKh7RSEqEVPCiX8h1CKHatr+fYd3pxNnrFzysM8TXkP/wUOH5RwtOHGmWvHgHObhqyYGwBcNfahhWCany81lebKlOhlwM5+N9+ajbqi3wwXYRcSsNYY00LuKShuJ3KwSk9cTo8QN+jwAND6JJgUM1IqSvzzbEZA1wcOZWUDQquV7zWkN2qcMrwc+Tmv8WjB5rPOXeLo+oPTg2KiND53M8XnCO7OjBi8uBTWijoINN+ZwNK1A2TsXGPcOiFyRMeQF1riSmd7pUMWGF2EZcfhMIpxa+i6QGsUvF9uPAcc6Zd/KUNZTs8no26S4CV12lVhZviT6faXgl8fn6Hz2U/zWJt89wvoCBynTTV0+egeXZXSQvxlYXoihND6wH6NeUnm7uQomVmc2zT3P2uFHRTeIk5C5SqzB9T7GYhhGDdV1SBT+R5RUhjR8YlM42GBf5iNN8xWgILK2vEl8k8FQbLn12htlIt4blLjaRctPBpGm72AOnopfV7sbMNmvjlV0NOP/NWNn0kMFLtcMtNKe0EGtOoi61+YwqAQzwKz2sC4pG7LuGEDV+V/meGWjPM=
