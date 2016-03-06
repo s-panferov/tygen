@@ -14,12 +14,16 @@ import {
 describe('type-alias:simple', () => {
     let module = generateInline(`
         type Alias<T> = T | Promise<T>
+        type Alias2<T> = T | Promise<T>
+
+        let a: Alias2<string> = 'any';
     `);
 
     let alias = module.items[0];
 
     it('reflection', () => {
         expect(alias.id).to.ok;
+        expect(alias.semanticId).eq('Alias');
         expect(alias.name).to.equal('Alias');
     });
 
@@ -28,9 +32,8 @@ describe('type-alias:simple', () => {
             expect(alias.typeParameters).lengthOf(1);
 
             const tp = alias.typeParameters[0];
-            expect(tp.name).equals('T');
-
             const type = alias.type;
+
             if (isUnionTypeReflection(type)) {
                 expect(type.types).lengthOf(2);
                 const first = type.types[0];
@@ -45,7 +48,6 @@ describe('type-alias:simple', () => {
                 if (isTypeReferenceReflection(second)) {
                     expect(second.typeName).equals('Promise');
                     expect(second.typeArguments).lengthOf(1);
-                    expect(second.targetType).to.ok;
 
                     let ta = second.typeArguments[0];
 

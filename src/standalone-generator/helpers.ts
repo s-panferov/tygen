@@ -1,10 +1,33 @@
 import * as ts from 'typescript';
 import * as path from 'path';
+import * as fs from 'fs';
 
 let fse = require('fs-extra');
 
-export function _compile(fileNames: string[], options: ts.CompilerOptions): ts.Program {
-    let program = ts.createProgram(fileNames, options);
+export function _compile(
+    fileNames: string[],
+    options: ts.CompilerOptions
+): [ts.LanguageService, ts.Program] {
+    // Create the language service host to allow the LS to communicate with the host
+    const servicesHost: ts.LanguageServiceHost = {
+        getScriptFileNames: () => fileNames,
+        getScriptVersion: (fileName) => '1',
+        getScriptSnapshot: (fileName) => {
+            if (!fs.existsSync(fileName)) {
+                return undefined;
+            }
+
+            return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());
+        },
+        getCurrentDirectory: () => process.cwd(),
+        getCompilationSettings: () => options,
+        getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),
+    };
+
+    // Create the language service files
+    const service = ts.createLanguageService(servicesHost, ts.createDocumentRegistry());
+
+    let program = service.getProgram();
     let allDiagnostics = ts.getPreEmitDiagnostics(program);
 
     allDiagnostics.forEach(diagnostic => {
@@ -17,7 +40,7 @@ export function _compile(fileNames: string[], options: ts.CompilerOptions): ts.P
         }
     });
 
-    return program;
+    return [service, program];
 }
 
 import { Context, Module } from '../doc/index';
@@ -28,12 +51,13 @@ export function generateFiles(
     opts?: ts.CompilerOptions
 ): Context {
     let ctx = new Context(mainPackage);
-    let program = _compile(fileNames, Object.assign({}, opts, {
+    let [service, program] = _compile(fileNames, Object.assign({}, opts, {
         target: ts.ScriptTarget.Latest,
         allowJs: true,
         noEmit: true,
     }));
 
+    ctx.setService(service);
     ctx.setProgram(program);
 
     program.getSourceFiles().forEach(sourceFile => {

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as theme from '../../explorer/components/theme';
+import Figure from '../../explorer/components/figure';
 
 import {
     TypeAliasDeclarationReflection
@@ -7,6 +8,8 @@ import {
 
 import TypeParameters from '../type-parameters';
 import Type from '../type';
+import Section from '../section';
+import Comment from '../comment';
 
 require('./index.css');
 const block = theme.block('ts-type-alias');
@@ -29,13 +32,21 @@ export default class TypeAlias extends React.Component<TypeAliasProps, TypeAlias
         let alias = this.props.item;
         return (
             <div className={ this.getClassName() }>
-                type
-                { alias.name }
-                { alias.typeParameters &&
-                    <TypeParameters typeParameters={ alias.typeParameters } />
-                }
-                =
-                <Type type={alias.type} />
+                <Section title={ `type ${alias.name}` }>
+                    <Figure>
+                        <span key='keyword'>type </span>
+                        <span key='name'>{ alias.name }</span>
+                        { alias.typeParameters &&
+                            <TypeParameters typeParameters={ alias.typeParameters } />
+                        }
+                        <span key='eq'> = </span>
+                        <Type type={alias.type} />
+                    </Figure>
+                    {
+                        alias.comment &&
+                            <Comment comment={ alias.comment } />
+                    }
+                </Section>
             </div>
         );
     }

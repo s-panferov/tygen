@@ -37,6 +37,15 @@ export class DocWriter {
         ) {
             if (obj.id) {
                 nesting = nesting.concat(obj.id);
+
+                // if (!!idMap[obj.id]) {
+                //     console.log('origin', idMap[obj.id]);
+                //     console.log('new', obj, nesting);
+                //     console.log('nest', idMap[nesting[1]]);
+                //     console.log('========================', obj);
+                //     throw '!!dublicate';
+                // }
+
                 idMap[obj.id] = [obj.semanticId, pkg, path, [nesting[0]]];
 
                 if (inMain && INCLUDE_ITEMS[obj.itemType]) {
@@ -173,8 +182,8 @@ export class DocWriter {
     "mainPackage": "${extractPackage(dir).info.name}",
     "packages": ${ JSON.stringify(packagesInfo, null, 4) },
     "files": ${ JSON.stringify(files, null, 4) },
-    "idMap": ${ JSON.stringify(idMap) },
-    "semanticIdMap": ${ JSON.stringify(semanticIdMap) }
+    "idMap": ${ JSON.stringify(idMap, null, 4) },
+    "semanticIdMap": ${ JSON.stringify(semanticIdMap, null, 4) }
 }`;
 
         return [buf, flatItems];

@@ -1,16 +1,14 @@
 import {
     TypeReferenceNode,
-    TypeReference
+    TypeReference,
+    SyntaxKind,
+    SymbolFlags,
 } from 'typescript';
 
 import {
     TypeReflection,
     visitTypeNode
 } from '../type';
-
-import {
-    extractTypeReference
-} from '../type-utils';
 
 import { Context,  Item, ItemType } from '../../index';
 
@@ -30,23 +28,36 @@ export function visitTypeReference(
     type: TypeReference,
     ctx: Context
 ): TypeReferenceReflection {
-    let targetType = type.target;
-    // FIXME @spanferov create visitType that returns ref, e.g. getTypeRef
+    let symbol = ctx.checker.getSymbolAtLocation(node.typeName);
 
-    let targetTypeRef = targetType
-        && targetType !== type
-        && extractTypeReference(targetType, ctx);
+    // If this is an alias, and the request came at the declaration location
+    // get the aliased symbol instead. This allows for goto def on an import e.g.
+    //   import {A, B} from "mod";
+    // to jump to the implementation directly.
+    if (symbol.flags & SymbolFlags.Alias) {
+        const declaration = symbol.declarations[0];
 
-    let id = ctx.id(type);
-    ctx.include(!targetTypeRef ? id : null);
+        // Go to the original declaration for cases:
+        //
+        //   (1) when the aliased symbol was declared in the location(parent).
+        //   (2) when the aliased symbol is originating from a named import.
+        //
+        if (node.kind === SyntaxKind.Identifier &&
+            (node.parent === declaration ||
+            (declaration.kind === SyntaxKind.ImportSpecifier && declaration.parent && declaration.parent.kind === SyntaxKind.NamedImports))) {
+
+            symbol = ctx.checker.getAliasedSymbol(symbol);
+        }
+    }
+
+    let refId = ctx.id(symbol);
+    ctx.include(refId);
 
     return {
-        // if we have targetType — it's generic that has own id and can be referenced
-        id: targetTypeRef ? id : ctx.id(node),
-        ref: !targetTypeRef ? id : null,
+        id: ctx.id(node),
+        ref: refId,
         itemType: ItemType.TypeReference,
         typeName: node.typeName.getText(),
-        targetType: targetTypeRef ? targetTypeRef : null,
         typeArguments: node.typeArguments &&
             node.typeArguments.map(ta => visitTypeNode(ta, ctx))
     };

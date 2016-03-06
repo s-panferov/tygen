@@ -148,7 +148,7 @@ export function visitBasicInfo(
     }
 
     return {
-        id: ctx.id(type),
+        id: ctx.id(type.getSymbol() || type),
         semanticId: ctx.semanticId(),
         itemType,
         name: base.name.getText(),

@@ -21,7 +21,7 @@ export function visitTypeParameter(decl: TypeParameterDeclaration, ctx: Context)
     let type = ctx.checker.getTypeAtLocation(decl);
 
     return {
-        id: ctx.id(type),
+        id: ctx.id(type.getSymbol() || type),
         itemType: ItemType.TypeParameter,
         name: decl.name.text,
         constraint: decl.constraint && visitTypeNode(decl.constraint, ctx)

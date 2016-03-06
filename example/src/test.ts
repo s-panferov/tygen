@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 /**
  * The visitNode function is used to visit single-node
  * branches of a tree. It also provides a facility
@@ -17,6 +19,9 @@ export interface Generic
      */
     someProperty: A;
     someOtherProperty: B;
+    enumProperty?: Test;
+
+    component: React.ReactNode;
 }
 
 export interface Index<A> {

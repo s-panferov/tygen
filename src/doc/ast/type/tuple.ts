@@ -24,7 +24,7 @@ export function visitTupleTypeNode(
     ctx: Context
 ): TupleTypeReflection {
     return {
-        id: ctx.id(type),
+        id: ctx.id(type.getSymbol() || type),
         itemType: ItemType.TupleType,
         elementTypes: node.elementTypes.map(et => visitTypeNode(et, ctx))
     };

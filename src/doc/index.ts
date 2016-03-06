@@ -79,6 +79,7 @@ export class Context {
     ts = typescript;
     checker: TypeChecker = null;
     program: Program;
+    service: LanguageService;
 
     mainPackage: string;
     packages: Dictionary<Package> = {};
@@ -161,21 +162,26 @@ export class Context {
     }
 
     id(object?: any): string {
+        this.currentId++;
         if (object) {
             if (!this.ids.has(object)) {
-                this.ids.set(object, (this.currentId++).toString());
+                this.ids.set(object, (this.currentId).toString());
                 // this.ids.set(object, uuid.v1());
             }
 
             return this.ids.get(object);
         } else {
-            return (this.currentId++).toString();
+            return (this.currentId).toString();
         }
     }
 
     setProgram(program: Program) {
         this.program = program;
         this.checker = this.program.getTypeChecker();
+    }
+
+    setService(service: LanguageService) {
+        this.service = service;
     }
 
     processInternalModule(name: string, sourceFile: any, packageLike: boolean) {

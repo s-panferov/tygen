@@ -44,7 +44,7 @@ export function extractTypeReference(type: Type, ctx: Context): TypeReflection {
                 case !!(type.symbol.flags & SymbolFlags.TypeAlias):
                 case !!(type.symbol.flags & SymbolFlags.Enum):
                 case !!(type.symbol.flags & SymbolFlags.TypeParameter):
-                    let id = ctx.id(type);
+                    let id = ctx.id(type.getSymbol() || type);
                     ctx.include(id);
                     return {
                         ref: id,
@@ -78,7 +78,7 @@ export function extractTypeLiteral(type: Type, ctx: Context): TypeReflection {
 
 export function extractStringLiteralType(type: StringLiteralType, ctx: Context): StringLiteralTypeReflection {
     return {
-        id: ctx.id(type),
+        id: ctx.id(type.getSymbol() || type),
         text: type.text
     };
 }

@@ -82,12 +82,7 @@ function testSignature(iface: InterfaceReflection, callSig: SignatureReflection)
     let type = callSig.type;
     if (isTypeReferenceReflection(type)) {
         expect(type.typeName).equal('Test');
-        let targetType = type.targetType;
-        if (isTypeReferenceReflection(targetType)) {
-            expect(targetType.ref).equal(iface.id);
-        } else {
-            expect(false).to.true;
-        }
+        expect(type.ref).equal(iface.id);
         expect(typeRef(type.typeArguments[0])).equal(callSig.typeParameters[0].id);
     } else {
         expect(false).to.true;

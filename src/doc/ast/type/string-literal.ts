@@ -23,7 +23,7 @@ export function visitStringLiteralTypeNode(
     ctx: Context
 ): StringLiteralTypeReflection {
     return {
-        id: ctx.id(type),
+        id: ctx.id(type.getSymbol() || type),
         text: node.text,
         itemType: ItemType.StringLiteralType
     };

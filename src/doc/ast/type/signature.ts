@@ -218,7 +218,7 @@ export function visitFunctionTypeNode(
     // TODO regiser inline types globally?
 
     return {
-        id: ctx.id(type),
+        id: ctx.id(type.getSymbol() || type),
         itemType: ItemType.FunctionType,
         signature: visitSignature(node, ctx)
     };

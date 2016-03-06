@@ -39,7 +39,7 @@ export function visitEnum(
     let basicInfo = visitBasicInfo(en, ctx);
 
     return Object.assign(basicInfo, {
-        id: ctx.id(type),
+        id: ctx.id(type.getSymbol() || type),
         itemType: ItemType.EnumDeclaration,
         name: en.name && en.name.getText(),
         members: en.members

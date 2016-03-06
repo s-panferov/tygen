@@ -32,7 +32,7 @@ export function visitIntersectionType(
     // TODO regiser inline types globally?
 
     return {
-        id: ctx.id(type),
+        id: ctx.id(type.getSymbol() || type),
         itemType: ItemType.IntersectionType,
         types: node.types.map((type) => visitTypeNode(type, ctx))
     };
@@ -46,7 +46,7 @@ export function visitUnionType(
     // TODO regiser inline types globally?
 
     return {
-        id: ctx.id(type),
+        id: ctx.id(type.getSymbol() || type),
         itemType: ItemType.UnionType,
         types: node.types.map((type) => visitTypeNode(type, ctx))
     };

@@ -36,12 +36,18 @@ export function visitTypeAliasDeclaration(
     alias: TypeAliasDeclaration,
     ctx: Context
 ): TypeAliasDeclarationReflection {
-    let type = ctx.checker.getTypeAtLocation(alias);
+    let name = alias.name.getText();
+    let symbol = (alias as any).symbol;
+
+    if (!symbol) {
+        throw new Error('no symbol');
+    }
 
     return {
-        id: ctx.id(type),
+        id: ctx.id(symbol),
+        semanticId: ctx.semanticId(name),
         itemType: ItemType.TypeAlias,
-        name: alias.name && alias.name.getText(),
+        name,
         typeParameters: alias.typeParameters &&
             alias.typeParameters.map(tp => visitTypeParameter(tp, ctx)),
         type: visitTypeNode(alias.type, ctx)

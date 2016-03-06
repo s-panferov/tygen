@@ -146,7 +146,7 @@ export function visitTypeNode(node: TypeNode, ctx: Context): TypeReflection {
     let coreType = matchCoreType(node);
     if (coreType) {
         return {
-            id: ctx.id(type),
+            ref: ctx.id(type.getSymbol() || type),
             itemType: ItemType.CoreTypeReference,
             coreType
         } as CoreTypeReferenceReflection;
