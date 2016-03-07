@@ -1,5 +1,7 @@
 # docscript
 
+https://travis-ci.org/docscript/docscript.svg?branch=master
+
 A documentation generator for TypeScript projects.
 
 [See example](http://docscript.github.io/docscript/doc/)
