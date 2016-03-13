@@ -150,7 +150,7 @@ export class DocWriter {
         let options = {
             db: require('memdown'),
             deletable: false,
-            fieldedSearch: true,
+            fieldedSearch: false,
             indexPath: 'si',
             logLevel: 'error',
             nGramLength: 1,
@@ -160,9 +160,6 @@ export class DocWriter {
         let indexOptions = {
             batchName: 'items',
             fieldOptions: [
-                {
-                    fieldName: 'name'
-                },
                 {
                     fieldName: 'semanticId'
                 }
