@@ -236,14 +236,17 @@ export class Context {
         }
     }
 
-    generateForeignModules() {
-        this.includeAllowed = false;
+    generateForeignModules(includeAllowed: boolean = true) {
+        let prevIncludeAllowed = this.includeAllowed;
+        this.includeAllowed = includeAllowed;
         this.foreign = true;
         Object.keys(this.foreignModules).forEach(fileName => {
             let [sourceFile, pkg] = this.foreignModules[fileName];
             let module = this.generateModule(fileName, sourceFile, pkg, false);
             this.modules[fileName] = module;
         });
+
+        this.includeAllowed = prevIncludeAllowed;
     }
 
     getModule(fileName): Module {

@@ -11,4 +11,8 @@
         font-size: 24px;
         line-height: 40px;
     }
+
+    &_lvl_2 {
+        margin-bottom: 10px;
+    }
 }

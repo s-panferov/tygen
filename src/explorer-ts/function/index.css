@@ -1,6 +1,5 @@
 @import 'theme';
 
 .ts-function {
-    display: flex;
     font-family: var(--sans-serif);
 }

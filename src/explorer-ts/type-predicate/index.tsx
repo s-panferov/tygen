@@ -29,7 +29,7 @@ export default class TypePredicate extends React.Component<TypePredicateProps, T
         return (
             <span className={ this.getClassName() }>
                 { predicate.parameterName }
-                is
+                <span> is </span>
                 <Type type={ predicate.type } />
             </span>
         );

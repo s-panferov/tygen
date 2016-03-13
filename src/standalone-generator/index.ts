@@ -11,6 +11,7 @@ interface Argv {
     mainPackage: string;
     outDir: string;
     ui?: string;
+    deepForeign?: boolean;
 }
 
 if (!module.parent) {
@@ -22,7 +23,7 @@ if (!module.parent) {
     let tsCompilerOptions = helpers.rawToTsCompilerOptions(compilerOptions, process.cwd(), ts);
     let ctx = helpers.generateFiles(files, argv.mainPackage, tsCompilerOptions);
 
-    ctx.generateForeignModules();
+    ctx.generateForeignModules(argv.deepForeign);
 
     let writer = new DocWriter(ctx);
     writer.ensureDir(argv.outDir);

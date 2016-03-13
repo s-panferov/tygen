@@ -6,6 +6,11 @@ import {
 } from '../../doc/ast/function';
 
 import Signature, { SignatureTypeStyle } from '../signature';
+import Heading from '../../explorer/components/heading';
+import Figure from '../../explorer/components/figure';
+import SmartLink from '../../explorer/components/smart-link';
+import Paper from '../../explorer/components/paper';
+import Comment from '../comment';
 
 require('./index.css');
 const block = theme.block('ts-function');
@@ -27,14 +32,22 @@ export default class Function extends React.Component<FunctionProps, FunctionSta
     render() {
         let func = this.props.item;
         return (
-            <div className={ this.getClassName() }>
-                function
-                { func.name }
-                <Signature
-                    typeStyle={ SignatureTypeStyle.Colon }
-                    signature={ func.callSignatures[0] }
-                />
-            </div>
+            <Paper id={ func.id } block={ true } highlight={ false } className={ this.getClassName() }>
+                <Heading lvl={ 1 }>
+                    <span>Function </span>
+                    <SmartLink id={ func.id }>{ func.name }</SmartLink>
+                </Heading>
+                { func.comment &&
+                    <Comment comment={ func.comment } />
+                }
+                <Figure>
+                    <span>function </span>
+                    <Signature
+                        typeStyle={ SignatureTypeStyle.Colon }
+                        signature={ func.callSignatures[0] }
+                    />
+                </Figure>
+            </Paper>
         );
     }
 }
