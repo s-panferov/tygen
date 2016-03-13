@@ -20,7 +20,7 @@
     }
 
     &__scroll {
-        overflow: scroll;
+        overflow: auto;
     }
 
     &__item {
