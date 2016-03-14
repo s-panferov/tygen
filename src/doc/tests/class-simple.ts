@@ -20,7 +20,7 @@ describe('class:simple', () => {
     });
 
     it('class', () => {
-        expect(cls.id).to.ok;
+        expect(cls.selfRef.id).to.ok;
         expect(cls.name).to.equal('Test');
     });
 
@@ -33,7 +33,7 @@ describe('class:simple', () => {
             if (isPropertyDeclarationReflection(first)) {
                 expect(first.name).to.equal('prop');
                 expect(first.optional).to.false;
-                expect(typeRef(first.type)).to.equal(cls.id);
+                expect(typeRef(first.type)).to.equal(cls.selfRef.id);
             } else {
                 expect(false).to.true;
             }

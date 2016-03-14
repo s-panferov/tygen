@@ -35,7 +35,7 @@ export default class Property extends React.Component<PropertyProps, PropertySta
         } else {
             let property = this.props.property;
             return (
-                <Paper id={ this.props.property.id } block={ true } className={ this.getClassName() }>
+                <Paper id={ this.props.property.selfRef.id } block={ true } className={ this.getClassName() }>
                     <Section title={ property.name }>
                         <Figure className={ block('figure') }>
                             { this.renderSignature() }

@@ -21,7 +21,7 @@ describe('class:constructor', () => {
     });
 
     it('class', () => {
-        expect(cls.id).to.ok;
+        expect(cls.selfRef.id).to.ok;
         expect(cls.name).to.equal('Test');
     });
 

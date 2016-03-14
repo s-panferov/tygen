@@ -36,7 +36,7 @@ export default class UnionType extends React.Component<UnionTypeProps, UnionType
             <Join separator={ this.getSeparator() }>
                 {
                     types.map((type, i) => {
-                        return <Type key={ type.id } type={ type } />;
+                        return <Type key={ type.selfRef.id } type={ type } />;
                     })
                 }
             </Join>

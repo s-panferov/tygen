@@ -34,13 +34,13 @@ export default class IndexSignature extends React.Component<IndexSignatureProps,
         let { signature } = this.props;
         if (this.props.inline) {
             return (
-                <div id={ signature.id } className={ this.getClassName() }>
+                <div id={ signature.selfRef.id } className={ this.getClassName() }>
                     { this.renderSignature() }
                 </div>
             );
         } else {
             return (
-                <Paper id={ signature.id } block={ true } className={ this.getClassName() }>
+                <Paper id={ signature.selfRef.id } block={ true } className={ this.getClassName() }>
                     <Section title={ signature.name }>
                         <Figure className={ block('figure') }>
                             { this.renderSignature() }

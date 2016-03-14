@@ -1,17 +1,22 @@
 import MemoryFileSystem from 'memory-fs';
 import { DocRegistry, PackageInfo } from '../doc/index';
 import { Settings } from './settings';
+import { ModuleInfo, Item } from '../doc';
+import { inflateJson } from './inflate';
 
 import * as path from 'path';
 
 export interface Route {
+    id?: string;
+    semanticId?: string;
+
     pkg?: string;
     path?: string;
-    id?: string;
-    invalid?: boolean;
+
     mainId?: string;
-    semanticId?: string;
-    nesting?: string[];
+    mainSemanticId?: string;
+
+    invalid?: boolean;
 }
 
 interface FileStructure {
@@ -40,10 +45,60 @@ export default class Service {
     packages: Packages;
     settings: Settings;
 
+    items: { [key: string]: Item } = {};
+    modules: { [key: string]: ModuleInfo } = {};
+
     constructor(registry: DocRegistry, settings: Settings) {
         this.registry = registry;
         this.settings = settings;
         this.packages = readPackages(registry);
+    }
+
+    ensureRoute(route: Route): Promise<{ item: Item, module: ModuleInfo }> {
+        let moduleMetaName = this.getModuleMetaName(route);
+        let promise: Promise<any>;
+        let itemId: string;
+
+        if (!moduleMetaName) {
+            promise = Promise.resolve();
+        } else {
+            let promises: Promise<any>[] = [];
+            itemId = route.mainSemanticId || route.semanticId || route.id;
+
+            if (itemId) {
+                if (!this.items[itemId]) {
+                    let promise = fetch(`${this.settings.docRoot}/${moduleMetaName.replace('.json', '')}/${itemId}.json.gz`)
+                        .then(res => inflateJson(res))
+                        .then((item: Item) => {
+                            this.items[itemId] = item;
+                        });
+
+                    promises.push(promise);
+                }
+            }
+
+            if (!this.modules[moduleMetaName]) {
+                // load module meta info
+                let promise = fetch(`${this.settings.docRoot}/${moduleMetaName}.gz`)
+                    .then(res => inflateJson(res))
+                    .then((moduleInfo) => {
+                        this.modules[moduleMetaName] = moduleInfo as any;
+                    });
+
+                promises.push(promise);
+            }
+
+            promise = Promise.all(promises) as Promise<any>;
+        }
+
+        return promise
+            .then(() => {
+                return {
+                    item: itemId && this.items[itemId],
+                    module: moduleMetaName && this.modules[moduleMetaName]
+                };
+            })
+            .catch(e => { console.error(e.toString()); throw e; });
     }
 
     getMainPackageName(): string {
@@ -84,37 +139,6 @@ export default class Service {
         } else {
             let pkg = this.getPackage(route.pkg);
             return pkg.files[route.path];
-        }
-    }
-
-    getIdBySemanticId(pkg: string, path: string, semanticId: string): string {
-        return this.registry.semanticIdMap[pkg][path][semanticId];
-    }
-
-    getFullRoute(route: Route): Route {
-        if (route.id && !route.pkg) {
-            // know only id, need to fill all other info
-            let finalRoute = this.registry.idMap[route.id];
-
-            if (finalRoute) {
-                let [semanticId, pkg, path, nesting] = finalRoute;
-                return {
-                    id: route.id,
-                    mainId: nesting[0],
-                    semanticId,
-                    pkg,
-                    path,
-                    nesting
-                };
-            } else {
-                return {
-                    pkg: this.getMainPackageName(),
-                    path: '/',
-                    invalid: true
-                };
-            }
-        } else {
-            return route;
         }
     }
 
@@ -190,8 +214,16 @@ export function pathFromRoute(route: Route): string {
 
     if (route.semanticId) {
         routeUrl += '?sid=' + route.semanticId;
+        let mainSid = route.mainSemanticId || route.mainId;
+        if (mainSid && mainSid !== route.semanticId && mainSid !== route.id) {
+            routeUrl += '&in=' + mainSid;
+        }
     } else if (route.id) {
         routeUrl += '?id=' + route.id;
+        let mainSid = route.mainSemanticId || route.mainId;
+        if (mainSid && mainSid !== route.semanticId && mainSid !== route.id) {
+            routeUrl += '&in=' + mainSid;
+        }
     }
 
     return routeUrl;
@@ -199,17 +231,17 @@ export function pathFromRoute(route: Route): string {
 
 export function routeFromPath(urlPath: string, query: any, service: Service): Route {
     let parts = urlPath.split('/').filter(Boolean);
-    let routePkg = parts[0];
-    let routePath = '/' + parts.slice(1).join('/');
-    let id = query.id || (query.sid &&
-                service.getIdBySemanticId(routePkg, routePath, query.sid));
+    let pkg = parts[0];
+    let path = '/' + parts.slice(1).join('/');
+    let id = query.id;
+    let semanticId = query.sid;
+    let mainSemanticId = query.in;
 
-    if (id) {
-        return service.getFullRoute({ id });
-    } else {
-        return {
-            pkg: routePkg,
-            path: routePath
-        };
-    }
+    return {
+        pkg,
+        path,
+        id,
+        semanticId,
+        mainSemanticId
+    };
 }

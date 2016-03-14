@@ -25,7 +25,7 @@ export function visitTypePredicateNode(
     ctx: Context
 ): TypePredicateReflection {
     return {
-        id: ctx.id(type.getSymbol() || type),
+        selfRef: { id: ctx.id(type.getSymbol() || type) },
         itemType: ItemType.TypePredicate,
         parameterName: node.parameterName.getText(),
         type: visitTypeNode(node.type, ctx)

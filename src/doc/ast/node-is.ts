@@ -1,17 +1,13 @@
 import {
     SyntaxKind,
-    NodeArray,
     TypeNode,
     TypeLiteralNode,
     UnionTypeNode,
     IntersectionTypeNode,
-    UnionType,
-    IntersectionType,
     Declaration,
     PropertySignature,
     CallSignatureDeclaration,
     TypeReferenceNode,
-    TypeReference,
     MethodSignature,
     FunctionTypeNode,
     PropertyDeclaration,
@@ -27,6 +23,7 @@ import {
     ParenthesizedTypeNode,
     FunctionDeclaration,
     TypePredicateNode,
+    ObjectLiteralExpression
 } from 'typescript';
 
 export function isPropertySignature(node: Declaration): node is PropertySignature {
@@ -59,6 +56,10 @@ export function isMethodSignature(node: Declaration): node is MethodSignature {
 
 export function isTypeLiteral(node: TypeNode): node is TypeLiteralNode {
     return node.kind == SyntaxKind.TypeLiteral;
+}
+
+export function isObjectLiteralExpression(node: Declaration): node is ObjectLiteralExpression {
+    return node.kind == SyntaxKind.ObjectLiteralExpression;
 }
 
 export function isUnionTypeNode(node: TypeNode): node is UnionTypeNode {

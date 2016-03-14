@@ -55,7 +55,7 @@ export function visitIndexSignature(
     ctx: Context
 ): IndexSignatureReflection {
     return {
-        id: ctx.id(sig),
+        selfRef: { id: ctx.id(sig) },
         itemType: ItemType.IndexSignature,
         parameters: sig.parameters &&
             sig.parameters.map(p => visitParameter(p, ctx)),
@@ -80,7 +80,7 @@ export function visitSignature(sig: SignatureDeclaration, ctx: Context): Signatu
     }
 
     return {
-        id: ctx.id(sig),
+        selfRef: { id: ctx.id(sig) },
         itemType: ItemType.Signature,
         name: sig.name && sig.name.getText(),
         typeParameters: sig.typeParameters &&
@@ -218,7 +218,7 @@ export function visitFunctionTypeNode(
     // TODO regiser inline types globally?
 
     return {
-        id: ctx.id(type.getSymbol() || type),
+        selfRef: { id: ctx.id(type.getSymbol() || type) },
         itemType: ItemType.FunctionType,
         signature: visitSignature(node, ctx)
     };
@@ -240,7 +240,6 @@ export function visitConstructorTypeNode(
 
     return Object.assign(signature, {
         name: 'new',
-        id: ctx.id(node),
         itemType: ItemType.ConstructorType,
     });
 }

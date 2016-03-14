@@ -1,6 +1,5 @@
 import { Action, Dispatch, GetState } from './redux';
 import { Route } from './state';
-import { inflateJson } from './inflate';
 import { ModuleInfo } from '../doc/index';
 import { Item } from '../doc/items';
 import { debounce } from '../lib/utils';
@@ -9,8 +8,6 @@ import { Settings, DisplaySettings } from './settings';
 export enum ActionType {
     Navigate = 'Navigate' as any,
     ChangeDisplaySettings = 'ChangeDisplaySettings' as any,
-    LoadModule = 'LoadModule' as any,
-    LoadItem = 'LoadItem' as any,
     ToggleSearch = 'ToggleSearch' as any,
     ChangeSearchQuery = 'ChangeSearchQuery' as any,
     InitSearchIndex = 'InitSearchIndex' as any,
@@ -91,84 +88,34 @@ export function changeSearchQuery(query: string) {
 }
 
 export interface Navigate {
-    route: Route;
-}
-export interface LoadModule {
-    moduleInfo: ModuleInfo;
-}
-export interface LoadItem {
-    item: Item;
+    route?: Route;
+    ready: boolean;
+    moduleInfo?: ModuleInfo;
+    item?: Item;
 }
 export function navigate(route: Route) {
     return (dispatch: Dispatch, getState: GetState) => {
-        let { settings } = getState();
         dispatch({
             type: ActionType.Navigate,
             payload: {
-                route
+                route,
+                ready: false
             }
         } as Action<Navigate, void>);
 
-        let { activity, service, items, modules } = getState();
-        let moduleMetaName = service.getModuleMetaName(route);
-
-        let promise: Promise<any>;
-        if (!moduleMetaName) {
-            promise = Promise.resolve();
-        } else {
-            let promises: Promise<any>[] = [];
-            if (route.id) {
-                let itemId = route.mainId || route.id;
-
-                if (items[itemId]) {
-                    dispatch({
-                        type: ActionType.LoadItem,
-                        payload: {
-                            // item from cache
-                            item: items[itemId]
-                        }
-                    } as Action<LoadItem, void>);
-                } else {
-                    let promise = fetch(`${settings.docRoot}/${moduleMetaName.replace('.json', '')}/${itemId}.json.gz`)
-                        .then(res => inflateJson(res))
-                        .then((item: Item) => {
-                            dispatch({
-                                type: ActionType.LoadItem,
-                                payload: {
-                                    item
-                                }
-                            } as Action<LoadItem, void>);
-                        });
-                    promises.push(promise);
+        let { activity, service } = getState();
+        let promise = service.ensureRoute(route).then(({ item, module }) => {
+            dispatch({
+                type: ActionType.Navigate,
+                payload: {
+                    route,
+                    ready: true,
+                    moduleInfo: module as any,
+                    item,
                 }
-            }
+            } as Action<Navigate, void>);
+        });
 
-            if (modules[moduleMetaName]) {
-                dispatch({
-                    type: ActionType.LoadModule,
-                    payload: {
-                        moduleInfo: modules[moduleMetaName]
-                    }
-                } as Action<LoadModule, void>);
-            } else {
-                // load module meta info
-                let promise = fetch(`${settings.docRoot}/${moduleMetaName}.gz`)
-                    .then(res => inflateJson(res))
-                    .then((moduleInfo) => {
-                        dispatch({
-                            type: ActionType.LoadModule,
-                            payload: {
-                                moduleInfo: moduleInfo as any
-                            }
-                        } as Action<LoadModule, void>);
-                    });
-                promises.push(promise);
-            }
-
-            promise = Promise.all(promises) as Promise<any>;
-        }
-
-        promise = promise.catch(e => { console.error(e.toString()); throw e; });
         activity.watch(promise);
     };
 }

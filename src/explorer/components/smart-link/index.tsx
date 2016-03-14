@@ -16,60 +16,37 @@ import {
 
 interface SmartLinkReduxProps extends DispatchProps {
     service?: Service;
+    appRoute?: Route;
 }
 
 export interface SmartLinkProps extends SmartLinkReduxProps, LinkProps, DispatchProps {
     route?: Route;
-    id?: string;
-
     render?: (route: Route, linkProps: React.HTMLAttributes) => React.ReactElement<any>;
 }
 
 export interface SmartLinkState {}
 
-@connect(({ service }) => { return { service } as SmartLinkReduxProps; })
+@connect(({ service, route }) => { return { service, appRoute: route } as SmartLinkReduxProps; })
 export default class SmartLink extends React.Component<SmartLinkProps, SmartLinkState> {
     static contextTypes = theme.themeContext;
 
-    finalRoute: Route;
-
-    shouldComponentUpdate(nextProps: SmartLinkProps) {
-        if (this.props.route !== nextProps.route
-            || this.props.id !== nextProps.id) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    componentWillMount() {
-        this.finalRoute = this.props.service.getFullRoute(
-            this.props.route || { id: this.props.id }
-        );
-    }
-
-    componentWillUpdate() {
-        this.finalRoute = this.props.service.getFullRoute(
-            this.props.route || { id: this.props.id }
-        );
-    }
-
     getClassName() {
         return block(theme.resolveTheme(this), {
-            invalid: this.finalRoute.invalid
+            invalid: this.props.route.invalid
         }).mix(this.props.className);
     }
 
     render() {
+        let route = this.props.route;
         let htmlProps = Object.assign({}, this.props.htmlProps);
 
-        if (!this.finalRoute.invalid) {
+        if (!route.invalid) {
             htmlProps.onClick = this.onClick;
-            htmlProps.href = pathFromRoute(this.finalRoute);
+            htmlProps.href = pathFromRoute(route);
         }
 
         if (this.props.render) {
-            return this.props.render(this.finalRoute, htmlProps);
+            return this.props.render(route, htmlProps);
         } else {
             return (
                 <Link
@@ -86,7 +63,7 @@ export default class SmartLink extends React.Component<SmartLinkProps, SmartLink
         e.preventDefault();
 
         this.props.dispatch(
-            actions.navigate(this.finalRoute)
+            actions.navigate(this.props.route)
         );
     }
 }

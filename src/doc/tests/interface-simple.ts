@@ -17,8 +17,8 @@ describe('interface:simple', () => {
     });
 
     it('interface', () => {
-        expect(iface.id).to.ok;
-        expect(iface.semanticId).equal('Test');
+        expect(iface.selfRef.id).to.ok;
+        expect(iface.selfRef.semanticId).equal('Test');
         expect(iface.name).to.equal('Test');
     });
 
@@ -29,7 +29,7 @@ describe('interface:simple', () => {
             let first = iface.properties[0];
 
             if (isPropertySignatureReflection(first)) {
-                expect(first.semanticId).equal('Test.name');
+                expect(first.selfRef.semanticId).equal('Test.name');
                 expect(first.name).to.equal('name');
                 expect(first.optional).to.false;
                 expect(coreType(first.type)).to.equal(CoreType.String);

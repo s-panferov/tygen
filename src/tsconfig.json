@@ -82,6 +82,7 @@
         "./doc/tests/tuple-type.ts",
         "./doc/tests/type-alias-simple.ts",
         "./doc/tests/type-predicate.ts",
+        "./doc/tests/type-ref.ts",
         "./doc/tests/utils.ts",
         "./doc/tests/var-context-complex.ts",
         "./doc/tests/var-context-type.ts",

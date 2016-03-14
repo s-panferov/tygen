@@ -32,7 +32,7 @@ export default class TupleType extends React.Component<TupleTypeProps, TupleType
             <Join>
                 {
                     types.map((type, i) => {
-                        return <Type key={ type.id } type={ type } />;
+                        return <Type key={ type.selfRef.id } type={ type } />;
                     })
                 }
             </Join>

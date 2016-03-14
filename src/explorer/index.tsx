@@ -79,7 +79,9 @@ function run(registry, appContainer) {
 
         if (!equal(prevState.route, state.route)) {
             let newPathName = pathFromRoute(state.route);
-            if (!currentLocation || (currentLocation && currentLocation.pathname !== newPathName)) {
+            let currentPathName = currentLocation.pathname + currentLocation.search;
+
+            if (!currentLocation || (currentLocation && currentPathName !== newPathName)) {
                 history.push({
                     pathname: newPathName
                 });

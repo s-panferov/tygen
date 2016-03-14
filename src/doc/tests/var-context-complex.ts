@@ -67,7 +67,7 @@ describe('var:simple', () => {
 
             if (isTypeReferenceReflection(type)) {
                 expect(type.typeName).equals('Bar');
-                expect(type.ref).equals(module.items[3].id);
+                expect(type.ref.id).equals(module.items[3].selfRef.id);
             } else {
                 expect(false).to.true;
             }

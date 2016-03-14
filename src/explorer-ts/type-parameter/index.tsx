@@ -37,10 +37,10 @@ export default class TypeParameter extends React.Component<TypeParameterProps, T
 
     render() {
         let typeParam = this.props.typeParam;
-        let route = { id: typeParam.id };
+        let route = { id: typeParam.selfRef.id };
 
         return (
-            <Paper id={ typeParam.id} className={ this.getClassName() }>
+            <Paper id={ typeParam.selfRef.id} className={ this.getClassName() }>
                 <SmartLink key='link' route={ route }>{ typeParam.name }</SmartLink>
                 { this.props.asConstraint && typeParam.constraint &&
                     this.renderConstraint() }

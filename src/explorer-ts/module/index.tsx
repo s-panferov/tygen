@@ -79,7 +79,7 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
         if (isInterfaceReflection(item)) {
             return (
                 <Interface
-                    key={ item.id }
+                    key={ item.selfRef.id }
                     item={ item }
                     showInherited={ this.props.displaySettings.inherited }
                     showNonPublic={ !this.props.displaySettings.public }
@@ -88,7 +88,7 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
         } else if (isClassReflection(item)) {
             return (
                 <Class
-                    key={ item.id }
+                    key={ item.selfRef.id }
                     item={ item }
                     showInherited={ this.props.displaySettings.inherited }
                     showNonPublic={ !this.props.displaySettings.public }
@@ -97,28 +97,28 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
         } else if (isFunctionReflection(item)) {
             return (
                 <Function
-                    key={ item.id }
+                    key={ item.selfRef.id }
                     item={ item }
                 />
             );
         } else if (isEnumDeclarationReflection(item)) {
             return (
                 <Enum
-                    key={ item.id }
+                    key={ item.selfRef.id }
                     item={ item }
                 />
             );
         } else if (isVariableDeclarationReflection(item)) {
             return (
                 <Variable
-                    key={ item.id }
+                    key={ item.selfRef.id }
                     item={ item }
                 />
             );
         } else if (isTypeAliasDeclarationReflection(item)) {
             return (
                 <TypeAlias
-                    key={ item.id }
+                    key={ item.selfRef.id }
                     item={ item }
                 />
             );

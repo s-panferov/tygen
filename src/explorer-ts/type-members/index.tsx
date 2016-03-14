@@ -142,7 +142,7 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
         let renderedIndexSignatures = signature.map(sig => {
             return <IndexSignature
                 inline={ this.props.inline }
-                key={ sig.id }
+                key={ sig.selfRef.id }
                 signature={ sig }
             />;
         });
@@ -162,7 +162,7 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
         let renderedCallSignatures = signature.map(sig => {
             return <CallSignature
                 inline={ this.props.inline }
-                key={ sig.id }
+                key={ sig.selfRef.id }
                 signature={ sig }
             />;
         });
@@ -183,7 +183,7 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
             return <Property
                 inline={ this.props.inline }
                 className={ block('member') }
-                key={ sig.id }
+                key={ sig.selfRef.id }
                 property={ sig }
             />;
         });
@@ -203,7 +203,7 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
             return <Method
                 inline={ this.props.inline }
                 className={ block('member') }
-                key={ method.id }
+                key={ method.selfRef.id }
                 method={ method }
             />;
         });
@@ -222,7 +222,7 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
         let renderedConstructors = constructors.map(ctor => {
             return <Constructor
                 inline={ this.props.inline }
-                key={ ctor.id }
+                key={ ctor.selfRef.id }
                 ctor={ ctor }
             />;
         });
@@ -244,13 +244,13 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
                 getter && <Accessor
                     inline={ this.props.inline }
                     className={ block('member') }
-                    key={ getter.id }
+                    key={ getter.selfRef.id }
                     getter={ getter }
                 />,
                 setter && <Accessor
                     inline={ this.props.inline }
                     className={ block('member') }
-                    key={ setter.id }
+                    key={ setter.selfRef.id }
                     setter={ setter }
                 />
             ];

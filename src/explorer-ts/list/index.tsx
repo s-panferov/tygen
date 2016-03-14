@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as theme from '../../explorer/components/theme';
 
-import { ModuleInfo } from '../../doc';
+import { ModuleInfo, Ref } from '../../doc';
 import ListSection, { ListSectionView } from '../list-section';
 
 require('./index.css');
@@ -45,10 +45,10 @@ export default class List extends React.Component<ListProps, ListState> {
     renderItems() {
         let items = this.props.module.items;
 
-        let groups = {} as {[itemType: string]: [string, string][]};
-        items.forEach(([id, itemType, name]) => {
+        let groups = {} as {[itemType: string]: [Ref, string][]};
+        items.forEach(([selfRef, itemType, name]) => {
             if (!groups[itemType]) { groups[itemType] = []; }
-            groups[itemType].push([id, name]);
+            groups[itemType].push([selfRef, name]);
         });
 
         let view = this.props.view === ListView.Reference

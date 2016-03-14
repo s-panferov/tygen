@@ -32,11 +32,11 @@ export default class Method extends React.Component<MethodProps, MethodState> {
     render() {
         let method = this.props.method;
         return (
-            <Paper id={ this.props.method.id } block={ true } className={ this.getClassName() }>
+            <Paper id={ this.props.method.selfRef.id } block={ true } className={ this.getClassName() }>
                 <Section title={ <span>fn { method.name }</span> }>
                     {
                         method.callSignatures.map(sig => {
-                            return <div key={ sig.id } className={ block('signature-section') } >
+                            return <div key={ sig.selfRef.id } className={ block('signature-section') } >
                                 <Figure className={ block('figure') }>
                                     <Signature
                                         className={ block('signature') }

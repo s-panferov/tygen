@@ -20,7 +20,9 @@ export function visitArrayTypeNode(
     ctx: Context
 ): ArrayTypeReflection {
     return {
-        id: ctx.id(type.getSymbol() || type),
+        selfRef: {
+            id: ctx.id(type.getSymbol() || type)
+        },
         itemType: ItemType.ArrayType,
         elementType: visitTypeNode(node.elementType, ctx)
     };

@@ -22,8 +22,8 @@ describe('type-alias:simple', () => {
     let alias = module.items[0];
 
     it('reflection', () => {
-        expect(alias.id).to.ok;
-        expect(alias.semanticId).eq('Alias');
+        expect(alias.selfRef.id).to.ok;
+        expect(alias.selfRef.semanticId).eq('Alias');
         expect(alias.name).to.equal('Alias');
     });
 
@@ -39,7 +39,7 @@ describe('type-alias:simple', () => {
                 const first = type.types[0];
                 if (isTypeReferenceReflection(first)) {
                     expect(first.typeName).equals('T');
-                    expect(first.ref).equals(tp.id);
+                    expect(first.ref.id).equals(tp.selfRef.id);
                 } else {
                     expect(false).to.true;
                 }
@@ -53,7 +53,7 @@ describe('type-alias:simple', () => {
 
                     if (isTypeReferenceReflection(ta)) {
                         expect(ta.typeName).equals('T');
-                        expect(typeRef(ta)).equals(tp.id);
+                        expect(typeRef(ta)).equals(tp.selfRef.id);
                     } else {
                         expect(false).to.true;
                     }

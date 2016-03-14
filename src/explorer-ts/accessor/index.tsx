@@ -36,13 +36,13 @@ export default class Accessor extends React.Component<AccessorProps, AccessorSta
         let [method, type] = this.getInfo();
         if (this.props.inline) {
             return (
-                <div id={ method.id } className={ this.getClassName() }>
+                <div id={ method.selfRef.id } className={ this.getClassName() }>
                     { this.renderSignature(method, type) }
                 </div>
             );
         } else {
             return (
-                <Paper id={ method.id } block={ true } className={ this.getClassName() }>
+                <Paper id={ method.selfRef.id } block={ true } className={ this.getClassName() }>
                     <Section title={ type + ' ' + method.name }>
                         <Figure className={ block('figure') }>
                             { this.renderSignature(method, type) }

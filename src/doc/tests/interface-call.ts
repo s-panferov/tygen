@@ -76,14 +76,14 @@ describe('interface-call', () => {
 
 function testSignature(iface: InterfaceReflection, callSig: SignatureReflection) {
     expect(callSig.typeParameters[0].name).equal('I');
-    expect(callSig.typeParameters[0].id).to.ok;
+    expect(callSig.typeParameters[0].selfRef.id).to.ok;
     expect(callSig.parameters[0].name).equal('a');
-    expect(typeRef(callSig.parameters[0].type)).equal(callSig.typeParameters[0].id);
+    expect(typeRef(callSig.parameters[0].type)).equal(callSig.typeParameters[0].selfRef.id);
     let type = callSig.type;
     if (isTypeReferenceReflection(type)) {
         expect(type.typeName).equal('Test');
-        expect(type.ref).equal(iface.id);
-        expect(typeRef(type.typeArguments[0])).equal(callSig.typeParameters[0].id);
+        expect(type.ref.id).equal(iface.selfRef.id);
+        expect(typeRef(type.typeArguments[0])).equal(callSig.typeParameters[0].selfRef.id);
     } else {
         expect(false).to.true;
     }

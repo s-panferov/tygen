@@ -32,7 +32,7 @@ export default class TypeArguments extends React.Component<TypeArgumentsProps, T
             <Join>
                 {
                     typeArguments.map((typeArg, i) => {
-                        return <Type key={ typeArg.id } type={ typeArg } />;
+                        return <Type key={ typeArg.selfRef.id } type={ typeArg } />;
                     })
                 }
             </Join>

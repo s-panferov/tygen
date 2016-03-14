@@ -45,9 +45,15 @@ export function visitTypeAliasDeclaration(
         throw new Error('no symbol');
     }
 
+    let id = ctx.id(symbol);
     return {
-        id: ctx.id(symbol),
-        semanticId: ctx.semanticId(name),
+        selfRef: {
+            id,
+            semanticId: ctx.semanticId(id, name),
+            pkg: ctx.currentModule.pkgName,
+            path: ctx.currentModule.fileInfo.relativeToPackage,
+            mainSemanticId: ctx.mainId()
+        },
         export: !!(alias.flags & NodeFlags.Export),
         default: !!(alias.flags & NodeFlags.Default),
         itemType: ItemType.TypeAlias,

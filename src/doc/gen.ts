@@ -23,12 +23,12 @@ export function processSourceFile(source: WithLocals, ctx: Context, foreign = fa
     let [ items ] = visitTopLevelDeclarations(declarations, ctx);
 
     items = items.filter(item => {
-        if ((foreign && ctx.included(item.id)) || !foreign) {
-            if (!item.id) {
+        if ((foreign && ctx.included(item.selfRef.id)) || !foreign) {
+            if (!item.selfRef.id) {
                 console.error(item);
                 throw new Error('item dont have id');
             }
-            indexed[item.id] = item;
+            indexed[item.selfRef.id] = item;
             return true;
         }
     });

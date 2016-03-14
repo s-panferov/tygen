@@ -26,7 +26,7 @@ describe('class:accessors', () => {
     });
 
     it('class', () => {
-        expect(cls.id).to.ok;
+        expect(cls.selfRef.id).to.ok;
         expect(cls.name).to.equal('Test');
     });
 
@@ -38,7 +38,7 @@ describe('class:accessors', () => {
 
             if (isGetAccessorDeclarationReflection(getter)) {
                 expect(getter.name).to.equal('name');
-                expect(typeRef(getter.type)).to.equal(cls.id);
+                expect(typeRef(getter.type)).to.equal(cls.selfRef.id);
             } else {
                 expect(false).to.true;
             }

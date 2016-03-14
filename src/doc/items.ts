@@ -1,4 +1,5 @@
 import { Comment } from './ast/comment';
+import { Ref } from './index';
 
 export enum ItemType {
     Interface = 'Interface' as any,
@@ -41,8 +42,7 @@ export enum ItemType {
 }
 
 export interface Item {
-    id?: string;
-    semanticId?: string;
+    selfRef?: Ref;
     name?: string;
     comment?: Comment;
     itemType?: ItemType;

@@ -39,7 +39,7 @@ export default class Enum<P extends EnumProps> extends React.Component<P, EnumSt
             <Paper className={ this.getClassName() }>
                 <Heading lvl={ 2 }>
                     { this.getHeader() }
-                    <SmartLink id={ en.id }>{ en.name }</SmartLink>
+                    <SmartLink route={ en.selfRef }>{ en.name }</SmartLink>
                 </Heading>
                 { en.comment &&
                     <Comment comment={ en.comment } />
@@ -56,7 +56,7 @@ export default class Enum<P extends EnumProps> extends React.Component<P, EnumSt
     renderMembers() {
         return (
             this.props.item.members.map(member => {
-                return <EnumMember key={ member.id } member={ member } />;
+                return <EnumMember key={ member.selfRef.id } member={ member } />;
             })
         );
     }

@@ -20,7 +20,7 @@ export function visitParenthesizedTypeNode(
     ctx: Context
 ): ParenthesizedTypeReflection {
     return {
-        id: ctx.id(type.getSymbol() || type),
+        selfRef: { id: ctx.id(type.getSymbol() || type) },
         itemType: ItemType.ParenthesizedType,
         type: visitTypeNode(node.type, ctx)
     };

@@ -44,10 +44,10 @@ export default class Interface<P extends InterfaceProps> extends React.Component
                 return !!tp.constraint;
             });
         return (
-            <Paper id={ iface.id } block={ true } highlight={ false } className={ this.getClassName() }>
+            <Paper id={ iface.selfRef.id } block={ true } highlight={ false } className={ this.getClassName() }>
                 <Heading lvl={ 1 }>
                     <span>{ this.getHeader() } </span>
-                    <SmartLink id={ iface.id }>{ iface.name }</SmartLink>
+                    <SmartLink route={ iface.selfRef }>{ iface.name }</SmartLink>
                     { iface.typeParameters &&
                         <TypeParameters
                             asConstraint={ false }

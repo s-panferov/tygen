@@ -34,13 +34,13 @@ export default class Constructor extends React.Component<ConstructorProps, Const
         let { ctor } = this.props;
         if (this.props.inline) {
             return (
-                <div id={ ctor.id } className={ this.getClassName() }>
+                <div id={ ctor.selfRef.id } className={ this.getClassName() }>
                     { this.renderSignature() }
                 </div>
             );
         } else {
             return (
-                <Paper id={ ctor.id } block={ true } className={ this.getClassName() }>
+                <Paper id={ ctor.selfRef.id } block={ true } className={ this.getClassName() }>
                     <Section title={ ctor.name }>
                         <Figure className={ block('figure') }>
                             { this.renderSignature() }

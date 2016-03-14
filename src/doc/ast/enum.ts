@@ -35,21 +35,28 @@ export function visitEnum(
     en: EnumDeclaration,
     ctx: Context
 ): EnumDeclarationReflection {
-    let type = ctx.checker.getTypeAtLocation(en);
-    let basicInfo = visitBasicInfo(en, ctx);
-
-    return Object.assign(basicInfo, {
-        id: ctx.id(type.getSymbol() || type),
-        itemType: ItemType.EnumDeclaration,
-        name: en.name && en.name.getText(),
-        members: en.members
-            && en.members.map(member => visitEnumMember(member, ctx)),
+    return ctx.dive(en, () => {
+        let basicInfo = visitBasicInfo(en, ctx);
+        return Object.assign(basicInfo, {
+            itemType: ItemType.EnumDeclaration,
+            name: en.name && en.name.getText(),
+            members: en.members
+                && en.members.map(member => visitEnumMember(member, ctx)),
+        });
     });
 }
 
 export function visitEnumMember(member: EnumMember, ctx: Context): EnumMemberReflection {
+    let id = ctx.id(member);
+    let name = member.name && member.name.getText();
     return {
-        id: ctx.id(member),
+        selfRef: {
+            id: ctx.id(member),
+            semanticId: ctx.semanticId(id, name),
+            pkg: ctx.currentModule.pkgName,
+            path: ctx.currentModule.fileInfo.relativeToPackage,
+            mainSemanticId: ctx.mainId()
+        },
         itemType: ItemType.EnumMember,
         name: member.name && member.name.getText(),
         initializer: member.initializer && member.initializer.getText()

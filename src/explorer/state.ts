@@ -17,8 +17,6 @@ export interface State {
     route?: Route;
     module?: ModuleInfo;
     item?: Item;
-    items?: { [key: string]: Item };
-    modules?: { [key: string]: ModuleInfo };
     plugins?: PluginRegistry;
     searchActive?: boolean;
     searchQuery?: string;
@@ -51,8 +49,6 @@ export function defaultState(
         activity: new ActivityManager(),
         service,
         plugins,
-        modules: {},
-        items: {},
         module: null,
         item: null,
         route: {
