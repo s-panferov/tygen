@@ -41,10 +41,16 @@ export function visitPropertySignature(
         ? visitTypeNode(prop.type, ctx)
         : extractTypeReference(ctx.checker.getTypeAtLocation(prop), ctx);
 
+    let id = inherenceInfo.inherited ? ctx.id() : ctx.id(prop);
     return Object.assign(inherenceInfo,
         {
-            id: inherenceInfo.inherited ? ctx.id() : ctx.id(prop),
-            semanticId: ctx.semanticId(name),
+            selfRef: {
+                id,
+                semanticId: ctx.semanticId(id, name),
+                pkg: ctx.currentModule.pkgName,
+                path: ctx.currentModule.fileInfo.relativeToPackage,
+                mainSemanticId: ctx.mainId()
+            },
             itemType: ItemType.PropertySignature,
             name,
             optional: !!prop.questionToken,

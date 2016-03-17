@@ -32,10 +32,10 @@ export default class Function extends React.Component<FunctionProps, FunctionSta
     render() {
         let func = this.props.item;
         return (
-            <Paper id={ func.id } block={ true } highlight={ false } className={ this.getClassName() }>
+            <Paper id={ func.selfRef.id } block={ true } highlight={ false } className={ this.getClassName() }>
                 <Heading lvl={ 1 }>
                     <span>Function </span>
-                    <SmartLink id={ func.id }>{ func.name }</SmartLink>
+                    <SmartLink route={ func.selfRef }>{ func.name }</SmartLink>
                 </Heading>
                 { func.comment &&
                     <Comment comment={ func.comment } />

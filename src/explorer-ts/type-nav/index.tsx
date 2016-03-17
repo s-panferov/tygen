@@ -63,7 +63,7 @@ export default class TypeNav extends React.Component<TypeNavProps, TypeNavState>
                         onScroll={ this.onScroll }
                         onWheel={ this.onMouseWheel }
                     >
-                        <ScrollSpy ids={ this.props.items.map(item => item.id) } onChange={ this.onSpyChange }>
+                        <ScrollSpy ids={ this.props.items.map(item => item.selfRef.id) } onChange={ this.onSpyChange }>
                             { this.renderItems }
                         </ScrollSpy>
                     </div>
@@ -75,7 +75,7 @@ export default class TypeNav extends React.Component<TypeNavProps, TypeNavState>
     renderItems(inView: string, outView: string) {
         let items = this.props.items.map(item => {
             let className = block('item', {
-                active: inView.indexOf(item.id) !== -1
+                active: inView.indexOf(item.selfRef.id) !== -1
             });
 
             let name = item.name;
@@ -85,11 +85,11 @@ export default class TypeNav extends React.Component<TypeNavProps, TypeNavState>
 
             return (
                 <div
-                    id={ `nav-${item.id}` }
+                    id={ `nav-${item.selfRef.id}` }
                     className={ className }
-                    key={ item.id }
+                    key={ item.selfRef.id }
                 >
-                    <SmartLink id={ item.id } className={ block('link') }>
+                    <SmartLink route={ item.selfRef } className={ block('link') }>
                         { item.name }
                     </SmartLink>
                 </div>

@@ -36,8 +36,8 @@ export class DocWriter {
             inMain: boolean,
             nesting: string[] = []
         ) {
-            if (obj.id) {
-                nesting = nesting.concat(obj.id);
+            if (obj.selfRef && obj.itemType) {
+                // nesting = nesting.concat(obj.id);
 
                 // if (!!idMap[obj.id]) {
                 //     console.log('origin', idMap[obj.id]);
@@ -47,20 +47,21 @@ export class DocWriter {
                 //     throw '!!dublicate';
                 // }
 
-                idMap[obj.id] = [obj.semanticId, pkg, path, [nesting[0]]];
-
+                // idMap[obj.id] = [obj.semanticId, pkg, path, [nesting[0]]];
+                //
                 if (inMain && INCLUDE_ITEMS[obj.itemType]) {
                     flatItems.push(obj);
                 }
-
-                if (obj.semanticId) {
-                    if (!semanticIdMap[pkg]) { semanticIdMap[pkg] = {}; };
-                    if (!semanticIdMap[pkg][path]) { semanticIdMap[pkg][path] = {}; };
-                    if (!semanticIdMap[pkg][path][obj.semanticId]) { semanticIdMap[pkg][path][obj.semanticId] = obj.id; }
-                    else {
-                        console.error('Duplicate semantic id ' + obj.semanticId);
-                    }
-                }
+                //
+                // if (obj.semanticId) {
+                //     if (!semanticIdMap[pkg]) { semanticIdMap[pkg] = {}; };
+                //     if (!semanticIdMap[pkg][path]) { semanticIdMap[pkg][path] = {}; };
+                //     if (!semanticIdMap[pkg][path][obj.semanticId]) { semanticIdMap[pkg][path][obj.semanticId] = obj.id; }
+                //     else {
+                //         console.error('Duplicate semantic id ' + obj.semanticId);
+                //     }
+                // }
+                //
             }
 
             for (let key in obj) {
@@ -110,9 +111,9 @@ export class DocWriter {
 
             let itemsPath = metaPath.replace('.json', '');
             fse.ensureDirSync(itemsPath);
-            Object.keys(module.itemsIndex).forEach(itemId => {
-                let itemPath = path.join(itemsPath, itemId + '.json');
-                fs.writeFileSync(itemPath, JSON.stringify(module.itemsIndex[itemId], null, 4));
+            module.items.forEach(item => {
+                let itemPath = path.join(itemsPath, (item.selfRef.semanticId || item.selfRef.id) + '.json');
+                fs.writeFileSync(itemPath, JSON.stringify(item, null, 4));
             });
         });
 
@@ -154,14 +155,17 @@ export class DocWriter {
             indexPath: 'si',
             logLevel: 'error',
             nGramLength: 1,
-            fieldsToStore: [ 'semanticId' ]
+            fieldsToStore: [ 'selfRef', 'name' ]
         };
 
         let indexOptions = {
             batchName: 'items',
             fieldOptions: [
                 {
-                    fieldName: 'semanticId'
+                    fieldName: 'selfRef'
+                },
+                {
+                    fieldName: 'name'
                 }
             ]
         };
@@ -185,7 +189,9 @@ export class DocWriter {
     }
 
     generateRegistryModule(dir: string): [string, any[]] {
-        let [idMap, semanticIdMap, flatItems] = this.generateIdMap();
+        let res = this.generateIdMap();
+        let flatItems = res[2];
+
         let modules = this.context.modules;
         let files: any = {};
         Object.keys(modules).forEach(moduleKey => {
@@ -202,9 +208,7 @@ export class DocWriter {
 {\n
     "mainPackage": "${extractPackage(dir).info.name}",
     "packages": ${ JSON.stringify(packagesInfo, null, 4) },
-    "files": ${ JSON.stringify(files, null, 4) },
-    "idMap": ${ JSON.stringify(idMap, null, 4) },
-    "semanticIdMap": ${ JSON.stringify(semanticIdMap, null, 4) }
+    "files": ${ JSON.stringify(files, null, 4) }
 }`;
 
         return [buf, flatItems];

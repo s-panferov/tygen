@@ -149,9 +149,20 @@ export function visitBasicInfo(
         itemType = ItemType.Class;
     }
 
+    let sym = type.getSymbol();
+    if (!sym) {
+        throw new Error('!sym');
+    }
+
+    let id = ctx.id(sym);
     return {
-        id: ctx.id(type.getSymbol() || type),
-        semanticId: ctx.semanticId(),
+        selfRef: {
+            id,
+            semanticId: ctx.semanticId(id),
+            pkg: ctx.currentModule.pkgName,
+            path: ctx.currentModule.fileInfo.relativeToPackage,
+            mainSemanticId: ctx.mainId()
+        },
         itemType,
         name: base.name.getText(),
         typeParameters,
@@ -174,6 +185,7 @@ export function visitInterface(
         let basicInfo = visitBasicInfo(iface, ctx);
 
         return Object.assign(basicInfo, {
+
         });
     });
 }
@@ -195,7 +207,7 @@ export interface HeritageClauseReflection extends Item {
 
 function visitHeritageClause(hc: HeritageClause, ctx: Context): HeritageClauseReflection {
     return {
-        id: ctx.id(hc),
+        selfRef: { id: ctx.id(hc) },
         itemType: ItemType.HeritageClause,
         clause: HeritageClauseTypeTsMapping[hc.token],
         types: hc.types &&

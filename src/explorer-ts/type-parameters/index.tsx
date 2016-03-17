@@ -61,7 +61,7 @@ export default class TypeParameters extends React.Component<TypeParametersProps,
                     typeParameters.map(typeParam => {
                         return <TypeParameter
                             asConstraint={ this.props.asConstraint}
-                            key={ typeParam.id }
+                            key={ typeParam.selfRef.id }
                             typeParam={ typeParam }
                         />;
                     })

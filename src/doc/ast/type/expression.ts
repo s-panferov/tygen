@@ -20,9 +20,9 @@ export function isExpressionWithTypeArgumentsReflection(item: TypeReflection): i
     return item.itemType == ItemType.ExpressionWithTypeArguments;
 }
 
-export function visitExpressionWithTypeArguments(expr: ExpressionWithTypeArguments, ctx: Context) {
+export function visitExpressionWithTypeArguments(expr: ExpressionWithTypeArguments, ctx: Context): ExpressionWithTypeArgumentsReflection {
     return {
-        id: ctx.id(expr),
+        selfRef: { id: ctx.id(expr) },
         itemType: ItemType.ExpressionWithTypeArguments,
         typeArguments: expr.typeArguments &&
             expr.typeArguments.map(ta => visitTypeNode(ta, ctx)),
@@ -50,7 +50,7 @@ export function visitLeftHandSideExpression(
     }
 
     return {
-        id: ctx.id(expr),
+        selfRef: { id: ctx.id(expr) },
         itemType: ItemType.LeftHandSideExpression,
         name: expr.getText(),
         type: extractTypeReference(targetType, ctx)

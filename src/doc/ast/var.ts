@@ -68,9 +68,17 @@ export function visitVariableDeclaration(
         type = extractTypeReference(checkerType, ctx);
     }
 
+    let id = ctx.id(variable);
+    let name = variable.name.getText();
     return {
-        id: ctx.id(variable),
-        name: variable.name.getText(),
+        selfRef: {
+            id,
+            semanticId: ctx.semanticId(id, name),
+            pkg: ctx.currentModule.pkgName,
+            path: ctx.currentModule.fileInfo.relativeToPackage,
+            mainSemanticId: ctx.mainId()
+        },
+        name,
         itemType: ItemType.VariableDeclaration,
         export: !!(list.parent.flags & NodeFlags.Export),
         default: !!(list.parent.flags & NodeFlags.Default),
@@ -78,7 +86,7 @@ export function visitVariableDeclaration(
         type,
         initializer: variable.initializer &&
             variable.initializer.getText()
-    } as VariableDeclarationReflection;
+    };
 }
 
 export function visitBindingElement(
@@ -98,9 +106,17 @@ export function visitBindingElement(
     let checkerType = ctx.checker.getTypeAtLocation(variable);
     type = extractTypeReference(checkerType, ctx);
 
+    let id = ctx.id(variable);
+    let name = variable.name.getText();
     return {
-        id: ctx.id(variable),
-        name: variable.name.getText(),
+        selfRef: {
+            id,
+            semanticId: ctx.semanticId(id, name),
+            pkg: ctx.currentModule.pkgName,
+            path: ctx.currentModule.fileInfo.relativeToPackage,
+            mainSemanticId: ctx.mainId()
+        },
+        name,
         itemType: ItemType.VariableDeclaration,
         export: !!(list.parent.flags & NodeFlags.Export),
         default: !!(list.parent.flags & NodeFlags.Default),
@@ -108,5 +124,5 @@ export function visitBindingElement(
         type,
         initializer: variable.initializer &&
             variable.initializer.getText()
-    } as VariableDeclarationReflection;
+    };
 }

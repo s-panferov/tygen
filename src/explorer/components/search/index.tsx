@@ -95,7 +95,7 @@ export default class Search extends React.Component<SearchProps & SearchReduxPro
         return searchResults.hits.map(hit => {
             return (
                 <div key={ hit.id } className={ block('result') }>
-                    <SmartLink id={ hit.id }
+                    <SmartLink route={ null }
                         render={
                             (route: Route, linkProps) => {
                                 return (

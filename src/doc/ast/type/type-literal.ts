@@ -22,7 +22,7 @@ export function visitTypeLiteral(node: TypeLiteralNode, type: Type, ctx: Context
     // TODO regiser inline types globally?
 
     return {
-        id: ctx.id(type.getSymbol() || type),
+        selfRef: { id: ctx.id(type.getSymbol() || type) },
         itemType: ItemType.TypeLiteral,
         members: node.members && visitDeclarations(
             node.members,

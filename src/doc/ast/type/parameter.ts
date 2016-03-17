@@ -31,7 +31,7 @@ export function visitParameter(
     }
 
     return {
-        id: ctx.id(param),
+        selfRef: { id: ctx.id(param) },
         itemType: ItemType.Parameter,
         name: param.name.getText(),
         optional: !!param.questionToken,

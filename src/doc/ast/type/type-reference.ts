@@ -10,10 +10,10 @@ import {
     visitTypeNode
 } from '../type';
 
-import { Context,  Item, ItemType } from '../../index';
+import { Context,  Item, ItemType, Ref } from '../../index';
 
 export interface TypeReferenceReflection extends TypeReflection {
-    ref: string;
+    ref: Ref;
     typeName?: string;
     targetType?: TypeReflection;
     typeArguments?: TypeReflection[];
@@ -28,6 +28,7 @@ export function visitTypeReference(
     type: TypeReference,
     ctx: Context
 ): TypeReferenceReflection {
+    let ident = node.typeName;
     let symbol = ctx.checker.getSymbolAtLocation(node.typeName);
 
     // If this is an alias, and the request came at the declaration location
@@ -42,8 +43,8 @@ export function visitTypeReference(
         //   (1) when the aliased symbol was declared in the location(parent).
         //   (2) when the aliased symbol is originating from a named import.
         //
-        if (node.kind === SyntaxKind.Identifier &&
-            (node.parent === declaration ||
+        if (ident.kind === SyntaxKind.Identifier &&
+            (ident.parent === declaration ||
             (declaration.kind === SyntaxKind.ImportSpecifier && declaration.parent && declaration.parent.kind === SyntaxKind.NamedImports))) {
 
             symbol = ctx.checker.getAliasedSymbol(symbol);
@@ -53,9 +54,18 @@ export function visitTypeReference(
     let refId = ctx.id(symbol);
     ctx.include(refId);
 
+    let { pkg, path, mainId, semanticId, mainSemanticId } = ctx.routeForSym(symbol);
+
     return {
-        id: ctx.id(node),
-        ref: refId,
+        selfRef: { id: ctx.id(node) },
+        ref: {
+            id: refId,
+            pkg,
+            path,
+            semanticId,
+            mainSemanticId,
+            mainId
+        },
         itemType: ItemType.TypeReference,
         typeName: node.typeName.getText(),
         typeArguments: node.typeArguments &&

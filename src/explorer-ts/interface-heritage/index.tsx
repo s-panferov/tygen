@@ -33,14 +33,14 @@ export default class InterfaceHeritage<P extends InterfaceHeritageProps>
                 {
                     clauses.map(clause => {
                         return (
-                            <div key={ clause.id } className={ block('heritage') }>
+                            <div key={ clause.selfRef.id } className={ block('heritage') }>
                                 <span>{ clause.clause } </span>
                                 <span className={ block('heritage-types') }>
                                     {
                                         clause.types.map(expr => {
                                             return (
                                                 <TypeExpression
-                                                    key={ expr.id }
+                                                    key={ expr.selfRef.id }
                                                     expr={ expr } />
                                             );
                                         })

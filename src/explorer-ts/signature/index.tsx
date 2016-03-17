@@ -53,7 +53,7 @@ export default class Signature extends React.Component<SignatureProps, Signature
                     <Join>
                         {
                             signature.parameters.map(param => {
-                                return <SignatureParam key={ param.id } param={ param }/>;
+                                return <SignatureParam key={ param.selfRef.id } param={ param }/>;
                             })
                         }
                     </Join>

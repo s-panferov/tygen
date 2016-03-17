@@ -63,7 +63,11 @@ export function visitFunctionLikeDeclaration(
         if (inherenceInfo) {
             let inherenceInfo = visitInherenceInfo(func, ctx);
             return Object.assign(basicInfo, inherenceInfo, {
-                id: inherenceInfo.inherited ? ctx.id() : basicInfo.id,
+                selfRef: !inherenceInfo.inherited
+                    ? basicInfo.selfRef
+                    : Object.assign({}, basicInfo.selfRef, {
+                        id: ctx.id()
+                    }),
                 itemType
             });
         } else {

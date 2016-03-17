@@ -1,6 +1,5 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import * as crypto from 'crypto';
 
 import { Package, FileInfo } from './index';
 
@@ -15,12 +14,6 @@ export function extractPackage(fileName: string): Package {
 }
 
 export function getFileInfo(fileName: string, pkg: Package): FileInfo {
-    let relativeToOrigin = path.relative(process.cwd(), fileName);
-
-    let shasum = crypto.createHash('sha1');
-    shasum.update(relativeToOrigin);
-
-    let metaName = shasum.digest('hex') + '.json';
     let relativeToPackage = path.relative(pkg.path, fileName);
 
     if (!/^(\.|\/)/.test(relativeToPackage)) {
@@ -28,6 +21,7 @@ export function getFileInfo(fileName: string, pkg: Package): FileInfo {
     }
 
     let withPackage = pkg.info.name + '://' + relativeToPackage;
+    let metaName = withPackage.replace(/\/|\\/g, '--') + '.json';
 
     return {
         metaName,

@@ -5,6 +5,8 @@ import { processSourceFile } from './gen';
 import { Item, ItemType } from './items';
 import * as path from 'path';
 
+import { isModuleDeclaration, isStringLiteral } from './ast/module';
+
 export { Item, ItemType }
 
 import {
@@ -13,7 +15,9 @@ import {
     SourceFile,
     Symbol,
     Node,
-    LanguageService
+    LanguageService,
+    SyntaxKind,
+    Declaration
 } from 'typescript';
 
 import * as typescript from 'typescript';
@@ -48,6 +52,7 @@ export interface ModuleInfo {
     pkgName: string;
     fileInfo: FileInfo;
     internal: boolean;
+    semanticIdMap: { [semantiId: string]: string };
     items: [string, string, string][];
 }
 
@@ -69,6 +74,15 @@ export interface DocRegistry {
 
 function isNode(node: Symbol | Node): node is Node {
     return !!(node as any).kind;
+}
+
+export interface Ref {
+    id?: string;
+    pkg?: string;
+    path?: string;
+    mainId?: string;
+    semanticId?: string;
+    mainSemanticId?: string;
 }
 
 /**
@@ -153,12 +167,23 @@ export class Context {
         return this._visited.get(obj);
     }
 
-    semanticId(level?: string): string {
+    mainId(): string {
+        if (this.currentStack[0]) {
+            return this.currentStack[0].name;
+        } else {
+            return null;
+        }
+    }
+
+    semanticId(id: string, level?: string): string {
         let currentStack = this.currentStack.map(sym => sym.name);
         if (level) {
             currentStack = currentStack.concat(level);
         }
-        return currentStack.join('.');
+        let resultId =  currentStack.join('.');
+        this.currentModule.semanticIdMap[resultId] = id;
+
+        return resultId;
     }
 
     id(object?: any): string {
@@ -249,8 +274,86 @@ export class Context {
         this.includeAllowed = prevIncludeAllowed;
     }
 
-    getModule(fileName): Module {
+    getModule(fileName: string): Module {
         return this.modules[fileName];
+    }
+
+    routeForSym(sym: Symbol): Ref {
+        let fileName = sym.declarations[0].getSourceFile().fileName;
+
+        let pkg = extractPackage(fileName);
+        let fileInfo = getFileInfo(fileName, pkg);
+        let decl = sym.declarations[0];
+
+        let modulePath = '';
+        let resultPath = '';
+        let resultPkg = pkg.info.name;
+        let current = decl;
+        let mainId = '' as string;
+        let mainSemanticId = '' as string;
+
+        if (decl.kind == SyntaxKind.SourceFile) {
+            // reference to value module
+            return { pkg: resultPkg, path: fileInfo.relativeToPackage };
+        }
+
+        if (decl.parent.kind == SyntaxKind.SourceFile) {
+            mainId = this.id(sym);
+            mainSemanticId = getSemanticId(decl);
+        }
+
+        function getSemanticId(decl: Declaration): string {
+            switch (decl.kind) {
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                    return decl.name.getText();
+            }
+        }
+
+        let semanticId = getSemanticId(decl);
+
+        while (current = current.parent as any) {
+            if (current.parent && current.parent.kind == SyntaxKind.SourceFile) {
+                let type = this.checker.getTypeAtLocation(current);
+                let sym = type.getSymbol();
+
+                if (!isModuleDeclaration(current)) {
+                    mainId = this.id(sym || type);
+                    mainSemanticId = getSemanticId(current);
+                }
+            }
+
+            if (semanticId && !isModuleDeclaration(current)) {
+                let parentSemanticId = getSemanticId(current);
+                if (parentSemanticId) {
+                    semanticId = parentSemanticId + '.' + semanticId;
+                }
+            }
+
+            if (isModuleDeclaration(current)) {
+                let name = current.name;
+                if (isStringLiteral(current)) {
+                    modulePath = `/${modulePath}`;
+                    resultPath = modulePath;
+                    resultPkg = name.text;
+                    break;
+                } else {
+                    modulePath = `/${name.text}${modulePath}`;
+                }
+            }
+        }
+
+        if (!resultPath) {
+            resultPath = fileInfo.relativeToPackage + modulePath;
+        }
+
+        return { pkg: resultPkg, path: resultPath, mainId, semanticId, mainSemanticId };
     }
 
     private generateModule(fileName: string, source: SourceFile, pkg: Package, internal: boolean): Module {
@@ -278,6 +381,7 @@ export class Module {
 
     items: Item[] = [];
     itemsIndex: { [id: string]: Item } = {};
+    semanticIdMap: { [key: string]: string } = {};
 
     constructor(sourceFile: SourceFile, pkgName: string, fileInfo: FileInfo, internal: boolean) {
         this.pkgName = pkgName;
@@ -286,11 +390,10 @@ export class Module {
     }
 
     toJSON() {
-        let { pkgName, fileInfo, itemsIndex, kind, internal } = this;
-        let shortItems = Object.keys(itemsIndex).map(itemId => {
-            let item = itemsIndex[itemId];
-            return [itemId, item.itemType, item.name];
+        let { pkgName, fileInfo, items, kind, internal, semanticIdMap } = this;
+        let shortItems = items.map(item => {
+            return [item.selfRef, item.itemType, item.name];
         });
-        return { kind, pkgName, fileInfo, internal, items: shortItems };
+        return { kind, pkgName, fileInfo, internal, semanticIdMap, items: shortItems };
     }
 }

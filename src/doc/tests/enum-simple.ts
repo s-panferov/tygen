@@ -15,7 +15,7 @@ describe('enum:simple', () => {
     let en = module.items[0];
 
     it('reflection', () => {
-        expect(en.id).to.ok;
+        expect(en.selfRef.id).to.ok;
         expect(en.name).to.equal('Test');
     });
 

@@ -36,13 +36,6 @@ export default class Paper extends React.Component<PaperProps, PaperState> {
 
         if (this.props.route.id) {
             return this.props.route.id === this.props.id;
-        } else if (this.props.route.semanticId) {
-            let fullRoute = this.props.service.getFullRoute({ id: this.props.id });
-            if (fullRoute.semanticId) {
-                return this.props.route.semanticId == fullRoute.semanticId;
-            } else {
-                return false;
-            }
         }
     }
 

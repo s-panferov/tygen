@@ -1,4 +1,3 @@
-require('shelljs/global');
 var spawn = require('child_process').spawn;
 
 function MochaPlugin(options) {

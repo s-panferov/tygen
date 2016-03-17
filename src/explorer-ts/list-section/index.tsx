@@ -3,6 +3,7 @@ import * as theme from '../../explorer/components/theme';
 
 import SmartLink from '../../explorer/components/smart-link';
 
+import { Ref } from '../../doc';
 import { ItemType } from '../../doc/items';
 
 require('./index.css');
@@ -16,7 +17,7 @@ export enum ListSectionView {
 export interface ListSectionProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     itemType: string;
-    items: [string, string][];
+    items: [Ref, string][];
     view?: ListSectionView;
 }
 
@@ -52,8 +53,8 @@ export default class ListSection extends React.Component<ListSectionProps, ListS
                 <div className={ block('items') }>
                     {
                         this.props.items.map(item => {
-                            let [id, name] = item;
-                            return <SmartLink key={ id } className={ block('item') } id={ id }>
+                            let [selfRef, name] = item;
+                            return <SmartLink key={ selfRef.id } className={ block('item') } route={ selfRef }>
                                 { name }
                             </SmartLink>;
                         })

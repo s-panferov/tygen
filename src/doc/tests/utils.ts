@@ -21,7 +21,7 @@ import { Item } from '../items';
 
 export function typeRef(item: Item): string {
     if (isTypeReferenceReflection(item)) {
-        return item.ref;
+        return item.ref.id;
     } else {
         throw new Error('item is not type reference');
     }

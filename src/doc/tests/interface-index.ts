@@ -23,7 +23,7 @@ describe('interface-index', () => {
             it ('reflection', () => {
                 expect(index.parameters[0].name).equal('key');
                 expect(coreType(index.parameters[0].type)).equal(CoreType.String);
-                expect(typeRef(index.type)).equal(iface.id);
+                expect(typeRef(index.type)).equal(iface.selfRef.id);
             });
         }
     } else {

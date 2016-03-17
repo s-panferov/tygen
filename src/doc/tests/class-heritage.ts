@@ -31,7 +31,7 @@ describe('interface-heritage', () => {
                 let hc = cls.heritageClauses[0];
                 expect(hc.itemType).equal(ItemType.HeritageClause);
                 expect(hc.clause).equal(HeritageClauseType.Extends);
-                expect(typeRef(hc.types[0].expression.type)).equal(base.id);
+                expect(typeRef(hc.types[0].expression.type)).equal(base.selfRef.id);
                 expect(hc.types[0].expression.name).equal('Base');
                 expect(coreType(hc.types[0].typeArguments[0])).equal(CoreType.String);
             });

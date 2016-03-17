@@ -40,7 +40,7 @@ describe('interface-literal', () => {
 
                     if (isPropertySignatureReflection(member)) {
                         expect(member.name).to.equal('p0');
-                        expect(typeRef(member.type)).equal(iface.id);
+                        expect(typeRef(member.type)).equal(iface.selfRef.id);
                     } else {
                         expect(false).to.true;
                     }

@@ -12,6 +12,7 @@ import {
 import SmartLink from '../../explorer/components/smart-link';
 import Paper from '../../explorer/components/paper';
 import TypeArguments from '../type-arguments';
+import Type from '../type';
 
 require('./index.css');
 const block = theme.block('ts-type-ref');
@@ -45,14 +46,6 @@ export default class TypeExpression extends React.Component<TypeExpressionProps,
     renderType() {
         let expression = this.props.expr.expression;
         let type = expression.type;
-        if (isTypeReferenceReflection(type)) {
-            return (
-                <SmartLink id={ type.ref }>
-                    { expression.name }
-                </SmartLink>
-            );
-        } else {
-            return <span>TODO</span>;
-        }
+        return <Type type={ type }/>;
     }
 }

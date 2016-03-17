@@ -30,14 +30,14 @@ export default class TypeRef extends React.Component<TypeRefProps, TypeRefState>
     render() {
         let typeRef = this.props.typeRef;
         let targetType = typeRef.targetType;
-        let ref: string = null;
+        let ref: typeof typeRef.ref = null;
         if (targetType && isTypeReferenceReflection(targetType)) {
             ref = targetType.ref;
         } else {
             ref = typeRef.ref;
         }
 
-        let route = { id: ref };
+        let route = ref;
         if (!route.id) {
             console.error('id expected', typeRef);
         }

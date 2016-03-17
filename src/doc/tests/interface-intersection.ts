@@ -37,7 +37,7 @@ describe('interface-intersection', () => {
                     if (isIntersectionTypeReflection(type)) {
                         expect(type.types).lengthOf(2);
                         expect(coreType(type.types[0])).to.equal(CoreType.String);
-                        expect(typeRef(type.types[1])).to.equal(iface.id);
+                        expect(typeRef(type.types[1])).to.equal(iface.selfRef.id);
                     } else {
                         expect(false).to.true;
                     }
@@ -56,7 +56,7 @@ describe('interface-intersection', () => {
                     if (isUnionTypeReflection(type)) {
                         expect(type.types).lengthOf(2);
                         expect(coreType(type.types[0])).to.equal(CoreType.String);
-                        expect(typeRef(type.types[1])).to.equal(iface.id);
+                        expect(typeRef(type.types[1])).to.equal(iface.selfRef.id);
                     } else {
                         expect(false).to.true;
                     }
