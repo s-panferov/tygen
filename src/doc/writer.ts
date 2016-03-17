@@ -153,7 +153,7 @@ export class DocWriter {
             deletable: false,
             fieldedSearch: false,
             indexPath: 'docscript-search',
-            logLevel: 'trace',
+            logLevel: 'error',
             nGramLength: 1,
             fieldsToStore: [
                 'selfRef__id',
