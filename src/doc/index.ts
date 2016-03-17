@@ -338,8 +338,8 @@ export class Context {
 
             if (isModuleDeclaration(current)) {
                 let name = current.name;
-                if (isStringLiteral(current)) {
-                    modulePath = `/${modulePath}`;
+                if (isStringLiteral(name)) {
+                    modulePath = `/${modulePath}/index`;
                     resultPath = modulePath;
                     resultPkg = name.text;
                     break;

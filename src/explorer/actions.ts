@@ -94,6 +94,15 @@ export interface Navigate {
     item?: Item;
 }
 export function navigate(route: Route) {
+    if (route.pkg.indexOf('/') !== -1) {
+        let parts = route.pkg.split('/');
+        let pkg = parts[0];
+        let path = '/' + parts.slice(1).join('/') + route.path;
+
+        route = Object.assign({}, route, { pkg, path });
+        console.log('normalized route', route);
+    }
+
     return (dispatch: Dispatch, getState: GetState) => {
         dispatch({
             type: ActionType.Navigate,

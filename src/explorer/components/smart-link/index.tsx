@@ -42,7 +42,7 @@ export default class SmartLink extends React.Component<SmartLinkProps, SmartLink
 
         if (!route.invalid) {
             htmlProps.onClick = this.onClick;
-            htmlProps.href = pathFromRoute(route);
+            htmlProps.href = `#${pathFromRoute(route)}`;
         }
 
         if (this.props.render) {

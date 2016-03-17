@@ -30,6 +30,7 @@ export default function root(state: State, action: Action<any, any>): State {
 function navigate(state: State, { payload }: Action<Navigate, void>): State {
     if (!isError(payload)) {
         let { route, ready, moduleInfo, item } = payload;
+
         if (!ready) {
             return Object.assign({}, state,
                 {

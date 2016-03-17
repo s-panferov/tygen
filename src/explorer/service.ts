@@ -181,7 +181,10 @@ function readPackages(registry: DocRegistry): Packages {
     Object.keys(registry.packages).forEach(packageName => {
         if (!packages[packageName]) {
             let packageInfo = registry.packages[packageName];
-            packages[packageName] = <any>{
+
+            // for packages like 'somename/lib/smth'
+            let mainName = packageName.split('/')[0];
+            packages[mainName] = <any>{
                 files: {},
                 info: packageInfo,
                 fs: new MemoryFileSystem()
@@ -194,7 +197,15 @@ function readPackages(registry: DocRegistry): Packages {
 
         let [pkgName, relativeToPackage] = key.split('://');
 
-        let pkg = packages[pkgName];
+        let pkgNameParts = pkgName.split('/');
+        let mainPkgName = pkgNameParts[0];
+        let pkg = packages[mainPkgName];
+
+        if (mainPkgName !== pkgName) {
+            // for packages like 'somename/lib/smth'
+            relativeToPackage = '/' + pkgNameParts.slice(1).join('/') + relativeToPackage;
+        }
+
         pkg.files[relativeToPackage] = moduleMetaName;
         pkg.fs.mkdirpSync(path.dirname(relativeToPackage));
 
