@@ -8,7 +8,7 @@ export { Route, PluginRegistry }
 import ActivityManager from './activity';
 
 export interface SearchResult {
-    hits: { id: string, document: { semanticId: string } }[];
+    hits: { id: string, document: { name: string } }[];
 }
 
 export interface State {

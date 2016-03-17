@@ -69,7 +69,7 @@ export default class Search extends React.Component<SearchProps & SearchReduxPro
                                 <div className={ block('input') }>
                                     <TextField
                                         placeholder='Type to search'
-                                        className={ block('control') }
+                                        className={ block('control').toString() }
                                         autoFocus={ true }
                                         fullWidth={ true }
                                         value={ this.props.searchQuery }
@@ -93,15 +93,24 @@ export default class Search extends React.Component<SearchProps & SearchReduxPro
     renderSearchResults() {
         let { searchResults } = this.props;
         return searchResults.hits.map(hit => {
+            let doc = hit.document as any;
+            let selfRef = {
+                id: doc.selfRef__id,
+                pkg: doc.selfRef__pkg,
+                path: doc.selfRef__path,
+                mainId: doc.selfRef__mainId,
+                semanticId: doc.selfRef__semanticId,
+                mainSemanticId: doc.selfRef__mainSemanticId
+            };
             return (
                 <div key={ hit.id } className={ block('result') }>
-                    <SmartLink route={ null }
+                    <SmartLink route={ selfRef }
                         render={
                             (route: Route, linkProps) => {
                                 return (
                                     <div className={ block('result-inner') }>
                                         <Link htmlProps={ linkProps } className={ block('result-link') }>
-                                            { hit.document.semanticId }
+                                            { hit.document.name }
                                         </Link>
                                         <div className={ block('result-hint') }>
                                             from { route.pkg }:{'//'}{ route.path }

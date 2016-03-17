@@ -152,23 +152,38 @@ export class DocWriter {
             db: require('memdown'),
             deletable: false,
             fieldedSearch: false,
-            indexPath: 'si',
-            logLevel: 'error',
+            indexPath: 'docscript-search',
+            logLevel: 'trace',
             nGramLength: 1,
-            fieldsToStore: [ 'selfRef', 'name' ]
+            fieldsToStore: [
+                'selfRef__id',
+                'selfRef__pkg',
+                'selfRef__path',
+                'selfRef__mainId',
+                'selfRef__semanticId',
+                'selfRef__mainSemanticId',
+                'name'
+            ]
         };
 
         let indexOptions = {
             batchName: 'items',
             fieldOptions: [
-                {
-                    fieldName: 'selfRef'
-                },
-                {
-                    fieldName: 'name'
-                }
+                { fieldName: 'selfRef__semanticId' },
+                { fieldName: 'name' },
+                { fieldName: 'selfRef__pkg' },
+                { fieldName: 'selfRef__path' },
             ]
         };
+
+        flatItems.forEach(item => {
+            item.selfRef__id = item.selfRef.id;
+            item.selfRef__pkg = item.selfRef.pkg;
+            item.selfRef__path = item.selfRef.path;
+            item.selfRef__mainId = item.selfRef.mainId;
+            item.selfRef__semanticId = item.selfRef.semanticId;
+            item.selfRef__mainSemanticId = item.selfRef.mainSemanticId;
+        });
 
         return new Promise((resolve, reject) => {
             SearchIndex(options, (err, index) => {
