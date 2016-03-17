@@ -2,6 +2,7 @@
 set -e # exit with nonzero exit code if anything fails
 
 if [[ $TRAVIS_BRANCH == 'master' ]]
+then
     mkdir -p doc-repo
 
     cp -r doc doc-repo/
