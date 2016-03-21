@@ -1,6 +1,6 @@
 # docscript
 
-https://travis-ci.org/docscript/docscript.svg?branch=master
+[![Build Status](https://travis-ci.org/docscript/docscript.svg?branch=master)](https://travis-ci.org/docscript/docscript)
 
 A documentation generator for TypeScript projects.
 
