@@ -25,3 +25,13 @@ declare module 'memory-fs' {
 
     export default MemoryFileSystem
 }
+
+declare module 'material-ui/lib/toggle' {
+    let Toggle: any;
+    export default Toggle;
+}
+
+declare module 'material-ui/lib/text-field' {
+    let TextField: any;
+    export default TextField;
+}

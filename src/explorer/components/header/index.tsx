@@ -8,8 +8,7 @@ import Breadcrumbs from '../breadcrumbs';
 import File from '../file';
 import SmartLink from '../smart-link';
 import Search from '../search';
-
-let Toggle = require('material-ui/lib/toggle');
+import Toggle from 'material-ui/lib/toggle';
 
 require('./index.css');
 const block = theme.block('header');

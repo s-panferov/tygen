@@ -7,8 +7,7 @@ import Hotkeys from '../hotkeys';
 import Link from '../link';
 
 import { connect, DispatchProps, actions } from '../../redux';
-
-let TextField = require('material-ui/lib/text-field');
+import TextField from 'material-ui/lib/text-field';
 
 require('./index.css');
 const block = theme.block('search');

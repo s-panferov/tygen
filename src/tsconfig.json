@@ -11,7 +11,8 @@
         "removeComments": true,
         "noLib": false,
         "preserveConstEnums": true,
-        "suppressImplicitAnyIndexErrors": true
+        "suppressImplicitAnyIndexErrors": true,
+        "allowSyntheticDefaultImports": true
     },
     "compileOnSave": false,
     "filesGlob": [
