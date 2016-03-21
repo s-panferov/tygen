@@ -2,10 +2,8 @@
 
 .ts-type-members {
     display: flex;
-    font-family: var(--sans-serif);
 
     &__member {
-        margin-bottom: 10px;
     }
 
     &__body {
@@ -35,6 +33,14 @@
 
         &_active {
             border-left-color: red;
+        }
+    }
+
+    &_inline {
+        .ts-type-members__body {
+            margin-right: 0;
+            display: flex;
+            flex-direction: column;
         }
     }
 }

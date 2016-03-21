@@ -7,10 +7,8 @@ import {
 
 import Signature from '../signature';
 
-import Paper from '../../explorer/components/paper';
-import Figure from '../../explorer/components/figure';
 import Comment from '../comment';
-import Section from '../section';
+import Panel from '../panel';
 
 require('./index.css');
 const block = theme.block('ts-method');
@@ -32,26 +30,19 @@ export default class Constructor extends React.Component<ConstructorProps, Const
 
     render() {
         let { ctor } = this.props;
-        if (this.props.inline) {
-            return (
-                <div id={ ctor.selfRef.id } className={ this.getClassName() }>
-                    { this.renderSignature() }
-                </div>
-            );
-        } else {
-            return (
-                <Paper id={ ctor.selfRef.id } block={ true } className={ this.getClassName() }>
-                    <Section title={ ctor.name }>
-                        <Figure className={ block('figure') }>
-                            { this.renderSignature() }
-                        </Figure>
-                        { ctor.comment &&
-                            <Comment comment={ ctor.comment }/>
-                        }
-                    </Section>
-                </Paper>
-            );
-        }
+        return (
+            <Panel
+                id={ ctor.selfRef.id }
+                title={ ctor.name }
+                inline={ this.props.inline }
+                figure={ this.renderSignature() }
+                className={ this.getClassName() }
+            >
+                { ctor.comment &&
+                    <Comment comment={ ctor.comment }/>
+                }
+            </Panel>
+        );
     }
 
     renderSignature() {

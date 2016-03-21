@@ -24,7 +24,7 @@
     }
 
     &__item {
-        border-left: 3px solid #ccc;
+        border-left: 2px solid #eee;
         padding: 5px 0 5px 10px;
         transition: all 100ms ease;
 

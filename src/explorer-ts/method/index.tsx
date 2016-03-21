@@ -6,9 +6,8 @@ import {
 } from '../../doc/ast/function';
 
 import Signature, { SignatureTypeStyle } from '../signature';
-import Paper from '../../explorer/components/paper';
+import Panel from '../panel';
 import Figure from '../../explorer/components/figure';
-import Section from '../section';
 import Comment from '../comment';
 
 require('./index.css');
@@ -32,26 +31,31 @@ export default class Method extends React.Component<MethodProps, MethodState> {
     render() {
         let method = this.props.method;
         return (
-            <Paper id={ this.props.method.selfRef.id } block={ true } className={ this.getClassName() }>
-                <Section title={ <span>fn { method.name }</span> }>
-                    {
-                        method.callSignatures.map(sig => {
-                            return <div key={ sig.selfRef.id } className={ block('signature-section') } >
-                                <Figure className={ block('figure') }>
-                                    <Signature
-                                        className={ block('signature') }
-                                        typeStyle={ SignatureTypeStyle.Colon }
-                                        signature={ sig }
-                                    />
-                                </Figure>
-                                { sig.comment &&
-                                    <Comment comment={ sig.comment }/>
-                                }
-                            </div>;
-                        })
-                    }
-                </Section>
-            </Paper>
+            <Panel
+                id={ this.props.method.selfRef.id }
+                inline={ this.props.inline }
+                className={ this.getClassName() }
+                title={ method.name }
+            >
+                 { this.renderSignatures(method) }
+            </Panel>
         );
+    }
+
+    renderSignatures(method: FunctionReflection) {
+        return method.callSignatures.map(sig => {
+            return <div key={ sig.selfRef.id } className={ block('signature-section') } >
+                <Figure className={ block('figure') }>
+                    <Signature
+                        className={ block('signature') }
+                        typeStyle={ SignatureTypeStyle.Colon }
+                        signature={ sig }
+                    />
+                </Figure>
+                { sig.comment &&
+                    <Comment comment={ sig.comment }/>
+                }
+            </div>;
+        });
     }
 }

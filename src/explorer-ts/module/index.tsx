@@ -99,6 +99,8 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
                 <Function
                     key={ item.selfRef.id }
                     item={ item }
+                    showInherited={ this.props.displaySettings.inherited }
+                    showNonPublic={ !this.props.displaySettings.public }
                 />
             );
         } else if (isEnumDeclarationReflection(item)) {

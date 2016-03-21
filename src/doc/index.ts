@@ -125,12 +125,21 @@ export class Context {
         return this.currentStack.indexOf(symbol) !== -1;
     }
 
+    /**
+     * Mark `id` to be included into documentation
+     * @param id - id to be included
+     */
     include(id: string) {
         if (this.includeAllowed) {
             this.foreignItems[id] = true;
         }
     }
 
+    /**
+     * Check if `id` has been included into documentation
+     * @param id - id to be checkes
+     * @return - `true` if id is included
+     */
     included(id: string): boolean {
         return !!this.foreignItems[id];
     }
@@ -357,6 +366,8 @@ export class Context {
     }
 
     private generateModule(fileName: string, source: SourceFile, pkg: Package, internal: boolean): Module {
+        console.time(fileName);
+
         let fileInfo = getFileInfo(fileName, pkg);
         let doc = new Module(source, pkg.info.name, fileInfo, internal);
 
@@ -367,6 +378,8 @@ export class Context {
 
         this.currentModuleStack.pop();
         this.currentModule = this.currentModuleStack[this.currentModuleStack.length - 1];
+
+        console.timeEnd(fileName);
 
         return doc;
     }

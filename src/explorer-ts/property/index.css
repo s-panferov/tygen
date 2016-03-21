@@ -1,8 +1,6 @@
 @import 'theme';
 
 .ts-property {
-    font-family: var(--sans-serif);
-
     &__figure {
         margin-bottom: 10px;
     }

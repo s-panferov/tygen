@@ -1,7 +1,13 @@
 @import 'theme';
 
 .ts-section {
-    font-family: var(--sans-serif);
+    &_lvl_1 {
+        .ts-section__heading {
+            color: #000;
+            font-weight: 600;
+            position: relative;
+        }
+    }
 
     &_with-heading {
         > .ts-section__content {
@@ -10,7 +16,6 @@
     }
 
     &__heading {
-        font-weight: bold;
         margin: 10px 0;
     }
 

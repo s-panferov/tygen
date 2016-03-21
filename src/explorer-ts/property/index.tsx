@@ -5,11 +5,8 @@ import {
     PropertySignatureReflection,
 } from '../../doc/ast/type/property';
 
-import Paper from '../../explorer/components/paper';
-import Figure from '../../explorer/components/figure';
 import Type from '../type';
-import Comment from '../comment';
-import Section from '../section';
+import Panel from '../panel';
 
 require('./index.css');
 const block = theme.block('ts-property');
@@ -30,23 +27,17 @@ export default class Property extends React.Component<PropertyProps, PropertySta
     }
 
     render() {
-        if (this.props.inline) {
-            return this.renderSignature();
-        } else {
-            let property = this.props.property;
-            return (
-                <Paper id={ this.props.property.selfRef.id } block={ true } className={ this.getClassName() }>
-                    <Section title={ property.name }>
-                        <Figure className={ block('figure') }>
-                            { this.renderSignature() }
-                        </Figure>
-                        { property.comment &&
-                            <Comment comment={ property.comment } />
-                        }
-                    </Section>
-                </Paper>
-            );
-        }
+        let property = this.props.property;
+        return (
+            <Panel
+                id={ this.props.property.selfRef.id }
+                inline={ this.props.inline }
+                figure={ this.renderSignature() }
+                className={ this.getClassName() }
+                title={ property.name }
+            >
+            </Panel>
+        );
     }
 
     renderSignature() {

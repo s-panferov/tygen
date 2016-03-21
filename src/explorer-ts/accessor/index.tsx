@@ -8,10 +8,8 @@ import {
 
 import Signature, { SignatureTypeStyle } from '../signature';
 
-import Paper from '../../explorer/components/paper';
-import Figure from '../../explorer/components/figure';
 import Comment from '../comment';
-import Section from '../section';
+import Panel from '../panel';
 
 require('./index.css');
 const block = theme.block('ts-accessor');
@@ -34,26 +32,19 @@ export default class Accessor extends React.Component<AccessorProps, AccessorSta
 
     render() {
         let [method, type] = this.getInfo();
-        if (this.props.inline) {
-            return (
-                <div id={ method.selfRef.id } className={ this.getClassName() }>
-                    { this.renderSignature(method, type) }
-                </div>
-            );
-        } else {
-            return (
-                <Paper id={ method.selfRef.id } block={ true } className={ this.getClassName() }>
-                    <Section title={ type + ' ' + method.name }>
-                        <Figure className={ block('figure') }>
-                            { this.renderSignature(method, type) }
-                        </Figure>
-                        { method.comment &&
-                            <Comment comment={ method.comment }/>
-                        }
-                    </Section>
-                </Paper>
-            );
-        }
+        return (
+            <Panel
+                id={ method.selfRef.id }
+                title={ method.name }
+                inline={ this.props.inline }
+                figure={ this.renderSignature(method, type) }
+                className={ this.getClassName() }
+            >
+                { method.comment &&
+                    <Comment comment={ method.comment }/>
+                }
+            </Panel>
+        );
     }
 
     getInfo(): [GetAccessorDeclarationReflection|SetAccessorDeclarationReflection, string] {

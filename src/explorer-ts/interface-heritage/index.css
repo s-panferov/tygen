@@ -1,8 +1,6 @@
 @import 'theme';
 
 .ts-interface-heritage {
-    font-family: var(--sans-serif);
-
     &__heritage-types {
         display: inline-flex;
         flex-direction: column;

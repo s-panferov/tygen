@@ -1,8 +1,6 @@
 @import 'theme';
 
 .ts-method {
-    font-family: var(--sans-serif);
-
     &__signature {
         display: block;
     }

@@ -5,10 +5,7 @@ import {
     EnumMemberReflection,
 } from '../../doc/ast/enum';
 
-import Paper from '../../explorer/components/paper';
-import Figure from '../../explorer/components/figure';
-
-import Section from '../section';
+import Panel from '../panel';
 import Comment from '../comment';
 
 require('./index.css');
@@ -31,19 +28,17 @@ export default class EnumMember extends React.Component<EnumMemberProps, EnumMem
     render() {
         let member = this.props.member;
         return (
-            <Paper className={ this.getClassName() }>
-                <Section title={ member.name } />
-                {
-                    member.initializer &&
-                        <Figure className={ block('figure') }>
-                            { member.initializer }
-                        </Figure>
-                }
+            <Panel
+                key={ member.name }
+                className={ this.getClassName() }
+                title={ member.name }
+                figure={ member.initializer }
+            >
                 {
                     member.comment &&
                         <Comment comment={ member.comment } />
                 }
-            </Paper>
+            </Panel>
         );
     }
 }

@@ -61,7 +61,7 @@ module.exports = {
                 test: /\.tsx?$/,
                 loaders: [
                     !STANDALONE ? "react-hot" : null,
-                    "awesome-typescript-loader?compiler=typescript&+useBabel&+useCache&+forkChecker&tsconfig=./src/explorer/tsconfig.json"
+                    "awesome-typescript-loader?compiler=typescript&+useBabel&+useCache&+forkChecker&tsconfig=./src/tsconfig.json"
                 ]
             },
             {

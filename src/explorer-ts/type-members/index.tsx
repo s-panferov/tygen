@@ -26,6 +26,8 @@ import {
     FunctionReflection
 } from '../../doc/ast/function';
 
+import Heading, { HeadingLevel } from '../../explorer/components/heading';
+
 import Property from '../property';
 import Method from '../method';
 import Constructor from '../constructor';
@@ -60,7 +62,9 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
     static contextTypes = theme.themeContext;
 
     getClassName() {
-        return block(theme.resolveTheme(this)).mix(this.props.className);
+        return block(theme.resolveTheme(this), {
+            inline: this.props.inline
+        }).mix(this.props.className);
     }
 
     render() {
@@ -132,7 +136,6 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
                 {
                     !this.props.inline &&
                         this.renderNav(properties, methods)
-
                 }
             </div>
         );
@@ -147,14 +150,13 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
             />;
         });
 
-        if (this.props.inline) {
-            return renderedIndexSignatures;
+        if (!this.props.inline) {
+            return [
+                <Heading lvl={ HeadingLevel.H2 }>Index signatures</Heading>,
+                renderedIndexSignatures
+            ];
         } else {
-            return (
-                <Section title='Index signatures'>
-                    { renderedIndexSignatures }
-                </Section>
-            );
+            return renderedIndexSignatures;
         }
     }
 
@@ -167,14 +169,13 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
             />;
         });
 
-        if (this.props.inline) {
-            return renderedCallSignatures;
+        if (!this.props.inline) {
+            return [
+                <Heading lvl={ HeadingLevel.H2 }>Call signatures</Heading>,
+                renderedCallSignatures
+            ];
         } else {
-            return (
-                <Section title='Call signatures'>
-                    { renderedCallSignatures }
-                </Section>
-            );
+            return renderedCallSignatures;
         }
     }
 
@@ -187,14 +188,14 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
                 property={ sig }
             />;
         });
-        if (this.props.inline) {
-            return renderedProperties;
+
+        if (!this.props.inline) {
+            return [
+                <Heading lvl={ HeadingLevel.H2 }>Properties</Heading>,
+                renderedProperties
+            ];
         } else {
-            return (
-                <Section title='Properties'>
-                    { renderedProperties }
-                </Section>
-            );
+            return renderedProperties;
         }
     }
 
@@ -207,14 +208,14 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
                 method={ method }
             />;
         });
-        if (this.props.inline) {
-            return renderedMethods;
+
+        if (!this.props.inline) {
+            return [
+                <Heading lvl={ HeadingLevel.H2 }>Methods</Heading>,
+                renderedMethods
+            ];
         } else {
-            return (
-                <Section title='Methods'>
-                    { renderedMethods }
-                </Section>
-            );
+            return renderedMethods;
         }
     }
 
@@ -227,14 +228,13 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
             />;
         });
 
-        if (this.props.inline) {
-            return renderedConstructors;
+        if (!this.props.inline) {
+            return [
+                <Heading lvl={ HeadingLevel.H2 }>Constructors</Heading>,
+                renderedConstructors
+            ];
         } else {
-            return (
-                <Section title='Constructors'>
-                    { renderedConstructors }
-                </Section>
-            );
+            return renderedConstructors;
         }
     }
 
@@ -256,14 +256,13 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
             ];
         });
 
-        if (this.props.inline) {
-            return renderedAccessors;
+        if (!this.props.inline) {
+            return [
+                <Heading lvl={ HeadingLevel.H2 }>Accessors</Heading>,
+                renderedAccessors
+            ];
         } else {
-            return (
-                <Section title='Accessors'>
-                    { renderedAccessors }
-                </Section>
-            );
+            return renderedAccessors;
         }
     }
 

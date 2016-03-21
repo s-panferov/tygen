@@ -11,6 +11,7 @@ import Paper from '../../explorer/components/paper';
 import Figure from '../../explorer/components/figure';
 import Comment from '../comment';
 import Section from '../section';
+import Panel from '../panel';
 
 require('./index.css');
 const block = theme.block('ts-call-signature');
@@ -32,26 +33,19 @@ export default class CallSignature extends React.Component<CallSignatureProps, C
 
     render() {
         let { signature } = this.props;
-        if (this.props.inline) {
-            return (
-                <div id={ signature.selfRef.id } className={ this.getClassName() }>
-                    { this.renderSignature() }
-                </div>
-            );
-        } else {
-            return (
-                <Paper id={ signature.selfRef.id } block={ true } className={ this.getClassName() }>
-                    <Section title={ signature.name }>
-                        <Figure className={ block('figure') }>
-                            { this.renderSignature() }
-                        </Figure>
-                        { signature.comment &&
-                            <Comment comment={ signature.comment }/>
-                        }
-                    </Section>
-                </Paper>
-            );
-        }
+        return (
+            <Panel
+                id={ signature.selfRef.id }
+                title={ signature.name }
+                inline={ this.props.inline }
+                figure={ this.renderSignature() }
+                className={ this.getClassName() }
+            >
+                { signature.comment &&
+                    <Comment comment={ signature.comment }/>
+                }
+            </Panel>
+        );
     }
 
     renderSignature() {

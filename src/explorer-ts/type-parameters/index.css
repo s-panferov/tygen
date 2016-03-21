@@ -1,8 +1,6 @@
 @import 'theme';
 
 .ts-type-parameters {
-    font-family: var(--sans-serif);
-
     &__constraints {
         display: inline-flex;
     }

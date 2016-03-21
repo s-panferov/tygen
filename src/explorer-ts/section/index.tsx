@@ -7,16 +7,21 @@ const block = theme.block('ts-section');
 export interface SectionProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
     title: React.ReactNode;
+    lvl?: number;
 }
 
 export interface SectionState {}
 
 export default class Section extends React.Component<SectionProps, SectionState> {
     static contextTypes = theme.themeContext;
+    static defaultProps = {
+        lvl: 1
+    };
 
     getClassName() {
         return block(theme.resolveTheme(this), {
-            'with-heading': !!this.props.title
+            'with-heading': !!this.props.title,
+            lvl: this.props.lvl
         }).mix(this.props.className);
     }
 

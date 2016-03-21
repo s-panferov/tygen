@@ -1,8 +1,6 @@
 @import 'theme';
 
 .ts-brackets {
-    font-family: var(--sans-serif);
-
     &__bracket {
         &_hover {
             color: red;

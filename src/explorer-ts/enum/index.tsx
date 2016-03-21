@@ -37,18 +37,16 @@ export default class Enum<P extends EnumProps> extends React.Component<P, EnumSt
         let en = this.props.item;
         return (
             <Paper className={ this.getClassName() }>
-                <Heading lvl={ 2 }>
+                <Heading lvl={ 1 }>
                     { this.getHeader() }
                     <SmartLink route={ en.selfRef }>{ en.name }</SmartLink>
                 </Heading>
                 { en.comment &&
                     <Comment comment={ en.comment } />
                 }
-                <Section title='Members'>
-                    { en.members &&
-                        this.renderMembers()
-                    }
-                </Section>
+                { en.members &&
+                    this.renderMembers()
+                }
             </Paper>
         );
     }

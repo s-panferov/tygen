@@ -12,10 +12,14 @@ interface Argv {
     outDir: string;
     ui?: string;
     deepForeign?: boolean;
+    withoutSearch?: boolean;
 }
 
 if (!module.parent) {
-    let argv: Argv = ((minimist as any).default || minimist)(process.argv.slice(2)) as any;
+    let argParser = ((minimist as any).default || minimist);
+    let argv: Argv = argParser(process.argv.slice(2)) as any;
+
+    console.log(argv);
 
     let tsconfigPath = tsconfig.resolveSync(argv.sourceDir);
     let { files, compilerOptions } = tsconfig.loadSync(tsconfigPath);
@@ -27,8 +31,7 @@ if (!module.parent) {
 
     let writer = new DocWriter(ctx);
     writer.ensureDir(argv.outDir);
-
-    writer.writeModules(path.join(argv.outDir, 'generated'))
+    writer.writeModules(path.join(argv.outDir, 'generated'), !argv.withoutSearch)
         .then(() => {
             helpers.copyUI(argv.outDir, argv.ui);
             process.exit(0);

@@ -100,7 +100,7 @@ export class DocWriter {
         fse.ensureDirSync(dir);
     }
 
-    writeModules(dir: string): Promise<any> {
+    writeModules(dir: string, generateSearchIndex = true): Promise<any> {
         this.ensureDir(dir);
 
         let modules = this.context.modules;
@@ -122,7 +122,9 @@ export class DocWriter {
 
         return this.deflate(dir)
             .then(() => {
-                return this.generateSearchIndex(dir, flatItems, () => {});
+                if (generateSearchIndex) {
+                    return this.generateSearchIndex(dir, flatItems, () => {});
+                }
             });
     }
 

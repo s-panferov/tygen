@@ -142,6 +142,7 @@
         "./explorer-ts/list/index.tsx",
         "./explorer-ts/method/index.tsx",
         "./explorer-ts/module/index.tsx",
+        "./explorer-ts/panel/index.tsx",
         "./explorer-ts/parenthesized-type/index.tsx",
         "./explorer-ts/property/index.tsx",
         "./explorer-ts/section/index.tsx",

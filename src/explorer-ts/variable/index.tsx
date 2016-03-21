@@ -51,7 +51,7 @@ export default class Variable<P extends VariableProps> extends React.Component<P
 
         return (
             <Paper id={ vrb.selfRef.id } className={ this.getClassName() } highlight={ false }>
-                <Heading lvl={ 2 }>
+                <Heading lvl={ 1 }>
                     { this.getHeader(vrb.varType) + ' ' }
                     { vrb.name }
                 </Heading>

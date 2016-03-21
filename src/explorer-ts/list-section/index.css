@@ -14,6 +14,11 @@
         height: 26px;
         align-items: center;
         margin-right: 20px;
+        width: calc(200px - 20px);
+        min-width: auto;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     &_view_row {

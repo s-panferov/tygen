@@ -1,5 +1,6 @@
 import {
-    Declaration
+    Declaration,
+    SyntaxKind
 } from 'typescript';
 
 import { Context } from '../index';
@@ -63,7 +64,17 @@ export function visitTopLevelDeclarations(declarations: Declaration[], ctx: Cont
         } else if (module.isModuleDeclaration(declaration)) {
             module.visitModuleDeclaration(declaration, ctx);
             return false;
+        } else if (declaration.kind == SyntaxKind.ImportDeclaration ||
+                    declaration.kind == SyntaxKind.ImportSpecifier ||
+                    declaration.kind == SyntaxKind.NamespaceImport ||
+                    declaration.kind == SyntaxKind.ImportClause ||
+                    declaration.kind == SyntaxKind.ImportEqualsDeclaration ||
+                    declaration.kind == SyntaxKind.ExportDeclaration
+        ) {
+            // TODO visit imports and exports somehow
+            return false;
         } else {
+
             if (logFailures) {
                 console.log('Unknown declaration', declaration.getText(), declaration.kind);
             }

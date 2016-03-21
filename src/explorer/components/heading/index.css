@@ -13,6 +13,9 @@
     }
 
     &_lvl_2 {
-        margin-bottom: 10px;
+        display: block;
+        margin: 10px 0 20px 0;
+        font-size: 20px;
+        border-bottom: 1px solid #ccc;
     }
 }
