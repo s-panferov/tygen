@@ -101,12 +101,12 @@
     "style-loader": "^0.13.0",
     "tsconfig": "^2.2.0",
     "tslint": "3.5.0-dev.1",
-    "typescript": "^1.9.0-dev.20160316",
+    "typescript": "^1.9.0-dev.20160321",
     "uglifyify": "^3.0.1",
     "webpack": "^1.12.13",
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
-    "search-index": "^0.7.6"
+    "search-index": "git+https://github.com/s-panferov/search-index.git"
   }
 }
