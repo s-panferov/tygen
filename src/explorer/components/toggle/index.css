@@ -1,0 +1,10 @@
+@import "theme";
+
+.toggle {
+    cursor: pointer;
+    color: #ccc;
+
+    &_toggled {
+        color: var(--link-color);
+    }
+}

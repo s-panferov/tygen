@@ -179,6 +179,7 @@
         "./explorer/components/path/index.tsx",
         "./explorer/components/search/index.tsx",
         "./explorer/components/smart-link/index.tsx",
+        "./explorer/components/toggle/index.tsx",
         "./explorer/index.tsx",
         "../typings/tsd.d.ts"
     ],

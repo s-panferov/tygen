@@ -93,7 +93,6 @@ module.exports = {
     postcss: webpackConfig.postcss,
 
     plugins: [
-        new ExtractTextPlugin("styles.css"),
         new HtmlWebpackPlugin({
             title: 'DocScript Explorer',
             template: './index.html',
