@@ -2,9 +2,10 @@ var webpack = require('webpack');
 var path = require("path");
 var ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 var webpackConfig = require('./webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin')
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-var STANDALONE = process.env.BUILD_TARGET === 'standalone';
+var PRODUCTION = process.env.NODE_ENV === 'production';
 
 module.exports = {
 
@@ -17,9 +18,9 @@ module.exports = {
     },
 
     externals: {
-        // "react": "React",
-        // "react-dom": "ReactDOM"
-        "docscript": "commonjs2 docscript"
+        "react": "React",
+        "react-dom": "ReactDOM",
+        "react-addons-css-transition-group": "React.addons.CSSTransitionGroup"
     },
 
     bail: false,
@@ -31,7 +32,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'dist/assets'),
         filename: '[name].js',
-        publicPath: STANDALONE ? undefined : '/assets/'
+        publicPath: PRODUCTION ? undefined : '/assets/'
     },
 
     resolveLoader: {
@@ -45,6 +46,7 @@ module.exports = {
         ],
         extensions: ['', '.ts', '.tsx', '.webpack.js', '.web.js', '.js', '.styl'],
         alias: {
+             "typescript": path.join(__dirname, 'src', 'explorer', 'typescript.ts')
         }
     },
 
@@ -53,32 +55,20 @@ module.exports = {
     },
 
     // Source maps support (or 'inline-source-map' also works)
-    devtool: 'eval',
+    devtool: !PRODUCTION ? 'eval' : 'source-map',
 
     module: {
         loaders: [
             {
                 test: /\.tsx?$/,
                 loaders: [
-                    !STANDALONE ? "react-hot" : null,
+                    !PRODUCTION ? "react-hot" : null,
                     "awesome-typescript-loader?compiler=typescript&+useBabel&+useCache&+forkChecker&tsconfig=./src/tsconfig.json"
-                ]
+                ].filter(Boolean)
             },
             {
                 test: /\.css$/,
-                loader: "style-loader!css-loader!postcss-loader",
-                include: [
-                    path.join(__dirname, 'src'),
-                    path.join(__dirname, 'demo')
-                ]
-            },
-            {
-                test: /\.css$/,
-                loader: "style-loader!css-loader",
-                include: [
-                    path.join(__dirname, 'node_modules'),
-                    path.join(__dirname, 'components'),
-                ]
+                loader: ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader")
             },
             {
                 test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -94,13 +84,6 @@ module.exports = {
                     'file-loader?hash=sha512&digest=hex&name=[hash].[ext]'
                 ]
             },
-            // {
-            //     test: /\.svg$/,
-            //     loader: 'svg-sprite-loader',
-            //     include: [
-            //         /csp-iconset/
-            //     ]
-            // },
             {
                 test: /\.json?$/,
                 loader: "json-loader"
@@ -111,12 +94,7 @@ module.exports = {
     postcss: webpackConfig.postcss,
 
     plugins: [
-        // new webpack.DllReferencePlugin({
-        //     context: __dirname,
-        //     manifest: require("./dist/manifest.json"),
-        //     // name: "require('./docscript.js')",
-        //     sourceType: "commonsjs2",
-        // }),
+        new ExtractTextPlugin("styles.css"),
         new HtmlWebpackPlugin({
             title: 'DocScript Explorer',
             template: './index.html',
@@ -124,16 +102,21 @@ module.exports = {
             inject: false
         }),
         new ForkCheckerPlugin(),
-        new webpack.ProvidePlugin({
-            React: "react"
-        }),
-        new webpack.NoErrorsPlugin(),
-        // new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js"),
+        // new webpack.ProvidePlugin({
+        //     React: "react"
+        // }),
         new webpack.ResolverPlugin(
             new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
         ),
         new webpack.DefinePlugin({
-            DEBUG: true,
+            DEBUG: process.env.NODE_ENV !== 'production',
+            NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+            'process.env': {
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+            }
+        }),
+        new ExtractTextPlugin("styles.css", {
+            disable: !PRODUCTION
         })
     ].filter(Boolean)
 };

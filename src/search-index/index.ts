@@ -1,8 +1,12 @@
 self.window = self;
 self.window.window = self;
 
-import { Action, ActionType } from '../explorer/redux';
-import { Search, InitSearchIndex } from '../explorer/actions';
+import {
+    Action,
+    ActionType,
+    Search,
+    InitSearchIndex
+} from '../explorer/actions';
 
 function emit<T>(action: Action<any, any>) {
     self.postMessage(action, null);

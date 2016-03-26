@@ -1,0 +1,15 @@
+{
+  "name": "docscript-search-index",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "search-index": "^0.7.12",
+    "memdown": "^1.1.2"
+  }
+}

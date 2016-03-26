@@ -15,7 +15,7 @@ var devServerConfing = {
     publicPath: '/assets',
     contentBase: './dist',
     historyApiFallback: true,
-    stats: { colors: true },
+    stats: { colors: true, modules: true },
     inline: !PRODUCTION,
     hot: !PRODUCTION
 };

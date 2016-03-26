@@ -5,6 +5,8 @@ import { Item } from '../doc/items';
 import { debounce } from '../lib/utils';
 import { Settings, DisplaySettings } from './settings';
 
+export { Action }
+
 export enum ActionType {
     Navigate = 'Navigate' as any,
     ChangeDisplaySettings = 'ChangeDisplaySettings' as any,

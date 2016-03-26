@@ -9,7 +9,7 @@ module.exports.postcss = function(webpack) {
         }),
         require('postcss-fontpath'),
         require('postcss-url')({
-            url: "rebase" // or "inline" or "copy"
+            url: "rebase"
         }),
         require('precss'),
         require('postcss-cssnext')({
@@ -17,11 +17,6 @@ module.exports.postcss = function(webpack) {
                 autoprefixer: false,
                 initial: false
             }
-        }),
-        // require('postcss-initial')({
-        //     reset: 'inherited' // reset only inherited rules
-        // }),
-        require('postcss-font-magician'),
-        // require('colorguard')
+        })
     ];
 };

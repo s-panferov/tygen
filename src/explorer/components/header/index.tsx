@@ -8,7 +8,6 @@ import Breadcrumbs from '../breadcrumbs';
 import File from '../file';
 import SmartLink from '../smart-link';
 import Search from '../search';
-import Toggle from 'material-ui/lib/toggle';
 
 require('./index.css');
 const block = theme.block('header');
@@ -57,33 +56,34 @@ export default class Header extends React.Component<HeaderProps, HeaderState> {
                         </Breadcrumbs>
                     </div>
                     <div className={ block('actions') }>
-                        <Toggle
-                            className={ block('toggle').toString() }
-                            label='Inherited'
-                            style={{ width: 'auto' }}
-                            toggled={ this.props.displaySettings.inherited }
-                            onToggle={ this.onInheritedToggle }
-                        />
-                        <Toggle
-                            className={ block('toggle').toString() }
-                            label='Public'
-                            style={{ width: 'auto' }}
-                            toggled={ this.props.displaySettings.public }
-                            onToggle={ this.onPublicToggle }
-                        />
-                        <Toggle
-                            className={ block('toggle').toString() }
-                            label='Exported'
-                            style={{ width: 'auto' }}
-                            toggled={ this.props.displaySettings.exported }
-                            onToggle={ this.onExportedToggle }
-                        />
                         <Search className={ block('search') } route={ this.props.route }/>
                     </div>
                 </div>
             </div>
         );
     }
+
+    // <Toggle
+    //     className={ block('toggle').toString() }
+    //     label='Inherited'
+    //     style={{ width: 'auto' }}
+    //     toggled={ this.props.displaySettings.inherited }
+    //     onToggle={ this.onInheritedToggle }
+    // />
+    // <Toggle
+    //     className={ block('toggle').toString() }
+    //     label='Public'
+    //     style={{ width: 'auto' }}
+    //     toggled={ this.props.displaySettings.public }
+    //     onToggle={ this.onPublicToggle }
+    // />
+    // <Toggle
+    //     className={ block('toggle').toString() }
+    //     label='Exported'
+    //     style={{ width: 'auto' }}
+    //     toggled={ this.props.displaySettings.exported }
+    //     onToggle={ this.onExportedToggle }
+    // />
 
     renderLogo() {
         return (

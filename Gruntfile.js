@@ -11,6 +11,10 @@ module.exports = function(grunt) {
                 src: './example/doc',
                 dest: 'dist/doc'
             },
+            generated: {
+                src: './doc/generated',
+                dest: 'dist/generated'
+            },
         }
     });
 };
