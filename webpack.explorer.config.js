@@ -3,7 +3,6 @@ var path = require("path");
 var ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 var webpackConfig = require('./webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var PRODUCTION = process.env.NODE_ENV === 'production';
 
@@ -68,7 +67,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader")
+                loader: "style-loader!css-loader!postcss-loader"
             },
             {
                 test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -114,9 +113,6 @@ module.exports = {
             'process.env': {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV)
             }
-        }),
-        new ExtractTextPlugin("styles.css", {
-            disable: !PRODUCTION
         })
     ].filter(Boolean)
 };
