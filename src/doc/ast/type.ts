@@ -154,6 +154,9 @@ export function matchCoreType(node: TypeNode): CoreType {
         case SyntaxKind.VoidKeyword: return CoreType.Void;
         case SyntaxKind.AnyKeyword: return CoreType.Any;
         case SyntaxKind.SymbolKeyword: return CoreType.Symbol;
+        case SyntaxKind.UndefinedKeyword: return CoreType.Undefined;
+        case SyntaxKind.NullKeyword: return CoreType.Null;
+        case SyntaxKind.ThisType: return CoreType.This;
         default: return null;
     }
 }

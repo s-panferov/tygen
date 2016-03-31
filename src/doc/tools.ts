@@ -7,7 +7,10 @@ export enum CoreType {
     Number = 'number' as any,
     Boolean = 'boolean' as any,
     Void = 'void' as any,
-    Symbol = 'symbol' as any
+    Symbol = 'symbol' as any,
+    Null = 'null' as any,
+    Undefined = 'undefined' as any,
+    This = 'this' as any,
 }
 
 export function getCoreType(type: Type): CoreType {
