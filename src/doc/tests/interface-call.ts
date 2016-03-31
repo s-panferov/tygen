@@ -34,29 +34,25 @@ describe('interface-call', () => {
 
     let iface = module.items[0];
 
-    if (isInterfaceReflection(iface)) {
-        let callSig = iface.callSignatures[0];
-        if (isCallSignatureReflection(callSig)) {
-            it ('call signature reflection', () => {
+    it ('call signature reflection', () => {
+        if (isInterfaceReflection(iface)) {
+            let callSig = iface.callSignatures[0];
+            if (isCallSignatureReflection(callSig)) {
                 testSignature(iface, callSig);
-            });
-        } else {
-            expect(false).to.true;
-        }
+            } else {
+                expect(false).to.true;
+            }
 
-        let methodSig = iface.properties[0];
-        if (isMethodReflection(methodSig)) {
-            it ('method signature reflection', () => {
+            let methodSig = iface.properties[0];
+            if (isMethodReflection(methodSig)) {
                 expect(methodSig.name).equal('method');
                 testSignature(iface, methodSig.callSignatures[0]);
-            });
-        } else {
-            expect(false).to.true;
-        }
+            } else {
+                expect(false).to.true;
+            }
 
-        let propertySig = iface.properties[1];
-        if (isPropertySignatureReflection(propertySig)) {
-            it ('property signature with function type reflection', () => {
+            let propertySig = iface.properties[1];
+            if (isPropertySignatureReflection(propertySig)) {
                 expect(propertySig.name).equal('property');
                 expect(propertySig.optional).true;
                 let type = propertySig.type;
@@ -65,13 +61,13 @@ describe('interface-call', () => {
                 } else {
                     expect(false).to.true;
                 }
-            });
+            } else {
+                expect(false).to.true;
+            }
         } else {
             expect(false).to.true;
         }
-    } else {
-        expect(false).to.true;
-    }
+    });
 });
 
 function testSignature(iface: InterfaceReflection, callSig: SignatureReflection) {

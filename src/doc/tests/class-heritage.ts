@@ -25,20 +25,20 @@ describe('interface-heritage', () => {
     let cls = module.items[0];
     let base = module.items[1];
 
-    if (isClassReflection(cls)) {
-        if (isClassReflection(base)) {
-            it('reflection', () => {
+    it('reflection', () => {
+        if (isClassReflection(cls)) {
+            if (isClassReflection(base)) {
                 let hc = cls.heritageClauses[0];
                 expect(hc.itemType).equal(ItemType.HeritageClause);
                 expect(hc.clause).equal(HeritageClauseType.Extends);
                 expect(typeRef(hc.types[0].expression.type)).equal(base.selfRef.id);
                 expect(hc.types[0].expression.name).equal('Base');
                 expect(coreType(hc.types[0].typeArguments[0])).equal(CoreType.String);
-            });
+            } else {
+                expect(false).to.true;
+            }
         } else {
             expect(false).to.true;
         }
-    } else {
-        expect(false).to.true;
-    }
+    });
 });

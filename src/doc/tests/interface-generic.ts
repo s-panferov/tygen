@@ -18,40 +18,37 @@ describe('interface-generic', () => {
 
     let iface = module.items[0];
 
-    if (isInterfaceReflection(iface)) {
-        it('members', () => {
+    it ('reflects generic interface', () => {
+        if (isInterfaceReflection(iface)) {
             expect(iface.properties).lengthOf(2);
-        });
-
-        it('type parameters', () => {
             expect(iface.typeParameters).lengthOf(2);
-        });
 
-        it('first type parameter', () => {
-            let tp = iface.typeParameters[0];
+            {
+                let tp = iface.typeParameters[0];
 
-            expect(tp.name).equal('T');
-            expect(tp.itemType).equal(ItemType.TypeParameter);
+                expect(tp.name).equal('T');
+                expect(tp.itemType).equal(ItemType.TypeParameter);
 
-            let member = iface.properties[0];
-            if (isPropertySignatureReflection(member)) {
-                expect(typeRef(member.type)).equal(tp.selfRef.id);
+                let member = iface.properties[0];
+                if (isPropertySignatureReflection(member)) {
+                    expect(typeRef(member.type)).equal(tp.selfRef.id);
+                }
             }
-        });
 
-        it('second type parameter', () => {
-            let tp = iface.typeParameters[1];
+            {
+                let tp = iface.typeParameters[1];
 
-            expect(tp.name).equal('A');
-            expect(tp.itemType).equal(ItemType.TypeParameter);
+                expect(tp.name).equal('A');
+                expect(tp.itemType).equal(ItemType.TypeParameter);
 
-            let member = iface.properties[1];
-            if (isPropertySignatureReflection(member)) {
-                expect(typeRef(member.type)).equal(tp.selfRef.id);
+                let member = iface.properties[1];
+                if (isPropertySignatureReflection(member)) {
+                    expect(typeRef(member.type)).equal(tp.selfRef.id);
+                }
+                expect(typeRef(tp.constraint)).equal(iface.typeParameters[0].selfRef.id);
             }
-            expect(typeRef(tp.constraint)).equal(iface.typeParameters[0].selfRef.id);
-        });
-    } else {
-        expect(false).to.true;
-    }
+        } else {
+            expect(false).to.true;
+        }
+    });
 });
