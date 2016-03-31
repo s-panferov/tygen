@@ -6,7 +6,14 @@
 
     &__package {
         position: relative;
+        line-height: 10px;
         height: 40px;
+    }
+
+    &__all-pkg-icon {
+        width: 16px;
+        height: 16px;
+        margin-left: 5px;
     }
 
     &__logo {

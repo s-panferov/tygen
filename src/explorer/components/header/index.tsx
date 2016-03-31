@@ -84,8 +84,8 @@ export default class Header extends React.Component<HeaderProps, HeaderState> {
 
     renderLogo() {
         return (
-            <SmartLink route={{ pkg: '', path: '' }} className={ block('logo') }>
-                <span>{'// '}DocScript</span>
+            <SmartLink route={{ pkg: this.props.route.pkg, path: '/' }} className={ block('logo') }>
+                <span>DocScript</span>
             </SmartLink>
         );
     }

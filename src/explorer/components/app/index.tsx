@@ -82,7 +82,7 @@ export default class App extends React.Component<AppProps, void> {
                         <Header
                             route={ this.props.route }
                             displaySettings={ this.props.displaySettings }
-                            onNavigate={ this.onNavigate}
+                            onNavigate={ this.onNavigate }
                             onChangeDisplaySettings={ this.onChangeDisplaySettings }
                         />
                         <Layout

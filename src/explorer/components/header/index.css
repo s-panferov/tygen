@@ -51,13 +51,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-weight: lighter;
         text-transform: uppercase;
         height: 40px;
         font-size: 15px;
         text-align: center;
         color: #999;
-        font-weight: bold;
 
         &:hover {
             color: #999;

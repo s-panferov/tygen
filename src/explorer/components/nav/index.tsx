@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as path from 'path';
 import * as theme from '../theme';
 
-import Link from '../link';
-import SmartLink from '../smart-link';
+import autobind from '../../../lib/autobind';
+
 import File from '../file';
 import Service from '../../service';
 import { Route } from '../../state';
@@ -31,6 +31,11 @@ export default class Nav extends React.Component<NavProps, NavState> {
             <div { ...this.props } className={ this.getClassName() }>
                 <div key='section' className={ block('section') }>
                     { route.pkg ? route.pkg : 'Packages' }
+                    <img
+                        className={ block('all-pkg-icon') }
+                        src={ require('./list.svg') }
+                        onClick={ this.onNavAllClick }
+                    />
                 </div>
                 <div key='struct' className={ block('struct') }>
                     {
@@ -104,5 +109,10 @@ export default class Nav extends React.Component<NavProps, NavState> {
         }));
 
         return files;
+    }
+
+    @autobind
+    onNavAllClick() {
+        this.props.onNavigate({ pkg: '', path: '' });
     }
 }
