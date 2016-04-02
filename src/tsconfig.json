@@ -18,6 +18,7 @@
         "!./doc/tests/**/*.d.ts"
     ],
     "files": [
+        "./cli/index.ts",
         "./doc/ast/class.ts",
         "./doc/ast/comment.ts",
         "./doc/ast/declaration.ts",
@@ -46,6 +47,7 @@
         "./doc/ast/var.ts",
         "./doc/defines.d.ts",
         "./doc/gen.ts",
+        "./doc/helpers.ts",
         "./doc/index.ts",
         "./doc/items.ts",
         "./doc/tests/array-type.ts",
@@ -118,8 +120,6 @@
         "./lib/utils.ts",
         "./loader-plugin/index.ts",
         "./search-index/index.ts",
-        "./standalone-generator/helpers.ts",
-        "./standalone-generator/index.ts",
         "./explorer-ts/accessor/index.tsx",
         "./explorer-ts/array-type/index.tsx",
         "./explorer-ts/brackets/index.tsx",

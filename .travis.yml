@@ -11,7 +11,7 @@ before_script:
   - bower install
 script:
 - npm run doc-build
-- npm run loader-build
+- npm run cli-build
 - npm run search-index-build
 - npm run search-index-lib
 - npm run explorer-build

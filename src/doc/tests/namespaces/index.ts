@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { Context, Module } from '../..';
 import { expect } from '../utils';
-import { generateFiles } from '../../../standalone-generator/helpers';
+import { generateFiles } from '../../helpers';
 
 function findModule(pathWithPackage: string, ctx: Context): Module {
     for (let key of Object.keys(ctx.modules)) {
