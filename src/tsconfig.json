@@ -20,6 +20,7 @@
     "files": [
         "./cli/generate.ts",
         "./cli/index.ts",
+        "./cli/publish.ts",
         "./doc/ast/class.ts",
         "./doc/ast/comment.ts",
         "./doc/ast/declaration.ts",

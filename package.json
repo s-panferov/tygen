@@ -105,7 +105,10 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "fstream": "^1.0.8",
+    "request": "^2.69.0",
     "search-index": "git+https://github.com/s-panferov/search-index.git",
+    "tar": "^2.2.1",
     "yargs": "^4.3.2"
   }
 }

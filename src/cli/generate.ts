@@ -56,7 +56,7 @@ export const CLI = {
       alias: '-p',
       describe: 'Main that will be shown in docscript',
     },
-    outDir: {
+    docDir: {
       alias: '-o',
       default: 'doc',
       describe: 'Directory to write output',
