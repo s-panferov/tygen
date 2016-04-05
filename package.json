@@ -108,6 +108,7 @@
   },
   "dependencies": {
     "doctrine": "^1.2.1",
+    "es6-shim": "^0.35.0",
     "fs-extra": "^0.23.1",
     "fstream": "^1.0.8",
     "pkg-up": "^1.0.0",

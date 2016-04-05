@@ -78,7 +78,7 @@ var config = {
     externals: nodeModules,
 
     plugins: [
-        new webpack.BannerPlugin('#!/usr/bin/env node\nrequire("source-map-support").install();',
+        new webpack.BannerPlugin('#!/usr/bin/env node\nrequire("es6-shim");\nrequire("source-map-support").install();',
             { raw: true, entryOnly: false }),
         new webpack.DllReferencePlugin({
             context: __dirname,
