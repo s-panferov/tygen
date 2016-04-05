@@ -16,5 +16,63 @@ module.exports = function(grunt) {
                 dest: 'dist/generated'
             },
         }
+
+        bump: {
+            options: {
+                files: ['package.json'],
+                updateConfigs: [],
+                commit: true,
+                commitMessage: 'chore(ver): v%VERSION%',
+                commitFiles: [
+                    'package.json',
+                    'CHANGELOG.md',
+                    'dist/lib/*'
+                ],
+                createTag: true,
+                tagName: 'v%VERSION%',
+                tagMessage: 'Version %VERSION%',
+                push: true,
+                pushTo: 'origin',
+                gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
+                globalReplace: false,
+                prereleaseName: false,
+                metadata: '',
+                regExp: false
+            }
+        },
+
+        conventionalChangelog: {
+            options: {
+                changelogOpts: {
+                    // conventional-changelog options go here
+                    preset: 'angular'
+                }
+            },
+            release: {
+                src: 'CHANGELOG.md'
+            }
+        },
+
+        shell: {
+            addChangelog: {
+                command: 'git add CHANGELOG.md'
+            },
+            buildLib: {
+                command: 'npm run build'
+            }
+        },
+    });
+
+    grunt.registerTask('release', 'Release a new version', function(target) {
+        if (!target) {
+            target = 'patch';
+        }
+        return grunt.task.run(
+            'shell:buildLib',
+            'bump-only:' + target,
+            'conventionalChangelog',
+            'shell:addChangelog',
+            'bump-commit'
+        );
     });
 };
