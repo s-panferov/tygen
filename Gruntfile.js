@@ -15,7 +15,7 @@ module.exports = function(grunt) {
                 src: './doc/generated',
                 dest: 'dist/generated'
             },
-        }
+        },
 
         bump: {
             options: {
@@ -26,7 +26,6 @@ module.exports = function(grunt) {
                 commitFiles: [
                     'package.json',
                     'CHANGELOG.md',
-                    'dist/lib/*'
                 ],
                 createTag: true,
                 tagName: 'v%VERSION%',
@@ -68,7 +67,6 @@ module.exports = function(grunt) {
             target = 'patch';
         }
         return grunt.task.run(
-            'shell:buildLib',
             'bump-only:' + target,
             'conventionalChangelog',
             'shell:addChangelog',
