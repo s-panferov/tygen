@@ -6,6 +6,9 @@
   "bin": {
     "docscript": "./dist/cli.js"
   },
+  "files": [
+      "dist"
+  ],
   "scripts": {
     "show-example": "ln -s ../example/doc/generated ./dist/generated",
     "show-self": "ln -s ../doc/generated ./dist/generated",
