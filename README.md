@@ -18,3 +18,14 @@ file an issue or submit a pull request!
 npm i -g docscript
 docscript generate --withoutSearch --deepForeign
 ```
+
+## .docscript.json
+
+To generate the doc you need to have `.docscript.json` at the root of your project.
+Sample content:
+
+```
+{
+    "package": "docscript"
+}
+```
