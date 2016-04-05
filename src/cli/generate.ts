@@ -1,6 +1,7 @@
 import * as tsconfig from 'tsconfig';
 import * as ts from 'typescript';
 import * as path from 'path';
+import * as fs from 'fs';
 
 import { resolveManifestSync } from './manifest';
 
@@ -9,7 +10,7 @@ import * as helpers from '../doc/helpers';
 
 interface GenerateCommand {
     sourceDir: string;
-    outDir: string;
+    docDir: string;
     ui?: string;
     deepForeign?: boolean;
     withoutSearch?: boolean;
@@ -31,10 +32,10 @@ export default function generate(argv: GenerateCommand) {
     ctx.generateForeignModules(argv.deepForeign);
 
     let writer = new DocWriter(ctx);
-    writer.ensureDir(argv.outDir);
-    writer.writeModules(path.join(argv.outDir, 'generated'), !argv.withoutSearch)
+    writer.ensureDir(argv.docDir);
+    writer.writeModules(path.join(argv.docDir, 'generated'), !argv.withoutSearch)
         .then(() => {
-            helpers.copyUI(argv.outDir, argv.ui);
+            helpers.copyUI(argv.docDir, argv.ui);
             process.exit(0);
         })
         .catch((e) => {
@@ -64,6 +65,7 @@ export const CLI = {
       describe: 'Directory to write output',
     },
     ui: {
+      default: path.dirname(fs.realpathSync(__filename)),
       describe: 'Package where compiled docscript UI is located',
     },
     deepForeign: {

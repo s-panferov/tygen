@@ -124,6 +124,8 @@ export class DocWriter {
             .then(() => {
                 if (generateSearchIndex) {
                     return this.generateSearchIndex(dir, flatItems, () => {});
+                } else {
+                    return Promise.resolve();
                 }
             });
     }

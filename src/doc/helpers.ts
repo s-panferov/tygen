@@ -133,15 +133,6 @@ export function rawToTsCompilerOptions(jsonOptions, projectDir, tsImpl: typeof t
 }
 
 export function copyUI(dir: string, libPath?: string) {
-    let r = (global as any).require;
-    let docscriptPath: string = libPath
-        ? path.join(path.resolve(process.cwd(), libPath, 'dist', 'docscript.js'))
-        : (r as any).resolve('docscript');
-
-    let uiPath = path.join(
-        path.dirname(docscriptPath)
-    );
-
-    fse.copySync(path.join(uiPath, 'assets'), path.join(dir, 'assets'));
-    fse.copySync(path.join(uiPath, 'index.html'), path.join(dir, 'index.html'));
+    fse.copySync(path.join(libPath, 'assets'), path.join(dir, 'assets'));
+    fse.copySync(path.join(libPath, 'index.html'), path.join(dir, 'index.html'));
 }

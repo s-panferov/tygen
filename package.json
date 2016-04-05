@@ -4,7 +4,7 @@
   "description": "Documentation generator for TypeScript built with ReactJS",
   "main": "./dist/docscript.js",
   "bin": {
-    "docscript": "./dist/standalone-generator.js"
+    "docscript": "./dist/cli.js"
   },
   "scripts": {
     "show-example": "ln -s ../example/doc/generated ./dist/generated",
@@ -23,7 +23,8 @@
     "search-index-lib": "NODE_ENV=production ./node_modules/.bin/browserify --list --plugin=browserify-resolutions -i leveldown -t brfs -g envify -g uglifyify src/search-index/lib.js | xargs stat -f \"%z%t%N\" | sort -nr",
     "explorer": "./node_modules/.bin/webpack-dev-server --hot --inline --config webpack.explorer.config.js --progress --history-api-fallback",
     "explorer-build": "NODE_ENV=production ./node_modules/.bin/webpack --config webpack.explorer.config.js --progress --bail --display-modules --display-reasons -p",
-    "explorer-watch": "./node_modules/.bin/webpack --config webpack.explorer.config.js --progress --watch"
+    "explorer-watch": "./node_modules/.bin/webpack --config webpack.explorer.config.js --progress --watch",
+    "build": "npm run doc-build && npm run cli-build && npm run search-index-build && npm run search-index-lib && npm run explorer-build && npm run test"
   },
   "repository": {
     "type": "git",

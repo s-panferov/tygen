@@ -57,7 +57,9 @@ var config = {
     },
 
     node: {
-        fs: true
+        fs: true,
+        __filename: false,
+        __dirname: false
     },
 
     // Source maps support (or 'inline-source-map' also works)
@@ -76,7 +78,7 @@ var config = {
     externals: nodeModules,
 
     plugins: [
-        new webpack.BannerPlugin('require("source-map-support").install();',
+        new webpack.BannerPlugin('#!/usr/bin/env node\nrequire("source-map-support").install();',
             { raw: true, entryOnly: false }),
         new webpack.DllReferencePlugin({
             context: __dirname,
