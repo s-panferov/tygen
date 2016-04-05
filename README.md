@@ -11,3 +11,10 @@ A documentation generator for TypeScript projects.
 DocScript is still in the early stages of development, so don't be surprised if
 APIs change and things break. If something's not working properly,
 file an issue or submit a pull request!
+
+## Usage
+
+```
+npm i -g docscript
+docscript generate --withoutSearch --deepForeign
+```
