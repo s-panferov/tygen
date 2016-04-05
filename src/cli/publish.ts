@@ -2,6 +2,14 @@ let fstream = require('fstream');
 let tar = require('tar');
 let zlib = require('zlib');
 let request = require('request');
+let temp = require('temp');
+
+import { resolveManifestSync } from './manifest';
+
+// Automatically track and cleanup files at exit
+temp.track();
+
+import * as fs from 'fs';
 
 interface PublishCommand {
     docDir: string;
@@ -9,29 +17,42 @@ interface PublishCommand {
 }
 
 export default function publish(argv: PublishCommand) {
-    let archiveStream = fstream.Reader({ path: argv.docDir, type: 'Directory' }) /* Read the source directory */
+    let manifest = resolveManifestSync();
+    let stream = temp.createWriteStream();
+
+    console.log('Writing an archive...');
+
+    fstream.Reader({ path: argv.docDir, type: 'Directory' }) /* Read the source directory */
         .pipe(tar.Pack()) /* Convert the directory to a .tar file */
-        .pipe(zlib.Gzip()); /* Compress the .tar file */
+        .pipe(zlib.Gzip()) /* Compress the .tar file */
+        .pipe(stream)
+        .on('finish', () => {
+            console.log('Pushing the archive...');
+            let readStream = fs.createReadStream(stream.path);
+            let formData = {
+              archive: {
+                value: readStream,
+                options: {
+                  filename: 'archive.tar.gz',
+                  contentType: 'application/json; charset=utf-8'
+                }
+              },
+              manifest: JSON.stringify(manifest)
+            };
 
-    let formData = {
-      archive: {
-        value: archiveStream,
-        options: {
-          filename: 'archive.tar.gz'
-        }
-      }
-    };
+            request.post({
+                url: `http://${argv.registry}/publish`,
+                formData
+            }, (err, httpResponse, body) => {
+                  if (err) {
+                    return console.error('upload failed:', err);
+                  }
+                  console.log('Upload successful!  Server responded with:', body);
+            });
 
-    console.log(`pushing to http://${argv.registry}/publish`);
-    request.post({
-        url: `http://${argv.registry}/publish`,
-        formData
-    }, (err, httpResponse, body) => {
-          if (err) {
-            return console.error('upload failed:', err);
-          }
-          console.log('Upload successful!  Server responded with:', body);
-    });
+        });
+        //
+        //
 };
 
 export const CLI = {

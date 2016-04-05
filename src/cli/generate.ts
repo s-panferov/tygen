@@ -2,12 +2,13 @@ import * as tsconfig from 'tsconfig';
 import * as ts from 'typescript';
 import * as path from 'path';
 
+import { resolveManifestSync } from './manifest';
+
 import { DocWriter } from '../doc/writer';
 import * as helpers from '../doc/helpers';
 
 interface GenerateCommand {
     sourceDir: string;
-    mainPackage: string;
     outDir: string;
     ui?: string;
     deepForeign?: boolean;
@@ -15,6 +16,7 @@ interface GenerateCommand {
 }
 
 export default function generate(argv: GenerateCommand) {
+    let manifest = resolveManifestSync();
     let tsconfigPath = tsconfig.resolveSync(argv.sourceDir);
 
     if (!tsconfigPath) {
@@ -24,7 +26,7 @@ export default function generate(argv: GenerateCommand) {
     let { files, compilerOptions } = tsconfig.loadSync(tsconfigPath);
 
     let tsCompilerOptions = helpers.rawToTsCompilerOptions(compilerOptions, process.cwd(), ts);
-    let ctx = helpers.generateFiles(files, argv.mainPackage, tsCompilerOptions);
+    let ctx = helpers.generateFiles(files, manifest.package, tsCompilerOptions);
 
     ctx.generateForeignModules(argv.deepForeign);
 
