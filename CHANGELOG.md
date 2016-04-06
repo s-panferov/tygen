@@ -1,3 +1,13 @@
+<a name="0.0.5"></a>
+## [0.0.5](https://github.com/docscript/docscript/compare/v0.0.4...v0.0.5) (2016-04-06)
+
+
+### Features
+
+* move search to fuzzaldrin-plus ([176884b](https://github.com/docscript/docscript/commit/176884b))
+
+
+
 <a name="0.0.4"></a>
 ## [0.0.4](https://github.com/docscript/docscript/compare/v0.0.3...v0.0.4) (2016-04-05)
 
