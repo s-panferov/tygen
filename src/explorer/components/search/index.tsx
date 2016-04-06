@@ -89,25 +89,16 @@ export default class Search extends React.Component<SearchProps & SearchReduxPro
 
     renderSearchResults() {
         let { searchResults } = this.props;
-        return searchResults.hits.map(hit => {
-            let doc = hit.document as any;
-            let selfRef = {
-                id: doc.selfRef__id,
-                pkg: doc.selfRef__pkg,
-                path: doc.selfRef__path,
-                mainId: doc.selfRef__mainId,
-                semanticId: doc.selfRef__semanticId,
-                mainSemanticId: doc.selfRef__mainSemanticId
-            };
+        return searchResults.map((selfRef: any) => {
             return (
-                <div key={ hit.id } className={ block('result') }>
+                <div key={ `${selfRef.pkg}//${selfRef.path}#${selfRef.semanticId}` } className={ block('result') }>
                     <SmartLink route={ selfRef }
                         render={
                             (route: Route, linkProps) => {
                                 return (
                                     <div className={ block('result-inner') }>
                                         <Link htmlProps={ linkProps } className={ block('result-link') }>
-                                            { hit.document.name }
+                                            { selfRef.semanticId }
                                         </Link>
                                         <div className={ block('result-hint') }>
                                             from { route.pkg }:{'//'}{ route.path }

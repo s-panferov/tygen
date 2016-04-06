@@ -1,6 +1,6 @@
 let pako = require('pako/dist/pako_inflate.min.js');
 
-export function inflateJson(res: Response): Promise<string> {
+export function inflateJson(res: Response): Promise<any> {
     return res.arrayBuffer()
         .then(buf => {
             let result = '';

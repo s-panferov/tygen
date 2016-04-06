@@ -24,9 +24,7 @@ export class DocWriter {
         this.context = context;
     }
 
-    generateIdMap(): [IdMap, SemanticIdMap, any[]] {
-        let idMap = {} as IdMap;
-        let semanticIdMap = {} as SemanticIdMap;
+    generateIdMap(): any[] {
         let flatItems: any[] = [];
 
         function walkObject(
@@ -37,31 +35,11 @@ export class DocWriter {
             nesting: string[] = []
         ) {
             if (obj.selfRef && obj.itemType) {
-                // nesting = nesting.concat(obj.id);
-
-                // if (!!idMap[obj.id]) {
-                //     console.log('origin', idMap[obj.id]);
-                //     console.log('new', obj, nesting);
-                //     console.log('nest', idMap[nesting[1]]);
-                //     console.log('========================', obj);
-                //     throw '!!dublicate';
-                // }
-
-                // idMap[obj.id] = [obj.semanticId, pkg, path, [nesting[0]]];
-                //
                 if (inMain && INCLUDE_ITEMS[obj.itemType]) {
-                    flatItems.push(obj);
+                    flatItems.push(
+                        `${pkg}://${path}#${obj.selfRef.semanticId}`
+                    );
                 }
-                //
-                // if (obj.semanticId) {
-                //     if (!semanticIdMap[pkg]) { semanticIdMap[pkg] = {}; };
-                //     if (!semanticIdMap[pkg][path]) { semanticIdMap[pkg][path] = {}; };
-                //     if (!semanticIdMap[pkg][path][obj.semanticId]) { semanticIdMap[pkg][path][obj.semanticId] = obj.id; }
-                //     else {
-                //         console.error('Duplicate semantic id ' + obj.semanticId);
-                //     }
-                // }
-                //
             }
 
             for (let key in obj) {
@@ -92,7 +70,7 @@ export class DocWriter {
             });
         });
 
-        return [idMap, semanticIdMap, flatItems];
+        return flatItems;
     }
 
     ensureDir(dir: string) {
@@ -120,14 +98,14 @@ export class DocWriter {
         let [regModule, flatItems] = this.generateRegistryModule(dir);
         fs.writeFileSync(path.join(dir, 'registry.json'), regModule);
 
-        return this.deflate(dir)
-            .then(() => {
-                if (generateSearchIndex) {
-                    return this.generateSearchIndex(dir, flatItems, () => {});
-                } else {
-                    return Promise.resolve();
-                }
-            });
+        let flow: Promise<any>;
+        if (generateSearchIndex) {
+            flow = this.generateSearchIndex(dir, flatItems, () => {});
+        } else {
+            flow = Promise.resolve();
+        }
+
+        return flow.then(() => this.deflate(dir));
     }
 
     deflate(dir): Promise<any> {
@@ -151,65 +129,20 @@ export class DocWriter {
     }
 
     generateSearchIndex(dir: string, flatItems: any[], cb: () => void): Promise<any> {
-        let SearchIndex = require('search-index');
-        let options = {
-            db: require('memdown'),
-            deletable: false,
-            fieldedSearch: false,
-            indexPath: 'docscript-search',
-            logLevel: 'error',
-            nGramLength: 1,
-            fieldsToStore: [
-                'selfRef__id',
-                'selfRef__pkg',
-                'selfRef__path',
-                'selfRef__mainId',
-                'selfRef__semanticId',
-                'selfRef__mainSemanticId',
-                'name'
-            ]
-        };
-
-        let indexOptions = {
-            batchName: 'items',
-            fieldOptions: [
-                { fieldName: 'selfRef__semanticId' },
-                { fieldName: 'name' },
-                { fieldName: 'selfRef__pkg' },
-                { fieldName: 'selfRef__path' },
-            ]
-        };
-
-        flatItems.forEach(item => {
-            item.selfRef__id = item.selfRef.id;
-            item.selfRef__pkg = item.selfRef.pkg;
-            item.selfRef__path = item.selfRef.path;
-            item.selfRef__mainId = item.selfRef.mainId;
-            item.selfRef__semanticId = item.selfRef.semanticId;
-            item.selfRef__mainSemanticId = item.selfRef.mainSemanticId;
-        });
-
+        let indexPath = path.join(dir, 'search-index.json');
         return new Promise((resolve, reject) => {
-            SearchIndex(options, (err, index) => {
-                console.log('search index initialized');
-                index.add(flatItems, indexOptions, function(err) {
-                    console.log('creating index snapshot...');
-                    index.snapShot(function(readStream) {
-                        readStream.pipe(fs.createWriteStream(path.join(dir, 'search-index.gz')))
-                            .on('close', function() {
-                            console.log('snapshot completed');
-                            cb();
-                            resolve();
-                        });
-                    });
-                });
+            fs.writeFile(indexPath, JSON.stringify(flatItems, null, 4), (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
             });
         });
     }
 
     generateRegistryModule(dir: string): [string, any[]] {
-        let res = this.generateIdMap();
-        let flatItems = res[2];
+        let flatItems = this.generateIdMap();
 
         let modules = this.context.modules;
         let files: any = {};

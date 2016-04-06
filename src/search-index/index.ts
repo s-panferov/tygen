@@ -8,52 +8,55 @@ import {
     InitSearchIndex
 } from '../explorer/actions';
 
+const fuzz = require('fuzzaldrin-plus');
+import { inflateJson } from '../explorer/inflate';
+
 function emit<T>(action: Action<any, any>) {
     self.postMessage(action, null);
 }
 
-let index: any;
+let candidates: string[];
 
 function initSearchIndex(payload: InitSearchIndex) {
     let { settings } = payload;
 
-    importScripts(`${settings.assetsRoot}/search-index-lib.js`);
-    let { buffer, stream, level, si } = (window as any).__search_index_lib__;
-
-    let searchIndex = fetch(`${settings.docRoot}/search-index.gz`)
-        .then(res => res.arrayBuffer());
-
-    Promise.all([searchIndex]).then(([idx]) => {
-        let options = {
-            indexPath: 'docscript-index',
-            db: level
-        };
-
-        let buf = new buffer.Buffer(idx);
-        let bufferStream = new stream.PassThrough();
-        bufferStream.end(buf);
-
-        si(options, (err, _index) => {
-            index = _index;
-            index.replicate(bufferStream, function(callback) {
-                console.log('search index ready');
-                emit({
-                    type: ActionType.InitSearchIndex,
-                    payload: { ready: true }
-                } as Action<InitSearchIndex, void>);
-            });
+    fetch(`${settings.docRoot}/search-index.json.gz`)
+        .then(res => inflateJson(res))
+        .then((_candidates) => {
+            candidates = _candidates;
+            console.log('search index ready: ', candidates.length, 'candidates');
+            emit({
+                type: ActionType.InitSearchIndex,
+                payload: { ready: true }
+            } as Action<InitSearchIndex, void>);
         });
-    });
 }
 
 function search(payload: Search) {
     let { query } = payload;
-    let options = {
-        query: { '*': [ query ] },
-        pageSize: 50
-    };
-    index.search(options, function(err, searchResults) {
-        emit({ type: ActionType.Search, payload: { query, searchResults }});
+    let searchResults = fuzz.filter(candidates, query, { maxInners: 20 }).map(str => {
+        let parts = str.split(':///');
+        let pkg = parts[0];
+        let restPath = '/' + parts[1];
+        let pathParts = restPath.split('#');
+        let path = pathParts[0];
+        let semanticId = pathParts[pathParts.length - 1];
+        let semanticIdParts = semanticId.split('.');
+        let mainSemanticId = semanticIdParts[0];
+
+        return {
+            pkg,
+            path,
+            semanticId,
+            mainSemanticId
+        };
+    });
+    emit({
+        type: ActionType.Search,
+        payload: {
+            query,
+            searchResults
+        }
     });
 }
 
