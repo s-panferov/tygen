@@ -16,7 +16,7 @@ file an issue or submit a pull request!
 
 ```
 npm i -g docscript
-docscript generate --withoutSearch --deepForeign
+docscript generate --deepForeign
 ```
 
 ## .docscript.json
