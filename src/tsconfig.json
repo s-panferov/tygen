@@ -120,6 +120,7 @@
         "./explorer/typings/redux.d.ts",
         "./lib/autobind.ts",
         "./lib/equal.ts",
+        "./lib/sizeof.ts",
         "./lib/utils.ts",
         "./loader-plugin/index.ts",
         "./search-index/index.ts",

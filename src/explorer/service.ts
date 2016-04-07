@@ -3,6 +3,7 @@ import { DocRegistry, PackageInfo } from '../doc/index';
 import { Settings } from './settings';
 import { ModuleInfo, Item } from '../doc';
 import { inflateJson } from './inflate';
+import { getMetaName } from '../doc/utils';
 
 import * as path from 'path';
 
@@ -30,9 +31,14 @@ interface FileStructure {
     isFile: boolean;
 }
 
+export interface ModuleMeta {
+    shortForm: boolean;
+    moduleMetaName: string;
+}
+
 export interface PackageService {
     info: PackageInfo;
-    files: Dictionary<string>;
+    files: Dictionary<ModuleMeta>;
     fs: MemoryFileSystem;
 }
 
@@ -55,17 +61,37 @@ export default class Service {
     }
 
     ensureRoute(route: Route): Promise<{ item: Item, module: ModuleInfo }> {
-        let moduleMetaName = this.getModuleMetaName(route);
+        let meta = this.getModuleMeta(route);
         let promise: Promise<any>;
         let itemId: string;
 
-        if (!moduleMetaName) {
+        if (!meta || !meta.moduleMetaName) {
             promise = Promise.resolve();
         } else {
+            let { shortForm, moduleMetaName } = meta;
             let promises: Promise<any>[] = [];
             itemId = route.mainSemanticId || route.semanticId || route.id;
 
-            if (itemId) {
+            if (!this.modules[moduleMetaName]) {
+                // load module meta info
+                let promise = fetch(`${this.settings.docRoot}/${moduleMetaName}.gz`)
+                    .then(res => inflateJson(res))
+                    .then((moduleInfo) => {
+                        this.modules[moduleMetaName] = moduleInfo as any;
+                        if (itemId && shortForm) {
+                            this.items[itemId] = moduleInfo.itemsIndex[moduleInfo.semanticIdMap[itemId]];
+                        }
+                    });
+
+                promises.push(promise);
+            } else {
+                if (itemId && shortForm) {
+                    let moduleInfo = this.modules[moduleMetaName];
+                    this.items[itemId] = moduleInfo.itemsIndex[moduleInfo.semanticIdMap[itemId]];
+                }
+            }
+
+            if (!shortForm && itemId) {
                 if (!this.items[itemId]) {
                     let promise = fetch(`${this.settings.docRoot}/${moduleMetaName.replace('.json', '')}/${itemId}.json.gz`)
                         .then(res => inflateJson(res))
@@ -77,17 +103,6 @@ export default class Service {
                 }
             }
 
-            if (!this.modules[moduleMetaName]) {
-                // load module meta info
-                let promise = fetch(`${this.settings.docRoot}/${moduleMetaName}.gz`)
-                    .then(res => inflateJson(res))
-                    .then((moduleInfo) => {
-                        this.modules[moduleMetaName] = moduleInfo as any;
-                    });
-
-                promises.push(promise);
-            }
-
             promise = Promise.all(promises) as Promise<any>;
         }
 
@@ -95,7 +110,7 @@ export default class Service {
             .then(() => {
                 return {
                     item: itemId && this.items[itemId],
-                    module: moduleMetaName && this.modules[moduleMetaName]
+                    module: meta && this.modules[meta.moduleMetaName]
                 };
             })
             .catch(e => { console.error(e.toString()); throw e; });
@@ -133,7 +148,7 @@ export default class Service {
         return this.packages;
     }
 
-    getModuleMetaName(route: Route): string {
+    getModuleMeta(route: Route): ModuleMeta {
         if (!route.pkg) {
             return null;
         } else {
@@ -193,8 +208,7 @@ function readPackages(registry: DocRegistry): Packages {
     });
 
     Object.keys(registry.files).forEach(key => {
-        let moduleMetaName = registry.files[key];
-
+        let moduleMetaName = getMetaName(key);
         let [pkgName, relativeToPackage] = key.split('://');
 
         let pkgNameParts = pkgName.split('/');
@@ -206,7 +220,12 @@ function readPackages(registry: DocRegistry): Packages {
             relativeToPackage = '/' + pkgNameParts.slice(1).join('/') + relativeToPackage;
         }
 
-        pkg.files[relativeToPackage] = moduleMetaName;
+        let fileInfo: ModuleMeta = {
+            shortForm: registry.files[key],
+            moduleMetaName
+        };
+
+        pkg.files[relativeToPackage] = fileInfo;
         pkg.fs.mkdirpSync(path.dirname(relativeToPackage));
 
         let modulePath = relativeToPackage;

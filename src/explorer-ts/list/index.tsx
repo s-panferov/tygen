@@ -44,6 +44,14 @@ export default class List extends React.Component<ListProps, ListState> {
 
     renderItems() {
         let items = this.props.module.items;
+        let itemsIndex = this.props.module.itemsIndex;
+
+        if (itemsIndex) {
+            items = Object.keys(itemsIndex).map(id => {
+                let i = itemsIndex[id];
+                return [i.selfRef, i.itemType, i.name] as any;
+            });
+        }
 
         let groups = {} as {[itemType: string]: [Ref, string][]};
         items.forEach(([selfRef, itemType, name]) => {

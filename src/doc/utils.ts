@@ -21,13 +21,17 @@ export function getFileInfo(fileName: string, pkg: Package): FileInfo {
     }
 
     let withPackage = pkg.info.name + '://' + relativeToPackage;
-    let metaName = withPackage.replace(/\/|\\/g, '--') + '.json';
+    let metaName = getMetaName(withPackage);
 
     return {
         metaName,
         relativeToPackage,
         withPackage
     };
+}
+
+export function getMetaName(withPackage: string) {
+    return withPackage.replace(/\/|\\/g, '--') + '.json';
 }
 
 export function logNode(node) {

@@ -54,6 +54,7 @@ export interface ModuleInfo {
     internal: boolean;
     semanticIdMap: { [semantiId: string]: string };
     items: [string, string, string][];
+    itemsIndex: { [id: string]: Item };
 }
 
 export interface IdMap {
@@ -66,7 +67,7 @@ export interface SemanticIdMap {
 
 export interface DocRegistry {
     mainPackage: string;
-    files: Dictionary<string>;
+    files: Dictionary<boolean>;
     idMap: IdMap;
     semanticIdMap: SemanticIdMap;
     packages: Dictionary<PackageInfo>;
@@ -391,6 +392,7 @@ export class Module {
     pkgName: string;
     fileInfo: FileInfo;
     internal: boolean;
+    shortForm: boolean;
 
     items: Item[] = [];
     itemsIndex: { [id: string]: Item } = {};
@@ -403,10 +405,18 @@ export class Module {
     }
 
     toJSON() {
-        let { pkgName, fileInfo, items, kind, internal, semanticIdMap } = this;
-        let shortItems = items.map(item => {
-            return [item.selfRef, item.itemType, item.name];
-        });
-        return { kind, pkgName, fileInfo, internal, semanticIdMap, items: shortItems };
+        let { pkgName, fileInfo, items, kind, internal, semanticIdMap, itemsIndex } = this;
+        let result = { kind, pkgName, fileInfo, internal, semanticIdMap, items: null, itemsIndex: null };
+        if (!this.shortForm) {
+            let shortItems = items.map(item => {
+                return [item.selfRef, item.itemType, item.name];
+            });
+
+            result.items = shortItems;
+        } else {
+            result.itemsIndex = itemsIndex;
+        }
+
+        return result;
     }
 }

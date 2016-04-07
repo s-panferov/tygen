@@ -2,8 +2,9 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { spawn } from 'child_process';
 import { ItemType } from './items';
-import { Context, IdMap, SemanticIdMap } from './index';
+import { Context } from './index';
 import { extractPackage } from './utils';
+import sizeof from '../lib/sizeof';
 
 let fse = require('fs-extra');
 
@@ -84,15 +85,24 @@ export class DocWriter {
         let modules = this.context.modules;
         Object.keys(modules).forEach(moduleKey => {
             let module = modules[moduleKey];
+
+            // approximate unzipped size in megabytes
+            let size = sizeof(module) / 1024 / 1024;
+            let shortForm = size <= 10;
+
+            module.shortForm = shortForm;
+
             let metaPath = path.join(dir, module.fileInfo.metaName);
             fs.writeFileSync(metaPath, JSON.stringify(module, null, 4));
 
-            let itemsPath = metaPath.replace('.json', '');
-            fse.ensureDirSync(itemsPath);
-            module.items.forEach(item => {
-                let itemPath = path.join(itemsPath, (item.selfRef.semanticId || item.selfRef.id) + '.json');
-                fs.writeFileSync(itemPath, JSON.stringify(item, null, 4));
-            });
+            if (!shortForm) {
+                let itemsPath = metaPath.replace('.json', '');
+                fse.ensureDirSync(itemsPath);
+                module.items.forEach(item => {
+                    let itemPath = path.join(itemsPath, (item.selfRef.semanticId || item.selfRef.id) + '.json');
+                    fs.writeFileSync(itemPath, JSON.stringify(item, null, 4));
+                });
+            }
         });
 
         let [regModule, flatItems] = this.generateRegistryModule(dir);
@@ -148,7 +158,7 @@ export class DocWriter {
         let files: any = {};
         Object.keys(modules).forEach(moduleKey => {
             let module = modules[moduleKey];
-            files[module.fileInfo.withPackage] = module.fileInfo.metaName;
+            files[module.fileInfo.withPackage] = module.shortForm;
         });
 
         let packagesInfo = {};
