@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as theme from '../../explorer/components/theme';
+import autobind from '../../lib/autobind';
 
 import {
     FunctionReflection
@@ -19,10 +20,16 @@ export interface MethodProps extends React.CommonProps {
     inline: boolean;
 }
 
-export interface MethodState {}
+export interface MethodState {
+    idx: number;
+}
 
 export default class Method extends React.Component<MethodProps, MethodState> {
     static contextTypes = theme.themeContext;
+
+    state = {
+        idx: 0
+    };
 
     getClassName() {
         return block(theme.resolveTheme(this)).mix(this.props.className);
@@ -43,19 +50,35 @@ export default class Method extends React.Component<MethodProps, MethodState> {
     }
 
     renderSignatures(method: FunctionReflection) {
-        return method.callSignatures.map(sig => {
+        return method.callSignatures.map((sig, idx) => {
             return <div key={ sig.selfRef.id } className={ block('signature-section') } >
-                <Figure className={ block('figure') }>
+                <Figure
+                    className={ block('figure') }
+                    clickable={ true }
+                    htmlProps={{
+                        'data-idx': idx,
+                        onClick: this.onFigureClick
+                    } as any}
+                >
                     <Signature
                         className={ block('signature') }
                         typeStyle={ SignatureTypeStyle.Colon }
                         signature={ sig }
                     />
                 </Figure>
-                { sig.comment &&
-                    <Comment comment={ sig.comment }/>
+                {
+                    (idx == this.state.idx) &&
+                        <Comment comment={ sig.comment }/>
                 }
             </div>;
+        });
+    }
+
+    @autobind
+    onFigureClick(e: React.MouseEvent) {
+        let idx = Number((e.currentTarget as any).attributes['data-idx'].nodeValue);
+        this.setState({
+            idx
         });
     }
 }

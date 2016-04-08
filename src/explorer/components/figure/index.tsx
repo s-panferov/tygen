@@ -6,6 +6,7 @@ const block = theme.block('figure');
 
 export interface FigureProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
+    clickable?: boolean;
 }
 
 export interface FigureState {
@@ -16,6 +17,7 @@ export default class Figure extends React.Component<FigureProps, FigureState> {
 
     getClassName() {
         return block(theme.resolveTheme(this), {
+            clickable: this.props.clickable
         }).mix(this.props.className);
     }
 

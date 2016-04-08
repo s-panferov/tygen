@@ -25,12 +25,16 @@ export default class Comment extends React.Component<CommentProps, CommentState>
 
     render() {
         let comment = this.props.comment;
-        return (
-            <div className={ this.getClassName() }>
-                <ReactMarkdown source={ comment.description } />
-                { this.renderTags(comment) }
-            </div>
-        );
+        if (!comment || (!comment.description && comment.tags.length == 0)) {
+            return null;
+        } else {
+            return (
+                <div className={ this.getClassName() }>
+                    <ReactMarkdown source={ comment.description } />
+                    { this.renderTags(comment) }
+                </div>
+            );
+        }
     }
 
     renderTags(comment: DocComment) {

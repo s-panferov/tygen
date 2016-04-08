@@ -9,6 +9,13 @@
 
     &__sidebar {
         flex: 0 0 200px;
+        height: 100vh;
+
+        left: 0;
+        width: 200px;
+        position: fixed;
+
+        background-color: #f9f9f9;
     }
 
     &__content {

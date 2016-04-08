@@ -5,11 +5,9 @@
         display: block;
     }
 
-    &__figure {
-        margin-bottom: 10px;
-    }
-
     &__signature-section + &__signature-section {
-        margin-top: 20px;
+        .figure {
+            border-top: 0;
+        }
     }
 }
