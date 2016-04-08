@@ -1,3 +1,14 @@
+<a name="0.0.6"></a>
+## [0.0.6](https://github.com/docscript/docscript/compare/v0.0.5...v0.0.6) (2016-04-08)
+
+
+### Features
+
+* don't split small modules by items on file system, fixes #24 ([32219c1](https://github.com/docscript/docscript/commit/32219c1)), closes [#24](https://github.com/docscript/docscript/issues/24)
+* make it looks little bit like typedoc ([c684d61](https://github.com/docscript/docscript/commit/c684d61))
+
+
+
 <a name="0.0.5"></a>
 ## [0.0.5](https://github.com/docscript/docscript/compare/v0.0.4...v0.0.5) (2016-04-06)
 
