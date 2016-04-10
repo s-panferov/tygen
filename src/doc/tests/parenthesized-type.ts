@@ -29,10 +29,10 @@ describe('parenthesized-type', () => {
                     expect(coreType(uType.types[1])).equals(CoreType.Number);
                 }
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

@@ -42,13 +42,13 @@ describe('interface-literal', () => {
                         expect(member.name).to.equal('p0');
                         expect(typeRef(member.type)).equal(iface.selfRef.id);
                     } else {
-                        expect(false).to.true;
+                        expect.fail();
                     }
                 } else {
-                    expect(false).to.true;
+                    expect.fail();
                 }
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         }
     });

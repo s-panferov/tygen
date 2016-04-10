@@ -40,7 +40,7 @@ describe('class:accessors', () => {
                 expect(getter.name).to.equal('name');
                 expect(typeRef(getter.type)).to.equal(cls.selfRef.id);
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
 
             let setter = cls.properties[1];
@@ -48,10 +48,10 @@ describe('class:accessors', () => {
             if (isSetAccessorDeclarationReflection(setter)) {
                 expect(setter.name).to.equal('name');
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

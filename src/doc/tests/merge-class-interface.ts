@@ -27,7 +27,7 @@ describe('class-interface-merge', () => {
             expect(cls.properties).lengthOf(3);
             expect(cls.typeParameters).lengthOf(3);
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

@@ -28,7 +28,7 @@ describe('enum-namespace-merge', () => {
             expect(en.properties).lengthOf(6);
             expect(en.properties.find(p => p.name == 'alarm')).ok;
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

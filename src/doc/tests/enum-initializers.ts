@@ -28,7 +28,7 @@ describe('enum:initializer', () => {
             expect(en.members[1].initializer).to.equal('\'string\' as any');
             expect(en.members[1].selfRef.semanticId).to.equal('Test.B');
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

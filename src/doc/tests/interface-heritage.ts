@@ -27,10 +27,10 @@ describe('interface-heritage', () => {
                 expect(typeRef(hc.types[0].expression.type)).equal(base.selfRef.id);
                 expect(coreType(hc.types[0].typeArguments[0])).equal(CoreType.String);
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

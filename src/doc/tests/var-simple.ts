@@ -24,7 +24,7 @@ describe('var:simple', () => {
             expect(coreType(variable.type)).equals(CoreType.String);
             expect(variable.initializer).equals('\'test\'');
         } else {
-           expect(false).to.true;
+           expect.fail();
         }
     });
 });

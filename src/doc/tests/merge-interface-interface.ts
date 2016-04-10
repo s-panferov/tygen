@@ -33,10 +33,10 @@ describe('interface-interface-merge', () => {
             if (isMethodReflection(method)) {
                 expect(method.callSignatures).lengthOf(2);
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

@@ -28,7 +28,7 @@ describe('function-namespace-merge', () => {
             expect(func.properties).lengthOf(2);
             expect(func.callSignatures).lengthOf(4);
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

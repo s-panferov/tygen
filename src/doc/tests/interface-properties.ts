@@ -30,7 +30,7 @@ describe('interface:properties', () => {
                 expect(isInherited(item)).is.true;
             });
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

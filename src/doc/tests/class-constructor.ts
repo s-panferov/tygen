@@ -34,10 +34,10 @@ describe('class:constructor', () => {
             if (isConstructorDeclarationReflection(constr)) {
                 expect(constr.name).equal('constructor');
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

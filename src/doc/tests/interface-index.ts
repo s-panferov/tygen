@@ -27,6 +27,6 @@ describe('interface-index', () => {
             });
         }
     } else {
-        expect(false).to.true;
+        expect.fail();
     }
 });

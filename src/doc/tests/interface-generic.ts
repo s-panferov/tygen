@@ -48,7 +48,7 @@ describe('interface-generic', () => {
                 expect(typeRef(tp.constraint)).equal(iface.typeParameters[0].selfRef.id);
             }
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

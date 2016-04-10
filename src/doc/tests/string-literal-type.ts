@@ -21,10 +21,10 @@ describe('string-literal-type', () => {
             if (isStringLiteralTypeReflection(type)) {
                 expect(type.text).equal('string');
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

@@ -22,10 +22,10 @@ describe('tuple-type', () => {
                 expect(coreType(type.elementTypes[0])).equal(CoreType.String);
                 expect(coreType(type.elementTypes[1])).equal(CoreType.Number);
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

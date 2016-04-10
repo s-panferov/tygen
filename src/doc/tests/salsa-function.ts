@@ -26,7 +26,7 @@ describe('salsa:simple', () => {
             expect(coreType(signature.parameters[1].type)).equals(CoreType.Number);
             expect(coreType(signature.type)).equals(CoreType.String);
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

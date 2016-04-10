@@ -27,7 +27,7 @@ describe('enum:simple', () => {
             expect(en.members[1].name).to.equal('B');
             expect(en.members[2].name).to.equal('C');
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

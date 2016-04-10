@@ -34,10 +34,10 @@ describe('interface:simple', () => {
                 expect(first.optional).to.false;
                 expect(coreType(first.type)).to.equal(CoreType.String);
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

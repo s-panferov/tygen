@@ -21,10 +21,10 @@ describe('array-type', () => {
             if (isArrayTypeReflection(type)) {
                 expect(coreType(type.elementType)).equal('string');
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

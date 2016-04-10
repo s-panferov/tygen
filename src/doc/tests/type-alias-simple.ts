@@ -41,7 +41,7 @@ describe('type-alias:simple', () => {
                     expect(first.typeName).equals('T');
                     expect(first.ref.id).equals(tp.selfRef.id);
                 } else {
-                    expect(false).to.true;
+                    expect.fail();
                 }
 
                 const second = type.types[1];
@@ -55,16 +55,16 @@ describe('type-alias:simple', () => {
                         expect(ta.typeName).equals('T');
                         expect(typeRef(ta)).equals(tp.selfRef.id);
                     } else {
-                        expect(false).to.true;
+                        expect.fail();
                     }
                 } else {
-                    expect(false).to.true;
+                    expect.fail();
                 }
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

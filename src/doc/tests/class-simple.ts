@@ -35,10 +35,10 @@ describe('class:simple', () => {
                 expect(first.optional).to.false;
                 expect(typeRef(first.type)).to.equal(cls.selfRef.id);
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

@@ -40,7 +40,7 @@ describe('interface-call', () => {
             if (isCallSignatureReflection(callSig)) {
                 testSignature(iface, callSig);
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
 
             let methodSig = iface.properties[0];
@@ -48,7 +48,7 @@ describe('interface-call', () => {
                 expect(methodSig.name).equal('method');
                 testSignature(iface, methodSig.callSignatures[0]);
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
 
             let propertySig = iface.properties[1];
@@ -59,13 +59,13 @@ describe('interface-call', () => {
                 if (isFunctionTypeReflection(type)) {
                     testSignature(iface, type.signature);
                 } else {
-                    expect(false).to.true;
+                    expect.fail();
                 }
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });
@@ -81,6 +81,6 @@ function testSignature(iface: InterfaceReflection, callSig: SignatureReflection)
         expect(type.ref.id).equal(iface.selfRef.id);
         expect(typeRef(type.typeArguments[0])).equal(callSig.typeParameters[0].selfRef.id);
     } else {
-        expect(false).to.true;
+        expect.fail();
     }
 }

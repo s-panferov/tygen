@@ -23,10 +23,10 @@ describe('constructor-type', () => {
                 expect(type.parameters).lengthOf(1);
                 expect(type.type).ok;
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         } else {
-            expect(false).to.true;
+            expect.fail();
         }
     });
 });

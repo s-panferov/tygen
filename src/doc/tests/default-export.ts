@@ -18,7 +18,7 @@ describe('default export', () => {
             expect(func.selfRef.semanticId).eq('test');
             expect(func.selfRef.mainSemanticId).eq('test');
         } else {
-            expect.fail();
+            expect.fail();;
         }
     });
 
@@ -28,7 +28,7 @@ describe('default export', () => {
             expect(cls.selfRef.semanticId).eq('Test');
             expect(cls.selfRef.mainSemanticId).eq('Test');
         } else {
-            expect.fail();
+            expect.fail();;
         }
     });
 });

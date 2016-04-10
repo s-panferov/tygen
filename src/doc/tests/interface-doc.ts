@@ -23,6 +23,6 @@ describe('interface-doc', () => {
             });
         });
     } else {
-        expect(false).to.true;
+        expect.fail();
     }
 });

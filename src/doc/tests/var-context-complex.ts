@@ -49,10 +49,10 @@ describe('var:simple', () => {
                 expect(type.members[0].name).equals('a');
                 expect(type.members[1].name).equals('b');
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         } else {
-           expect(false).to.true;
+           expect.fail();
         }
     });
 
@@ -69,10 +69,10 @@ describe('var:simple', () => {
                 expect(type.typeName).equals('Bar');
                 expect(type.ref.id).equals(module.items[3].selfRef.id);
             } else {
-                expect(false).to.true;
+                expect.fail();
             }
         } else {
-           expect(false).to.true;
+           expect.fail();
         }
     });
 });

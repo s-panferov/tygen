@@ -39,10 +39,10 @@ describe('interface-intersection', () => {
                         expect(coreType(type.types[0])).to.equal(CoreType.String);
                         expect(typeRef(type.types[1])).to.equal(iface.selfRef.id);
                     } else {
-                        expect(false).to.true;
+                        expect.fail();
                     }
                 } else {
-                    expect(false).to.true;
+                    expect.fail();
                 }
             }
 
@@ -58,10 +58,10 @@ describe('interface-intersection', () => {
                         expect(coreType(type.types[0])).to.equal(CoreType.String);
                         expect(typeRef(type.types[1])).to.equal(iface.selfRef.id);
                     } else {
-                        expect(false).to.true;
+                        expect.fail();
                     }
                 } else {
-                    expect(false).to.true;
+                    expect.fail();
                 }
             }
         }
