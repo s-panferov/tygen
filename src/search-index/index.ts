@@ -1,6 +1,3 @@
-self.window = self;
-self.window.window = self;
-
 import {
     Action,
     ActionType,
