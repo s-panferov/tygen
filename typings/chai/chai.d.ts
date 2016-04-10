@@ -19,6 +19,7 @@ declare module Chai {
     }
 
     export interface ExpectStatic extends AssertionStatic {
+        fail(): void;
     }
 
     export interface AssertStatic extends Assert {

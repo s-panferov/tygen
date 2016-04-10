@@ -59,6 +59,7 @@
         "./doc/tests/class-heritage.ts",
         "./doc/tests/class-simple.ts",
         "./doc/tests/constructor-type.ts",
+        "./doc/tests/default-export.ts",
         "./doc/tests/enum-initializers.ts",
         "./doc/tests/enum-simple.ts",
         "./doc/tests/export.ts",

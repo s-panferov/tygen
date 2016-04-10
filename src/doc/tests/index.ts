@@ -31,5 +31,6 @@ import './merge-enum-namespace';
 import './namespaces';
 import './export';
 import './type-ref';
+import './default-export';
 
 console.log('tests loaded'); // WARN! BABEL HACK https://phabricator.babeljs.io/T7071

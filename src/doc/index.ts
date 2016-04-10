@@ -179,14 +179,26 @@ export class Context {
 
     mainId(): string {
         if (this.currentStack[0]) {
-            return this.currentStack[0].name;
+            return this.getSymbolName(this.currentStack[0]);
         } else {
             return null;
         }
     }
 
+    getSymbolName(sym: Symbol) {
+        let name: string;
+        sym.declarations.some(decl => {
+            if (decl.name) {
+                name = decl.name.getText();
+                return true;
+            }
+        });
+
+        return name || sym.name;
+    }
+
     semanticId(id: string, level?: string): string {
-        let currentStack = this.currentStack.map(sym => sym.name);
+        let currentStack = this.currentStack.map(this.getSymbolName);
         if (level) {
             currentStack = currentStack.concat(level);
         }
