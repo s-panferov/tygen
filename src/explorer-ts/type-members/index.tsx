@@ -152,7 +152,7 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
 
         if (!this.props.inline) {
             return [
-                <Heading lvl={ HeadingLevel.H2 }>Index signatures</Heading>,
+                <Heading key='indexes-heading' lvl={ HeadingLevel.H2 }>Index signatures</Heading>,
                 renderedIndexSignatures
             ];
         } else {
@@ -171,7 +171,7 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
 
         if (!this.props.inline) {
             return [
-                <Heading lvl={ HeadingLevel.H2 }>Call signatures</Heading>,
+                <Heading key='calls-heading' lvl={ HeadingLevel.H2 }>Call signatures</Heading>,
                 renderedCallSignatures
             ];
         } else {
@@ -191,7 +191,7 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
 
         if (!this.props.inline) {
             return [
-                <Heading lvl={ HeadingLevel.H2 }>Properties</Heading>,
+                <Heading key='properties-heading' lvl={ HeadingLevel.H2 }>Properties</Heading>,
                 renderedProperties
             ];
         } else {
@@ -211,7 +211,7 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
 
         if (!this.props.inline) {
             return [
-                <Heading lvl={ HeadingLevel.H2 }>Methods</Heading>,
+                <Heading key='methods-heading' lvl={ HeadingLevel.H2 }>Methods</Heading>,
                 renderedMethods
             ];
         } else {
@@ -258,7 +258,7 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
 
         if (!this.props.inline) {
             return [
-                <Heading lvl={ HeadingLevel.H2 }>Accessors</Heading>,
+                <Heading key='accessors-heading' lvl={ HeadingLevel.H2 }>Accessors</Heading>,
                 renderedAccessors
             ];
         } else {
@@ -272,6 +272,6 @@ export default class TypeMembers extends React.Component<TypeMembersProps, TypeM
             methods
         );
 
-        return <TypeNav items={ items } />;
+        return <TypeNav key='type-nav' items={ items } />;
     }
 }

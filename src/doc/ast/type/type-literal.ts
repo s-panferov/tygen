@@ -24,9 +24,11 @@ export function visitTypeLiteral(node: TypeLiteralNode, type: Type, ctx: Context
     return {
         selfRef: { id: ctx.id(type.getSymbol() || type) },
         itemType: ItemType.TypeLiteral,
-        members: node.members && visitDeclarations(
-            node.members,
-            ctx
-        )
+        members: node.members
+            ? visitDeclarations(
+                node.members,
+                ctx
+            )
+            : []
     };
 }

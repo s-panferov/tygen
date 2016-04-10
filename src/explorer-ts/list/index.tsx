@@ -26,6 +26,10 @@ export default class List extends React.Component<ListProps, ListState> {
         view: ListView.Sidebar
     };
 
+    shouldComponentUpdate(nextProps: ListProps) {
+        return this.props.module !== nextProps.module;
+    }
+
     getClassName() {
         return block(theme.resolveTheme(this), {
             view: this.props.view
@@ -34,7 +38,7 @@ export default class List extends React.Component<ListProps, ListState> {
 
     render() {
         return (
-            <div className={ this.getClassName() }>
+            <div {...this.props.htmlProps} className={ this.getClassName() } >
                 {
                     this.renderItems()
                 }
