@@ -1,3 +1,16 @@
+<a name="0.0.7"></a>
+## [0.0.7](https://github.com/docscript/docscript/compare/v0.0.6...v0.0.7) (2016-04-11)
+
+
+### Features
+
+* add module internal nav ([c1d2f7c](https://github.com/docscript/docscript/commit/c1d2f7c))
+* bump ts ([1d64288](https://github.com/docscript/docscript/commit/1d64288))
+* **doc:** use declaration name instead of Symbol name, fixes #23 ([ccf2e55](https://github.com/docscript/docscript/commit/ccf2e55)), closes [#23](https://github.com/docscript/docscript/issues/23)
+* **explorer-ts:** more lightweight shadow ([a15814f](https://github.com/docscript/docscript/commit/a15814f))
+
+
+
 <a name="0.0.6"></a>
 ## [0.0.6](https://github.com/docscript/docscript/compare/v0.0.5...v0.0.6) (2016-04-08)
 

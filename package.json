@@ -1,6 +1,6 @@
 {
   "name": "docscript",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Documentation generator for TypeScript built with ReactJS",
   "main": "./dist/docscript.js",
   "bin": {
