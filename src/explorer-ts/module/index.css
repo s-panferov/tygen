@@ -7,4 +7,9 @@
     &__layout {
         flex: 1 1;
     }
+
+    &__layout-content {
+        margin-left: 420px;
+        margin-top: 10px;
+    }
 }

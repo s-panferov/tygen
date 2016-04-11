@@ -1,8 +1,10 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import * as theme from '../../explorer/components/theme';
 
 import Layout from '../../explorer/components/layout';
 import Heading from '../../explorer/components/heading';
+import StickyScroll from '../../explorer/components/sticky-scroll';
 import { Route } from '../../explorer/service';
 import { DisplaySettings } from '../../explorer/settings';
 import { Item } from '../../doc/items';
@@ -47,7 +49,9 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
             <div className={ this.getClassName() }>
                 <Layout
                     className={ block('layout') }
-                    reverse={ true }
+                    contentClassName={ block('layout-content') }
+                    sidebarClassName={ block('layout-sidebar') }
+                    sidebar={ this.renderSidebar() }
                 >
                     <div>
                         { !this.props.item &&
@@ -59,6 +63,15 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
                     </div>
                 </Layout>
             </div>
+        );
+    }
+
+    renderSidebar() {
+        return (
+            <List
+                module={ this.props.module }
+                view={ ListView.Sidebar }
+            />
         );
     }
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as theme from '../../explorer/components/theme';
 
-import Sticky from '../../explorer/components/sticky';
+import StickyScroll from '../../explorer/components/sticky-scroll';
 import SmartLink from '../../explorer/components/smart-link';
 import ScrollSpy from 'rscrollspy';
 
@@ -27,7 +27,7 @@ export default class TypeNav extends React.Component<TypeNavProps, TypeNavState>
 
     refs: {
         [key: string]: React.Component<any, any>,
-        scroll: React.Component<any, any>
+        stickyScroll: StickyScroll
     };
 
     constructor(props, context) {
@@ -39,9 +39,6 @@ export default class TypeNav extends React.Component<TypeNavProps, TypeNavState>
 
         this.renderItems = this.renderItems.bind(this);
         this.onSpyChange = this.onSpyChange.bind(this);
-        this.onScroll = this.onScroll.bind(this);
-        this.onMouseWheel = this.onMouseWheel.bind(this);
-        this.onStickyStateChange = this.onStickyStateChange.bind(this);
     }
 
     getClassName() {
@@ -50,25 +47,11 @@ export default class TypeNav extends React.Component<TypeNavProps, TypeNavState>
 
     render() {
         return (
-            <div className={ this.getClassName() }>
-                <Sticky
-                    topOffset={ -20 }
-                    stickyClass={ block('body') }
-                    stickyStyle={{}}
-                    onStickyStateChange={ this.onStickyStateChange }
-                >
-                    <div
-                        ref='scroll'
-                        className={ block('scroll') }
-                        onScroll={ this.onScroll }
-                        onWheel={ this.onMouseWheel }
-                    >
-                        <ScrollSpy ids={ this.props.items.map(item => item.selfRef.id) } onChange={ this.onSpyChange }>
-                            { this.renderItems }
-                        </ScrollSpy>
-                    </div>
-                </Sticky>
-            </div>
+            <StickyScroll ref='stickyScroll'>
+                <ScrollSpy ids={ this.props.items.map(item => item.selfRef.id) } onChange={ this.onSpyChange }>
+                    { this.renderItems }
+                </ScrollSpy>
+            </StickyScroll>
         );
     }
 
@@ -103,41 +86,12 @@ export default class TypeNav extends React.Component<TypeNavProps, TypeNavState>
         );
     }
 
-    onScroll(e: React.UIEvent) {
-        e.stopPropagation();
-    }
-
-    onStickyStateChange(state) {
-        this.setState({
-            sticky: state
-        });
-    }
-
-    onMouseWheel(e: React.WheelEvent) {
-        if (!this.state.sticky) {
-            return true;
-        }
-
-        let el = ReactDOM.findDOMNode(this.refs.scroll);
-        if (e.deltaY > 0 && el.clientHeight + el.scrollTop >= el.scrollHeight) {
-            e.stopPropagation();
-            e.preventDefault();
-            return false;
-        }
-        else if (e.deltaY < 0 && el.scrollTop <= 0) {
-            e.stopPropagation();
-            e.preventDefault();
-            return false;
-        }
-
-        return true;
-    }
-
     onSpyChange(inView: string[]) {
         let id = inView[0];
         if (id) {
-            let scroll: HTMLElement = ReactDOM.findDOMNode(this.refs.scroll) as any;
-            if (scroll) {
+            let scrollComponent = this.refs.stickyScroll && this.refs.stickyScroll.getScroll();
+            if (scrollComponent) {
+                let scroll: HTMLElement = ReactDOM.findDOMNode(scrollComponent) as any;
                 let elem: HTMLElement = scroll.querySelector(`#nav-${id}`) as any;
                 let offsetTop = elem.offsetTop;
                 if (offsetTop > scroll.scrollTop + scroll.offsetHeight) {

@@ -51,23 +51,23 @@ export default class Variable<P extends VariableProps> extends React.Component<P
 
         return (
             <Paper id={ vrb.selfRef.id } className={ this.getClassName() } highlight={ false }>
-                <Heading lvl={ 1 }>
+                <Heading key='heading' lvl={ 1 }>
                     { this.getHeader(vrb.varType) + ' ' }
                     { vrb.name }
                 </Heading>
                 { vrb.comment &&
-                    <Comment comment={ vrb.comment } />
+                    <Comment key='comment' comment={ vrb.comment } />
                 }
                 <Figure>
-                    <span>{this.getLabel(vrb.varType)} </span>
+                    <span key='label'>{this.getLabel(vrb.varType)} </span>
                     { vrb.name }
-                    <span>: </span>
-                    <Type type={ vrb.type } />
+                    <span key='colon'>: </span>
+                    <Type key='type' type={ vrb.type } />
                     {
                         vrb.initializer &&
                             [
-                                <span> = </span>,
-                                <span>{ vrb.initializer }</span>
+                                <span key='equals'> = </span>,
+                                <span key='initializer'>{ vrb.initializer }</span>
                             ]
                     }
                 </Figure>
