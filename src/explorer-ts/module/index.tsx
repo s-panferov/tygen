@@ -69,6 +69,7 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
     renderSidebar() {
         return (
             <List
+                showOnlyExported={ this.props.displaySettings.exported }
                 module={ this.props.module }
                 view={ ListView.Sidebar }
             />
@@ -81,6 +82,7 @@ export default class Module extends React.Component<ModuleProps, ModuleState> {
         } else {
             return (
                 <List
+                    showOnlyExported={ this.props.displaySettings.exported }
                     module={ this.props.module }
                     view={ ListView.Reference }
                 />

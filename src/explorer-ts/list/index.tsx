@@ -14,6 +14,7 @@ export enum ListView {
 
 export interface ListProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
+    showOnlyExported?: boolean;
     module: ModuleInfo;
     view?: ListView;
 }
@@ -23,11 +24,13 @@ export interface ListState {}
 export default class List extends React.Component<ListProps, ListState> {
     static contextTypes = theme.themeContext;
     static defaultProps = {
-        view: ListView.Sidebar
+        view: ListView.Sidebar,
+        showOnlyExported: false
     };
 
     shouldComponentUpdate(nextProps: ListProps) {
-        return this.props.module !== nextProps.module;
+        return this.props.module !== nextProps.module
+            || this.props.showOnlyExported !== nextProps.showOnlyExported;
     }
 
     getClassName() {
@@ -49,18 +52,20 @@ export default class List extends React.Component<ListProps, ListState> {
     renderItems() {
         let items = this.props.module.items;
         let itemsIndex = this.props.module.itemsIndex;
+        let showOnlyExported = this.props.showOnlyExported;
 
         if (itemsIndex) {
             items = Object.keys(itemsIndex).map(id => {
                 let i = itemsIndex[id];
-                return [i.selfRef, i.itemType, i.name] as any;
+                return [i.selfRef, i.itemType, i.name, (i as any).exported] as any;
             });
         }
 
         let groups = {} as {[itemType: string]: [Ref, string][]};
-        items.forEach(([selfRef, itemType, name]) => {
+        items.forEach(([selfRef, itemType, name, exported]) => {
+            if (showOnlyExported && !exported) { return; }
             if (!groups[itemType]) { groups[itemType] = []; }
-            groups[itemType].push([selfRef, name]);
+            groups[itemType].push([selfRef, name, exported]);
         });
 
         let view = this.props.view === ListView.Reference
