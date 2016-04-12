@@ -1,3 +1,14 @@
+<a name="0.0.8"></a>
+## [0.0.8](https://github.com/docscript/docscript/compare/v0.0.7...v0.0.8) (2016-04-12)
+
+
+### Features
+
+* `export` -> `exported`, write exported flag in short state ([1c7d17a](https://github.com/docscript/docscript/commit/1c7d17a))
+* make exported switch work, fixes #29 ([770fb61](https://github.com/docscript/docscript/commit/770fb61)), closes [#29](https://github.com/docscript/docscript/issues/29)
+
+
+
 <a name="0.0.7"></a>
 ## [0.0.7](https://github.com/docscript/docscript/compare/v0.0.6...v0.0.7) (2016-04-11)
 
