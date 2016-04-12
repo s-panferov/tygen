@@ -53,7 +53,7 @@ export interface ModuleInfo {
     fileInfo: FileInfo;
     internal: boolean;
     semanticIdMap: { [semantiId: string]: string };
-    items: [string, string, string][];
+    items: [string, string, string, boolean][];
     itemsIndex: { [id: string]: Item };
 }
 
@@ -421,7 +421,12 @@ export class Module {
         let result = { kind, pkgName, fileInfo, internal, semanticIdMap, items: null, itemsIndex: null };
         if (!this.shortForm) {
             let shortItems = items.map(item => {
-                return [item.selfRef, item.itemType, item.name];
+                let res = [item.selfRef, item.itemType, item.name];
+                if ((item as any).exported) {
+                    res.push((item as any).exported);
+                }
+
+                return res;
             });
 
             result.items = shortItems;

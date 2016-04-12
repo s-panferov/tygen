@@ -128,7 +128,7 @@ export interface TypeReflection extends Item {
 }
 
 export interface StatementReflection extends Item {
-    export: boolean;
+    exported: boolean;
     default: boolean;
 }
 

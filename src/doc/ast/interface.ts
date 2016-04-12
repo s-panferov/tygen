@@ -167,7 +167,7 @@ export function visitBasicInfo(
         name: base.name.getText(),
         typeParameters,
         heritageClauses,
-        export: !!(base.flags & NodeFlags.Export),
+        exported: !!(base.flags & NodeFlags.Export),
         default: !!(base.flags & NodeFlags.Default),
         callSignatures: callSignatures as any,
         indexSignatures: indexSignatures as any,

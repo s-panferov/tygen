@@ -18,7 +18,7 @@ describe('export test', () => {
         expect(module.items).lengthOf(6);
         expect((def as StatementReflection).default).true;
         module.items.forEach((item: StatementReflection) => {
-            expect(item.export).true;
+            expect(item.exported).true;
         });
     });
 });

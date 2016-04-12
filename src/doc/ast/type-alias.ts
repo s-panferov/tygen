@@ -54,7 +54,7 @@ export function visitTypeAliasDeclaration(
             path: ctx.currentModule.fileInfo.relativeToPackage,
             mainSemanticId: ctx.mainId()
         },
-        export: !!(alias.flags & NodeFlags.Export),
+        exported: !!(alias.flags & NodeFlags.Export),
         default: !!(alias.flags & NodeFlags.Default),
         itemType: ItemType.TypeAlias,
         name,
