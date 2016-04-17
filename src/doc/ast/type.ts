@@ -24,7 +24,9 @@ import {
     visitPropertySignature,
     visitPropertyDeclaration,
 } from './type/property';
+
 import { visitFunctionDeclaration } from './type/function';
+
 import {
     visitIndexSignature,
     visitCallSignature,
@@ -36,21 +38,27 @@ import {
     visitFunctionTypeNode,
     visitConstructorTypeNode,
 } from './type/signature';
+
 import { visitTypeLiteral } from './type/type-literal';
+
 import {
     visitUnionType,
     visitIntersectionType,
 } from './type/intersection-union';
+
 import {
     visitTypeReference,
 } from './type/type-reference';
+
 import {
     visitStringLiteralTypeNode,
 } from './type/string-literal';
+
 import { visitArrayTypeNode } from './type/array';
 import { visitTupleTypeNode } from './type/tuple';
 import { visitParenthesizedTypeNode } from './type/parenthesized';
 import { visitTypePredicateNode } from './type/type-predicate';
+import { visitTypeQueryNode } from './type/type-query';
 
 export function visitDeclarations(
     members: NodeArray<Declaration>,
@@ -216,6 +224,10 @@ export function visitTypeNode(node: TypeNode, ctx: Context): TypeReflection {
 
     if (nodeIs.isTypePredicateNode(node)) {
         return visitTypePredicateNode(node, type, ctx);
+    }
+
+    if (nodeIs.isTypeQueryNode(node)) {
+        return visitTypeQueryNode(node, type, ctx);
     }
 
     console.warn('Unknown type node', node.kind, node.getText());

@@ -19,6 +19,7 @@ import { isConstructorTypeReflection } from '../doc/ast/type/signature';
 import { isTypeLiteralReflection } from '../doc/ast/type/type-literal';
 import { isTypePredicateReflection } from '../doc/ast/type/type-predicate';
 import { isParenthesizedTypeReflection } from '../doc/ast/type/parenthesized';
+import { isTypeQueryReflection } from '../doc/ast/type/type-query';
 
 import TypeRef from './type-ref';
 import TypeCore from './type-core';
@@ -32,6 +33,7 @@ import ConstructorType from './constructor-type';
 import TypePredicate from './type-predicate';
 import TypeLiteral from './type-literal';
 import ParenthesizedType from './parenthesized-type';
+import TypeQuery from './type-query';
 
 export interface TypeProps extends React.CommonProps {
     htmlProps?: React.HTMLAttributes;
@@ -65,6 +67,8 @@ export default class Type extends React.Component<TypeProps, void> {
             return <TypeLiteral { ...this.props } type={ type } />;
         } else if (isParenthesizedTypeReflection(type)) {
             return <ParenthesizedType { ...this.props } type={ type } />;
+        } else if (isTypeQueryReflection(type)) {
+            return <TypeQuery { ...this.props } type={ type } />;
         } else {
             return <div>
                 Unknown type

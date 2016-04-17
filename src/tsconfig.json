@@ -12,6 +12,7 @@
     },
     "compileOnSave": false,
     "exclude": [
+        "doc/tests/namespaces/typings",
         "node_modules",
         "bower_components",
         "example"

@@ -1,4 +1,5 @@
 import {
+    Node,
     SyntaxKind,
     TypeNode,
     TypeLiteralNode,
@@ -23,7 +24,9 @@ import {
     ParenthesizedTypeNode,
     FunctionDeclaration,
     TypePredicateNode,
-    ObjectLiteralExpression
+    ObjectLiteralExpression,
+    TypeQueryNode,
+    Identifier
 } from 'typescript';
 
 export function isPropertySignature(node: Declaration): node is PropertySignature {
@@ -112,6 +115,14 @@ export function isStringKeyword(node: TypeNode): boolean {
 
 export function isIndexSignatureDeclaration(node: Declaration): node is IndexSignatureDeclaration {
     return node.kind == SyntaxKind.IndexSignature;
+}
+
+export function isTypeQueryNode(node: TypeNode): node is TypeQueryNode {
+    return node.kind == SyntaxKind.TypeQuery;
+}
+
+export function isIdentifier(node: Node): node is Identifier {
+    return node.kind == SyntaxKind.Identifier;
 }
 
 export function isFunctionDeclaration(statement: Declaration)

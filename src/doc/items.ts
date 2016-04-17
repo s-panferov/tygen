@@ -39,6 +39,7 @@ export enum ItemType {
     Function = 'Function' as any, // top level
     FunctionDeclaration = 'FunctionDeclaration' as any,
     AccessorReflection = 'AccessorReflection' as any,
+    TypeQuery = 'TypeQuery' as any,
 }
 
 export interface Item {
