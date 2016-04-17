@@ -50,6 +50,7 @@ import {
 
 import {
     visitDeclarations,
+    isExported,
     StatementReflection
 } from './type';
 
@@ -167,7 +168,7 @@ export function visitBasicInfo(
         name: base.name.getText(),
         typeParameters,
         heritageClauses,
-        exported: !!(base.flags & NodeFlags.Export),
+        exported: isExported(base),
         default: !!(base.flags & NodeFlags.Default),
         callSignatures: callSignatures as any,
         indexSignatures: indexSignatures as any,

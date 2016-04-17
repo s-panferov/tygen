@@ -9,7 +9,7 @@
 
     &__sidebar {
         flex: 0 0 200px;
-        overflow: scroll;
+        overflow: auto;
         height: calc(100vh - 40px);
         background-color: #f9f9f9;
         position: fixed;

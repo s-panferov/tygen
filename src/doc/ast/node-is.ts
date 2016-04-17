@@ -26,6 +26,8 @@ import {
     TypePredicateNode,
     ObjectLiteralExpression,
     TypeQueryNode,
+    SourceFile,
+    ModuleBlock,
     Identifier
 } from 'typescript';
 
@@ -123,6 +125,14 @@ export function isTypeQueryNode(node: TypeNode): node is TypeQueryNode {
 
 export function isIdentifier(node: Node): node is Identifier {
     return node.kind == SyntaxKind.Identifier;
+}
+
+export function isSourceFile(node: Node): node is SourceFile {
+    return node.kind == SyntaxKind.SourceFile;
+}
+
+export function isModuleBlock(node: Node): node is ModuleBlock {
+    return node.kind == SyntaxKind.ModuleBlock;
 }
 
 export function isFunctionDeclaration(statement: Declaration)

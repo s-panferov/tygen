@@ -1,4 +1,6 @@
 import {
+    Node,
+    NodeFlags,
     SyntaxKind,
     NodeArray,
     TypeNode,
@@ -151,6 +153,30 @@ export interface FieldReflection extends Item {
     static: boolean;
     readonly: boolean;
     abstract: boolean;
+}
+
+export function isExported(node: Node) {
+    if (node.flags & NodeFlags.Export) {
+        return true;
+    }
+
+    let parent = node.parent;
+    if (nodeIs.isSourceFile(parent)) {
+        if (parent.isDeclarationFile) {
+            // FIXME @spanferov interlan API is used
+            if (!(parent as any).externalModuleIndicator) {
+                return true;
+            }
+        }
+    }
+
+    if (nodeIs.isModuleBlock(parent)) {
+        if (node.getSourceFile().isDeclarationFile) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 export function matchCoreType(node: TypeNode): CoreType {

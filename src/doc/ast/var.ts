@@ -9,7 +9,8 @@ import {
 import {
     TypeReflection,
     visitTypeNode,
-    StatementReflection
+    StatementReflection,
+    isExported
 } from './type';
 
 import {
@@ -80,7 +81,7 @@ export function visitVariableDeclaration(
         },
         name,
         itemType: ItemType.VariableDeclaration,
-        exported: !!(list.parent.flags & NodeFlags.Export),
+        exported: isExported(list.parent),
         default: !!(list.parent.flags & NodeFlags.Default),
         varType,
         type,
@@ -118,7 +119,7 @@ export function visitBindingElement(
         },
         name,
         itemType: ItemType.VariableDeclaration,
-        exported: !!(list.parent.flags & NodeFlags.Export),
+        exported: isExported(list.parent),
         default: !!(list.parent.flags & NodeFlags.Default),
         varType,
         type,

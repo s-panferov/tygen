@@ -1,5 +1,6 @@
 import {
     Symbol,
+    SourceFile
 } from 'typescript';
 
 import { Context } from './index';

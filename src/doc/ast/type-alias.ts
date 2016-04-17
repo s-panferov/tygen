@@ -8,7 +8,8 @@ import {
 import {
     TypeReflection,
     visitTypeNode,
-    StatementReflection
+    StatementReflection,
+    isExported
 } from './type';
 
 import {
@@ -54,7 +55,7 @@ export function visitTypeAliasDeclaration(
             path: ctx.currentModule.fileInfo.relativeToPackage,
             mainSemanticId: ctx.mainId()
         },
-        exported: !!(alias.flags & NodeFlags.Export),
+        exported: isExported(alias),
         default: !!(alias.flags & NodeFlags.Default),
         itemType: ItemType.TypeAlias,
         name,
