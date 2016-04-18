@@ -1,3 +1,18 @@
+<a name="0.0.9"></a>
+## [0.0.9](https://github.com/docscript/docscript/compare/v0.0.8...v0.0.9) (2016-04-18)
+
+
+### Bug Fixes
+
+* **doc:** more proper `exported` reflection ([4e47aca](https://github.com/docscript/docscript/commit/4e47aca))
+
+### Features
+
+* impl type-query (typeof in type position) ([a194133](https://github.com/docscript/docscript/commit/a194133))
+* move to latest ReactJS ([e201c67](https://github.com/docscript/docscript/commit/e201c67))
+
+
+
 <a name="0.0.8"></a>
 ## [0.0.8](https://github.com/docscript/docscript/compare/v0.0.7...v0.0.8) (2016-04-12)
 
