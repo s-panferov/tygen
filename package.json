@@ -108,7 +108,6 @@
     "fstream": "^1.0.8",
     "pkg-up": "^1.0.0",
     "request": "^2.69.0",
-    "search-index": "git+https://github.com/s-panferov/search-index.git",
     "source-map-support": "^0.4.0",
     "tar": "^2.2.1",
     "temp": "^0.8.3",
