@@ -29,6 +29,8 @@ export interface InterfaceState {}
 export default class Interface<P extends InterfaceProps> extends React.Component<P, InterfaceState> {
     static contextTypes = theme.themeContext;
 
+    renderComment: boolean = true;
+
     getClassName() {
         return block(theme.resolveTheme(this)).mix(this.props.className);
     }
@@ -66,7 +68,7 @@ export default class Interface<P extends InterfaceProps> extends React.Component
                     { iface.heritageClauses &&
                         <InterfaceHeritage clauses={ iface.heritageClauses }/> }
                 </div>
-                { iface.comment &&
+                { this.renderComment && iface.comment &&
                     <Comment comment={ iface.comment } />
                 }
                 {

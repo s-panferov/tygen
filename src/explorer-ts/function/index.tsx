@@ -15,6 +15,8 @@ export interface FunctionProps extends InterfaceProps {
 export interface FunctionState {}
 
 export default class Function extends Interface<FunctionProps> {
+    renderComment = false;
+
     getClassName() {
         let iface = Interface.prototype.getClassName.call(this);
         let self = block(theme.resolveTheme(this)).mix(this.props.className);

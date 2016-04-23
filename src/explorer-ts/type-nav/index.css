@@ -27,6 +27,8 @@
         border-left: 2px solid #eee;
         padding: 5px 0 5px 10px;
         transition: all 100ms ease;
+        font-size: 13px;
+        height: 22px;
 
         &_active {
             border-left-color: red;

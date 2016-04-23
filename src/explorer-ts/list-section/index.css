@@ -11,11 +11,12 @@
     }
 
     &__item {
-        height: 26px;
+        height: 20px;
         align-items: center;
         margin-right: 20px;
         width: calc(200px - 20px);
         min-width: auto;
+        font-size: 13px;
 
         overflow: hidden;
         text-overflow: ellipsis;
