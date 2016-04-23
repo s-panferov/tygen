@@ -1,3 +1,18 @@
+<a name="0.0.10"></a>
+## [0.0.10](https://github.com/docscript/docscript/compare/v0.0.9...v0.0.10) (2016-04-23)
+
+
+### Bug Fixes
+
+* tests pass, make it faster ([6f5134e](https://github.com/docscript/docscript/commit/6f5134e))
+
+### Features
+
+* small style changes ([9c024ca](https://github.com/docscript/docscript/commit/9c024ca))
+* ts bump and small fixes ([87e2b75](https://github.com/docscript/docscript/commit/87e2b75))
+
+
+
 <a name="0.0.9"></a>
 ## [0.0.9](https://github.com/docscript/docscript/compare/v0.0.8...v0.0.9) (2016-04-18)
 
