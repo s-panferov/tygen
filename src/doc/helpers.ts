@@ -59,6 +59,7 @@ export function generateFiles(
         target: ts.ScriptTarget.Latest,
         allowJs: true,
         noEmit: true,
+        skipDefaultLibCheck: true
     }));
 
     ctx.setService(service);
