@@ -40,6 +40,10 @@ export function _compile(
         }
     });
 
+    if (allDiagnostics.length > 0) {
+        throw new Error('Refuse to generate documentation due to compilation errors.');
+    }
+
     return [service, program];
 }
 

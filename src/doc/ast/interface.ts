@@ -165,7 +165,10 @@ export function visitBasicInfo(
             mainSemanticId: ctx.mainId()
         },
         itemType,
-        name: base.name.getText(),
+        name: base.name
+            // anonymous functions don't have names
+            ? base.name.getText()
+            : null,
         typeParameters,
         heritageClauses,
         exported: isExported(base),

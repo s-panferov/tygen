@@ -96,7 +96,7 @@
     "shelljs": "^0.5.3",
     "style-loader": "^0.13.0",
     "tslint": "3.5.0-dev.1",
-    "typescript": "^1.9.0-dev.20160416",
+    "typescript": "^1.9.0-dev.20160423",
     "uglifyify": "^3.0.1",
     "webpack": "^1.12.13",
     "webpack-dev-server": "^1.14.1"
