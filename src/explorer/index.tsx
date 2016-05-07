@@ -10,7 +10,7 @@ import { defaultState, Route, State } from './state';
 import { Provider, createStore, actions } from './redux';
 import { ThemeProvider, ThemeType } from './components/theme';
 import { waitForEl } from './helpers';
-import { inflateJson } from './inflate';
+import { inflateJson } from '../lib/inflate';
 import { defaultSettings } from './settings';
 
 import App from './components/app';
