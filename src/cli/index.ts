@@ -1,20 +1,12 @@
-import generate, { CLI as GENERATE_CLI } from './generate';
-import publish, { CLI as PUBLISH_CLI } from './publish';
+import * as generate from './generate';
+import * as publish from './publish';
 
 let yargs = require('yargs');
-let argv = yargs
+yargs
     .usage('Usage: $0 <command> [options]')
-    .command('generate', 'Generate documentation for project', GENERATE_CLI)
-    .command('publish', 'Publish generated documentation on docscript.io', PUBLISH_CLI)
+    .command(generate)
+    .command(publish)
     .help('h')
     .alias('h', 'help')
     .epilog('copyright 2016')
     .argv;
-
-if (argv._[0] === 'generate') {
-    generate(argv);
-}
-
-if (argv._[0] === 'publish') {
-    publish(argv);
-}

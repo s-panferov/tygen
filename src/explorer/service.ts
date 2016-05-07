@@ -2,7 +2,7 @@ import MemoryFileSystem from 'memory-fs';
 import { DocRegistry, PackageInfo } from '../doc/index';
 import { Settings } from './settings';
 import { ModuleInfo, Item } from '../doc';
-import { inflateJson } from './inflate';
+import { inflateJson } from '../lib/inflate';
 import { getMetaName } from '../doc/utils';
 
 import * as path from 'path';

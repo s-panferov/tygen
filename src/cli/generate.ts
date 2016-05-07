@@ -16,35 +16,10 @@ interface GenerateCommand {
     withoutSearch?: boolean;
 }
 
-export default function generate(argv: GenerateCommand) {
-    let manifest = resolveManifestSync();
-    let tsconfigPath = tsconfig.resolveSync(argv.sourceDir);
+export const command = 'generate';
+export const describe = 'Generate documentation for project';
 
-    if (!tsconfigPath) {
-        throw new Error('Cannot resolve tsconfig.json in sourceDir');
-    }
-
-    let { files, compilerOptions } = tsconfig.loadSync(tsconfigPath);
-
-    let tsCompilerOptions = helpers.rawToTsCompilerOptions(compilerOptions, process.cwd(), ts);
-    let ctx = helpers.generateFiles(files, manifest.package, tsCompilerOptions);
-
-    ctx.generateForeignModules(argv.deepForeign);
-
-    let writer = new DocWriter(ctx);
-    writer.ensureDir(argv.docDir);
-    writer.writeModules(path.join(argv.docDir, 'generated'), !argv.withoutSearch)
-        .then(() => {
-            helpers.copyUI(argv.docDir, argv.ui);
-            process.exit(0);
-        })
-        .catch((e) => {
-            console.error(e);
-            process.exit(1);
-        });
-};
-
-export const CLI = {
+export const builder = {
     config: {
       alias: '-c',
       default: 'docscript.json',
@@ -76,4 +51,32 @@ export const CLI = {
       alias: '-n',
       describe: 'Omit search index generation',
     },
+};
+
+export function handler(argv: GenerateCommand) {
+    let manifest = resolveManifestSync();
+    let tsconfigPath = tsconfig.resolveSync(argv.sourceDir);
+
+    if (!tsconfigPath) {
+        throw new Error('Cannot resolve tsconfig.json in sourceDir');
+    }
+
+    let { files, compilerOptions } = tsconfig.loadSync(tsconfigPath);
+
+    let tsCompilerOptions = helpers.rawToTsCompilerOptions(compilerOptions, process.cwd(), ts);
+    let ctx = helpers.generateFiles(files, manifest.package, tsCompilerOptions);
+
+    ctx.generateForeignModules(argv.deepForeign);
+
+    let writer = new DocWriter(ctx);
+    writer.ensureDir(argv.docDir);
+    writer.writeModules(path.join(argv.docDir, 'generated'), !argv.withoutSearch)
+        .then(() => {
+            helpers.copyUI(argv.docDir, argv.ui);
+            process.exit(0);
+        })
+        .catch((e) => {
+            console.error(e);
+            process.exit(1);
+        });
 };

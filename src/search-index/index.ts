@@ -6,7 +6,7 @@ import {
 } from '../explorer/actions';
 
 const fuzz = require('fuzzaldrin-plus');
-import { inflateJson } from '../explorer/inflate';
+import { inflateJson } from '../lib/inflate';
 
 function emit<T>(action: Action<any, any>) {
     self.postMessage(action, null);

@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+
 let fstream = require('fstream');
 let tar = require('tar');
 let zlib = require('zlib');
@@ -9,14 +11,32 @@ import { resolveManifestSync } from './manifest';
 // Automatically track and cleanup files at exit
 temp.track();
 
-import * as fs from 'fs';
-
 interface PublishCommand {
     docDir: string;
     registry: string;
 }
 
-export default function publish(argv: PublishCommand) {
+export const command = 'publish';
+export const describe = 'Publish generated documentation on docscript.io';
+export const builder = {
+    config: {
+      alias: '-c',
+      default: 'docscript.json',
+      describe: 'Path to your .docscript.json file',
+    },
+    docDir: {
+      alias: '-o',
+      default: 'doc',
+      describe: 'Directory where generated doc is stored',
+    },
+    registry: {
+      alias: '-r',
+      default: 'docscript.io',
+      describe: 'Docscript registry',
+    }
+};
+
+export function handler(argv: PublishCommand) {
     let manifest = resolveManifestSync();
     let stream = temp.createWriteStream();
 
@@ -51,24 +71,4 @@ export default function publish(argv: PublishCommand) {
             });
 
         });
-        //
-        //
-};
-
-export const CLI = {
-    config: {
-      alias: '-c',
-      default: 'docscript.json',
-      describe: 'Path to your .docscript.json file',
-    },
-    docDir: {
-      alias: '-o',
-      default: 'doc',
-      describe: 'Directory where generated doc is stored',
-    },
-    registry: {
-      alias: '-r',
-      default: 'docscript.io',
-      describe: 'Docscript registry',
-    }
 };

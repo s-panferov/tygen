@@ -5,8 +5,14 @@ interface Manifest {
     package: string;
 }
 
-export function resolveManifestSync() {
-    let manifest = readManifestSync(path.join(process.cwd(), '.docscript.json'));
+export function resolveManifestSync(): Manifest {
+    let manifest: Manifest;
+    try {
+        manifest = readManifestSync(path.join(process.cwd(), '.docscript.json'));
+    } catch (e) {
+        console.log(`You don't have a '.doscript.json' manifest file.`);
+    }
+
     return manifest;
 }
 

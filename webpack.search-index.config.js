@@ -13,6 +13,8 @@ var ATL_OPTIONS = [
     '&tsconfig=./src/tsconfig.json'
 ].join('');
 
+console.log(path.join(__dirname, 'src', 'explorer'));
+
 var config = {
     entry: {
         'search-index': [
@@ -36,19 +38,27 @@ var config = {
             path.join(__dirname, "node_modules"),
             path.join(__dirname, "bower_components"),
         ],
-        extensions: ['', '.ts', '.tsx', '.webpack.js', '.web.js', '.js'],
-        alias: {
-        }
+        extensions: ['', '.ts', '.tsx', '.js'],
     },
 
     // Source maps support (or 'inline-source-map' also works)
     devtool: 'source-map',
 
     module: {
-        loaders: [{
-            test: /\.tsx?$/,
-            loader: "awesome-typescript-loader?" + ATL_OPTIONS
-        }]
+        loaders: [
+            {
+                test: /\.tsx?$/,
+                loader: "awesome-typescript-loader?" + ATL_OPTIONS
+            },
+            {
+                loader: "null-loader",
+                include: [
+                    // don't accidentally include anything from explorer
+                    path.join(__dirname, 'src', 'explorer')
+                ],
+            }
+        ]
+
     },
 
     plugins: [
