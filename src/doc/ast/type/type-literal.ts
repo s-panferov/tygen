@@ -1,34 +1,34 @@
 import {
-    TypeLiteralNode,
-    Type
-} from 'typescript';
+	TypeLiteralNode,
+	Type
+} from 'typescript'
 
 import {
-    TypeReflection,
-    visitDeclarations
-} from '../type';
+	TypeReflection,
+	visitDeclarations
+} from '../type'
 
-import { Context,  Item, ItemType } from '../../index';
+import { Context, Item, ItemType } from '../../index'
 
 export function isTypeLiteralReflection(item: Item): item is TypeLiteralReflection {
-    return  item.itemType == ItemType.TypeLiteral;
+	return item.itemType === ItemType.TypeLiteral
 }
 
 export interface TypeLiteralReflection extends TypeReflection {
-    members: Item[];
+	members: Item[]
 }
 
 export function visitTypeLiteral(node: TypeLiteralNode, type: Type, ctx: Context): TypeLiteralReflection {
-    // TODO regiser inline types globally?
+	// TODO regiser inline types globally?
 
-    return {
-        selfRef: { id: ctx.id(type.getSymbol() || type) },
-        itemType: ItemType.TypeLiteral,
-        members: node.members
-            ? visitDeclarations(
-                node.members,
-                ctx
-            )
-            : []
-    };
+	return {
+		selfRef: { id: ctx.id(type.getSymbol() || type) },
+		itemType: ItemType.TypeLiteral,
+		members: node.members
+			? visitDeclarations(
+				node.members,
+				ctx
+			)
+			: []
+	}
 }

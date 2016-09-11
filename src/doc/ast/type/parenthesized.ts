@@ -1,27 +1,27 @@
 import {
-    ParenthesizedTypeNode,
-    Type
-} from 'typescript';
+	ParenthesizedTypeNode,
+	Type
+} from 'typescript'
 
-import { TypeReflection, visitTypeNode } from '../type';
-import { Context,  Item, ItemType } from '../../index';
+import { TypeReflection, visitTypeNode } from '../type'
+import { Context, Item, ItemType } from '../../index'
 
 export interface ParenthesizedTypeReflection extends TypeReflection {
-    type: TypeReflection;
+	type: TypeReflection
 }
 
 export function isParenthesizedTypeReflection(item: Item): item is ParenthesizedTypeReflection {
-    return item.itemType == ItemType.ParenthesizedType;
+	return item.itemType === ItemType.ParenthesizedType
 }
 
 export function visitParenthesizedTypeNode(
-    node: ParenthesizedTypeNode,
-    type: Type,
-    ctx: Context
+	node: ParenthesizedTypeNode,
+	type: Type,
+	ctx: Context
 ): ParenthesizedTypeReflection {
-    return {
-        selfRef: { id: ctx.id(type.getSymbol() || type) },
-        itemType: ItemType.ParenthesizedType,
-        type: visitTypeNode(node.type, ctx)
-    };
+	return {
+		selfRef: { id: ctx.id(type.getSymbol() || type) },
+		itemType: ItemType.ParenthesizedType,
+		type: visitTypeNode(node.type, ctx)
+	}
 }

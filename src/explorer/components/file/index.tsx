@@ -1,72 +1,72 @@
-import * as React from 'react';
-import * as theme from '../theme';
+import * as React from 'react'
+import * as theme from '../theme'
 
-import Link from '../link';
-import { Route } from '../../state';
+import Link from '../link'
+import { Route } from '../../state'
 
-let block = theme.block('file');
-require('./index.css');
+let block = theme.block('file')
+require('./index.css')
 
 export interface FileProps extends React.CommonProps {
-    pkg: string;
-    name: string;
-    path: string;
-    icon?: string;
+	pkg: string
+	name: string
+	path: string
+	icon?: string
 
-    pseudo?: boolean;
-    folder?: boolean;
-    disabled?: boolean;
-    active?: boolean;
+	pseudo?: boolean
+	folder?: boolean
+	disabled?: boolean
+	active?: boolean
 
-    navigate: (nav: Route) => void;
+	navigate: (nav: Route) => void
 }
 
-export interface FileState {}
+export interface FileState { }
 
 export default class File extends React.Component<FileProps, FileState> {
-    constructor(props, context) {
-        super(props, context);
-        this.onClick = this.onClick.bind(this);
-    }
-    render() {
-        let className = block(
-            {
-                folder: this.props.folder,
-                pseudo: this.props.pseudo,
-                active: this.props.active
-            }
-        ).mix(this.props.className);
+	constructor(props, context) {
+		super(props, context)
+		this.onClick = this.onClick.bind(this)
+	}
+	render() {
+		let className = block(
+			{
+				folder: this.props.folder,
+				pseudo: this.props.pseudo,
+				active: this.props.active
+			}
+		).mix(this.props.className)
 
-        if (!this.props.disabled && !this.props.active) {
-            return (
-                <Link
-                    htmlProps={{
-                        onClick: this.onClick
-                    }}
-                    className={ className }
-                >
-                    {
-                        this.props.icon &&
-                            <img className={ block('icon') } src={ this.props.icon }/>
-                    }
-                    { this.props.name }
-                </Link>
-            );
-        } else {
-            return (
-                <div className={ className }>
-                    {
-                        this.props.icon &&
-                            <img className={ block('icon') } src={ this.props.icon }/>
-                    }
-                    { this.props.name }
-                </div>
-            );
-        }
-    }
+		if (!this.props.disabled && !this.props.active) {
+			return (
+				<Link
+					htmlProps={{
+						onClick: this.onClick
+					}}
+					className={className}
+					>
+					{
+						this.props.icon &&
+						<img className={block('icon')} src={this.props.icon} />
+					}
+					{this.props.name}
+				</Link>
+			)
+		} else {
+			return (
+				<div className={className}>
+					{
+						this.props.icon &&
+						<img className={block('icon')} src={this.props.icon} />
+					}
+					{this.props.name}
+				</div>
+			)
+		}
+	}
 
-    onClick() {
-        let { pkg, path } = this.props;
-        this.props.navigate({ pkg, path });
-    }
+	onClick() {
+		let { pkg, path } = this.props
+		this.props.navigate({ pkg, path })
+	}
 }

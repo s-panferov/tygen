@@ -1,2 +1,2 @@
-let autobind = require('autobind-decorator');
-export default autobind;
+let autobind = require('autobind-decorator')
+export default autobind

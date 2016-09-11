@@ -1,35 +1,35 @@
-import * as React from 'react';
-import * as theme from '../../explorer/components/theme';
+import * as React from 'react'
+import * as theme from '../../explorer/components/theme'
 
 import {
-    ConstructorTypeReflection
-} from '../../doc/ast/type/signature';
+	ConstructorTypeReflection
+} from '../../doc/ast/type/signature'
 
-import Signature from '../signature';
+import Signature from '../signature'
 
-require('./index.css');
-const block = theme.block('ts-constructor-type');
+require('./index.css')
+const block = theme.block('ts-constructor-type')
 
 export interface ConstructorTypeProps extends React.CommonProps {
-    htmlProps?: React.HTMLAttributes;
-    type: ConstructorTypeReflection;
+	htmlProps?: React.HTMLAttributes
+	type: ConstructorTypeReflection
 }
 
-export interface ConstructorTypeState {}
+export interface ConstructorTypeState { }
 
 export default class Constructor extends React.Component<ConstructorTypeProps, ConstructorTypeState> {
-    static contextTypes = theme.themeContext;
+	static contextTypes = theme.themeContext
 
-    getClassName() {
-        return block(theme.resolveTheme(this)).mix(this.props.className);
-    }
+	getClassName() {
+		return block(theme.resolveTheme(this)).mix(this.props.className)
+	}
 
-    render() {
-        let type = this.props.type;
-        return (
-            <div className={ this.getClassName() }>
-                <Signature signature={ type } />
-            </div>
-        );
-    }
+	render() {
+		let type = this.props.type
+		return (
+			<div className={this.getClassName()}>
+				<Signature signature={type} />
+			</div>
+		)
+	}
 }

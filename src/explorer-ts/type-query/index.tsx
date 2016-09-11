@@ -1,36 +1,36 @@
-import * as React from 'react';
-import * as theme from '../../explorer/components/theme';
+import * as React from 'react'
+import * as theme from '../../explorer/components/theme'
 
 import {
-    TypeQueryReflection,
-} from '../../doc/ast/type/type-query';
+	TypeQueryReflection,
+} from '../../doc/ast/type/type-query'
 
-import SmartLink from '../../explorer/components/smart-link';
+import SmartLink from '../../explorer/components/smart-link'
 
-require('./index.css');
-const block = theme.block('ts-type-query');
+require('./index.css')
+const block = theme.block('ts-type-query')
 
 export interface TypeQueryProps extends React.CommonProps {
-    htmlProps?: React.HTMLAttributes;
-    type: TypeQueryReflection;
+	htmlProps?: React.HTMLAttributes
+	type: TypeQueryReflection
 }
 
-export interface TypeQueryState {}
+export interface TypeQueryState { }
 
 export default class TypeQuery extends React.Component<TypeQueryProps, TypeQueryState> {
-    static contextTypes = theme.themeContext;
+	static contextTypes = theme.themeContext
 
-    getClassName() {
-        return block(theme.resolveTheme(this)).mix(this.props.className);
-    }
+	getClassName() {
+		return block(theme.resolveTheme(this)).mix(this.props.className)
+	}
 
-    render() {
-        let typeQuery = this.props.type;
-        return (
-            <span className={ this.getClassName() }>
-                <span key='typeof'>typeof </span>
-                <SmartLink route={ typeQuery.ref }>{ typeQuery.exprName }</SmartLink>
-            </span>
-        );
-    }
+	render() {
+		let typeQuery = this.props.type
+		return (
+			<span className={this.getClassName()}>
+				<span key='typeof'>typeof </span>
+				<SmartLink route={typeQuery.ref}>{typeQuery.exprName}</SmartLink>
+			</span>
+		)
+	}
 }

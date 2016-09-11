@@ -1,25 +1,25 @@
 import {
-    FunctionDeclaration,
-} from 'typescript';
+	FunctionDeclaration,
+} from 'typescript'
 
-import { SignatureReflection, visitSignature } from './signature';
-import { Context,  Item, ItemType } from '../../index';
+import { SignatureReflection, visitSignature } from './signature'
+import { Context, Item, ItemType } from '../../index'
 
 export interface FunctionDeclarationReflection extends SignatureReflection {
-    generator: boolean;
+	generator: boolean
 }
 
 export function isFunctionDeclarationReflection(item: Item): item is FunctionDeclarationReflection {
-    return item.itemType == ItemType.FunctionDeclaration;
+	return item.itemType == ItemType.FunctionDeclaration
 }
 
 export function visitFunctionDeclaration(
-    func: FunctionDeclaration,
-    ctx: Context
+	func: FunctionDeclaration,
+	ctx: Context
 ): FunctionDeclarationReflection {
-    let signature = visitSignature(func, ctx);
-    return Object.assign(signature, {
-        itemType: ItemType.FunctionDeclaration,
-        generator: !!func.asteriskToken
-    });
+	let signature = visitSignature(func, ctx)
+	return Object.assign(signature, {
+		itemType: ItemType.FunctionDeclaration,
+		generator: !!func.asteriskToken
+	})
 }

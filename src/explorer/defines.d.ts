@@ -9,29 +9,29 @@
 /// <reference path="./typings/redux-thunk.d.ts"/>
 
 declare module 'memory-fs' {
-    export interface MemoryFsStat {
-        isFile: () => boolean;
-        isDirectory: () => boolean;
-        isSymbolicLink: () => boolean;
-    }
+	export interface MemoryFsStat {
+		isFile: () => boolean
+		isDirectory: () => boolean
+		isSymbolicLink: () => boolean
+	}
 
-    class MemoryFileSystem {
-        statSync(path: string): MemoryFsStat;
-        readdirSync(path: string): string[];
-        mkdirpSync(path: string);
-        mkdirSync(path: string);
-        writeFileSync(path: string, content: string);
-    }
+	class MemoryFileSystem {
+		statSync(path: string): MemoryFsStat
+		readdirSync(path: string): string[]
+		mkdirpSync(path: string)
+		mkdirSync(path: string)
+		writeFileSync(path: string, content: string)
+	}
 
-    export default MemoryFileSystem
+	export default MemoryFileSystem
 }
 
 declare module 'material-ui/lib/toggle' {
-    let Toggle: any;
-    export default Toggle;
+	let Toggle: any
+	export default Toggle
 }
 
 declare module 'material-ui/lib/text-field' {
-    let TextField: any;
-    export default TextField;
+	let TextField: any
+	export default TextField
 }

@@ -1,31 +1,31 @@
-import * as React from 'react';
-import * as theme from '../../explorer/components/theme';
+import * as React from 'react'
+import * as theme from '../../explorer/components/theme'
 
-const block = theme.block('ts-type-core');
+const block = theme.block('ts-type-core')
 
-require('./index.css');
+require('./index.css')
 
 export interface TypeProps extends React.CommonProps {
-    htmlProps?: React.HTMLAttributes;
-    coreType: string;
+	htmlProps?: React.HTMLAttributes
+	coreType: string
 }
 
 export default class TypeCore extends React.Component<TypeProps, void> {
-    static contextTypes = theme.themeContext;
+	static contextTypes = theme.themeContext
 
-    getClassName() {
-        return block(theme.resolveTheme(this)).mix(this.props.className);
-    }
+	getClassName() {
+		return block(theme.resolveTheme(this)).mix(this.props.className)
+	}
 
-    render() {
-        let type = this.props.coreType;
-        return (
-            <div
-                { ...this.props.htmlProps }
-                className={ this.getClassName() }
-            >
-                { type }
-            </div>
-        );
-    }
+	render() {
+		let type = this.props.coreType
+		return (
+			<div
+				{ ...this.props.htmlProps }
+				className={this.getClassName()}
+				>
+				{type}
+			</div>
+		)
+	}
 }

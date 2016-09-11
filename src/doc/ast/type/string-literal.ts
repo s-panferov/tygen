@@ -1,30 +1,30 @@
 import {
-    StringLiteralTypeNode,
-    Type
-} from 'typescript';
+	StringLiteralTypeNode,
+	Type
+} from 'typescript'
 
 import {
-    TypeReflection,
-} from '../type';
+	TypeReflection,
+} from '../type'
 
-import { Context,  Item, ItemType } from '../../index';
+import { Context, Item, ItemType } from '../../index'
 
 export interface StringLiteralTypeReflection extends TypeReflection {
-    text: string;
+	text: string
 }
 
 export function isStringLiteralTypeReflection(item: Item): item is StringLiteralTypeReflection {
-    return item.itemType == ItemType.StringLiteralType;
+	return item.itemType === ItemType.StringLiteralType
 }
 
 export function visitStringLiteralTypeNode(
-    node: StringLiteralTypeNode,
-    type: Type,
-    ctx: Context
+	node: StringLiteralTypeNode,
+	type: Type,
+	ctx: Context
 ): StringLiteralTypeReflection {
-    return {
-        selfRef: { id: ctx.id(type.getSymbol() || type) },
-        text: node.text,
-        itemType: ItemType.StringLiteralType
-    };
+	return {
+		selfRef: { id: ctx.id(type.getSymbol() || type) },
+		text: node.text,
+		itemType: ItemType.StringLiteralType
+	}
 }

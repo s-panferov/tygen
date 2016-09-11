@@ -1,30 +1,30 @@
-import * as React from 'react';
-import * as theme from '../../explorer/components/theme';
+import * as React from 'react'
+import * as theme from '../../explorer/components/theme'
 
-import { FunctionReflection } from '../../doc/ast/function';
-import Interface, { InterfaceProps } from '../interface';
+import { FunctionReflection } from '../../doc/ast/function'
+import Interface, { InterfaceProps } from '../interface'
 
-require('./index.css');
-const block = theme.block('ts-function');
+require('./index.css')
+const block = theme.block('ts-function')
 
 export interface FunctionProps extends InterfaceProps {
-    htmlProps?: React.HTMLAttributes;
-    item: FunctionReflection;
+	htmlProps?: React.HTMLAttributes
+	item: FunctionReflection
 }
 
-export interface FunctionState {}
+export interface FunctionState { }
 
 export default class Function extends Interface<FunctionProps> {
-    renderComment = false;
+	renderComment = false
 
-    getClassName() {
-        let iface = Interface.prototype.getClassName.call(this);
-        let self = block(theme.resolveTheme(this)).mix(this.props.className);
+	getClassName() {
+		let iface = Interface.prototype.getClassName.call(this)
+		let self = block(theme.resolveTheme(this)).mix(this.props.className)
 
-        return iface.mix(self);
-    }
+		return iface.mix(self)
+	}
 
-    getHeader() {
-        return 'Function';
-    }
+	getHeader() {
+		return 'Function'
+	}
 }
