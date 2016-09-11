@@ -1,23 +1,20 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "target": "es5",
         "moduleResolution": "node",
-        "jsx": "preserve",
+        "jsx": "react",
         "experimentalDecorators": true,
         "declaration": false,
         "noImplicitAny": false,
         "removeComments": true,
         "noLib": false,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "lib": [ "es6", "dom" ]
     },
-    "compileOnSave": false,
     "exclude": [
         "doc/tests/namespaces/typings",
         "node_modules",
         "bower_components",
         "example"
-    ],
-    "atom": {
-        "rewriteTsconfig": false
-    }
+    ]
 }

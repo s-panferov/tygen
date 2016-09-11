@@ -16,12 +16,6 @@ module.exports = {
         ].filter(Boolean)
     },
 
-    externals: {
-        "react": "React",
-        "react-dom": "ReactDOM",
-        "react-addons-css-transition-group": "React.addons.CSSTransitionGroup"
-    },
-
     bail: false,
 
     devServer: {
@@ -39,13 +33,9 @@ module.exports = {
     },
 
     resolve: {
-        root: [
-            path.join(__dirname, "node_modules"),
-            path.join(__dirname, "bower_components"),
-        ],
-        extensions: ['', '.ts', '.tsx', '.webpack.js', '.web.js', '.js', '.styl'],
+        extensions: ['', '.ts', '.tsx', '.js', '.jsx'],
         alias: {
-             "typescript": path.join(__dirname, 'src', 'explorer', 'typescript.ts')
+            // "typescript": path.join(__dirname, 'src', 'explorer', 'typescript.ts')
         }
     },
 
@@ -61,13 +51,12 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 loaders: [
-                    !PRODUCTION ? "react-hot" : null,
-                    "awesome-typescript-loader?compiler=typescript&+useBabel&+useCache&+forkChecker&tsconfig=./src/tsconfig.json"
+                    "awesome-typescript-loader?compiler=typescript&+useCache&+forkChecker&tsconfig=./src/tsconfig.json"
                 ].filter(Boolean)
             },
             {
                 test: /\.css$/,
-                loader: "style-loader!css-loader!postcss-loader"
+                loader: "style-loader!css-loader"
             },
             {
                 test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -90,8 +79,6 @@ module.exports = {
         ]
     },
 
-    postcss: webpackConfig.postcss,
-
     plugins: [
         new HtmlWebpackPlugin({
             title: 'DocScript Explorer',
@@ -100,12 +87,6 @@ module.exports = {
             inject: false
         }),
         new ForkCheckerPlugin(),
-        // new webpack.ProvidePlugin({
-        //     React: "react"
-        // }),
-        new webpack.ResolverPlugin(
-            new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
-        ),
         new webpack.DefinePlugin({
             DEBUG: process.env.NODE_ENV !== 'production',
             NODE_ENV: JSON.stringify(process.env.NODE_ENV),
