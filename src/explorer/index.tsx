@@ -17,9 +17,8 @@ import App from './components/app'
 import Service, { routeFromPath, pathFromRoute } from './service'
 
 import { History, Location } from 'history'
-let createHistory = require('history/lib/createHashHistory')
-let useQueries = require('history/lib/useQueries')
-let history: History = useQueries(createHistory)()
+let createHistory = require('history/createHashHistory')
+let history: History = createHistory()
 
 import PluginRegistry from './plugins'
 import tsPlugin from '../explorer-ts'

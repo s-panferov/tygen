@@ -15,10 +15,6 @@ fs.readdirSync('node_modules')
 var isProduction = false;
 
 var ATL_OPTIONS = [
-    '&target=es6',
-    '&jsx=react',
-    '&+experimentalDecorators',
-    '&+useBabel',
     '&+useCache',
     '&tsconfig=./src/tsconfig.json'
 ].join('');
@@ -49,7 +45,7 @@ var config = {
         root: [
             path.join(__dirname, 'node_modules'),
         ],
-        extensions: ['', '.ts', '.tsx', '.webpack.js', '.web.js', '.js'],
+        extensions: ['', '.ts', '.tsx', '.js'],
         alias: {
         }
     },
@@ -75,8 +71,11 @@ var config = {
 
     plugins: [
         process.env.NODE_ENV === 'development' && new MochaPlugin(),
-        new webpack.BannerPlugin('require("source-map-support").install();',
-            { raw: true, entryOnly: false }),
+        new webpack.BannerPlugin({
+			banner: 'require("source-map-support").install();',
+			raw: true,
+			entryOnly: false
+		}),
         // new webpack.DllReferencePlugin({
         //     context: __dirname,
         //     manifest: require("./dist/manifest.json"),

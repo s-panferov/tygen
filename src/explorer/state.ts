@@ -1,5 +1,6 @@
 import Service, { Route } from './service'
 import { ModuleInfo, Item } from '../doc'
+import PluginRegistry from './plugins'
 import { Settings, DisplaySettings } from './settings'
 
 export { Route }
@@ -13,6 +14,7 @@ export interface State {
 	service?: Service
 	route?: Route
 	module?: ModuleInfo
+	plugins?: PluginRegistry
 	item?: Item
 	searchActive?: boolean
 	searchQuery?: string
@@ -26,6 +28,7 @@ export interface State {
 
 export function defaultState(
 	service: Service,
+	plugins: PluginRegistry,
 	searchIndex: Worker,
 	settings: Settings
 ): State {
@@ -44,6 +47,7 @@ export function defaultState(
 		activity: new ActivityManager(),
 		service,
 		module: null,
+		plugins,
 		item: null,
 		route: {
 			pkg: service.getMainPackageName(),

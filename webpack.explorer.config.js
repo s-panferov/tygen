@@ -6,6 +6,26 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var PRODUCTION = process.env.NODE_ENV === 'production';
 
+var postcss = function(webpack) {
+    return [
+        require('postcss-import')({
+            path: [path.join(__dirname, 'src', 'explorer')],
+            addDependencyTo: webpack
+        }),
+        require('postcss-fontpath'),
+        require('postcss-url')({
+            url: "rebase"
+        }),
+        require('precss'),
+        require('postcss-cssnext')({
+            features: {
+                autoprefixer: false,
+                initial: false
+            }
+        })
+    ];
+};
+
 module.exports = {
 
     cache: true,
@@ -39,6 +59,8 @@ module.exports = {
         }
     },
 
+	postcss: webpackConfig.postcss(webpack),
+
     node: {
         fs: "empty"
     },
@@ -56,7 +78,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: "style-loader!css-loader"
+                loader: "style-loader!css-loader!postcss-loader"
             },
             {
                 test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,

@@ -14,10 +14,6 @@ fs.readdirSync('node_modules')
 var isProduction = false;
 
 var ATL_OPTIONS = [
-    '&target=es6',
-    '&jsx=react',
-    '&+experimentalDecorators',
-    '&+useBabel',
     '&+useCache',
     '&tsconfig=./src/tsconfig.json'
 ].join('');
@@ -38,19 +34,9 @@ var config = {
         libraryTarget: 'commonjs2',
     },
 
-    resolveLoader: {
-        root: [
-            path.join(__dirname, 'node_modules')
-        ]
-    },
-
     resolve: {
-        root: [
-            path.join(__dirname, 'node_modules'),
-        ],
-        extensions: ['', '.ts', '.tsx', '.webpack.js', '.web.js', '.js'],
-        alias: {
-        }
+        extensions: ['', '.ts', '.tsx', '.js'],
+
     },
 
     node: {
@@ -73,8 +59,11 @@ var config = {
     externals: nodeModules,
 
     plugins: [
-        new webpack.BannerPlugin('require("source-map-support").install();',
-            { raw: true, entryOnly: false }),
+        new webpack.BannerPlugin({
+			banner: 'require("source-map-support").install();',
+			raw: true,
+			entryOnly: false
+		}),
         new webpack.DllPlugin({
             path: path.join(__dirname, "dist/manifest.json"),
             name: "[name]",
