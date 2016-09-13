@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 var path = require("path");
 var fs = require("fs");
+var MochaPlugin = require('./mocha-plugin');
 
 var nodeModules = {};
 fs.readdirSync('node_modules')
@@ -20,8 +21,8 @@ var ATL_OPTIONS = [
 
 var config = {
     entry: {
-        docscript: [
-            './src/doc/index.ts'
+        tests: [
+            './src/reflector/tests/index.ts'
         ]
     },
 
@@ -34,9 +35,19 @@ var config = {
         libraryTarget: 'commonjs2',
     },
 
-    resolve: {
-        extensions: ['', '.ts', '.tsx', '.js'],
+    resolveLoader: {
+        root: [
+            path.join(__dirname, 'node_modules')
+        ]
+    },
 
+    resolve: {
+        root: [
+            path.join(__dirname, 'node_modules'),
+        ],
+        extensions: ['', '.ts', '.tsx', '.js'],
+        alias: {
+        }
     },
 
     node: {
@@ -59,17 +70,19 @@ var config = {
     externals: nodeModules,
 
     plugins: [
+        process.env.NODE_ENV === 'development' && new MochaPlugin(),
         new webpack.BannerPlugin({
 			banner: 'require("source-map-support").install();',
 			raw: true,
 			entryOnly: false
 		}),
-        new webpack.DllPlugin({
-            path: path.join(__dirname, "dist/manifest.json"),
-            name: "[name]",
-            context: __dirname
-        })
-    ]
+        // new webpack.DllReferencePlugin({
+        //     context: __dirname,
+        //     manifest: require("./dist/manifest.json"),
+        //     name: "require('./docscript.js')",
+        //     sourceType: "commonsjs2",
+        // })
+    ].filter(Boolean)
 };
 
 if (isProduction) {

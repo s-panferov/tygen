@@ -14,10 +14,6 @@ fs.readdirSync('node_modules')
 var isProduction = false;
 
 var ATL_OPTIONS = [
-    '&target=es6',
-    '&jsx=react',
-    '&+experimentalDecorators',
-    '&+useBabel',
     '&+useCache',
     '&tsconfig=./src/tsconfig.json'
 ].join('');
@@ -78,8 +74,11 @@ var config = {
     externals: nodeModules,
 
     plugins: [
-        new webpack.BannerPlugin('#!/usr/bin/env node\nrequire("es6-shim");\nrequire("source-map-support").install();',
-            { raw: true, entryOnly: false }),
+        new webpack.BannerPlugin({
+			banner: '#!/usr/bin/env node\nrequire("es6-shim");\nrequire("source-map-support").install();',
+			raw: true,
+			entryOnly: false
+		}),
         new webpack.DllReferencePlugin({
             context: __dirname,
             manifest: require("./dist/manifest.json"),
