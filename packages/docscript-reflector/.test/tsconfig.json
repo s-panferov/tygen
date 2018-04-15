@@ -1,0 +1,15 @@
+
+		{
+			"compilerOptions": {
+				"modules": "node",
+				"target": "esnext",
+				"skipDefaultLibCheck": false,
+				"skipLibCheck": false,
+				"strict": true,
+				"typeRoots" : ["node_modules/@types"]
+			},
+			"include": [
+				"src/**/*"
+			]
+		}
+	

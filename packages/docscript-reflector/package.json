@@ -1,0 +1,22 @@
+{
+  "name": "@docscript/reflector",
+  "version": "0.0.10",
+  "description": "Documentation generator for TypeScript",
+  "devDependencies": {
+    "@types/node": "^9.6.4",
+    "@types/fs-extra": "^5.0.2",
+    "node-uuid": "^1.4.8",
+    "standard-version": "^4.3.0",
+    "typescript": "^2.8.1",
+    "doctrine": "^2.1.0",
+    "fs-extra": "^5.0.0",
+    "fstream": "^1.0.11",
+    "pkg-up": "^2.0.0",
+    "request": "^2.85.0",
+    "source-map-support": "^0.5.4",
+    "tar": "^4.4.1",
+    "tsutils": "^2.26.1",
+    "tsconfig": "^7.0.0",
+    "temp": "^0.8.3"
+  }
+}
