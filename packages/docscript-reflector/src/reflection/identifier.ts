@@ -5,6 +5,10 @@ export function symbolId(symbol: ts.Symbol, ctx: Context): string {
 	return generateIdChainForSymbol(symbol, ctx).join('/')
 }
 
+export function declarationId(node: ts.Node, ctx: Context): string {
+	return generateIdChainForDeclaration(node, ctx).join('/')
+}
+
 function generateIdChainForSymbol(symbol: ts.Symbol, ctx: Context): string[] {
 	let id = [] as string[]
 
@@ -44,8 +48,11 @@ function generateIdChainForDeclaration(node: ts.Node, ctx: Context): string[] {
 		let name = ((node as any) as { name?: ts.Identifier }).name
 		if (name) {
 			id.push(name.text)
+		} else if (
+			node.kind === ts.SyntaxKind.VariableStatement ||
+			node.kind === ts.SyntaxKind.VariableDeclarationList
+		) {
 		} else {
-			debugger
 		}
 	}
 

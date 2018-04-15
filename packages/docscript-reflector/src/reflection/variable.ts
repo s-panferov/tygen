@@ -27,21 +27,26 @@ import {
 	ReflectionWithIndexSignatures
 } from './signature'
 import { symbolId } from './identifier'
+import { TypeReflection, visitType } from './type/type'
 
-export interface ObjectLiteralReflection extends BaseReflection, ObjectLikeReflection {
-	kind: ReflectionKind.ObjectLiteral
+export interface VariableReflection extends BaseReflection {
+	kind: ReflectionKind.Variable
+	name: string
+	type: TypeReflection
 }
 
-export function visitObjectLiteral(symbol: ts.Symbol, ctx: Context): ObjectLiteralReflection {
-	let objectLiteralRef: ObjectLiteralReflection = {
+export function visitVariable(symbol: ts.Symbol, ctx: Context): VariableReflection {
+	let variableRef: VariableReflection = {
 		id: symbolId(symbol, ctx),
-		kind: ReflectionKind.ObjectLiteral
+		kind: ReflectionKind.Variable,
+		name: symbol.name,
+		type: undefined as any
 	}
 
-	ctx.register(symbol, objectLiteralRef)
+	ctx.register(symbol, variableRef)
 
-	const type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
-	visitObjectLikeReflection(symbol, type, objectLiteralRef, ctx)
+	let type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
+	variableRef.type = visitType(type, ctx)
 
-	return objectLiteralRef
+	return variableRef
 }

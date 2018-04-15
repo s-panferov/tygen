@@ -11,6 +11,9 @@ import { visitEnum, visitEnumMember } from './enum'
 import { visitObjectLiteral } from './object'
 import { visitFunction, visitMethod } from './function'
 import { visitFunctionScopedVariable } from './signature'
+import { visitClass } from './class'
+import { visitTypeAlias } from './type-alias'
+import { visitVariable } from './variable'
 
 export function visitSymbol(symbol: ts.Symbol, ctx: Context): Reflection | undefined {
 	if (ctx.visited.has(symbol)) {
@@ -25,6 +28,8 @@ export function visitSymbol(symbol: ts.Symbol, ctx: Context): Reflection | undef
 		reflection = visitModule(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Enum) {
 		reflection = visitEnum(symbol, ctx)
+	} else if (symbol.flags & ts.SymbolFlags.Class) {
+		reflection = visitClass(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.ObjectLiteral) {
 		reflection = visitObjectLiteral(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.EnumMember) {
@@ -41,9 +46,14 @@ export function visitSymbol(symbol: ts.Symbol, ctx: Context): Reflection | undef
 		reflection = visitFunctionScopedVariable(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Method) {
 		reflection = visitMethod(symbol, ctx)
+	} else if (symbol.flags & ts.SymbolFlags.TypeAlias) {
+		reflection = visitTypeAlias(symbol, ctx)
+	} else if (symbol.flags & ts.SymbolFlags.BlockScopedVariable) {
+		reflection = visitVariable(symbol, ctx)
 	} else if (
 		(symbol.flags & ts.SymbolFlags.ExportStar) |
-		(symbol.flags & ts.SymbolFlags.ExportValue)
+		(symbol.flags & ts.SymbolFlags.ExportValue) |
+		(symbol.flags & ts.SymbolFlags.Alias)
 	) {
 	} else {
 		debugger

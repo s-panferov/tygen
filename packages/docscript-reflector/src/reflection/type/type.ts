@@ -3,9 +3,11 @@ import { visitPrimitive } from './primitive'
 import { visitSymbol } from '../visitor'
 import { Context } from '../../context'
 import { ReflectionKind, ReflectionLink, BaseReflection } from '../reflection'
-import { visitLiteral } from './literal'
+import { visitLiteral, visitBooleanLiteral } from './literal'
 import { visitUnion, visitIntersection } from './intersection'
 import { visitTypeLiteral } from './type-literal'
+import { visitESSymbol } from './symbol'
+import { visitIndexedAccess } from './indexed-access'
 
 export enum TypeKind {
 	Unsupported = 'Unsupported',
@@ -21,7 +23,10 @@ export enum TypeKind {
 	Link = 'Link',
 	Unreachable = 'Unreachable',
 	Literal = 'Literal',
-	TypeLiteral = 'TypeLiteral'
+	Object = 'Object',
+	TypeLiteral = 'TypeLiteral',
+	ESSymbol = 'ESSymbol',
+	IndexedAccess = 'IndexedAccess'
 }
 
 export interface TypeReflectionBase extends BaseReflection {
@@ -64,12 +69,16 @@ export function visitType(type: ts.Type, ctx: Context): TypeReflection {
 
 	if (type.flags & ts.TypeFlags.StringOrNumberLiteral) {
 		return visitLiteral(type as ts.LiteralType, ctx)
+	} else if (type.flags & ts.TypeFlags.BooleanLiteral) {
+		return visitBooleanLiteral(type, ctx)
 	} else if (type.flags & ts.TypeFlags.Union) {
 		return visitUnion(type as ts.UnionType, ctx)
 	} else if (type.flags & ts.TypeFlags.Intersection) {
 		return visitIntersection(type as ts.IntersectionType, ctx)
 	} else if (type.flags & ts.TypeFlags.ESSymbol) {
 		return visitESSymbol(type as ts.UniqueESSymbolType, ctx)
+	} else if (type.flags & ts.TypeFlags.IndexedAccess) {
+		return visitIndexedAccess(type as ts.IndexedAccessType, ctx)
 	}
 
 	debugger

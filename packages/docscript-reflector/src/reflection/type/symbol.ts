@@ -4,15 +4,13 @@ import { TypeReflectionBase, TypeKind } from './type'
 import { ReflectionKind } from '../reflection'
 import { Context } from '../../context'
 
-export interface LiteralTypeReflection extends TypeReflectionBase {
-	typeKind: TypeKind.Literal
-	value: number | string
+export interface ESSymbolReflection extends TypeReflectionBase {
+	typeKind: TypeKind.ESSymbol
 }
 
-export function visitLiteral(type: ts.LiteralType, ctx: Context): LiteralTypeReflection {
+export function visitESSymbol(type: ts.UniqueESSymbolType, ctx: Context): ESSymbolReflection {
 	return {
 		kind: ReflectionKind.Type,
-		typeKind: TypeKind.Literal,
-		value: type.value
+		typeKind: TypeKind.ESSymbol
 	}
 }

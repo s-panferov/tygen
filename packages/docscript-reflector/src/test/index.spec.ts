@@ -1,4 +1,4 @@
-import { compile, file, clear, defaultSetup } from '../test'
+import { compile, file, clear, defaultSetup, write } from '../test'
 
 describe(__filename, () => {
 	beforeAll(clear)
@@ -10,7 +10,7 @@ describe(__filename, () => {
 			`
 				export interface Test {
 					a: {
-						test: 1
+						test: Error
 					}
 				}
 			`
@@ -29,7 +29,6 @@ describe(__filename, () => {
 			`
 		)
 
-		let ctx = compile()
-		debugger
+		let ctx = write(compile())
 	})
 })

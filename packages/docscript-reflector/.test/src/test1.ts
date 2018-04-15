@@ -1,7 +1,7 @@
 
 				export interface Test {
 					a: {
-						test: 1
+						test: Error
 					}
 				}
 			

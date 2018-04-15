@@ -52,6 +52,8 @@ export class Generator {
 			// }
 		})
 
+		context.registerRelatedModules()
+
 		return context
 	}
 }

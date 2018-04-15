@@ -39,5 +39,10 @@ export function visitPrimitive(type: ts.Type): TypeReflection | undefined {
 			kind: ReflectionKind.Type,
 			typeKind: TypeKind.Void
 		}
+	} else if (type.flags & ts.TypeFlags.NonPrimitive) {
+		return {
+			kind: ReflectionKind.Type,
+			typeKind: TypeKind.Object
+		}
 	}
 }

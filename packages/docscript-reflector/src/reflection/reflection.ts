@@ -6,10 +6,15 @@ import { EnumReflection, EnumMemberReflection } from './enum'
 import { ObjectLiteralReflection } from './object'
 import { FunctionReflection, MethodReflection } from './function'
 import { FunctionScopedVariableReflection } from './signature'
+import { ClassReflection } from './class'
+import { TypeAliasReflection } from './type-alias'
+import { VariableReflection } from './variable'
 
 export enum ReflectionKind {
 	Type = 'Type',
+	Class = 'Class',
 	TypeLiteral = 'TypeLiteral',
+	TypeAlias = 'TypeAlias',
 	Enum = 'Enum',
 	EnumMember = 'EnumMember',
 	FunctionScopedVariable = 'FunctionScopedVariable',
@@ -21,7 +26,8 @@ export enum ReflectionKind {
 	HeritageClause = 'HeritageClause',
 	Property = 'Property',
 	Function = 'Function',
-	Method = 'Method'
+	Method = 'Method',
+	Variable = 'Variable'
 }
 
 export interface ReflectionWithExports {
@@ -50,6 +56,9 @@ export type Reflection =
 	| FunctionReflection
 	| FunctionScopedVariableReflection
 	| MethodReflection
+	| ClassReflection
+	| TypeAliasReflection
+	| VariableReflection
 
 export interface HasId {
 	id: string

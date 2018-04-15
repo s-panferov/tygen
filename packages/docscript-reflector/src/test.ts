@@ -29,6 +29,7 @@ export function tsconfig() {
 				"target": "esnext",
 				"skipDefaultLibCheck": false,
 				"skipLibCheck": false,
+				"strictNullChecks": true,
 				"strict": true,
 				"typeRoots" : ["node_modules/@types"]
 			},
@@ -73,5 +74,12 @@ export function compile(): Context {
 	)
 
 	const generator = generateFiles(config.fileNames, 'test-package', config.options)
-	return generator.generate()
+	let context = generator.generate()
+
+	return context
+}
+
+export function write(context: Context): Context {
+	context.write()
+	return context
 }

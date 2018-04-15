@@ -5,7 +5,7 @@ import { Package } from './package'
 import { Context } from './context'
 
 import { visitSymbol } from './reflection/visitor'
-import { visitModule, ModuleReflection } from './reflection/module'
+import { visitModule, ModuleReflection, visitSourceFile } from './reflection/module'
 import { ReflectionKind } from './reflection/reflection'
 
 interface WithLocals {
@@ -25,42 +25,23 @@ export class Module {
 		this.pathInfo = getPathInfo(sourceFile.fileName, pkg)
 	}
 
-	ensureOwnReflection(ctx: Context): ts.Symbol | undefined {
-		let symbol = ctx.checker.getSymbolAtLocation(this.sourceFile)
-		if (this.reflection) {
-			return symbol
-		}
-
-		this.reflection = {
-			kind: ReflectionKind.Module,
-			name: this.pathInfo.relativePath
-		}
-
-		return symbol
-	}
-
 	generate(ctx: Context) {
-		let symbol = this.ensureOwnReflection(ctx)
-		if (symbol) {
-			visitModule(symbol, ctx)
-		}
+		visitSourceFile(this.sourceFile, ctx)
 	}
 }
 
 export interface PathInfo {
 	fileName: string
+	folderName: string
 	relativePath: string
 }
 
 export function getPathInfo(fileName: string, pkg: Package): PathInfo {
 	let relativeToPackage = path.relative(pkg.folderPath, fileName)
 
-	if (!/^(\.|\/)/.test(relativeToPackage)) {
-		relativeToPackage = '/' + relativeToPackage
-	}
-
 	return {
-		fileName,
+		fileName: path.basename(relativeToPackage),
+		folderName: path.dirname(relativeToPackage),
 		relativePath: relativeToPackage
 	}
 }

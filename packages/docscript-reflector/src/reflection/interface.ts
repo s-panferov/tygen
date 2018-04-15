@@ -32,18 +32,31 @@ export interface ReflectionWithProperties {
 	apparentProperties?: Reflection[]
 }
 
-export interface InterfaceReflection
-	extends ReflectionWithExports,
-		BaseReflection,
-		ObjectLikeReflection {
-	kind: ReflectionKind.Interface
-	name: string
+export interface ReflectionWithTypeParameters {
 	typeParameters?: TypeParameterReflection[]
+}
+
+export interface ReflectionWithHeritageClauses {
 	heritageClauses?: HeritageClauseReflection[]
+}
+
+export interface ReflectionWithBaseTypes {
 	baseTypes?: TypeReflection[]
 }
 
-interface HeritageClauseReflection {
+export interface InterfaceReflection
+	extends ReflectionWithExports,
+		BaseReflection,
+		ObjectLikeReflection,
+		ReflectionWithTypeParameters,
+		ReflectionWithHeritageClauses,
+		ReflectionWithCallSignatures,
+		ReflectionWithBaseTypes {
+	kind: ReflectionKind.Interface
+	name: string
+}
+
+export interface HeritageClauseReflection {
 	kind: ReflectionKind.HeritageClause
 	token: 'extends' | 'implements'
 	types: ExpressionWithTypeArgumentsReflection[]
@@ -64,15 +77,14 @@ export function visitInterface(symbol: ts.Symbol, ctx: Context): InterfaceReflec
 
 	visitContainer(symbol, iface, ctx)
 	visitBaseTypes(symbol, type, iface, ctx)
+	visitCallSignatures(type, iface, ctx)
 	visitObjectLikeReflection(symbol, type, iface, ctx)
-	registerRelatedModules(symbol, iface, ctx)
 
 	return iface
 }
 
 export interface ObjectLikeReflection
-	extends ReflectionWithCallSignatures,
-		ReflectionWithConstructSignatures,
+	extends ReflectionWithConstructSignatures,
 		ReflectionWithIndexSignatures,
 		ReflectionWithProperties {}
 
@@ -83,32 +95,14 @@ export function visitObjectLikeReflection(
 	ctx: Context
 ) {
 	visitObjectProperties(symbol, type, parent, ctx)
-	visitCallSignatures(type, parent, ctx)
 	visitConstructSignatures(type, parent, ctx)
 	visitIndexSignatures(type, parent, ctx)
-}
-
-export function registerRelatedModules(symbol: ts.Symbol, reflection: Reflection, ctx: Context) {
-	if (symbol.declarations) {
-		// Push a link to our interface to all modules that declare it
-
-		symbol.declarations.forEach(decl => {
-			let sourceFile = decl.getSourceFile()
-			let module = ctx.generator.getModule(sourceFile.fileName)!
-			module.ensureOwnReflection(ctx)
-			if (!module.reflection.exports) {
-				module.reflection.exports = []
-			}
-
-			module.reflection.exports.push(createLink(reflection))
-		})
-	}
 }
 
 export function visitBaseTypes(
 	symbol: ts.Symbol,
 	type: ts.Type,
-	parent: InterfaceReflection,
+	parent: ReflectionWithBaseTypes,
 	ctx: Context
 ) {
 	const baseTypes = type.getBaseTypes()

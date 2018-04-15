@@ -5,6 +5,6 @@
     "module": "commonjs"
   },
   "include": [
-    "packages/docscript-reflector/src/**/*"
+    "packages/*/src/**/*"
   ]
 }
