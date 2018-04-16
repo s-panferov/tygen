@@ -21,7 +21,7 @@ export function visitProperty(symbol: ts.Symbol, ctx: Context): PropertyReflecti
 		type: undefined as any
 	}
 
-	ctx.register(symbol, propertyRef)
+	ctx.registerSymbol(symbol, propertyRef)
 
 	let type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
 	let typeReflection = visitType(type, ctx)

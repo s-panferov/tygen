@@ -43,7 +43,7 @@ export function visitVariable(symbol: ts.Symbol, ctx: Context): VariableReflecti
 		type: undefined as any
 	}
 
-	ctx.register(symbol, variableRef)
+	ctx.registerSymbol(symbol, variableRef)
 
 	let type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
 	variableRef.type = visitType(type, ctx)

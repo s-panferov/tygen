@@ -13,11 +13,17 @@ export function visitIntersection(
 	type: ts.IntersectionType,
 	ctx: Context
 ): IntersectionTypeReflection {
-	return {
+	const reflection: IntersectionTypeReflection = {
 		kind: ReflectionKind.Type,
 		typeKind: TypeKind.Intersection,
-		types: type.types.map(type => visitType(type, ctx))
+		types: undefined as any
 	}
+
+	ctx.registerType(type, reflection)
+
+	reflection.types = type.types.map(type => visitType(type, ctx))
+
+	return reflection
 }
 
 export interface UnionTypeReflection extends TypeReflectionBase {
@@ -26,9 +32,15 @@ export interface UnionTypeReflection extends TypeReflectionBase {
 }
 
 export function visitUnion(type: ts.UnionType, ctx: Context): UnionTypeReflection {
-	return {
+	const reflection: UnionTypeReflection = {
 		kind: ReflectionKind.Type,
 		typeKind: TypeKind.Union,
-		types: type.types.map(type => visitType(type, ctx))
+		types: undefined as any
 	}
+
+	ctx.registerType(type, reflection)
+
+	reflection.types = type.types.map(type => visitType(type, ctx))
+
+	return reflection
 }

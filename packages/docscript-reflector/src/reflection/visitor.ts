@@ -15,12 +15,16 @@ import { visitClass } from './class'
 import { visitTypeAlias } from './type-alias'
 import { visitVariable } from './variable'
 
-export function visitSymbol(symbol: ts.Symbol, ctx: Context): Reflection | undefined {
-	if (ctx.visited.has(symbol)) {
+export function visitSymbol(
+	symbol: ts.Symbol,
+	ctx: Context,
+	type?: ts.Type
+): Reflection | undefined {
+	if (ctx.visitedReflections.has(symbol)) {
 		return ctx.reflectionBySymbol.get(symbol)
 	}
 
-	ctx.visited.add(symbol)
+	ctx.visitedReflections.add(symbol)
 
 	let reflection: Reflection | undefined
 
@@ -30,8 +34,8 @@ export function visitSymbol(symbol: ts.Symbol, ctx: Context): Reflection | undef
 		reflection = visitEnum(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Class) {
 		reflection = visitClass(symbol, ctx)
-	} else if (symbol.flags & ts.SymbolFlags.ObjectLiteral) {
-		reflection = visitObjectLiteral(symbol, ctx)
+	} else if (symbol.flags & ts.SymbolFlags.TypeLiteral) {
+		reflection = visitObjectLiteral(symbol, ctx, type)
 	} else if (symbol.flags & ts.SymbolFlags.EnumMember) {
 		reflection = visitEnumMember(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Interface) {

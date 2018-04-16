@@ -2,47 +2,56 @@ import * as ts from 'typescript'
 
 import { TypeReflection, TypeKind } from './type'
 import { ReflectionKind } from '../reflection'
+import { Context } from '../../context'
 
-export function visitPrimitive(type: ts.Type): TypeReflection | undefined {
+export function visitPrimitive(type: ts.Type, ctx: Context): TypeReflection | undefined {
+	let reflection: TypeReflection | undefined
+
 	if (type.flags & ts.TypeFlags.Any) {
-		return {
+		reflection = {
 			kind: ReflectionKind.Type,
 			typeKind: TypeKind.Any
 		}
 	} else if (type.flags & ts.TypeFlags.Boolean) {
-		return {
+		reflection = {
 			kind: ReflectionKind.Type,
 			typeKind: TypeKind.Boolean
 		}
 	} else if (type.flags & ts.TypeFlags.Never) {
-		return {
+		reflection = {
 			kind: ReflectionKind.Type,
 			typeKind: TypeKind.Never
 		}
 	} else if (type.flags & ts.TypeFlags.Null) {
-		return {
+		reflection = {
 			kind: ReflectionKind.Type,
 			typeKind: TypeKind.Null
 		}
 	} else if (type.flags & ts.TypeFlags.Number) {
-		return {
+		reflection = {
 			kind: ReflectionKind.Type,
 			typeKind: TypeKind.Number
 		}
 	} else if (type.flags & ts.TypeFlags.String) {
-		return {
+		reflection = {
 			kind: ReflectionKind.Type,
 			typeKind: TypeKind.String
 		}
 	} else if (type.flags & ts.TypeFlags.Void) {
-		return {
+		reflection = {
 			kind: ReflectionKind.Type,
 			typeKind: TypeKind.Void
 		}
 	} else if (type.flags & ts.TypeFlags.NonPrimitive) {
-		return {
+		reflection = {
 			kind: ReflectionKind.Type,
 			typeKind: TypeKind.Object
 		}
 	}
+
+	if (reflection) {
+		ctx.registerType(type, reflection)
+	}
+
+	return reflection
 }

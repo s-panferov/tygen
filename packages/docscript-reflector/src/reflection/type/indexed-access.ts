@@ -14,10 +14,17 @@ export function visitIndexedAccess(
 	type: ts.IndexedAccessType,
 	ctx: Context
 ): IndexedAccessReflection {
-	return {
+	let reflection: IndexedAccessReflection = {
 		kind: ReflectionKind.Type,
 		typeKind: TypeKind.IndexedAccess,
-		indexType: visitType(type.indexType, ctx),
-		objectType: visitType(type.objectType, ctx)
+		indexType: undefined as any,
+		objectType: undefined as any
 	}
+
+	ctx.registerType(type, reflection)
+
+	reflection.indexType = visitType(type.indexType, ctx)
+	reflection.objectType = visitType(type.objectType, ctx)
+
+	return reflection
 }

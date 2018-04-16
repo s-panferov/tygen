@@ -22,9 +22,7 @@ function generateIdChainForSymbol(symbol: ts.Symbol, ctx: Context): string[] {
 			id.push(...generateIdChainForSymbol(parent, ctx))
 		}
 
-		if (symbol.name) {
-			id.push(symbol.name)
-		}
+		id.push(symbol.name)
 	}
 
 	return []
@@ -52,7 +50,11 @@ function generateIdChainForDeclaration(node: ts.Node, ctx: Context): string[] {
 			node.kind === ts.SyntaxKind.VariableStatement ||
 			node.kind === ts.SyntaxKind.VariableDeclarationList
 		) {
+			// just ignore
+		} else if (node.kind === ts.SyntaxKind.TypeLiteral) {
+			id.push('__type')
 		} else {
+			debugger
 		}
 	}
 

@@ -5,6 +5,7 @@
   "devDependencies": {
     "@types/node": "^9.6.4",
     "@types/fs-extra": "^5.0.2",
+    "@types/circular-json": "^0.4.0",
     "node-uuid": "^1.4.8",
     "standard-version": "^4.3.0",
     "typescript": "^2.8.1",
@@ -14,6 +15,7 @@
     "pkg-up": "^2.0.0",
     "request": "^2.85.0",
     "source-map-support": "^0.5.4",
+    "circular-json": "^0.5.3",
     "tar": "^4.4.1",
     "tsutils": "^2.26.1",
     "tsconfig": "^7.0.0",

@@ -19,6 +19,6 @@ export function visitTypeParameter(symbol: ts.Symbol, ctx: Context): TypeParamet
 		name: symbol.name
 	}
 
-	ctx.register(symbol, typeParameter)
+	ctx.registerSymbol(symbol, typeParameter)
 	return typeParameter
 }

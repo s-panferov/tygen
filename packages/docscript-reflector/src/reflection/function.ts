@@ -48,7 +48,7 @@ export function visitFunction(symbol: ts.Symbol, ctx: Context): FunctionReflecti
 		callSignatures: []
 	}
 
-	ctx.register(symbol, functionRef)
+	ctx.registerSymbol(symbol, functionRef)
 
 	const type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
 
@@ -65,7 +65,7 @@ export function visitMethod(symbol: ts.Symbol, ctx: Context): MethodReflection {
 		callSignatures: []
 	}
 
-	ctx.register(symbol, methodRef)
+	ctx.registerSymbol(symbol, methodRef)
 
 	const type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
 	visitCallSignatures(type, methodRef, ctx)

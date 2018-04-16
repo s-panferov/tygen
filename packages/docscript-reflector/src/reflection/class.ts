@@ -55,9 +55,9 @@ export function visitClass(symbol: ts.Symbol, ctx: Context): ClassReflection {
 		name: symbol.name
 	}
 
-	ctx.register(symbol, classRef)
+	ctx.registerSymbol(symbol, classRef)
 
-	const type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
+	const type = ctx.checker.getDeclaredTypeOfSymbol(symbol)
 
 	visitContainer(symbol, classRef, ctx)
 	visitBaseTypes(symbol, type, classRef, ctx)

@@ -24,7 +24,7 @@ export function visitModule(symbol: ts.Symbol, ctx: Context): ModuleReflection {
 	let sourceFile = symbol.declarations![0]!.getSourceFile()
 	let reflection = visitSourceFile(sourceFile, ctx)
 
-	ctx.register(symbol, reflection)
+	ctx.registerSymbol(symbol, reflection)
 
 	return reflection
 }

@@ -9,8 +9,12 @@ export interface ESSymbolReflection extends TypeReflectionBase {
 }
 
 export function visitESSymbol(type: ts.UniqueESSymbolType, ctx: Context): ESSymbolReflection {
-	return {
+	let reflection: ESSymbolReflection = {
 		kind: ReflectionKind.Type,
 		typeKind: TypeKind.ESSymbol
 	}
+
+	ctx.registerType(type, reflection)
+
+	return reflection
 }

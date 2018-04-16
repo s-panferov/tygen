@@ -19,7 +19,7 @@ export function visitTypeAlias(symbol: ts.Symbol, ctx: Context): TypeAliasReflec
 		type: undefined as any
 	}
 
-	ctx.register(symbol, typeAliasRef)
+	ctx.registerSymbol(symbol, typeAliasRef)
 
 	const type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
 	typeAliasRef.type = visitType(type, ctx)

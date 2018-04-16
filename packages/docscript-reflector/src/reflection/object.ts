@@ -24,24 +24,34 @@ import {
 import {
 	ReflectionWithCallSignatures,
 	ReflectionWithConstructSignatures,
-	ReflectionWithIndexSignatures
+	ReflectionWithIndexSignatures,
+	visitCallSignatures
 } from './signature'
 import { symbolId } from './identifier'
 
-export interface ObjectLiteralReflection extends BaseReflection, ObjectLikeReflection {
+export interface ObjectLiteralReflection
+	extends BaseReflection,
+		ObjectLikeReflection,
+		ReflectionWithCallSignatures {
 	kind: ReflectionKind.ObjectLiteral
 }
 
-export function visitObjectLiteral(symbol: ts.Symbol, ctx: Context): ObjectLiteralReflection {
+export function visitObjectLiteral(
+	symbol: ts.Symbol,
+	ctx: Context,
+	type?: ts.Type
+): ObjectLiteralReflection {
 	let objectLiteralRef: ObjectLiteralReflection = {
 		id: symbolId(symbol, ctx),
 		kind: ReflectionKind.ObjectLiteral
 	}
 
-	ctx.register(symbol, objectLiteralRef)
+	ctx.registerSymbol(symbol, objectLiteralRef)
 
-	const type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
-	visitObjectLikeReflection(symbol, type, objectLiteralRef, ctx)
+	const declaredType = type || ctx.checker.getDeclaredTypeOfSymbol(symbol)
+
+	visitObjectLikeReflection(symbol, declaredType, objectLiteralRef, ctx)
+	visitCallSignatures(declaredType, objectLiteralRef, ctx)
 
 	return objectLiteralRef
 }

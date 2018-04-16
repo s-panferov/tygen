@@ -10,18 +10,23 @@ export interface LiteralTypeReflection extends TypeReflectionBase {
 }
 
 export function visitLiteral(type: ts.LiteralType, ctx: Context): LiteralTypeReflection {
-	return {
+	let reflection: LiteralTypeReflection = {
 		kind: ReflectionKind.Type,
 		typeKind: TypeKind.Literal,
 		value: type.value
 	}
+
+	ctx.registerType(type, reflection)
+	return reflection
 }
 
 export function visitBooleanLiteral(type: ts.Type, ctx: Context): LiteralTypeReflection {
 	let intristicName = (type as any).intrinsicName
-	return {
+	let reflection: LiteralTypeReflection = {
 		kind: ReflectionKind.Type,
 		typeKind: TypeKind.Literal,
 		value: intristicName === 'true'
 	}
+	ctx.registerType(type, reflection)
+	return reflection
 }

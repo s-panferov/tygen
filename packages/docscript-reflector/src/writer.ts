@@ -2,6 +2,8 @@ import { Context } from './context'
 import * as fse from 'fs-extra'
 import * as path from 'path'
 
+import * as CircularJSON from 'circular-json'
+
 export class Writer {
 	context: Context
 	outDir: string
@@ -22,7 +24,7 @@ export class Writer {
 			let fileName = path.join(folder, 'index.json')
 
 			fse.mkdirpSync(folder)
-			fse.writeFileSync(fileName, JSON.stringify(reflection, null, 4))
+			fse.writeFileSync(fileName, CircularJSON.stringify(reflection, null, 4))
 		})
 	}
 }

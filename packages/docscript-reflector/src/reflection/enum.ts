@@ -11,7 +11,6 @@ import {
 import { Context } from '../context'
 import { visitSymbol } from './visitor'
 import { TypeParameterReflection } from './type-parameter'
-import { registerRelatedModules } from './interface'
 import { visitContainer } from './module'
 import { isReachable } from './utils'
 import { symbolId } from './identifier'
@@ -35,10 +34,8 @@ export function visitEnum(symbol: ts.Symbol, ctx: Context): EnumReflection {
 		name: symbol.name
 	}
 
-	ctx.register(symbol, enumRef)
-
+	ctx.registerSymbol(symbol, enumRef)
 	visitContainer(symbol, enumRef, ctx)
-	registerRelatedModules(symbol, enumRef, ctx)
 
 	return enumRef
 }

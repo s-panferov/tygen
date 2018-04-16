@@ -65,7 +65,7 @@ export function visitFunctionScopedVariable(
 		type: undefined as any
 	}
 
-	ctx.register(symbol, variableRef)
+	ctx.registerSymbol(symbol, variableRef)
 
 	const type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
 	variableRef.type = visitType(type, ctx)

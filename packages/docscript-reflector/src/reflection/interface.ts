@@ -71,9 +71,9 @@ export function visitInterface(symbol: ts.Symbol, ctx: Context): InterfaceReflec
 		name: symbol.name
 	}
 
-	ctx.register(symbol, iface)
+	ctx.registerSymbol(symbol, iface)
 
-	const type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
+	const type = ctx.checker.getDeclaredTypeOfSymbol(symbol)
 
 	visitContainer(symbol, iface, ctx)
 	visitBaseTypes(symbol, type, iface, ctx)

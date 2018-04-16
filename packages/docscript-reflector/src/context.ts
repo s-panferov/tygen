@@ -1,4 +1,4 @@
-import ts, { ModuleReference } from 'typescript'
+import ts, { ModuleReference, TypeReference } from 'typescript'
 
 import { Generator } from './generator'
 import { Module } from './module'
@@ -6,17 +6,22 @@ import { Reflection, HasId, createLink } from './reflection/reflection'
 import { ReflectionWithExports } from './reflection/reflection'
 import { WriteStream } from 'fs'
 import { Writer } from './writer'
+import { TypeReflection } from './reflection/type/type'
 
 export class Context {
 	generator: Generator
 	program: ts.Program
 	checker: ts.TypeChecker
 
-	visited = new Set<ts.Symbol>()
+	visitedReflections = new Set<ts.Symbol>()
 
 	reflectionById = new Map<String, Reflection>()
+
 	reflectionBySymbol = new Map<ts.Symbol, Reflection>()
 	symbolByReflection = new Map<Reflection, ts.Symbol>()
+
+	reflectionByType = new Map<ts.Type, TypeReflection>()
+	typeByReflection = new Map<TypeReflection, ts.Type>()
 
 	constructor(generator: Generator) {
 		this.generator = generator
@@ -24,7 +29,12 @@ export class Context {
 		this.checker = generator.program.getTypeChecker()
 	}
 
-	register(symbol: ts.Symbol, reflection: Reflection) {
+	registerType(type: ts.Type, reflection: TypeReflection) {
+		this.reflectionByType.set(type, reflection)
+		this.typeByReflection.set(reflection, type)
+	}
+
+	registerSymbol(symbol: ts.Symbol, reflection: Reflection) {
 		this.reflectionBySymbol.set(symbol, reflection)
 		this.symbolByReflection.set(reflection, symbol)
 
