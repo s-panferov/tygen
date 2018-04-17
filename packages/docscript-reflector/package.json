@@ -1,0 +1,23 @@
+{
+  "name": "@docscript/reflector",
+  "version": "0.0.10",
+  "description": "Documentation generator for TypeScript",
+  "dependencies": {
+    "node-uuid": "^1.4.8",
+    "doctrine": "^2.1.0",
+    "fs-extra": "^5.0.0",
+    "pkg-up": "^2.0.0",
+    "circular-json": "^0.5.3",
+    "source-map-support": "^0.5.4",
+    "tsutils": "^2.26.1",
+    "yargs": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/yargs": "^11.0.0",
+    "@types/node": "^9.6.4",
+    "@types/fs-extra": "^5.0.2",
+    "@types/circular-json": "^0.4.0",
+    "standard-version": "^4.3.0",
+    "typescript": "^2.8.1"
+  }
+}

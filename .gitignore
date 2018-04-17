@@ -15,3 +15,7 @@ npm-debug.log
 /example/si
 /doc
 /bower_components
+.vscode
+/lib
+/docs
+.test
