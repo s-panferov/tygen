@@ -5,7 +5,9 @@
         "jsx": "react",
         "experimentalDecorators": true,
         "strict": true,
+        "declaration": true,
         "noImplicitAny": false,
+        "sourceMap": true,
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "lib": [ "es6", "dom" ]

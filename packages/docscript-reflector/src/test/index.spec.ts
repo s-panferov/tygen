@@ -1,4 +1,4 @@
-import { compile, file, clear, defaultSetup, write } from '../test'
+import { file, clear, defaultSetup, compile } from '../test'
 
 describe(__filename, () => {
 	beforeAll(clear)
@@ -29,6 +29,6 @@ describe(__filename, () => {
 			`
 		)
 
-		let ctx = write(compile())
+		let ctx = compile()
 	})
 })

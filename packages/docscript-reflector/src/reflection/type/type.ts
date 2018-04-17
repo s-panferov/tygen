@@ -8,11 +8,15 @@ import { visitUnion, visitIntersection } from './intersection'
 import { visitESSymbol } from './symbol'
 import { visitIndexedAccess } from './indexed-access'
 import { visitReference } from './reference'
+import { visitObjectLiteral } from './object'
+import { visitTypeParameter } from '../type-parameter'
 
 export enum TypeKind {
 	Unsupported = 'Unsupported',
 	Any = 'Any',
+	Undefined = 'Undefined',
 	Boolean = 'Boolean',
+	TypeParameter = 'TypeParameter',
 	TypeReference = 'TypeReference',
 	Never = 'Never',
 	Null = 'Null',
@@ -25,7 +29,7 @@ export enum TypeKind {
 	Unreachable = 'Unreachable',
 	Literal = 'Literal',
 	Object = 'Object',
-	TypeLiteral = 'TypeLiteral',
+	ObjectLiteral = 'ObjectLiteral',
 	ESSymbol = 'ESSymbol',
 	IndexedAccess = 'IndexedAccess'
 }
@@ -45,7 +49,6 @@ export function visitType(type: ts.Type, ctx: Context): TypeReflection {
 
 	let reflection = visitTypeInternal(type, ctx)
 	if (!ctx.reflectionByType.get(type)) {
-		debugger
 		throw new Error('Reflection is not registered')
 	}
 
@@ -56,6 +59,23 @@ function visitTypeInternal(type: ts.Type, ctx: Context): TypeReflection {
 	let primitive = visitPrimitive(type, ctx)
 	if (primitive) {
 		return primitive
+	}
+
+	if (type.flags & ts.TypeFlags.Object) {
+		let objectType = type as ts.ObjectType
+		// Visit only exact reference to prevent cycle types
+		if (objectType.objectFlags === ts.ObjectFlags.Reference) {
+			let referenceType = objectType as ts.TypeReference
+			return visitReference(referenceType, ctx)
+		} else {
+			if (!(objectType.objectFlags & ts.ObjectFlags.ClassOrInterface)) {
+				return visitObjectLiteral(type, ctx)
+			}
+		}
+	}
+
+	if (type.flags & ts.TypeFlags.TypeParameter) {
+		return visitTypeParameter(type, ctx)
 	}
 
 	let symbol = type.getSymbol()

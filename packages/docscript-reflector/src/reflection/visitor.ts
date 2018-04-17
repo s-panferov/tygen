@@ -8,7 +8,6 @@ import { visitModule } from './module'
 
 import { Reflection } from './reflection'
 import { visitEnum, visitEnumMember } from './enum'
-import { visitObjectLiteral } from './object'
 import { visitFunction, visitMethod } from './function'
 import { visitFunctionScopedVariable } from './signature'
 import { visitClass } from './class'
@@ -34,16 +33,12 @@ export function visitSymbol(
 		reflection = visitEnum(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Class) {
 		reflection = visitClass(symbol, ctx)
-	} else if (symbol.flags & ts.SymbolFlags.TypeLiteral) {
-		reflection = visitObjectLiteral(symbol, ctx, type)
 	} else if (symbol.flags & ts.SymbolFlags.EnumMember) {
 		reflection = visitEnumMember(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Interface) {
 		reflection = visitInterface(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Property) {
 		reflection = visitProperty(symbol, ctx)
-	} else if (symbol.flags & ts.SymbolFlags.TypeParameter) {
-		reflection = visitTypeParameter(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Function) {
 		reflection = visitFunction(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.FunctionScopedVariable) {

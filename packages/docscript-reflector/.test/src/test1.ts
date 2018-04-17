@@ -1,7 +1,4 @@
-
-				export interface Test {
-					a: {
-						test: Error
-					}
-				}
-			
+export interface Test<T> {
+	test: Error[]
+	a: T[]
+}

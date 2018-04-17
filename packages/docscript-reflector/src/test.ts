@@ -2,8 +2,7 @@ import * as fse from 'fs-extra'
 import * as path from 'path'
 import * as ts from 'typescript'
 
-import { parse } from 'tsconfig'
-import { generateFiles } from './helpers'
+import { generateFiles, compileAndGenerate } from './helpers'
 import { Context } from './context'
 
 const testRoot = path.resolve(__dirname, '..', '.test')
@@ -53,6 +52,10 @@ export function packageJson() {
 	)
 }
 
+export function compile() {
+	return compileAndGenerate(testRoot).write(path.join(testRoot, 'docs'))
+}
+
 export function defaultSetup() {
 	tsconfig()
 	packageJson()
@@ -61,25 +64,4 @@ export function defaultSetup() {
 export function clear() {
 	fse.removeSync(testRoot)
 	fse.mkdirpSync(testRoot)
-}
-
-export function compile(): Context {
-	let configFilePath = ts.findConfigFile(testRoot, ts.sys.fileExists)!
-	const config = ts.parseJsonConfigFileContent(
-		fse.readFileSync(configFilePath),
-		ts.sys,
-		testRoot,
-		undefined,
-		configFilePath
-	)
-
-	const generator = generateFiles(config.fileNames, 'test-package', config.options)
-	let context = generator.generate()
-
-	return context
-}
-
-export function write(context: Context): Context {
-	context.write()
-	return context
 }

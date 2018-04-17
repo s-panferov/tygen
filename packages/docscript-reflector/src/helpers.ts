@@ -6,6 +6,45 @@ let fse = require('fs-extra')
 
 import { Generator } from './generator'
 import { Module } from './module'
+import { Context } from './context'
+import { Package } from './package'
+
+export function compileAndGenerate(target: string = process.cwd()): Context {
+	let configFilePath = ts.findConfigFile(target, ts.sys.fileExists)!
+
+	console.log(ts.version)
+	const config = ts.parseJsonConfigFileContent(
+		JSON.parse(fse.readFileSync(configFilePath)),
+		ts.sys,
+		'',
+		undefined,
+		configFilePath
+	)
+
+	console.log(JSON.parse(fse.readFileSync(configFilePath)))
+
+	if (config.errors.length > 0) {
+		throw new Error(
+			`Cannot build project, tsconfig.json errors: ${JSON.stringify(config.errors)}`
+		)
+	}
+
+	let pkg = Package.fromPath(path.join(target, 'package.js'))
+	const generator = generateFiles(config.fileNames, pkg.manifest.name, config.options)
+
+	try {
+		let context = generator.generate()
+		return context
+	} catch (e) {
+		debugger
+		throw e
+	}
+}
+
+export function write(context: Context): Context {
+	context.write()
+	return context
+}
 
 export function compile(fileNames: string[], options: ts.CompilerOptions): ts.Program {
 	let program = ts.createProgram(fileNames, options)

@@ -12,10 +12,9 @@ import {
 } from './reflection'
 import { Context } from '../context'
 import { visitSymbol } from './visitor'
-import { TypeParameterReflection } from './type-parameter'
+import { TypeParameterReflection, visitTypeParameter } from './type-parameter'
 import { visitContainer } from './module'
 import { isReachable } from './utils'
-import { ObjectLiteralReflection } from './object'
 import { TypeReflection, visitType } from './type/type'
 import {
 	ReflectionWithCallSignatures,
@@ -62,7 +61,7 @@ export interface HeritageClauseReflection {
 	types: ExpressionWithTypeArgumentsReflection[]
 }
 
-interface ExpressionWithTypeArgumentsReflection {}
+export interface ExpressionWithTypeArgumentsReflection {}
 
 export function visitInterface(symbol: ts.Symbol, ctx: Context): InterfaceReflection {
 	let iface: InterfaceReflection = {
@@ -73,12 +72,14 @@ export function visitInterface(symbol: ts.Symbol, ctx: Context): InterfaceReflec
 
 	ctx.registerSymbol(symbol, iface)
 
-	const type = ctx.checker.getDeclaredTypeOfSymbol(symbol)
+	const type = ctx.checker.getDeclaredTypeOfSymbol(symbol) as ts.InterfaceType
 
 	visitContainer(symbol, iface, ctx)
-	visitBaseTypes(symbol, type, iface, ctx)
+
+	visitTypeParameters(type, iface, ctx)
+	visitBaseTypes(type, iface, ctx)
 	visitCallSignatures(type, iface, ctx)
-	visitObjectLikeReflection(symbol, type, iface, ctx)
+	visitObjectLikeReflection(type, iface, ctx)
 
 	return iface
 }
@@ -89,22 +90,16 @@ export interface ObjectLikeReflection
 		ReflectionWithProperties {}
 
 export function visitObjectLikeReflection(
-	symbol: ts.Symbol,
 	type: ts.Type,
 	parent: ObjectLikeReflection,
 	ctx: Context
 ) {
-	visitObjectProperties(symbol, type, parent, ctx)
+	visitObjectProperties(type, parent, ctx)
 	visitConstructSignatures(type, parent, ctx)
 	visitIndexSignatures(type, parent, ctx)
 }
 
-export function visitBaseTypes(
-	symbol: ts.Symbol,
-	type: ts.Type,
-	parent: ReflectionWithBaseTypes,
-	ctx: Context
-) {
+export function visitBaseTypes(type: ts.Type, parent: ReflectionWithBaseTypes, ctx: Context) {
 	const baseTypes = type.getBaseTypes()
 	if (baseTypes) {
 		baseTypes.forEach(type => {
@@ -117,8 +112,23 @@ export function visitBaseTypes(
 	}
 }
 
+export function visitTypeParameters(
+	type: ts.InterfaceType,
+	parent: ReflectionWithTypeParameters,
+	ctx: Context
+) {
+	let typeParameters = type.typeParameters
+	if (typeParameters) {
+		typeParameters.forEach(ty => {
+			if (!parent.typeParameters) {
+				parent.typeParameters = []
+			}
+			parent.typeParameters.push(visitTypeParameter(ty, ctx))
+		})
+	}
+}
+
 export function visitObjectProperties(
-	symbol: ts.Symbol,
 	type: ts.Type,
 	parent: ReflectionWithProperties,
 	ctx: Context

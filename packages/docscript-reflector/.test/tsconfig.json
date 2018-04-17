@@ -1,16 +1,13 @@
-
-		{
-			"compilerOptions": {
-				"modules": "node",
-				"target": "esnext",
-				"skipDefaultLibCheck": false,
-				"skipLibCheck": false,
-				"strictNullChecks": true,
-				"strict": true,
-				"typeRoots" : ["node_modules/@types"]
-			},
-			"include": [
-				"src/**/*"
-			]
-		}
+{
+	"compilerOptions": {
+		"moduleResolution": "node",
+		"target": "esnext",
+		"strict": true,
+		"baseUrl": ".",
+		"typeRoots" : ["node_modules/@types"]
+	},
+	"include": [
+		"src/**/*"
+	]
+}
 	

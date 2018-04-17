@@ -22,13 +22,17 @@ function generateIdChainForSymbol(symbol: ts.Symbol, ctx: Context): string[] {
 			id.push(...generateIdChainForSymbol(parent, ctx))
 		}
 
-		id.push(symbol.name)
+		if (symbol.name) {
+			id.push(symbol.name)
+		} else {
+			id.push('__type')
+		}
 	}
 
-	return []
+	return id
 }
 
-function generateIdChainForDeclaration(node: ts.Node, ctx: Context): string[] {
+function generateIdChainForDeclaration(node: ts.Node, ctx: Context, symbolName?: string): string[] {
 	let id = [] as string[]
 
 	if (node.parent) {
@@ -44,17 +48,22 @@ function generateIdChainForDeclaration(node: ts.Node, ctx: Context): string[] {
 		id.push(module.pathInfo.relativePath)
 	} else {
 		let name = ((node as any) as { name?: ts.Identifier }).name
-		if (name) {
+		if (name && name.text) {
 			id.push(name.text)
 		} else if (
 			node.kind === ts.SyntaxKind.VariableStatement ||
 			node.kind === ts.SyntaxKind.VariableDeclarationList
 		) {
 			// just ignore
-		} else if (node.kind === ts.SyntaxKind.TypeLiteral) {
-			id.push('__type')
 		} else {
-			debugger
+			let symbol: ts.Symbol | undefined =
+				(node as any).symbol || ctx.checker.getSymbolAtLocation(node)
+
+			if (symbol && symbol.name) {
+				id.push(symbol.name)
+			} else {
+				id.push('__type')
+			}
 		}
 	}
 

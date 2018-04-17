@@ -40,9 +40,12 @@ export class Context {
 
 		if (reflection.id) {
 			if (this.reflectionById.has(reflection.id)) {
-				let conflict = this.symbolByReflection.get(this.reflectionById.get(reflection.id)!)
-				console.error(`Duplicate ID for symbol: ${reflection.id}`)
-				return
+				let conflict = this.symbolByReflection.get(this.reflectionById.get(reflection.id)!)!
+				if (!areSymbolsEqual(symbol, conflict)) {
+					debugger
+					console.error(`Duplicate ID for symbol: ${reflection.id}`)
+					return
+				}
 			}
 			this.reflectionById.set(reflection.id, reflection)
 		}
@@ -71,4 +74,16 @@ export class Context {
 		const writer = new Writer(this, outDir)
 		writer.write()
 	}
+}
+
+function areSymbolsEqual(a: ts.Symbol, b: ts.Symbol) {
+	if (a === b) {
+		return true
+	}
+
+	if (a.declarations && b.declarations && a.declarations[0] === b.declarations[0]) {
+		return true
+	}
+
+	return false
 }

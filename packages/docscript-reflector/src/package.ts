@@ -24,12 +24,12 @@ export class Package {
 	/**
 	 * Extract package information for fileName
 	 */
-	static fromPath(fileName: string, cache: Map<string, Package>): Package {
+	static fromPath(fileName: string, cache?: Map<string, Package>): Package {
 		// TODO cache
 		let manifestFilePath = closest.sync(path.dirname(fileName))
 		let folderPath = path.dirname(manifestFilePath)
 
-		let existed = cache.get(folderPath)
+		let existed = cache && cache.get(folderPath)
 		if (existed) {
 			return existed
 		}

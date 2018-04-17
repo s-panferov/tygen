@@ -19,7 +19,7 @@ export function visitReference(type: ts.TypeReference, ctx: Context): TypeRefere
 
 	ctx.registerType(type, reflection)
 
-	reflection.target = visitType(type, ctx)
+	reflection.target = visitType(type.target, ctx)
 	reflection.typeArguments =
 		type.typeArguments && type.typeArguments.map(arg => visitType(arg, ctx))
 

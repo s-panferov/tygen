@@ -16,7 +16,6 @@ import { visitSymbol } from './visitor'
 import { TypeParameterReflection } from './type-parameter'
 import { visitContainer } from './module'
 import { isReachable } from './utils'
-import { ObjectLiteralReflection } from './object'
 import { TypeReflection, visitType } from './type/type'
 import {
 	ReflectionWithCallSignatures,
@@ -60,8 +59,8 @@ export function visitClass(symbol: ts.Symbol, ctx: Context): ClassReflection {
 	const type = ctx.checker.getDeclaredTypeOfSymbol(symbol)
 
 	visitContainer(symbol, classRef, ctx)
-	visitBaseTypes(symbol, type, classRef, ctx)
-	visitObjectLikeReflection(symbol, type, classRef, ctx)
+	visitBaseTypes(type, classRef, ctx)
+	visitObjectLikeReflection(type, classRef, ctx)
 
 	return classRef
 }

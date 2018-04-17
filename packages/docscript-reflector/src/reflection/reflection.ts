@@ -3,7 +3,6 @@ import { PropertyReflection } from './property'
 import { TypeParameterReflection } from './type-parameter'
 import { ModuleReflection } from './module'
 import { EnumReflection, EnumMemberReflection } from './enum'
-import { ObjectLiteralReflection } from './object'
 import { FunctionReflection, MethodReflection } from './function'
 import { FunctionScopedVariableReflection } from './signature'
 import { ClassReflection } from './class'
@@ -18,11 +17,9 @@ export enum ReflectionKind {
 	Enum = 'Enum',
 	EnumMember = 'EnumMember',
 	FunctionScopedVariable = 'FunctionScopedVariable',
-	ObjectLiteral = 'ObjectLiteral',
 	Link = 'Link',
 	Module = 'Module',
 	Interface = 'Interface',
-	TypeParameter = 'TypeParameter',
 	HeritageClause = 'HeritageClause',
 	Property = 'Property',
 	Function = 'Function',
@@ -52,7 +49,6 @@ export type Reflection =
 	| ModuleReflection
 	| EnumReflection
 	| EnumMemberReflection
-	| ObjectLiteralReflection
 	| FunctionReflection
 	| FunctionScopedVariableReflection
 	| MethodReflection
