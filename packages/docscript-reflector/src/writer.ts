@@ -3,6 +3,17 @@ import * as fse from 'fs-extra'
 import * as path from 'path'
 
 import * as CircularJSON from 'circular-json'
+import { ReflectionKind } from './reflection/reflection'
+
+const IsWritable: { [name: string]: boolean } = {
+	[ReflectionKind.Class]: true,
+	[ReflectionKind.Enum]: true,
+	[ReflectionKind.Function]: true,
+	[ReflectionKind.Interface]: true,
+	[ReflectionKind.Module]: true,
+	[ReflectionKind.Variable]: true,
+	[ReflectionKind.TypeAlias]: true
+}
 
 export class Writer {
 	context: Context
@@ -20,6 +31,10 @@ export class Writer {
 
 	write() {
 		this.context.reflectionById.forEach(reflection => {
+			if (!IsWritable[reflection.kind]) {
+				return
+			}
+
 			let folder = path.join(this.outDir, reflection.id!)
 			let fileName = path.join(folder, 'index.json')
 

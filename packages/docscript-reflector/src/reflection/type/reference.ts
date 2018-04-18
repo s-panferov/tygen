@@ -1,7 +1,7 @@
 import * as ts from 'typescript'
 
 import { TypeReflectionBase, TypeKind, TypeReflection, visitType } from './type'
-import { ReflectionKind } from '../reflection'
+import { ReflectionKind, createLink } from '../reflection'
 import { Context } from '../../context'
 
 export interface TypeReferenceReflection extends TypeReflectionBase {
@@ -19,9 +19,9 @@ export function visitReference(type: ts.TypeReference, ctx: Context): TypeRefere
 
 	ctx.registerType(type, reflection)
 
-	reflection.target = visitType(type.target, ctx)
+	reflection.target = createLink(visitType(type.target, ctx))
 	reflection.typeArguments =
-		type.typeArguments && type.typeArguments.map(arg => visitType(arg, ctx))
+		type.typeArguments && type.typeArguments.map(arg => createLink(visitType(arg, ctx)))
 
 	return reflection
 }

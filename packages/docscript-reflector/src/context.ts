@@ -42,7 +42,6 @@ export class Context {
 			if (this.reflectionById.has(reflection.id)) {
 				let conflict = this.symbolByReflection.get(this.reflectionById.get(reflection.id)!)!
 				if (!areSymbolsEqual(symbol, conflict)) {
-					debugger
 					console.error(`Duplicate ID for symbol: ${reflection.id}`)
 					return
 				}

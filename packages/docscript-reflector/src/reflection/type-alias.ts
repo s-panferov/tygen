@@ -21,7 +21,7 @@ export function visitTypeAlias(symbol: ts.Symbol, ctx: Context): TypeAliasReflec
 
 	ctx.registerSymbol(symbol, typeAliasRef)
 
-	const type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
+	const type = ctx.checker.getDeclaredTypeOfSymbol(symbol)
 	typeAliasRef.type = visitType(type, ctx)
 
 	return typeAliasRef

@@ -5,10 +5,15 @@ import { Package } from './package'
 import { Context } from './context'
 
 import { visitSymbol } from './reflection/visitor'
-import { visitModule, ModuleReflection, visitSourceFile } from './reflection/module'
+import {
+	visitModule,
+	ModuleReflection,
+	visitSourceFile,
+	ESModuleReflection
+} from './reflection/module'
 import { ReflectionKind } from './reflection/reflection'
 
-interface WithLocals {
+export interface WithLocals {
 	locals: Map<string, ts.Symbol>
 }
 
@@ -17,7 +22,7 @@ export class Module {
 	pkg: Package
 	pathInfo: PathInfo
 
-	reflection!: ModuleReflection
+	reflection!: ESModuleReflection
 
 	constructor(pkg: Package, sourceFile: ts.SourceFile) {
 		this.sourceFile = sourceFile as ts.SourceFile & WithLocals

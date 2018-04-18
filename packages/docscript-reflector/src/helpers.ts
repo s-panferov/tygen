@@ -32,13 +32,8 @@ export function compileAndGenerate(target: string = process.cwd()): Context {
 	let pkg = Package.fromPath(path.join(target, 'package.js'))
 	const generator = generateFiles(config.fileNames, pkg.manifest.name, config.options)
 
-	try {
-		let context = generator.generate()
-		return context
-	} catch (e) {
-		debugger
-		throw e
-	}
+	let context = generator.generate()
+	return context
 }
 
 export function write(context: Context): Context {

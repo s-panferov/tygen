@@ -16,10 +16,11 @@ import { TypeParameterReflection } from './type-parameter'
 import { visitContainer } from './module'
 import { isReachable } from './utils'
 import { visitObjectProperties } from './interface'
-import { TypeReflection, visitType } from './type/type'
+import { TypeReflection, visitType, TypeReflectionBase } from './type/type'
 
 export interface ReflectionWithCallSignatures {
-	callSignatures?: SignatureReflection[]
+	ownCallSignatures?: SignatureReflection[]
+	allCallSignatures?: (ReflectionLink | SignatureReflection)[]
 }
 
 export interface ReflectionWithConstructSignatures {
@@ -31,12 +32,14 @@ export interface ReflectionWithIndexSignatures {
 	stringIndexType?: TypeReflection
 }
 
-export interface SignatureReflection {
+export interface SignatureReflection extends BaseReflection {
+	kind: ReflectionKind.Signature
 	parameters: Reflection[]
 }
 
 export function visitSignature(sig: ts.Signature, ctx: Context): SignatureReflection {
 	const signatureRef: SignatureReflection = {
+		kind: ReflectionKind.Signature,
 		parameters: []
 	}
 
@@ -70,6 +73,8 @@ export function visitFunctionScopedVariable(
 	const type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
 	variableRef.type = visitType(type, ctx)
 
+	ts.ObjectFlags
+
 	return variableRef
 }
 
@@ -78,12 +83,24 @@ export function visitCallSignatures(
 	parent: ReflectionWithCallSignatures,
 	ctx: Context
 ) {
+	let otype = type as ts.InterfaceTypeWithDeclaredMembers
+
+	if (otype.declaredCallSignatures) {
+		otype.declaredCallSignatures.forEach(signature => {
+			if (!parent.ownCallSignatures) {
+				parent.ownCallSignatures = []
+			}
+			let reflection = visitSignature(signature, ctx)
+			parent.ownCallSignatures.push(reflection)
+		})
+	}
+
 	type.getCallSignatures().forEach(signature => {
-		if (!parent.callSignatures) {
-			parent.callSignatures = []
+		if (!parent.allCallSignatures) {
+			parent.allCallSignatures = []
 		}
 		let reflection = visitSignature(signature, ctx)
-		parent.callSignatures.push(reflection)
+		parent.allCallSignatures.push(createLink(reflection))
 	})
 }
 

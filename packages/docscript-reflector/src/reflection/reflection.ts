@@ -1,16 +1,18 @@
 import { InterfaceReflection } from './interface'
 import { PropertyReflection } from './property'
 import { TypeParameterReflection } from './type-parameter'
-import { ModuleReflection } from './module'
+import { ModuleReflection, NamespaceReflection, ESModuleReflection } from './module'
 import { EnumReflection, EnumMemberReflection } from './enum'
 import { FunctionReflection, MethodReflection } from './function'
-import { FunctionScopedVariableReflection } from './signature'
+import { FunctionScopedVariableReflection, SignatureReflection } from './signature'
 import { ClassReflection } from './class'
 import { TypeAliasReflection } from './type-alias'
 import { VariableReflection } from './variable'
+import { TypeReflectionBase } from './type/type'
 
 export enum ReflectionKind {
 	Type = 'Type',
+	Signature = 'Signature',
 	Class = 'Class',
 	TypeLiteral = 'TypeLiteral',
 	TypeAlias = 'TypeAlias',
@@ -19,6 +21,8 @@ export enum ReflectionKind {
 	FunctionScopedVariable = 'FunctionScopedVariable',
 	Link = 'Link',
 	Module = 'Module',
+	Namespace = 'Namespace',
+	ESModule = 'ESModule',
 	Interface = 'Interface',
 	HeritageClause = 'HeritageClause',
 	Property = 'Property',
@@ -55,12 +59,16 @@ export type Reflection =
 	| ClassReflection
 	| TypeAliasReflection
 	| VariableReflection
+	| SignatureReflection
+	| TypeReflectionBase
+	| NamespaceReflection
+	| ESModuleReflection
 
 export interface HasId {
 	id: string
 }
 
-export function createLink(ref: Reflection): Reflection {
+export function createLink<T extends Reflection>(ref: T): ReflectionLink | T {
 	if (ref.kind === ReflectionKind.Link) {
 		return ref
 	} else if (ref.id) {

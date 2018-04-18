@@ -25,18 +25,15 @@ import {
 	visitIndexSignatures
 } from './signature'
 import { symbolId } from './identifier'
+import { PropertyReflection } from './property'
 
 export interface ReflectionWithProperties {
-	properties?: Reflection[]
-	apparentProperties?: Reflection[]
+	ownProperties?: PropertyReflection[]
+	allProperties?: (PropertyReflection | ReflectionLink)[]
 }
 
 export interface ReflectionWithTypeParameters {
 	typeParameters?: TypeParameterReflection[]
-}
-
-export interface ReflectionWithHeritageClauses {
-	heritageClauses?: HeritageClauseReflection[]
 }
 
 export interface ReflectionWithBaseTypes {
@@ -48,20 +45,11 @@ export interface InterfaceReflection
 		BaseReflection,
 		ObjectLikeReflection,
 		ReflectionWithTypeParameters,
-		ReflectionWithHeritageClauses,
 		ReflectionWithCallSignatures,
 		ReflectionWithBaseTypes {
 	kind: ReflectionKind.Interface
 	name: string
 }
-
-export interface HeritageClauseReflection {
-	kind: ReflectionKind.HeritageClause
-	token: 'extends' | 'implements'
-	types: ExpressionWithTypeArgumentsReflection[]
-}
-
-export interface ExpressionWithTypeArgumentsReflection {}
 
 export function visitInterface(symbol: ts.Symbol, ctx: Context): InterfaceReflection {
 	let iface: InterfaceReflection = {
@@ -133,31 +121,34 @@ export function visitObjectProperties(
 	parent: ReflectionWithProperties,
 	ctx: Context
 ) {
-	let properties = type.getProperties()
-	properties.forEach(property => {
-		let reflection = visitSymbol(property, ctx)
-		if (!reflection) {
-			return
-		}
+	let ifaceType = type as ts.InterfaceTypeWithDeclaredMembers
 
-		if (!parent.properties) {
-			parent.properties = []
-		}
+	if (ifaceType.declaredProperties) {
+		let properties = ifaceType.declaredProperties.forEach(property => {
+			let reflection = visitSymbol(property, ctx) as PropertyReflection
+			if (!reflection) {
+				return
+			}
 
-		parent.properties.push(createLink(reflection))
-	})
+			if (!parent.ownProperties) {
+				parent.ownProperties = []
+			}
+
+			parent.ownProperties.push(reflection)
+		})
+	}
 
 	let apparentProperties = type.getApparentProperties()
 	apparentProperties.forEach(property => {
-		let reflection = visitSymbol(property, ctx)
+		let reflection = visitSymbol(property, ctx) as PropertyReflection
 		if (!reflection) {
 			return
 		}
 
-		if (!parent.apparentProperties) {
-			parent.apparentProperties = []
+		if (!parent.allProperties) {
+			parent.allProperties = []
 		}
 
-		parent.apparentProperties.push(createLink(reflection))
+		parent.allProperties.push(createLink(reflection))
 	})
 }

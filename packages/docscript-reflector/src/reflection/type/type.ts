@@ -10,9 +10,14 @@ import { visitIndexedAccess } from './indexed-access'
 import { visitReference } from './reference'
 import { visitObjectLiteral } from './object'
 import { visitTypeParameter } from '../type-parameter'
+import { visitTuple } from './tuple'
+import { visitConditional } from './conditional'
+import { visitMapped } from './mapped'
 
 export enum TypeKind {
 	Unsupported = 'Unsupported',
+	Conditional = 'Conditional',
+	Mapped = 'Mapped',
 	Any = 'Any',
 	Undefined = 'Undefined',
 	Boolean = 'Boolean',
@@ -31,7 +36,8 @@ export enum TypeKind {
 	Object = 'Object',
 	ObjectLiteral = 'ObjectLiteral',
 	ESSymbol = 'ESSymbol',
-	IndexedAccess = 'IndexedAccess'
+	IndexedAccess = 'IndexedAccess',
+	Tuple = 'Tuple'
 }
 
 export interface TypeReflectionBase extends BaseReflection {
@@ -65,13 +71,22 @@ function visitTypeInternal(type: ts.Type, ctx: Context): TypeReflection {
 		let objectType = type as ts.ObjectType
 		// Visit only exact reference to prevent cycle types
 		if (objectType.objectFlags === ts.ObjectFlags.Reference) {
-			let referenceType = objectType as ts.TypeReference
-			return visitReference(referenceType, ctx)
-		} else {
-			if (!(objectType.objectFlags & ts.ObjectFlags.ClassOrInterface)) {
-				return visitObjectLiteral(type, ctx)
+			let reference = objectType as ts.TypeReference
+			if (reference.target.objectFlags & ts.ObjectFlags.Tuple) {
+				return visitTuple(reference, ctx)
+			} else {
+				let referenceType = objectType as ts.TypeReference
+				return visitReference(referenceType, ctx)
 			}
+		} else if (objectType.objectFlags & ts.ObjectFlags.Mapped) {
+			return visitMapped(type, ctx)
+		} else if (!(objectType.objectFlags & ts.ObjectFlags.ClassOrInterface)) {
+			return visitObjectLiteral(type, ctx)
 		}
+	}
+
+	if (type.flags & ts.TypeFlags.Conditional) {
+		return visitConditional(type as ts.ConditionalType, ctx)
 	}
 
 	if (type.flags & ts.TypeFlags.TypeParameter) {

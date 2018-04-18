@@ -28,9 +28,7 @@ import {
 import { symbolId } from './identifier'
 import {
 	ReflectionWithTypeParameters,
-	ReflectionWithHeritageClauses,
 	ReflectionWithBaseTypes,
-	HeritageClauseReflection,
 	visitBaseTypes,
 	visitObjectLikeReflection,
 	ObjectLikeReflection
@@ -41,7 +39,6 @@ export interface ClassReflection
 		BaseReflection,
 		ObjectLikeReflection,
 		ReflectionWithTypeParameters,
-		ReflectionWithHeritageClauses,
 		ReflectionWithBaseTypes {
 	kind: ReflectionKind.Class
 	name: string
@@ -61,6 +58,8 @@ export function visitClass(symbol: ts.Symbol, ctx: Context): ClassReflection {
 	visitContainer(symbol, classRef, ctx)
 	visitBaseTypes(type, classRef, ctx)
 	visitObjectLikeReflection(type, classRef, ctx)
+
+	// TODO visit "implements"
 
 	return classRef
 }
