@@ -45,11 +45,12 @@ export class Generator {
 
 		// generate own modules
 		this.packages.forEach(pkg => {
-			if (pkg.manifest.name === this.packageName) {
-				pkg.modules.forEach(mod => {
-					mod.generate(context)
-				})
-			}
+			// if (pkg.manifest.name === this.packageName) {
+			pkg.modules.forEach(mod => {
+				mod.generate(context)
+			})
+			pkg.generate(context)
+			// }
 		})
 
 		context.registerRelatedModules()

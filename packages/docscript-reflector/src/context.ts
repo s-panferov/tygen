@@ -37,11 +37,14 @@ export class Context {
 	registerSymbol(symbol: ts.Symbol, reflection: Reflection) {
 		this.reflectionBySymbol.set(symbol, reflection)
 		this.symbolByReflection.set(reflection, symbol)
+		this.registerReflectionById(reflection, symbol)
+	}
 
+	registerReflectionById(reflection: Reflection, symbol?: ts.Symbol) {
 		if (reflection.id) {
 			if (this.reflectionById.has(reflection.id)) {
 				let conflict = this.symbolByReflection.get(this.reflectionById.get(reflection.id)!)!
-				if (!areSymbolsEqual(symbol, conflict)) {
+				if (!symbol || !areSymbolsEqual(symbol, conflict)) {
 					console.error(`Duplicate ID for symbol: ${reflection.id}`)
 					return
 				}

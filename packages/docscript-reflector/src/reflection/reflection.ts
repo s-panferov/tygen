@@ -9,6 +9,7 @@ import { ClassReflection } from './class'
 import { TypeAliasReflection } from './type-alias'
 import { VariableReflection } from './variable'
 import { TypeReflectionBase } from './type/type'
+import { PackageReflection } from '../package'
 
 export enum ReflectionKind {
 	Type = 'Type',
@@ -28,7 +29,8 @@ export enum ReflectionKind {
 	Property = 'Property',
 	Function = 'Function',
 	Method = 'Method',
-	Variable = 'Variable'
+	Variable = 'Variable',
+	Package = 'Package'
 }
 
 export interface ReflectionWithExports {
@@ -65,6 +67,7 @@ export type Reflection =
 	| TypeReflectionBase
 	| NamespaceReflection
 	| ESModuleReflection
+	| PackageReflection
 
 export interface HasId {
 	id: string

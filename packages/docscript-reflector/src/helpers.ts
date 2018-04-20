@@ -12,7 +12,8 @@ import { Package } from './package'
 export function compileAndGenerate(target: string = process.cwd()): Context {
 	let configFilePath = ts.findConfigFile(target, ts.sys.fileExists)!
 
-	console.log(ts.version)
+	console.log('Using TypeScript', ts.version)
+
 	const config = ts.parseJsonConfigFileContent(
 		JSON.parse(fse.readFileSync(configFilePath)),
 		ts.sys,
@@ -20,8 +21,6 @@ export function compileAndGenerate(target: string = process.cwd()): Context {
 		undefined,
 		configFilePath
 	)
-
-	console.log(JSON.parse(fse.readFileSync(configFilePath)))
 
 	if (config.errors.length > 0) {
 		throw new Error(

@@ -71,6 +71,9 @@ export function visitSourceFile(sourceFile: ts.SourceFile, ctx: Context): ESModu
 		folder: module.pathInfo.folderName
 	}
 
+	let symbol = ctx.checker.getSymbolAtLocation(sourceFile)
+	ctx.registerReflectionById(moduleRef, symbol)
+
 	function visitNode(node: ts.Node) {
 		let symbol = (node as any).symbol
 		if (symbol) {

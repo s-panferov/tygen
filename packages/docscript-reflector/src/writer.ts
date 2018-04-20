@@ -11,8 +11,11 @@ const IsWritable: { [name: string]: boolean } = {
 	[ReflectionKind.Function]: true,
 	[ReflectionKind.Interface]: true,
 	[ReflectionKind.ESModule]: true,
+	[ReflectionKind.Module]: true,
+	[ReflectionKind.Namespace]: true,
 	[ReflectionKind.Variable]: true,
-	[ReflectionKind.TypeAlias]: true
+	[ReflectionKind.TypeAlias]: true,
+	[ReflectionKind.Package]: true
 }
 
 export class Writer {
@@ -39,7 +42,7 @@ export class Writer {
 			let fileName = path.join(folder, 'index.json')
 
 			fse.mkdirpSync(folder)
-			fse.writeFileSync(fileName, CircularJSON.stringify(reflection, null, 4))
+			fse.writeFileSync(fileName, JSON.stringify(reflection, null, 4))
 		})
 	}
 }

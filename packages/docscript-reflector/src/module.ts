@@ -31,7 +31,7 @@ export class Module {
 	}
 
 	generate(ctx: Context) {
-		visitSourceFile(this.sourceFile, ctx)
+		this.reflection = visitSourceFile(this.sourceFile, ctx)
 	}
 }
 
