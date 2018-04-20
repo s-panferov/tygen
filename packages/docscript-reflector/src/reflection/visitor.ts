@@ -23,8 +23,6 @@ export function visitSymbol(
 		return ctx.reflectionBySymbol.get(symbol)
 	}
 
-	console.log(symbol.getJsDocTags())
-
 	ctx.visitedReflections.add(symbol)
 
 	let reflection: Reflection | undefined
@@ -59,6 +57,18 @@ export function visitSymbol(
 	} else {
 		debugger
 		throw new Error('Unknown symbol')
+	}
+
+	if (reflection) {
+		let comment = symbol.getDocumentationComment(ctx.checker)
+		if (comment.length > 0) {
+			reflection.comments = comment
+		}
+
+		let directive = symbol.getJsDocTags()
+		if (directive.length > 0) {
+			reflection.directives = directive
+		}
 	}
 
 	if (reflection && !ctx.reflectionBySymbol.get(symbol)) {

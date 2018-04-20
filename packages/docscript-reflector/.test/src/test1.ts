@@ -12,4 +12,8 @@
 // 	c: 3
 // }
 
+/**
+ * Test @test
+ * @private
+ */
 export type ReturnType<T> = T extends (...args: any[]) => infer R ? R : any

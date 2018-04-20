@@ -38,6 +38,8 @@ export interface ReflectionWithExports {
 export interface BaseReflection {
 	id?: string
 	kind: ReflectionKind
+	comments?: { kind: string; text: string }[]
+	directives?: { name: string; text?: string }[]
 }
 
 export interface ReflectionLink extends BaseReflection {
