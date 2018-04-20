@@ -1,7 +1,7 @@
 import * as ts from 'typescript'
 
 import { TypeReflectionBase, TypeKind, visitType, TypeReflection } from './type'
-import { ReflectionKind } from '../reflection'
+import { ReflectionKind, createLink } from '../reflection'
 import { Context } from '../../context'
 
 export interface IndexedAccessReflection extends TypeReflectionBase {
@@ -23,8 +23,8 @@ export function visitIndexedAccess(
 
 	ctx.registerType(type, reflection)
 
-	reflection.indexType = visitType(type.indexType, ctx)
-	reflection.objectType = visitType(type.objectType, ctx)
+	reflection.indexType = createLink(visitType(type.indexType, ctx))
+	reflection.objectType = createLink(visitType(type.objectType, ctx))
 
 	return reflection
 }

@@ -10,7 +10,7 @@ const IsWritable: { [name: string]: boolean } = {
 	[ReflectionKind.Enum]: true,
 	[ReflectionKind.Function]: true,
 	[ReflectionKind.Interface]: true,
-	[ReflectionKind.Module]: true,
+	[ReflectionKind.ESModule]: true,
 	[ReflectionKind.Variable]: true,
 	[ReflectionKind.TypeAlias]: true
 }

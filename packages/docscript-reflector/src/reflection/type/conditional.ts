@@ -10,6 +10,7 @@ export interface ConditionalTypeReflection extends TypeReflectionBase {
 	extendsType: TypeReflection
 	trueType?: TypeReflection
 	falseType?: TypeReflection
+	inferTypeParameters?: TypeReflection[]
 }
 
 export function visitConditional(
@@ -24,6 +25,10 @@ export function visitConditional(
 	}
 
 	ctx.registerType(type, reflection)
+
+	if (type.root.inferTypeParameters) {
+		reflection.inferTypeParameters = type.root.inferTypeParameters.map(ty => visitType(ty, ctx))
+	}
 
 	reflection.checkType = createLink(visitType(type.root.checkType, ctx))
 	reflection.extendsType = createLink(visitType(type.root.extendsType, ctx))

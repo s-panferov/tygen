@@ -138,8 +138,8 @@ export function visitObjectProperties(
 		})
 	}
 
-	let apparentProperties = type.getApparentProperties()
-	apparentProperties.forEach(property => {
+	let properties = type.getProperties()
+	properties.forEach(property => {
 		let reflection = visitSymbol(property, ctx) as PropertyReflection
 		if (!reflection) {
 			return

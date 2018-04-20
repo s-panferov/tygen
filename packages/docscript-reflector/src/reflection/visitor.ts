@@ -23,6 +23,8 @@ export function visitSymbol(
 		return ctx.reflectionBySymbol.get(symbol)
 	}
 
+	console.log(symbol.getJsDocTags())
+
 	ctx.visitedReflections.add(symbol)
 
 	let reflection: Reflection | undefined

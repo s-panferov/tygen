@@ -13,9 +13,13 @@ import { visitTypeParameter } from '../type-parameter'
 import { visitTuple } from './tuple'
 import { visitConditional } from './conditional'
 import { visitMapped } from './mapped'
+import { visitIndexType } from './index-type'
+import { visitSubstitution } from './substitution'
 
 export enum TypeKind {
 	Unsupported = 'Unsupported',
+	Substitution = 'Substitution',
+	Index = 'Index',
 	Conditional = 'Conditional',
 	Mapped = 'Mapped',
 	Any = 'Any',
@@ -89,8 +93,16 @@ function visitTypeInternal(type: ts.Type, ctx: Context): TypeReflection {
 		return visitConditional(type as ts.ConditionalType, ctx)
 	}
 
+	if (type.flags & ts.TypeFlags.Index) {
+		return visitIndexType(type as ts.IndexType, ctx)
+	}
+
 	if (type.flags & ts.TypeFlags.TypeParameter) {
 		return visitTypeParameter(type, ctx)
+	}
+
+	if (type.flags & ts.TypeFlags.Substitution) {
+		return visitSubstitution(type as ts.SubstitutionType, ctx)
 	}
 
 	let symbol = type.getSymbol()
