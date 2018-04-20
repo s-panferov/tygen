@@ -1,0 +1,16 @@
+{
+  "name": "@docscript/react",
+  "version": "0.0.10",
+  "description": "React frontend for DocScript",
+  "keywords": [
+    "typescript",
+    "documentation"
+  ],
+  "devDependencies": {
+    "react": "^16.3.2",
+    "react-dom": "^16.3.1",
+    "react-markdown": "^3.3.0"
+  },
+  "dependencies": {
+  }
+}

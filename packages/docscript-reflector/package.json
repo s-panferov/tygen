@@ -1,10 +1,9 @@
 {
   "name": "@docscript/reflector",
   "version": "0.0.10",
-  "description": "Documentation generator for TypeScript",
+  "description": "Reflector for TypeScript types",
+  "typings": "src/index.ts",
   "dependencies": {
-    "node-uuid": "^1.4.8",
-    "doctrine": "^2.1.0",
     "fs-extra": "^5.0.0",
     "pkg-up": "^2.0.0",
     "circular-json": "^0.5.3",
