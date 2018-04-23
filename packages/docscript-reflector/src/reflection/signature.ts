@@ -35,12 +35,24 @@ export interface ReflectionWithIndexSignatures {
 export interface SignatureReflection extends BaseReflection {
 	kind: ReflectionKind.Signature
 	parameters: Reflection[]
+	typeParameters?: Reflection[]
+	returnType: Reflection
 }
 
 export function visitSignature(sig: ts.Signature, ctx: Context): SignatureReflection {
 	const signatureRef: SignatureReflection = {
 		kind: ReflectionKind.Signature,
-		parameters: []
+		parameters: [],
+		returnType: visitType(sig.getReturnType(), ctx)
+	}
+
+	if (sig.typeParameters) {
+		sig.typeParameters.forEach(ty => {
+			if (!signatureRef.typeParameters) {
+				signatureRef.typeParameters = []
+			}
+			signatureRef.typeParameters.push(visitType(ty, ctx))
+		})
 	}
 
 	sig.parameters.forEach(parameter => {
@@ -50,10 +62,21 @@ export function visitSignature(sig: ts.Signature, ctx: Context): SignatureReflec
 		}
 	})
 
+	let comment = sig.getDocumentationComment(ctx.checker)
+	if (comment.length > 0) {
+		signatureRef.comments = comment
+	}
+
+	let directive = sig.getJsDocTags()
+	if (directive.length > 0) {
+		signatureRef.directives = directive
+	}
+
 	return signatureRef
 }
 
 export interface FunctionScopedVariableReflection extends BaseReflection {
+	kind: ReflectionKind.FunctionScopedVariable
 	name: string
 	type: TypeReflection
 }

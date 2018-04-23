@@ -15,7 +15,8 @@ const IsWritable: { [name: string]: boolean } = {
 	[ReflectionKind.Namespace]: true,
 	[ReflectionKind.Variable]: true,
 	[ReflectionKind.TypeAlias]: true,
-	[ReflectionKind.Package]: true
+	[ReflectionKind.Package]: true,
+	[ReflectionKind.Folder]: true
 }
 
 export class Writer {
@@ -38,7 +39,7 @@ export class Writer {
 				return
 			}
 
-			let folder = path.join(this.outDir, reflection.id!)
+			let folder = path.join(this.outDir, reflection.id!.replace(/::/g, path.sep))
 			let fileName = path.join(folder, 'index.json')
 
 			fse.mkdirpSync(folder)

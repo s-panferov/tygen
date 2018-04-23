@@ -40,18 +40,14 @@ export function visitEnum(symbol: ts.Symbol, ctx: Context): EnumReflection {
 	return enumRef
 }
 
-function enumMemberId(symbol: ts.Symbol, ctx: Context) {
-	if (isReachable(symbol)) {
-		return ctx.checker.getFullyQualifiedName(symbol)
-	}
-}
-
 export function visitEnumMember(symbol: ts.Symbol, ctx: Context): EnumMemberReflection {
 	let enumMemberRef: EnumMemberReflection = {
-		id: enumMemberId(symbol, ctx),
+		id: symbolId(symbol, ctx),
 		kind: ReflectionKind.EnumMember,
 		name: symbol.name
 	}
+
+	ctx.registerSymbol(symbol, enumMemberRef)
 
 	let declaration = symbol.declarations![0]!
 	if (tg.isEnumMember(declaration)) {

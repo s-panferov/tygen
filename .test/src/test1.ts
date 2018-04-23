@@ -1,5 +1,19 @@
+type TypeName<T> = T extends string
+	? 'string'
+	: T extends number
+		? 'number'
+		: T extends boolean
+			? 'boolean'
+			: T extends undefined ? 'undefined' : T extends Function ? 'function' : 'object'
 
-				export interface Test {
-					a: 1
-				}
-			
+interface A {
+	a: 1
+	b: 2
+	c: 3
+}
+
+/**
+ * Test @test
+ * @private
+ */
+export type ReturnType<T> = T extends (...args: any[]) => infer R ? R : any

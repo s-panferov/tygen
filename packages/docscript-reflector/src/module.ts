@@ -13,19 +13,15 @@ import {
 } from './reflection/module'
 import { ReflectionKind } from './reflection/reflection'
 
-export interface WithLocals {
-	locals: Map<string, ts.Symbol>
-}
-
 export class Module {
-	sourceFile: ts.SourceFile & WithLocals
+	sourceFile: ts.SourceFile
 	pkg: Package
 	pathInfo: PathInfo
 
 	reflection!: ESModuleReflection
 
 	constructor(pkg: Package, sourceFile: ts.SourceFile) {
-		this.sourceFile = sourceFile as ts.SourceFile & WithLocals
+		this.sourceFile = sourceFile as ts.SourceFile
 		this.pkg = pkg
 		this.pathInfo = getPathInfo(sourceFile.fileName, pkg)
 	}

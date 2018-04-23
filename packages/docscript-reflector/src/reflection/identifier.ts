@@ -2,11 +2,11 @@ import * as ts from 'typescript'
 import { Context } from '../context'
 
 export function symbolId(symbol: ts.Symbol, ctx: Context): string {
-	return generateIdChainForSymbol(symbol, ctx).join('/')
+	return generateIdChainForSymbol(symbol, ctx).join('::')
 }
 
 export function declarationId(node: ts.Node, ctx: Context): string {
-	return generateIdChainForDeclaration(node, ctx).join('/')
+	return generateIdChainForDeclaration(node, ctx).join('::')
 }
 
 function generateIdChainForSymbol(symbol: ts.Symbol, ctx: Context): string[] {
@@ -61,7 +61,12 @@ function generateIdChainForDeclaration(node: ts.Node, ctx: Context, symbolName?:
 		id.push(module.pathInfo.relativePath)
 	} else if (ts.isMethodDeclaration(node)) {
 		id.push((isStatic(node) ? '.' : '') + node.name.getText())
-	} else if (ts.isMethodSignature(node) || ts.isFunctionDeclaration(node)) {
+	} else if (
+		ts.isMethodSignature(node) ||
+		ts.isFunctionDeclaration(node) ||
+		ts.isCallSignatureDeclaration(node) ||
+		ts.isConstructSignatureDeclaration(node)
+	) {
 		let symbol: ts.Symbol | undefined =
 			(node as any).symbol || ctx.checker.getSymbolAtLocation(node)
 

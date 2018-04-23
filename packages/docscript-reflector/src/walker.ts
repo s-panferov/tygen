@@ -16,7 +16,7 @@ export class ReflectionWalker {
 	walk(converter: Converter) {
 		walkFolder(this.targetFolder, fileName => {
 			const ref = JSON.parse(fse.readFileSync(fileName).toString())
-			const folderName = path.basename(fileName)
+			const folderName = path.dirname(fileName)
 			const files = converter.visitReflection(ref, fileName, this)
 			if (files) {
 				files.forEach(file => {
@@ -30,13 +30,28 @@ export class ReflectionWalker {
 
 function walkFolder(targetFolder: string, cb: (fileName: string) => void) {
 	let items = fse.readdirSync(targetFolder)
-	for (const item of items) {
+
+	let files: string[] = []
+	let folders: string[] = []
+
+	items.forEach(item => {
 		let itemPath = path.join(targetFolder, item)
 		let stat = fse.statSync(itemPath)
+
 		if (stat.isDirectory()) {
-			walkFolder(itemPath, cb)
-		} else if (path.extname(itemPath) === '.json') {
-			cb(itemPath)
+			folders.push(itemPath)
+		} else {
+			files.push(itemPath)
 		}
+	})
+
+	for (const item of files) {
+		if (path.extname(item) === '.json') {
+			cb(item)
+		}
+	}
+
+	for (const item of folders) {
+		walkFolder(item, cb)
 	}
 }

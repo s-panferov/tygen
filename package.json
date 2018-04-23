@@ -6,6 +6,9 @@
 	"workspaces": [
 		"packages/*"
   ],
+  "scripts": {
+    "start": "node -r module-alias/register ./node_modules/.bin/micro-dev ./lib/docscript-react/src/server.js --target docs"
+  },
   "_moduleAliases": {
     "@docscript/reflector": "lib/docscript-reflector/src/index.js",
     "@docscript/react": "lib/docscript-react/src/index.js"

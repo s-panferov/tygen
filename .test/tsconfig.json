@@ -1,13 +1,12 @@
-
-		{
-			"compilerOptions": {
-				"modules": "node",
-				"target": "esnext",
-				"strict": true,
-				"typeRoots" : ["node_modules/@types"]
-			},
-			"include": [
-				"src/**/*"
-			]
-		}
+{
+	"compilerOptions": {
+		"moduleResolution": "node",
+		"target": "esnext",
+		"strict": true,
+		"baseUrl": "."
+	},
+	"include": [
+		"src/**/*"
+	]
+}
 	

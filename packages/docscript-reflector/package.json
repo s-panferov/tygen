@@ -9,7 +9,8 @@
     "circular-json": "^0.5.3",
     "source-map-support": "^0.5.4",
     "tsutils": "^2.26.1",
-    "yargs": "^11.0.0"
+    "yargs": "^11.0.0",
+    "memfs": "^2.8.0"
   },
   "devDependencies": {
     "@types/yargs": "^11.0.0",

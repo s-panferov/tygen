@@ -30,7 +30,7 @@ export class Generator {
 
 		let mod = new Module(pack, sourceFile)
 
-		pack.modules.set(sourceFile.fileName, mod)
+		pack.addModule(mod)
 		this.modules.set(sourceFile.fileName, mod)
 
 		return mod
