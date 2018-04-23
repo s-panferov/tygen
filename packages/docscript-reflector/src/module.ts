@@ -1,17 +1,10 @@
-import ts, { ModuleReference, createExternalModuleReference } from 'typescript'
+import ts from 'typescript'
 import path from 'path'
 
 import { Package } from './package'
 import { Context } from './context'
 
-import { visitSymbol } from './reflection/visitor'
-import {
-	visitModule,
-	ModuleReflection,
-	visitSourceFile,
-	ESModuleReflection
-} from './reflection/module'
-import { ReflectionKind } from './reflection/reflection'
+import { visitSourceFile, ESModuleReflection } from './reflection/module'
 
 export class Module {
 	sourceFile: ts.SourceFile

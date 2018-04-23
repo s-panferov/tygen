@@ -1,9 +1,7 @@
 import * as fse from 'fs-extra'
 import * as path from 'path'
-import * as ts from 'typescript'
 
-import { generateFiles, compileAndGenerate } from './helpers'
-import { Context } from './context'
+import { compileAndGenerate } from './helpers'
 
 const testRoot = path.resolve(__dirname, '..', '.test')
 fse.mkdirpSync(testRoot)

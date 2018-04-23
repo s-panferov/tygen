@@ -1,7 +1,6 @@
 import * as path from 'path'
 import * as fse from 'fs-extra'
 
-import { Reflection } from './reflection/reflection'
 import { File, Converter } from './converter'
 
 export type ReflectionVisitor = () => File[] | undefined

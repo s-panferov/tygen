@@ -19,3 +19,5 @@ npm-debug.log
 /lib
 /docs
 .test/docs
+yarn-error.log
+.cache

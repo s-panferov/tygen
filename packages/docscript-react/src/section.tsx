@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { PackageReflection, Reflection } from '@docscript/reflector'
 import styled from 'styled-components'
 
 export interface SectionProps {

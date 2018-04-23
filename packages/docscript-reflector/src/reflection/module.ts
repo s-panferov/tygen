@@ -1,13 +1,10 @@
-import ts, { Expression, HeritageClause } from 'typescript'
-import * as tg from 'tsutils/typeguard'
-import * as path from 'path'
+import ts from 'typescript'
 
 import {
 	Reflection,
 	ReflectionKind,
 	BaseReflection,
 	ReflectionWithExports,
-	ReflectionLink,
 	createLink
 } from './reflection'
 import { Context } from '../context'

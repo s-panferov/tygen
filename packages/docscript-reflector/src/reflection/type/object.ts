@@ -1,33 +1,9 @@
-import ts, { Expression, HeritageClause } from 'typescript'
-import * as tg from 'tsutils/typeguard'
+import ts from 'typescript'
 
-import {
-	Reflection,
-	ReflectionKind,
-	ReflectionWithExports,
-	BaseReflection,
-	ReflectionLink,
-	HasId,
-	createLink
-} from '../reflection'
+import { ReflectionKind, BaseReflection } from '../reflection'
 import { Context } from '../../context'
-import { visitSymbol } from '../visitor'
-import { TypeParameterReflection } from '../type-parameter'
-import { visitContainer } from '../module'
-import { isReachable } from '../utils'
-import {
-	visitObjectProperties,
-	ReflectionWithProperties,
-	ObjectLikeReflection,
-	visitObjectLikeReflection
-} from '../interface'
-import {
-	ReflectionWithCallSignatures,
-	ReflectionWithConstructSignatures,
-	ReflectionWithIndexSignatures,
-	visitCallSignatures
-} from '../signature'
-import { symbolId } from '../identifier'
+import { ObjectLikeReflection, visitObjectLikeReflection } from '../interface'
+import { ReflectionWithCallSignatures, visitCallSignatures } from '../signature'
 import { TypeKind } from './type'
 
 export interface ObjectTypeReflection

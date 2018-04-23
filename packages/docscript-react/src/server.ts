@@ -1,25 +1,43 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
-import { IncomingMessage, ServerResponse } from 'http'
-import { renderHTML } from './index'
+const micro = require('micro')
 
-const baseFolder = path.join(process.cwd(), process.env.DOCS || 'docs')
+import { IncomingMessage } from 'http'
+import { renderHTML } from './html'
 
-export default function server(req: IncomingMessage) {
-	let url = req.url!
+const baseFolder = path.resolve(process.cwd(), process.env.DOCS || 'docs')
+const client = path.resolve(__dirname, 'client.js')
 
-	if (url) {
-		// TODO security
+console.log('BASE FOLDER', baseFolder)
+console.log('CLIENT', client)
 
-		let fullPath = path.join(baseFolder, url, 'index.json')
-		console.log(fullPath)
+const server = micro((req: IncomingMessage) => {
+	let url = req.url
 
-		if (fs.existsSync(fullPath)) {
-			let content = fs.readFileSync(fullPath).toString()
+	if (!url) {
+		return
+	}
+
+	console.log('URL', url)
+
+	if (url.startsWith('/-/client.js')) {
+		return fs.readFileSync(client)
+	}
+
+	let urlPath = path.join(baseFolder, url)
+
+	if (fs.existsSync(urlPath) && fs.statSync(urlPath).isFile()) {
+		return fs.readFileSync(urlPath)
+	} else {
+		let indexPath = path.join(baseFolder, url, 'index.json')
+		if (fs.existsSync(indexPath)) {
+			let content = fs.readFileSync(indexPath).toString()
 			return renderHTML(JSON.parse(content), url)
 		} else {
 			throw new Error(`File not found: ${url}`)
 		}
 	}
-}
+})
+
+server.listen(3000)

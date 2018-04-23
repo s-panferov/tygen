@@ -1,9 +1,9 @@
 import { Context } from './context'
-import * as fse from 'fs-extra'
+import * as fs from 'fs'
 import * as path from 'path'
 
-import * as CircularJSON from 'circular-json'
 import { ReflectionKind } from './reflection/reflection'
+import { mkdirSyncP } from './helpers'
 
 const IsWritable: { [name: string]: boolean } = {
 	[ReflectionKind.Class]: true,
@@ -29,7 +29,7 @@ export class Writer {
 			outDir = path.join(process.cwd(), 'docs')
 		}
 
-		fse.mkdirpSync(outDir)
+		mkdirSyncP(outDir)
 		this.outDir = outDir
 	}
 
@@ -42,8 +42,8 @@ export class Writer {
 			let folder = path.join(this.outDir, reflection.id!.replace(/::/g, path.sep))
 			let fileName = path.join(folder, 'index.json')
 
-			fse.mkdirpSync(folder)
-			fse.writeFileSync(fileName, JSON.stringify(reflection, null, 4))
+			mkdirSyncP(folder)
+			fs.writeFileSync(fileName, JSON.stringify(reflection, null, 4))
 		})
 	}
 }

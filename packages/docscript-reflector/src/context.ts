@@ -1,10 +1,7 @@
-import ts, { ModuleReference, TypeReference } from 'typescript'
+import ts from 'typescript'
 
 import { Generator } from './generator'
-import { Module } from './module'
-import { Reflection, HasId, createLink } from './reflection/reflection'
-import { ReflectionWithExports } from './reflection/reflection'
-import { WriteStream } from 'fs'
+import { Reflection, createLink } from './reflection/reflection'
 import { Writer } from './writer'
 import { TypeReflection } from './reflection/type/type'
 

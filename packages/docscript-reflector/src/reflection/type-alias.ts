@@ -1,7 +1,6 @@
 import { ReflectionKind, BaseReflection, ReflectionWithExports } from './reflection'
-import ts, { Expression, HeritageClause } from 'typescript'
+import ts from 'typescript'
 import { Context } from '../context'
-import { visitSymbol } from './visitor'
 import { symbolId } from './identifier'
 import { TypeReflection, visitType } from './type/type'
 

@@ -2,9 +2,6 @@ import yc from 'yargs'
 import * as yargs from 'yargs'
 import { compileAndGenerate } from './helpers'
 import { ReflectionWalker } from './walker'
-import { Converter } from './converter'
-import * as fs from 'fs'
-import * as path from 'path'
 
 require('source-map-support').install()
 

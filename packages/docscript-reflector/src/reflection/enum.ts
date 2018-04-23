@@ -1,18 +1,9 @@
-import ts, { Expression, HeritageClause } from 'typescript'
+import ts from 'typescript'
 import * as tg from 'tsutils/typeguard'
 
-import {
-	Reflection,
-	ReflectionKind,
-	ReflectionWithExports,
-	BaseReflection,
-	ReflectionLink
-} from './reflection'
+import { ReflectionKind, ReflectionWithExports, BaseReflection } from './reflection'
 import { Context } from '../context'
-import { visitSymbol } from './visitor'
-import { TypeParameterReflection } from './type-parameter'
 import { visitContainer } from './module'
-import { isReachable } from './utils'
 import { symbolId } from './identifier'
 
 export interface EnumMemberReflection extends BaseReflection {

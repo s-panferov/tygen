@@ -1,9 +1,7 @@
-import ts, { Expression, HeritageClause } from 'typescript'
-import * as tg from 'tsutils/typeguard'
+import ts from 'typescript'
 
-import { Reflection, ReflectionKind, BaseReflection } from './reflection'
+import { ReflectionKind, BaseReflection } from './reflection'
 import { Context } from '../context'
-import { visitSymbol } from './visitor'
 import { visitType, TypeReflection } from './type/type'
 import { symbolId } from './identifier'
 

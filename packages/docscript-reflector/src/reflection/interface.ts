@@ -1,20 +1,17 @@
-import ts, { Expression, HeritageClause } from 'typescript'
-import * as tg from 'tsutils/typeguard'
+import ts from 'typescript'
 
 import {
-	Reflection,
 	ReflectionKind,
 	ReflectionWithExports,
 	BaseReflection,
 	ReflectionLink,
-	HasId,
 	createLink
 } from './reflection'
+
 import { Context } from '../context'
 import { visitSymbol } from './visitor'
 import { TypeParameterReflection, visitTypeParameter } from './type-parameter'
 import { visitContainer } from './module'
-import { isReachable } from './utils'
 import { TypeReflection, visitType } from './type/type'
 import {
 	ReflectionWithCallSignatures,
@@ -24,6 +21,7 @@ import {
 	ReflectionWithIndexSignatures,
 	visitIndexSignatures
 } from './signature'
+
 import { symbolId } from './identifier'
 import { PropertyReflection } from './property'
 
@@ -124,7 +122,7 @@ export function visitObjectProperties(
 	let ifaceType = type as ts.InterfaceTypeWithDeclaredMembers
 
 	if (ifaceType.declaredProperties) {
-		let properties = ifaceType.declaredProperties.forEach(property => {
+		ifaceType.declaredProperties.forEach(property => {
 			let reflection = visitSymbol(property, ctx) as PropertyReflection
 			if (!reflection) {
 				return

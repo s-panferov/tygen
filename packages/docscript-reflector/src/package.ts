@@ -1,17 +1,8 @@
 import * as path from 'path'
-import * as fse from 'fs-extra'
+import * as fs from 'fs'
 import { Module } from './module'
-import {
-	BaseReflection,
-	ReflectionKind,
-	ReflectionLink,
-	createLink,
-	Reflection
-} from './reflection/reflection'
-import { REFUSED } from 'dns'
+import { BaseReflection, ReflectionKind, createLink, Reflection } from './reflection/reflection'
 import { Context } from './context'
-import { ESModuleReflection } from './reflection'
-import { createLoopVariable } from 'typescript'
 
 const { Volume } = require('memfs')
 const closest = require('pkg-up')
@@ -22,6 +13,7 @@ export interface PackageReflection
 		ReflectionWithStructure {
 	kind: ReflectionKind.Package
 	manifest: Manifest
+	main?: Reflection
 }
 
 export interface ReflectionWithReadme {
@@ -43,6 +35,7 @@ export interface FolderReflection
 export interface Manifest {
 	name: string
 	version: string
+	typings?: string
 }
 
 export interface PackageFields {
@@ -55,7 +48,7 @@ export interface PackageFields {
 export interface Package extends PackageFields {}
 
 export class Package {
-	volume = Volume.fromJSON({}) as typeof fse
+	volume = Volume.fromJSON({}) as typeof fs & { mkdirpSync: (path: string) => void }
 
 	constructor(contents: PackageFields) {
 		this.folderPath = contents.folderPath
@@ -80,7 +73,7 @@ export class Package {
 		return new Package({
 			manifestFilePath,
 			folderPath,
-			manifest: JSON.parse(fse.readFileSync(manifestFilePath).toString()),
+			manifest: JSON.parse(fs.readFileSync(manifestFilePath).toString()),
 			modules: new Map()
 		})
 	}
@@ -106,21 +99,27 @@ export class Package {
 
 		visitReadme(this.folderPath, packageRef)
 		visitFolders(this.volume, [packageRef], ctx)
+
+		if (this.manifest.typings && this.volume.existsSync(this.manifest.typings)) {
+			const id = this.volume.readFileSync(this.manifest.typings).toString()
+			const ref = createLink(ctx.reflectionById.get(id)!)
+			packageRef.main = ref
+		}
 	}
 }
 
 function visitReadme(folderPath: string, parent: ReflectionWithReadme) {
-	const files = fse.readdirSync(folderPath)
+	const files = fs.readdirSync(folderPath)
 	const readmeIndex = files.findIndex(file => file.toLowerCase() === 'readme.md')
 	if (readmeIndex !== -1) {
 		const readmePath = path.join(folderPath, files[readmeIndex])
-		const readmeContent = fse.readFileSync(readmePath).toString()
+		const readmeContent = fs.readFileSync(readmePath).toString()
 		parent.readme = readmeContent
 	}
 }
 
 export function visitFolders(
-	volume: typeof fse,
+	volume: typeof fs,
 	parents: ReflectionWithStructure[],
 	ctx: Context,
 	root = '.'

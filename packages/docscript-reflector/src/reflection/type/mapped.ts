@@ -1,7 +1,7 @@
 import * as ts from 'typescript'
 
 import { TypeReflectionBase, TypeKind, TypeReflection, visitType } from './type'
-import { ReflectionKind, createLink } from '../reflection'
+import { ReflectionKind } from '../reflection'
 import { Context } from '../../context'
 
 export interface MappedTypeReflection extends TypeReflectionBase {

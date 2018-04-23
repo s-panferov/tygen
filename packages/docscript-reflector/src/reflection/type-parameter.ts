@@ -1,7 +1,6 @@
-import { ReflectionKind, BaseReflection } from './reflection'
-import ts, { Expression, HeritageClause } from 'typescript'
+import { ReflectionKind } from './reflection'
+import ts from 'typescript'
 import { Context } from '../context'
-import { visitSymbol } from './visitor'
 import { symbolId } from './identifier'
 import { TypeReflectionBase, TypeKind } from './type/type'
 

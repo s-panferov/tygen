@@ -6,14 +6,28 @@
     "typescript",
     "documentation"
   ],
+  "alias": {
+    "@docscript/reflector": "../docscript-reflector/src/index.ts",
+    "@docscript/react": "../docscript-react/src/index.ts"
+  },
+  "scripts": {
+    "server-start": "nodemon --exec \"node -r module-alias/register -r source-map-support/register dist/server.js\"",
+    "server-watch": "parcel watch --target=node --no-autoinstall src/server.ts",
+    "client-watch": "parcel watch --no-autoinstall src/client.ts",
+    "start": "concurrently -p name -n \"server-watch,client-watch,server\" --allow-restart --restart-tries=0 --restart-after=100 \"yarn run server-watch\" \"yarn run client-watch\" \"yarn run server-start\""
+  },
   "devDependencies": {
     "@types/react": "^16.3.12",
     "@types/react-dom": "^16.0.5",
     "@types/classnames": "^2.2.3",
     "@types/micro": "^7.3.1",
-    "micro-dev": "^2.2.2"
+    "source-map-support": "^0.5.4",
+    "concurrently": "^3.5.1",
+    "parcel-bundler": "^1.7.1",
+    "nodemon": "^1.17.3"
   },
   "dependencies": {
+    "micro": "^9.2.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.1",
     "react-markdown": "^3.3.0",

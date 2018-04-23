@@ -3,7 +3,6 @@ import * as ts from 'typescript'
 import { Context } from '../context'
 import { visitInterface } from './interface'
 import { visitProperty } from './property'
-import { visitTypeParameter } from './type-parameter'
 import { visitModule } from './module'
 
 import { Reflection } from './reflection'
@@ -17,7 +16,7 @@ import { visitVariable } from './variable'
 export function visitSymbol(
 	symbol: ts.Symbol,
 	ctx: Context,
-	type?: ts.Type
+	_type?: ts.Type
 ): Reflection | undefined {
 	if (ctx.visitedReflections.has(symbol)) {
 		return ctx.reflectionBySymbol.get(symbol)

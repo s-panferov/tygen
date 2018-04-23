@@ -85,3 +85,17 @@ export function generateFiles(
 export function generateModule(fileName: string, mainPackage: string): Module | undefined {
 	return generateFiles([fileName], mainPackage).getModule(fileName)
 }
+
+export function mkdirSyncP(location: string) {
+	let normalizedPath = path.normalize(location)
+	let parsedPathObj = path.parse(normalizedPath)
+	let curDir = parsedPathObj.root
+	let folders = parsedPathObj.dir.split(path.sep)
+	folders.push(parsedPathObj.base)
+	for (let part of folders) {
+		curDir = path.join(curDir, part)
+		if (!fs.existsSync(curDir)) {
+			fs.mkdirSync(curDir)
+		}
+	}
+}
