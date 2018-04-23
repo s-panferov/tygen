@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { PackageReflection, Reflection, ReflectionKind } from '@docscript/reflector'
+import { Reflection, ReflectionKind } from '@docscript/reflector/src/reflection'
 import styled from 'styled-components'
 import { ReflectionView } from './view'
 

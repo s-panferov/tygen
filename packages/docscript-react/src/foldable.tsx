@@ -17,7 +17,7 @@ export class Foldable extends React.Component<FoldableProps, FoldableState> {
 	render() {
 		return (
 			<FoldableBlock>
-				<Plus>{this.state.open ? '+' : '-'}</Plus>
+				<Plus onClick={this.onClick}>{this.state.open ? '+' : '-'}</Plus>
 				{this.state.open && this.props.children}
 			</FoldableBlock>
 		)

@@ -7,8 +7,8 @@
     "documentation"
   ],
   "alias": {
-    "@docscript/reflector": "../docscript-reflector/src/index.ts",
-    "@docscript/react": "../docscript-react/src/index.ts"
+    "@docscript/reflector": "../docscript-reflector",
+    "@docscript/react": "../docscript-react"
   },
   "scripts": {
     "server-start": "nodemon --exec \"node -r module-alias/register -r source-map-support/register dist/server.js\"",

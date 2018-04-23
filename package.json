@@ -11,11 +11,13 @@
   },
   "_moduleAliases": {
     "@docscript/reflector": "lib/docscript-reflector/src/index.js",
-    "@docscript/react": "lib/docscript-react/src/index.js"
+    "@docscript/reflector/src": "lib/docscript-reflector/src",
+    "@docscript/react": "lib/docscript-react/src/index.js",
+    "@docscript/react/src": "lib/docscript-react/src"
   },
   "alias": {
-    "@docscript/reflector": "~/lib/docscript-reflector/src/index.js",
-    "@docscript/react": "~/lib/docscript-react/src/index.js"
+    "@docscript/reflector": "packages/docscript-reflector",
+    "@docscript/react": "packages/docscript-react"
   },
   "repository": {
     "type": "git",

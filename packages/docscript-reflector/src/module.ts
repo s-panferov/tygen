@@ -4,7 +4,8 @@ import path from 'path'
 import { Package } from './package'
 import { Context } from './context'
 
-import { visitSourceFile, ESModuleReflection } from './reflection/module'
+import { visitSourceFile } from './reflection/module'
+import { ESModuleReflection } from './reflection/module/reflection'
 
 export class Module {
 	sourceFile: ts.SourceFile

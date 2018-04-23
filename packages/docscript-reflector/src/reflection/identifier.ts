@@ -41,7 +41,11 @@ function isStatic(node: ts.Node) {
 	return ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Static
 }
 
-function generateIdChainForDeclaration(node: ts.Node, ctx: Context, symbolName?: string): string[] {
+function generateIdChainForDeclaration(
+	node: ts.Node,
+	ctx: Context,
+	_symbolName?: string
+): string[] {
 	let id = [] as string[]
 
 	const parent = node.parent

@@ -1,42 +1,19 @@
 import * as path from 'path'
 import * as fs from 'fs'
 import { Module } from './module'
-import { BaseReflection, ReflectionKind, createLink, Reflection } from './reflection/reflection'
+import { ReflectionKind, createLink } from './reflection/reflection'
 import { Context } from './context'
 
 const { Volume } = require('memfs')
 const closest = require('pkg-up')
 
-export interface PackageReflection
-	extends BaseReflection,
-		ReflectionWithReadme,
-		ReflectionWithStructure {
-	kind: ReflectionKind.Package
-	manifest: Manifest
-	main?: Reflection
-}
-
-export interface ReflectionWithReadme {
-	readme?: string
-}
-
-export interface ReflectionWithStructure {
-	id?: string
-	modules: Reflection[]
-}
-
-export interface FolderReflection
-	extends BaseReflection,
-		ReflectionWithReadme,
-		ReflectionWithStructure {
-	kind: ReflectionKind.Folder
-}
-
-export interface Manifest {
-	name: string
-	version: string
-	typings?: string
-}
+import {
+	Manifest,
+	PackageReflection,
+	ReflectionWithReadme,
+	ReflectionWithStructure,
+	FolderReflection
+} from './reflection/package'
 
 export interface PackageFields {
 	folderPath: string

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Reflection, ReflectionKind } from '@docscript/reflector'
+import { Reflection, ReflectionKind } from '@docscript/reflector/src/reflection'
 import { PackageView } from './package'
 
 export function renderReflection(ref: Reflection): React.ReactElement<any> {

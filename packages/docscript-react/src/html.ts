@@ -1,4 +1,4 @@
-import { Reflection } from '@docscript/reflector'
+import { Reflection } from '@docscript/reflector/src/reflection'
 import { renderToString } from 'react-dom/server'
 import { ServerStyleSheet } from 'styled-components'
 import { renderReflection } from './render'
@@ -22,9 +22,7 @@ export function renderHTML(ref: Reflection, _fileName: string): string {
 				${sheet.getStyleTags()}
 			</head>
 			<body>
-				<div id='react-app'>
-					${html}
-				</div>
+				<div id='react-app'>${html}</div>
 				<script type="text/javascript" src="/-/client.js" defer async></script>
 			</body>
 		</html>

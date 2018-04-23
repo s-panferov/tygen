@@ -5,7 +5,7 @@ describe(__filename, () => {
 	it('works', () => {
 		defaultSetup()
 
-		let testFile1 = file(
+		file(
 			'src/test1.ts',
 			`
 				export interface Test {
@@ -16,7 +16,7 @@ describe(__filename, () => {
 			`
 		)
 
-		let testFile2 = file(
+		file(
 			'src/test2.ts',
 			`
 				import { Test } from './test1'
@@ -29,6 +29,6 @@ describe(__filename, () => {
 			`
 		)
 
-		let ctx = compile()
+		compile()
 	})
 })
