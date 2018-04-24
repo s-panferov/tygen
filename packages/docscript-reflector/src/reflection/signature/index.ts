@@ -8,8 +8,7 @@ import {
 	SignatureReflection,
 	ReflectionWithCallSignatures,
 	ReflectionWithConstructSignatures,
-	ReflectionWithIndexSignatures,
-	FunctionScopedVariableReflection
+	ReflectionWithIndexSignatures
 } from './reflection'
 
 export function visitSignature(sig: ts.Signature, ctx: Context): SignatureReflection {
@@ -46,26 +45,6 @@ export function visitSignature(sig: ts.Signature, ctx: Context): SignatureReflec
 	}
 
 	return signatureRef
-}
-
-export function visitFunctionScopedVariable(
-	symbol: ts.Symbol,
-	ctx: Context
-): FunctionScopedVariableReflection {
-	const variableRef: FunctionScopedVariableReflection = {
-		name: symbol.name,
-		kind: ReflectionKind.FunctionScopedVariable,
-		type: undefined as any
-	}
-
-	ctx.registerSymbol(symbol, variableRef)
-
-	const type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
-	variableRef.type = visitType(type, ctx)
-
-	ts.ObjectFlags
-
-	return variableRef
 }
 
 export function visitCallSignatures(

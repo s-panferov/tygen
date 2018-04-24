@@ -4,7 +4,7 @@ import { TypeParameterReflection } from './type-parameter/reflection'
 import { ModuleReflection, NamespaceReflection, ESModuleReflection } from './module/reflection'
 import { EnumReflection, EnumMemberReflection } from './enum/reflection'
 import { FunctionReflection, MethodReflection } from './function/reflection'
-import { FunctionScopedVariableReflection, SignatureReflection } from './signature/reflection'
+import { SignatureReflection } from './signature/reflection'
 import { ClassReflection } from './class/reflection'
 import { TypeAliasReflection } from './type-alias/reflection'
 import { VariableReflection } from './variable/reflection'
@@ -19,7 +19,6 @@ export enum ReflectionKind {
 	TypeAlias = 'TypeAlias',
 	Enum = 'Enum',
 	EnumMember = 'EnumMember',
-	FunctionScopedVariable = 'FunctionScopedVariable',
 	Link = 'Link',
 	Module = 'Module',
 	Namespace = 'Namespace',
@@ -48,6 +47,7 @@ export interface BaseReflection {
 export interface ReflectionLink extends BaseReflection {
 	kind: ReflectionKind.Link
 	target: string
+	targetKind: ReflectionKind
 }
 
 export type Reflection =
@@ -59,7 +59,6 @@ export type Reflection =
 	| EnumReflection
 	| EnumMemberReflection
 	| FunctionReflection
-	| FunctionScopedVariableReflection
 	| MethodReflection
 	| ClassReflection
 	| TypeAliasReflection
@@ -81,7 +80,8 @@ export function createLink<T extends Reflection>(ref: T): ReflectionLink | T {
 	} else if (ref.id) {
 		return <ReflectionLink>{
 			kind: ReflectionKind.Link,
-			target: ref.id
+			target: ref.id,
+			targetKind: ref.kind
 		}
 	} else {
 		return ref

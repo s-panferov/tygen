@@ -50,21 +50,31 @@ export function visitSourceFile(sourceFile: ts.SourceFile, ctx: Context): ESModu
 	let symbol = ctx.checker.getSymbolAtLocation(sourceFile)
 	ctx.registerReflectionById(moduleRef, symbol)
 
-	function visitNode(node: ts.Node) {
-		let symbol = (node as any).symbol
-		if (symbol) {
-			visitSymbol(symbol, ctx)
-		} else {
-			if (ts.isVariableStatement(node)) {
-				node.declarationList.forEachChild(visitNode)
-			} else if (node.kind & ts.SyntaxKind.ObjectBindingPattern) {
+	if (symbol) {
+		visitContainer(symbol, moduleRef, ctx)
+	} else {
+		function visitNode(node: ts.Node) {
+			let symbol = (node as any).symbol
+			if (symbol) {
+				let ref = visitSymbol(symbol, ctx)
+				if (ref) {
+					if (!moduleRef.exports) {
+						moduleRef.exports = []
+					}
+					moduleRef.exports.push(createLink(ref))
+				}
 			} else {
-				debugger
+				if (ts.isVariableStatement(node)) {
+					node.declarationList.forEachChild(visitNode)
+				} else if (node.kind & ts.SyntaxKind.ObjectBindingPattern) {
+				} else {
+					debugger
+				}
 			}
 		}
-	}
 
-	sourceFile.statements.forEach(visitNode)
+		sourceFile.statements.forEach(visitNode)
+	}
 
 	return moduleRef
 }

@@ -63,9 +63,8 @@ function generateIdChainForDeclaration(
 		id.push(module.pkg.manifest.name)
 		id.push(module.pkg.manifest.version)
 		id.push(module.pathInfo.relativePath)
-	} else if (ts.isMethodDeclaration(node)) {
-		id.push((isStatic(node) ? '.' : '') + node.name.getText())
 	} else if (
+		ts.isMethodDeclaration(node) ||
 		ts.isMethodSignature(node) ||
 		ts.isFunctionDeclaration(node) ||
 		ts.isCallSignatureDeclaration(node) ||
@@ -89,20 +88,20 @@ function generateIdChainForDeclaration(
 	} else if (ts.isIntersectionTypeNode(node)) {
 		id.push('__intersection__')
 	} else {
-		let name = ((node as any) as { name?: ts.Identifier }).name
-		if (name && name.text) {
-			id.push(name.text)
-		} else if (
-			node.kind === ts.SyntaxKind.VariableStatement ||
-			node.kind === ts.SyntaxKind.VariableDeclarationList
-		) {
-			// just ignore
-		} else {
-			let symbol: ts.Symbol | undefined =
-				(node as any).symbol || ctx.checker.getSymbolAtLocation(node)
+		let symbol: ts.Symbol | undefined =
+			(node as any).symbol || ctx.checker.getSymbolAtLocation(node)
 
-			if (symbol && symbol.name) {
-				id.push(symbol.name)
+		if (symbol && symbol.escapedName) {
+			id.push(symbol.escapedName.toString())
+		} else {
+			let name = ((node as any) as { name?: ts.Identifier }).name
+			if (name && name.text) {
+				id.push(name.text)
+			} else if (
+				node.kind === ts.SyntaxKind.VariableStatement ||
+				node.kind === ts.SyntaxKind.VariableDeclarationList
+			) {
+				// just ignore
 			} else {
 				id.push('__type')
 			}

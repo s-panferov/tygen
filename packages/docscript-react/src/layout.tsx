@@ -23,14 +23,15 @@ export class Layout extends React.Component<LayoutProps> {
 }
 
 const Sidebar = styled.div`
-	display: block;
+	display: flex;
+	flex-direction: column;
 	grid-area: sidebar;
+	min-width: 200px;
+	padding: 20px 10px;
 `
 
 const Content = styled.div`
 	grid-area: content;
-	display: flex;
-	align-items: center;
 	margin-left: 20px;
 `
 
@@ -39,13 +40,11 @@ const ContentInner = styled.div`
 `
 
 const LayoutBlock = styled.div`
-	display: grid;
-
-	grid-template-areas: 'content';
-	grid-template-columns: 1fr;
-	grid-template-rows: 1fr;
+	display: flex;
+	justify-content: center;
 
 	&.wide {
+		display: grid;
 		grid-template-areas: 'sidebar content';
 		grid-template-columns: auto 1fr;
 		grid-template-rows: 1fr;

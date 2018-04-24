@@ -55,7 +55,6 @@ export class Context {
 		this.symbolByReflection.forEach((symbol, reflection) => {
 			if (symbol.declarations) {
 				// Push a link to our interface to all modules that declare it
-
 				symbol.declarations.forEach(decl => {
 					let sourceFile = decl.getSourceFile()
 					let module = this.generator.getModule(sourceFile.fileName)!

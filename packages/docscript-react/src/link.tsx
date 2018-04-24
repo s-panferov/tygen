@@ -25,7 +25,7 @@ function createLink(reflection: Reflection): { name: string; href: string } {
 		return hrefFromId(reflection.id)
 	}
 
-	throw new Error('Unsupported')
+	throw new Error(`Unsupported ${JSON.stringify(reflection, null, 4)}`)
 }
 
 export class Link extends ReflectionView<Reflection> {
@@ -35,4 +35,7 @@ export class Link extends ReflectionView<Reflection> {
 	}
 }
 
-const LinkBody = styled.a``
+const LinkBody = styled.a`
+	overflow: hidden;
+	text-overflow: ellipsis;
+`

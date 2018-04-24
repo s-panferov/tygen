@@ -53,7 +53,8 @@ export class Generator {
 			// }
 		})
 
-		context.registerRelatedModules()
+		// TODO
+		// context.registerRelatedModules()
 		return context
 	}
 }

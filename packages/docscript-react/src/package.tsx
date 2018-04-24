@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { PackageReflection, Reflection, ReflectionKind } from '@docscript/reflector/src/reflection'
+import { PackageReflection } from '@docscript/reflector/src/reflection'
 import { Markdown } from './markdown'
 import { Toolbar } from './toolbar'
 import { parseId } from './helpers'
@@ -9,19 +9,7 @@ import { Section } from './section'
 import { Link } from './link'
 import { ReflectionView } from './view'
 import { Foldable } from './foldable'
-
-function key(reflection: Reflection) {
-	switch (reflection.kind) {
-		case ReflectionKind.Link:
-			return reflection.target
-		default:
-			if (reflection.id) {
-				return reflection.id
-			} else {
-				return
-			}
-	}
-}
+import { key } from './helper'
 
 export class PackageView extends ReflectionView<PackageReflection> {
 	render() {
@@ -43,7 +31,7 @@ export class PackageView extends ReflectionView<PackageReflection> {
 					<h1>
 						{reflection.manifest.name} <Badge>Package</Badge>
 					</h1>
-					<Foldable>
+					<Foldable title="README">
 						<Markdown source={reflection.readme || 'The package has no README'} />
 					</Foldable>
 				</Layout>

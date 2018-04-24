@@ -21,9 +21,3 @@ export interface SignatureReflection extends BaseReflection {
 	typeParameters?: Reflection[]
 	returnType: Reflection
 }
-
-export interface FunctionScopedVariableReflection extends BaseReflection {
-	kind: ReflectionKind.FunctionScopedVariable
-	name: string
-	type: TypeReflection
-}

@@ -10,7 +10,7 @@ export class Section extends React.Component<SectionProps> {
 		return (
 			<SectionBody>
 				<Header>{this.props.heading}</Header>
-				{this.props.children}
+				<Content>{this.props.children}</Content>
 			</SectionBody>
 		)
 	}
@@ -26,4 +26,11 @@ const SectionBody = styled.div`
 	padding: 10px;
 	display: flex;
 	flex-direction: column;
+`
+
+const Content = styled.div`
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 250px);
+	grid-column-gap: 20px;
+	grid-row-gap: 5px;
 `

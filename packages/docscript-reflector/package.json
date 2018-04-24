@@ -7,11 +7,11 @@
     "pkg-up": "^2.0.0",
     "source-map-support": "^0.5.4",
     "tsutils": "^2.26.1",
-    "yargs": "^11.0.0",
-    "memfs": "^2.8.0"
+    "memfs": "^2.8.0",
+    "minimist": "^1.2.0"
   },
   "devDependencies": {
-    "@types/yargs": "^11.0.0",
+    "@types/minimist": "^1.2.0",
     "@types/node": "^9.6.4",
     "standard-version": "^4.3.0",
     "typescript": "^2.8.3"

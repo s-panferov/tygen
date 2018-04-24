@@ -78,7 +78,8 @@ function visitTypeInternal(type: ts.Type, ctx: Context): TypeReflection {
 			if (reflection.id) {
 				let link: ReflectionLink = {
 					kind: ReflectionKind.Link,
-					target: reflection.id
+					target: reflection.id,
+					targetKind: reflection.kind
 				}
 
 				ctx.registerType(type, link)

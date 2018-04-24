@@ -133,9 +133,13 @@ export function visitFolders(
 			visitFolders(volume, addTo, ctx, fullPath)
 		} else {
 			const id = volume.readFileSync(fullPath).toString()
-			const ref = createLink(ctx.reflectionById.get(id)!)
+			const ref = ctx.reflectionById.get(id)
+			if (!ref) {
+				throw new Error('Unknown reflection')
+			}
+			const link = createLink(ref)
 			addTo.forEach(parent => {
-				parent.modules.push(ref)
+				parent.modules.push(link)
 			})
 		}
 	})

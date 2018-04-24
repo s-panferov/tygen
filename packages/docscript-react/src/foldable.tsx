@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 export interface FoldableProps {
-	sidebar?: React.ReactNode
+	title: string
 }
 
 export interface FoldableState {
@@ -18,7 +18,7 @@ export class Foldable extends React.Component<FoldableProps, FoldableState> {
 		return (
 			<FoldableBlock>
 				<Plus onClick={this.onClick}>{this.state.open ? '+' : '-'}</Plus>
-				{this.state.open && this.props.children}
+				{this.state.open ? this.props.children : this.props.title}
 			</FoldableBlock>
 		)
 	}
@@ -40,6 +40,7 @@ const Plus = styled.div`
 	color: #444;
 	position: absolute;
 	left: -12px;
+	top: -2px;
 	font-size: 18px;
 	display: block;
 	width: 20px;
