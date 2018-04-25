@@ -6,9 +6,8 @@ import { parseId } from './helpers'
 import { Layout } from './layout'
 import { Badge } from './badge'
 import { Section } from './section'
-import { Link } from './link'
+import { RefLink } from './ref-link'
 import { ReflectionView } from './view'
-import { Foldable } from './foldable'
 import { key } from './helper'
 
 export class PackageView extends ReflectionView<PackageReflection> {
@@ -19,7 +18,7 @@ export class PackageView extends ReflectionView<PackageReflection> {
 		let modules = (
 			<Section key="struct" heading="Structure">
 				{reflection.modules.map(module => {
-					return <Link key={key(module)} reflection={module} />
+					return <RefLink key={key(module)} reflection={module} />
 				})}
 			</Section>
 		)
@@ -31,9 +30,9 @@ export class PackageView extends ReflectionView<PackageReflection> {
 					<h1>
 						{reflection.manifest.name} <Badge>Package</Badge>
 					</h1>
-					<Foldable title="README">
+					<Section heading="README">
 						<Markdown source={reflection.readme || 'The package has no README'} />
-					</Foldable>
+					</Section>
 				</Layout>
 			</div>
 		)

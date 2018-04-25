@@ -3,10 +3,6 @@ import { Reflection, ReflectionKind } from '@docscript/reflector/src/reflection'
 import styled from 'styled-components'
 import { ReflectionView } from './view'
 
-export interface LinkProps {
-	reflection: string
-}
-
 function hrefFromId(id: string) {
 	const parts = id.split('::')
 	return {
@@ -28,14 +24,14 @@ function createLink(reflection: Reflection): { name: string; href: string } {
 	throw new Error(`Unsupported ${JSON.stringify(reflection, null, 4)}`)
 }
 
-export class Link extends ReflectionView<Reflection> {
+export class RefLink extends ReflectionView<Reflection> {
 	render() {
 		let { name, href } = createLink(this.props.reflection)
-		return <LinkBody href={href}>{name}</LinkBody>
+		return <RefLinkBody href={href}>{name}</RefLinkBody>
 	}
 }
 
-const LinkBody = styled.a`
+const RefLinkBody = styled.a`
 	overflow: hidden;
 	text-overflow: ellipsis;
 `

@@ -24,7 +24,8 @@
     "source-map-support": "^0.5.4",
     "concurrently": "^3.5.1",
     "parcel-bundler": "^1.7.1",
-    "nodemon": "^1.17.3"
+    "nodemon": "^1.17.3",
+    "babel-plugin-styled-components": "^1.5.1"    
   },
   "dependencies": {
     "micro": "^9.2.0",

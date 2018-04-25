@@ -33,7 +33,7 @@ export enum ReflectionKind {
 	Folder = 'Folder'
 }
 
-export interface ReflectionWithExports {
+export interface ReflectionWithExports extends BaseReflection {
 	exports?: Reflection[]
 }
 

@@ -1,6 +1,12 @@
 import ts from 'typescript'
 
-import { Reflection, ReflectionKind, ReflectionWithExports, createLink } from '../reflection'
+import {
+	Reflection,
+	ReflectionKind,
+	ReflectionWithExports,
+	createLink,
+	BaseReflection
+} from '../reflection'
 import { Context } from '../../context'
 import { visitSymbol } from '../visitor'
 import { symbolId, declarationId } from '../identifier'
@@ -38,6 +44,26 @@ export function visitModule(symbol: ts.Symbol, ctx: Context): Reflection {
 	return reflection
 }
 
+const visited = new WeakMap<BaseReflection, Set<ts.Symbol>>()
+
+function hasExport(reflection: BaseReflection, symbol: ts.Symbol): boolean {
+	let item = visited.get(reflection)
+	if (!item) {
+		return false
+	}
+
+	return item.has(symbol)
+}
+
+function setVisited(reflection: BaseReflection, symbol: ts.Symbol) {
+	let item = visited.get(reflection)
+	if (!item) {
+		visited.set(reflection, new Set([symbol]))
+	} else {
+		item.add(symbol)
+	}
+}
+
 export function visitSourceFile(sourceFile: ts.SourceFile, ctx: Context): ESModuleReflection {
 	let module = ctx.generator.getModule(sourceFile.fileName)!
 	let moduleRef: ESModuleReflection = {
@@ -55,7 +81,8 @@ export function visitSourceFile(sourceFile: ts.SourceFile, ctx: Context): ESModu
 	} else {
 		function visitNode(node: ts.Node) {
 			let symbol = (node as any).symbol
-			if (symbol) {
+			if (symbol && !hasExport(moduleRef, symbol)) {
+				setVisited(moduleRef, symbol)
 				let ref = visitSymbol(symbol, ctx)
 				if (ref) {
 					if (!moduleRef.exports) {
@@ -83,6 +110,12 @@ export function visitContainer(symbol: ts.Symbol, parent: ReflectionWithExports,
 	let exp = symbol.exports
 	if (exp) {
 		exp.forEach(item => {
+			if (hasExport(parent, symbol)) {
+				return
+			}
+
+			setVisited(parent, symbol)
+
 			let reflection = visitSymbol(item, ctx)
 			if (reflection) {
 				if (!parent.exports) {
