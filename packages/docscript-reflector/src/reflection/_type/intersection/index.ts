@@ -1,10 +1,10 @@
 import * as ts from 'typescript'
 
 import { visitType } from '../index'
-import { TypeReflectionBase, TypeKind, TypeReflection } from '../reflection'
+import { TypeKind } from '../reflection'
 import { ReflectionKind } from '../../reflection'
 import { Context } from '../../../context'
-import { IntersectionTypeReflection } from './reflection'
+import { IntersectionTypeReflection, UnionTypeReflection } from './reflection'
 
 export function visitIntersection(
 	type: ts.IntersectionType,
@@ -21,11 +21,6 @@ export function visitIntersection(
 	reflection.types = type.types.map(type => visitType(type, ctx))
 
 	return reflection
-}
-
-export interface UnionTypeReflection extends TypeReflectionBase {
-	typeKind: TypeKind.Union
-	types: TypeReflection[]
 }
 
 export function visitUnion(type: ts.UnionType, ctx: Context): UnionTypeReflection {

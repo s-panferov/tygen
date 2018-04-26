@@ -1,8 +1,19 @@
 import React from 'react'
 import { Reflection, ReflectionKind } from '@docscript/reflector/src/reflection/reflection'
-import { Section } from './section'
+import { Section } from './ui/section'
 import { RefLink } from './ref-link'
-import { key } from './helper'
+import { key } from './helpers'
+
+export const SectionNames = {
+	[ReflectionKind.Interface]: 'Interfaces',
+	[ReflectionKind.Class]: 'Classes',
+	[ReflectionKind.TypeAlias]: 'Type Aliases',
+	[ReflectionKind.Function]: 'Functions',
+	[ReflectionKind.Variable]: 'Variables',
+	getName(group: string) {
+		return this[group] || group
+	}
+}
 
 export type GroupedReflections = { [key: string]: Reflection[] }
 
@@ -12,6 +23,7 @@ export interface GroupViewProps {
 
 export class GroupView extends React.Component<GroupViewProps> {
 	static groupReflections = groupReflections
+	static SectionNames = SectionNames
 
 	render() {
 		let { groups } = this.props
@@ -20,8 +32,9 @@ export class GroupView extends React.Component<GroupViewProps> {
 			<div>
 				{Object.keys(groups).map(group => {
 					let reflections = groups[group]
+					let name = SectionNames.getName(group)
 					return (
-						<Section key={group} heading={group}>
+						<Section key={group} heading={<h2 id={name}>{name}</h2>}>
 							<Section.Grid>
 								{reflections.map(module => {
 									return <RefLink key={key(module)} reflection={module} />

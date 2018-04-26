@@ -18,6 +18,16 @@ export function renderHTML(ref: Reflection, _fileName: string): string {
 						font-size: 16px;
 						color: #222;
 					}
+
+					h1 {
+						border-bottom: 1px solid #ccc;
+						padding-bottom: 5px;
+					}
+
+					h2 {
+						border-bottom: 1px solid #ccc;
+						padding-bottom: 5px;
+					}
 				</style>
 				${sheet.getStyleTags()}
 			</head>

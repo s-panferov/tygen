@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Foldable } from './foldable'
 
 export interface SectionProps {
-	heading: string
+	heading: React.ReactNode
 }
 
 export const Grid = styled.div`
@@ -18,24 +18,18 @@ export class Section extends React.Component<SectionProps> {
 
 	render() {
 		return (
-			<Foldable title={<Header id={this.props.heading}>{this.props.heading}</Header>}>
-				<SectionBody>{this.props.children}</SectionBody>
-			</Foldable>
+			<SectionBody>
+				<Foldable title={this.props.heading}>
+					<SectionContent>{this.props.children}</SectionContent>
+				</Foldable>
+			</SectionBody>
 		)
 	}
 }
 
-const Header = styled.h2`
-	font-size: 14px;
-	text-transform: uppercase;
-	color: #444;
-
-	margin: 0;
-	margin-bottom: 10px;
-	padding: 0;
-`
-
-const SectionBody = styled.div`
+const SectionContent = styled.div`
 	display: flex;
 	flex-direction: column;
 `
+
+const SectionBody = styled.div``

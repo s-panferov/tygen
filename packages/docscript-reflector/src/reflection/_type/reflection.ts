@@ -33,4 +33,39 @@ export interface TypeReflectionBase extends BaseReflection {
 	typeKind: TypeKind
 }
 
-export type TypeReflection = ReflectionLink | TypeReflectionBase
+import { ConditionalTypeReflection } from './conditional/reflection'
+import { IndexTypeReflection } from './index-type/reflection'
+import { IntersectionTypeReflection, UnionTypeReflection } from './intersection/reflection'
+import { LiteralTypeReflection } from './literal/reflection'
+import { MappedTypeReflection } from './mapped/reflection'
+import { ObjectTypeReflection } from './object/reflection'
+import { TypeReferenceReflection } from './reference/reflection'
+import { SubstitutionTypeReflection } from './substitution/reflection'
+import { ESSymbolReflection } from './symbol/reflection'
+import { TupleReflection } from './tuple/reflection'
+
+export interface PrimitiveTypeReflection extends TypeReflectionBase {
+	typeKind:
+		| TypeKind.Any
+		| TypeKind.Boolean
+		| TypeKind.Never
+		| TypeKind.Null
+		| TypeKind.Number
+		| TypeKind.String
+		| TypeKind.Void
+}
+
+export type TypeReflection =
+	| ReflectionLink
+	| ConditionalTypeReflection
+	| IndexTypeReflection
+	| IntersectionTypeReflection
+	| UnionTypeReflection
+	| LiteralTypeReflection
+	| MappedTypeReflection
+	| ObjectTypeReflection
+	| TypeReferenceReflection
+	| SubstitutionTypeReflection
+	| ESSymbolReflection
+	| TupleReflection
+	| PrimitiveTypeReflection

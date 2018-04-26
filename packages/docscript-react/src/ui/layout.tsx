@@ -27,7 +27,7 @@ const Sidebar = styled.div`
 	flex-direction: column;
 	grid-area: sidebar;
 	min-width: 200px;
-	padding: 20px 10px;
+	padding: 20px 10px 20px 20px;
 `
 
 const Content = styled.div`

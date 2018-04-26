@@ -17,7 +17,7 @@ export class Foldable extends React.Component<FoldableProps, FoldableState> {
 	render() {
 		return (
 			<FoldableBlock>
-				<Plus onClick={this.onClick}>{this.state.open ? '+' : '-'}</Plus>
+				<Plus onClick={this.onClick}>{this.state.open ? '-' : '+'}</Plus>
 				{this.props.title}
 				{this.state.open && this.props.children}
 			</FoldableBlock>
@@ -33,15 +33,12 @@ export class Foldable extends React.Component<FoldableProps, FoldableState> {
 
 const FoldableBlock = styled.div`
 	position: relative;
-	padding-left: 18px;
-	border-left: 1px solid #ccc;
-	margin-bottom: 20px;
 `
 
 const Plus = styled.div`
-	color: #444;
+	color: #ccc;
 	position: absolute;
-	left: -12px;
+	left: -20px;
 	top: -2px;
 	font-size: 18px;
 	display: block;
@@ -50,9 +47,5 @@ const Plus = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-weight: bold;
-	background-color: #fff;
-	border: 1px solid #ccc;
-	border-radius: 50%;
 	cursor: pointer;
 `

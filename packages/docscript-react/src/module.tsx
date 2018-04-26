@@ -1,25 +1,34 @@
 import * as React from 'react'
 import { ESModuleReflection } from '@docscript/reflector/src/reflection'
-import { Toolbar } from './toolbar'
+import { Toolbar } from './ui/toolbar'
 import { parseId } from './helpers'
-import { Layout } from './layout'
-import { Badge } from './badge'
+import { Layout } from './ui/layout'
+import { Badge } from './ui/badge'
 import { ReflectionView } from './view'
 import { GroupView } from './group'
+import { Nav } from './ui/nav'
 
 export class ModuleView extends ReflectionView<ESModuleReflection> {
 	render() {
-		let { reflection } = this.props
-		let ident = parseId(reflection.id!)
-		let groups = GroupView.groupReflections(reflection.exports || [])
+		const { reflection } = this.props
+		const ident = parseId(reflection.id!)
 
-		let sections = Object.keys(groups).map(groupName => {
-			return (
-				<a key={groupName} href={`#${groupName}`}>
-					{groupName}
-				</a>
-			)
-		})
+		const groups = GroupView.groupReflections(reflection.exports || [])
+
+		const sections = (
+			<Nav>
+				<Nav.Section heading="Structure">
+					{Object.keys(groups).map(group => {
+						const name = GroupView.SectionNames.getName(group)
+						return (
+							<Nav.Item key={group}>
+								<a href={`#${name}`}>{name}</a>
+							</Nav.Item>
+						)
+					})}
+				</Nav.Section>
+			</Nav>
+		)
 
 		return (
 			<div>
