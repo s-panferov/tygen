@@ -5,21 +5,24 @@ import styled from 'styled-components'
 import { Item } from './ui/item'
 import { TypeView } from './type'
 import { CommentView } from './comment'
+import { NavItem } from './ui/nav'
+import { hrefFromId, documentIdFromId } from './ref-link'
 
 export class PropertyView extends BaseView<PropertyReflection> {
 	render() {
-		const { reflection } = this.props
+		const { reflection, nav } = this.props
 
-		if (!reflection.type) {
-			console.error(reflection)
+		if (nav) {
+			return <NavItem href={hrefFromId(reflection.id!).href}>{reflection.name}</NavItem>
 		}
 
 		return (
 			<Item
 				name={
 					<span>
-						<PropertyName>{reflection.name}</PropertyName>:{' '}
-						{<TypeView reflection={reflection.type} />}
+						<PropertyName id={documentIdFromId(reflection.id!)}>
+							{reflection.name}
+						</PropertyName>: {<TypeView reflection={reflection.type} />}
 					</span>
 				}>
 				<CommentView reflection={reflection} />

@@ -28,14 +28,15 @@ const NavSectionHeader = styled.div`
 	margin-bottom: 10px;
 `
 
-export class NavItem extends React.Component<{}> {
+export class NavItem extends React.Component<{ href: string }> {
 	render() {
-		return <NavItemBlock>{this.props.children}</NavItemBlock>
+		return <NavItemBlock href={this.props.href}>{this.props.children}</NavItemBlock>
 	}
 }
 
-const NavItemBlock = styled.div`
+const NavItemBlock = styled.a`
 	margin-bottom: 5px;
+	display: block;
 `
 
 export interface NavProps {}

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { BaseView } from './view'
 import { parseId } from './helpers'
 
-function hrefFromId(id: string, relativeId?: string) {
+export function hrefFromId(id: string, relativeId?: string) {
 	const ident = parseId(id)
 	let href = `/${ident.pkg}/${ident.version}`
 	if (ident.module) {
@@ -26,6 +26,16 @@ function hrefFromId(id: string, relativeId?: string) {
 	return {
 		name: last,
 		href
+	}
+}
+
+export function documentIdFromId(id: string): string | undefined {
+	const ident = parseId(id)
+
+	if (ident.items) {
+		return ident.items.join('/')
+	} else {
+		return undefined
 	}
 }
 

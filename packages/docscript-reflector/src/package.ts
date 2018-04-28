@@ -62,7 +62,7 @@ export class Package {
 	generate(ctx: Context) {
 		const packageRef: PackageReflection = {
 			kind: ReflectionKind.Package,
-			id: `${this.manifest.name}::${this.manifest.version}`,
+			id: `${this.manifest.name}->${this.manifest.version}`,
 			manifest: this.manifest,
 			modules: []
 		}
@@ -107,7 +107,7 @@ export function visitFolders(
 		const fullPath = path.join(root, item)
 		if (volume.statSync(fullPath).isDirectory()) {
 			const folderRef: FolderReflection = {
-				id: `${parent.id}::${item}`,
+				id: `${parent.id}->${item}`,
 				kind: ReflectionKind.Folder,
 				name: item,
 				modules: []

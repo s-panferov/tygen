@@ -3,6 +3,7 @@ import React from 'react'
 
 export interface ReflectionViewProps<R extends BaseReflection> {
 	reflection: R
+	nav?: boolean
 }
 
 export abstract class BaseView<

@@ -29,6 +29,7 @@ export enum ReflectionKind {
 	Function = 'Function',
 	Method = 'Method',
 	Variable = 'Variable',
+	Parameter = 'Parameter',
 	Package = 'Package',
 	Folder = 'Folder',
 	NotSupported = 'NotSupported'

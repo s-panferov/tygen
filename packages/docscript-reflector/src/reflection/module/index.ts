@@ -14,7 +14,7 @@ import { ModuleReflection, NamespaceReflection, ESModuleReflection } from './ref
 
 export function visitModule(symbol: ts.Symbol, ctx: Context): Reflection {
 	if (symbol.flags & ts.SymbolFlags.ValueModule) {
-		let reflection: ModuleReflection = {
+		const reflection: ModuleReflection = {
 			id: symbolId(symbol, ctx),
 			kind: ReflectionKind.Module,
 			name: symbol.name,
@@ -25,7 +25,7 @@ export function visitModule(symbol: ts.Symbol, ctx: Context): Reflection {
 		visitContainer(symbol, reflection, ctx)
 		return reflection
 	} else if (symbol.flags & ts.SymbolFlags.NamespaceModule) {
-		let reflection: NamespaceReflection = {
+		const reflection: NamespaceReflection = {
 			id: symbolId(symbol, ctx),
 			kind: ReflectionKind.Namespace,
 			name: symbol.name,
@@ -37,8 +37,8 @@ export function visitModule(symbol: ts.Symbol, ctx: Context): Reflection {
 		return reflection
 	}
 
-	let sourceFile = symbol.declarations![0]!.getSourceFile()
-	let reflection = visitSourceFile(sourceFile, ctx)
+	const sourceFile = symbol.declarations![0]!.getSourceFile()
+	const reflection = visitSourceFile(sourceFile, ctx)
 	ctx.registerSymbol(symbol, reflection)
 
 	return reflection
@@ -65,15 +65,15 @@ function setVisited(reflection: BaseReflection, symbol: ts.Symbol) {
 }
 
 export function visitSourceFile(sourceFile: ts.SourceFile, ctx: Context): ESModuleReflection {
-	let module = ctx.generator.getModule(sourceFile.fileName)!
-	let moduleRef: ESModuleReflection = {
+	const module = ctx.generator.getModule(sourceFile.fileName)!
+	const moduleRef: ESModuleReflection = {
 		id: declarationId(sourceFile, ctx),
 		kind: ReflectionKind.ESModule,
 		name: module.pathInfo.fileName,
 		folder: module.pathInfo.folderName
 	}
 
-	let symbol = ctx.checker.getSymbolAtLocation(sourceFile)
+	const symbol = ctx.checker.getSymbolAtLocation(sourceFile)
 	ctx.registerReflectionById(moduleRef, symbol)
 
 	if (symbol) {

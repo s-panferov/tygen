@@ -16,10 +16,6 @@ export function visitProperty(symbol: ts.Symbol, ctx: Context): PropertyReflecti
 
 	ctx.registerSymbol(symbol, propertyRef)
 
-	if (symbol.name === 'main') {
-		debugger
-	}
-
 	let type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
 	let typeReflection = createLink(visitType(type, ctx))
 

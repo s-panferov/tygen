@@ -2,11 +2,11 @@ import * as ts from 'typescript'
 import { Context } from '../context'
 
 export function symbolId(symbol: ts.Symbol, ctx: Context): string {
-	return generateIdChainForSymbol(symbol, ctx).join('::')
+	return generateIdChainForSymbol(symbol, ctx).join('')
 }
 
 export function declarationId(node: ts.Node, ctx: Context): string {
-	return generateIdChainForDeclaration(node, ctx, false).join('::')
+	return generateIdChainForDeclaration(node, ctx, false).join('')
 }
 
 function generateIdChainForSymbol(symbol: ts.Symbol, ctx: Context): string[] {
@@ -28,9 +28,9 @@ function generateIdChainForSymbol(symbol: ts.Symbol, ctx: Context): string[] {
 		}
 
 		if (symbol.name) {
-			id.push(symbol.name)
+			id.push(isWritableSymbol(symbol) ? '->' : '::', symbol.name)
 		} else {
-			id.push('__type')
+			id.push('::', '__type')
 		}
 	}
 
@@ -39,6 +39,20 @@ function generateIdChainForSymbol(symbol: ts.Symbol, ctx: Context): string[] {
 
 function isStatic(node: ts.Node) {
 	return ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Static
+}
+
+function isWritableSymbol(symbol: ts.Symbol) {
+	return !!(
+		symbol.flags & ts.SymbolFlags.Interface ||
+		symbol.flags & ts.SymbolFlags.Module ||
+		symbol.flags & ts.SymbolFlags.NamespaceModule ||
+		symbol.flags & ts.SymbolFlags.Class ||
+		symbol.flags & ts.SymbolFlags.Function ||
+		(symbol.flags & ts.SymbolFlags.Variable &&
+			!(symbol.flags & ts.SymbolFlags.FunctionScopedVariable)) ||
+		symbol.flags & ts.SymbolFlags.TypeAlias ||
+		symbol.flags & ts.SymbolFlags.Enum
+	)
 }
 
 function generateIdChainForDeclaration(node: ts.Node, ctx: Context, isParent: boolean): string[] {
@@ -53,12 +67,12 @@ function generateIdChainForDeclaration(node: ts.Node, ctx: Context, isParent: bo
 	}
 
 	if (ts.isSourceFile(node)) {
-		let fileName = node.getSourceFile().fileName
-		let module = ctx.generator.getModule(fileName)!
+		const fileName = node.getSourceFile().fileName
+		const module = ctx.generator.getModule(fileName)!
 
 		id.push(module.pkg.manifest.name)
-		id.push(module.pkg.manifest.version)
-		id.push(module.pathInfo.relativePath)
+		id.push('->', module.pkg.manifest.version)
+		id.push('->', module.pathInfo.relativePath)
 	} else if (
 		ts.isMethodDeclaration(node) ||
 		ts.isMethodSignature(node) ||
@@ -66,42 +80,46 @@ function generateIdChainForDeclaration(node: ts.Node, ctx: Context, isParent: bo
 		ts.isCallSignatureDeclaration(node) ||
 		ts.isConstructSignatureDeclaration(node)
 	) {
-		let symbol: ts.Symbol | undefined =
+		const symbol: ts.Symbol | undefined =
 			(node as any).symbol || ctx.checker.getSymbolAtLocation(node)
 
-		let name = node.name ? node.name.getText() : symbol ? symbol.name : '__function'
+		const name = node.name ? node.name.getText() : symbol ? symbol.name : '__function'
+		const isWritable = symbol && isWritableSymbol(symbol)
 		if (symbol && symbol.declarations && symbol.declarations.length > 1 && isParent) {
-			id.push((isStatic(node) ? '.' : '') + `${name}.${symbol.declarations.indexOf(node)}`)
+			id.push(
+				isWritable ? '->' : '::',
+				(isStatic(node) ? '.' : '') + `${name}.${symbol.declarations.indexOf(node)}`
+			)
 		} else {
-			id.push((isStatic(node) ? '.' : '') + name)
+			id.push(isWritable ? '->' : '::', (isStatic(node) ? '.' : '') + name)
 		}
 	} else if (ts.isTypeParameterDeclaration(node)) {
-		id.push(`<${node.name.getText()}>`)
+		id.push('::', `<${node.name.getText()}>`)
 	} else if (ts.isPropertyDeclaration(node)) {
-		id.push(`.${node.name.getText()}`)
+		id.push('::', `.${node.name.getText()}`)
 	} else if (ts.isPropertyAssignment(node)) {
-		id.push(node.name.getText())
+		id.push('::', node.name.getText())
 	} else if (ts.isUnionTypeNode(node)) {
-		id.push('__union__')
+		id.push('::', '__union__')
 	} else if (ts.isIntersectionTypeNode(node)) {
-		id.push('__intersection__')
+		id.push('::', '__intersection__')
 	} else {
 		let symbol: ts.Symbol | undefined =
 			(node as any).symbol || ctx.checker.getSymbolAtLocation(node)
 
 		if (symbol && symbol.escapedName) {
-			id.push(symbol.escapedName.toString())
+			id.push(isWritableSymbol(symbol) ? '->' : '::', symbol.escapedName.toString())
 		} else {
 			let name = ((node as any) as { name?: ts.Identifier }).name
 			if (name && name.text) {
-				id.push(name.text)
+				id.push('::', name.text)
 			} else if (
 				node.kind === ts.SyntaxKind.VariableStatement ||
 				node.kind === ts.SyntaxKind.VariableDeclarationList
 			) {
 				// just ignore
 			} else {
-				id.push('__type')
+				id.push('::', '__type')
 			}
 		}
 	}

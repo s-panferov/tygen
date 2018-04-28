@@ -6,10 +6,15 @@ import { MethodReflection } from '../../docscript-reflector/src/reflection/funct
 import { SignatureView } from './signature'
 import { ReflectionKind } from '@docscript/reflector/src/reflection'
 import styled from 'styled-components'
+import { NavItem } from './ui/nav'
 
 export class MethodView extends BaseView<MethodReflection> {
 	render() {
-		const { reflection } = this.props
+		const { reflection, nav } = this.props
+
+		if (nav) {
+			return <NavItem href="">{reflection.name}</NavItem>
+		}
 
 		return (
 			<div>
