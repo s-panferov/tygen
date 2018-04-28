@@ -5,6 +5,7 @@ export interface ReflectionViewProps<R extends BaseReflection> {
 	reflection: R
 }
 
-export class ReflectionView<R extends BaseReflection> extends React.Component<
-	ReflectionViewProps<R>
-> {}
+export abstract class BaseView<
+	R extends BaseReflection,
+	P extends object = {}
+> extends React.Component<ReflectionViewProps<R> & P> {}

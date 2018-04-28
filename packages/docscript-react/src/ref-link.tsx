@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Reflection, ReflectionKind } from '@docscript/reflector/src/reflection'
 import styled from 'styled-components'
-import { ReflectionView } from './view'
+import { BaseView } from './view'
 
 function hrefFromId(id: string) {
 	const parts = id.split('::')
@@ -24,7 +24,7 @@ function createLink(reflection: Reflection): { name: string; href: string } {
 	throw new Error(`Unsupported ${JSON.stringify(reflection, null, 4)}`)
 }
 
-export class RefLink extends ReflectionView<Reflection> {
+export class RefLink extends BaseView<Reflection> {
 	render() {
 		let { name, href } = createLink(this.props.reflection)
 		return <RefLinkBody href={href}>{name}</RefLinkBody>

@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { ReflectionView } from '../view'
+import { BaseView } from '../view'
 import {
 	IntersectionTypeReflection,
 	UnionTypeReflection
@@ -8,42 +8,39 @@ import {
 import { TypeView } from '../type'
 import { TypeKind } from '@docscript/reflector/src/reflection/_type/reflection'
 import styled from 'styled-components'
+import cn from 'classnames'
 
-export class Join extends React.Component<{
-	joinWith: (i: number, prev: React.ReactNode) => React.ReactNode
-}> {
-	render() {
-		const { children, joinWith } = this.props
-		const array = React.Children.toArray(children)
-		const result = [] as React.ReactNode[]
-
-		array.forEach((value, i) => {
-			result.push(value)
-			if (i !== array.length - 1) {
-				result.push(joinWith(i, value))
-			}
-		})
-
-		return result
-	}
-}
-
-export class IntersectionTypeView extends ReflectionView<
+export class IntersectionTypeView extends BaseView<
 	IntersectionTypeReflection | UnionTypeReflection
 > {
 	render() {
 		const { reflection } = this.props
 		const sep = reflection.typeKind === TypeKind.Intersection ? '&' : '|'
+		const long = reflection.types.length > 5
 		return (
-			<Join joinWith={i => <Sep key={i}>{sep}</Sep>}>
+			<IntersectionBody className={cn({ long })}>
 				{reflection.types.map((type, i) => {
-					return <TypeView key={type.id || `${type}-${i}`} reflection={type} />
+					return (
+						<span key={type.id || `${type}-${i}`}>
+							{(long || i !== 0) && <Sep>{sep}</Sep>}
+							<TypeView reflection={type} />
+						</span>
+					)
 				})}
-			</Join>
+			</IntersectionBody>
 		)
 	}
 }
 
 const Sep = styled.span`
 	padding: 0 2px;
+	color: #ccc;
+`
+
+const IntersectionBody = styled.span`
+	&.long {
+		display: flex;
+		margin-left: 10px;
+		flex-direction: column;
+	}
 `

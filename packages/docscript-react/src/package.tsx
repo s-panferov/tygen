@@ -7,11 +7,11 @@ import { Layout } from './ui/layout'
 import { Badge } from './ui/badge'
 import { Section } from './ui/section'
 import { RefLink } from './ref-link'
-import { ReflectionView } from './view'
+import { BaseView } from './view'
 import { key } from './helpers'
 import { Nav } from './ui/nav'
 
-export class PackageView extends ReflectionView<PackageReflection> {
+export class PackageView extends BaseView<PackageReflection> {
 	render() {
 		const { reflection } = this.props
 		const ident = parseId(reflection.id!)

@@ -1,15 +1,16 @@
 import * as React from 'react'
 
-import { ReflectionView } from './view'
+import { BaseView } from './view'
 import { TypeReflection, TypeKind } from '@docscript/reflector/src/reflection/_type/reflection'
 import { ReflectionKind } from '@docscript/reflector/src/reflection'
 import { RefLink } from './ref-link'
 import styled from 'styled-components'
 import { IntersectionTypeView } from './type/intersection'
 
-export class TypeView extends ReflectionView<TypeReflection> {
+export class TypeView extends BaseView<TypeReflection> {
 	render() {
 		const { reflection } = this.props
+
 		switch (reflection.kind) {
 			case ReflectionKind.Link:
 				return <RefLink reflection={reflection} />
@@ -29,16 +30,22 @@ export class TypeView extends ReflectionView<TypeReflection> {
 						return <PrimitiveType>string</PrimitiveType>
 					case TypeKind.Void:
 						return <PrimitiveType>void</PrimitiveType>
+					case TypeKind.Object:
+						return <PrimitiveType>object</PrimitiveType>
+					case TypeKind.Undefined:
+						return <PrimitiveType>undefined</PrimitiveType>
+					case TypeKind.Literal:
+						return <PrimitiveType>{JSON.stringify(reflection.value)}</PrimitiveType>
 					case TypeKind.Intersection:
 					case TypeKind.Union:
 						return <IntersectionTypeView reflection={reflection} />
 					default:
-						return 'unsupported'
+						return 'unsupported ' + reflection.typeKind
 				}
 		}
 	}
 }
 
 const PrimitiveType = styled.span`
-	color: green;
+	color: #10ac84;
 `

@@ -1,7 +1,6 @@
 import { BaseReflection, ReflectionKind, ReflectionLink } from '../reflection'
 
 export enum TypeKind {
-	Unsupported = 'Unsupported',
 	Substitution = 'Substitution',
 	Index = 'Index',
 	Conditional = 'Conditional',
@@ -19,13 +18,13 @@ export enum TypeKind {
 	String = 'String',
 	Void = 'Void',
 	Link = 'Link',
-	Unreachable = 'Unreachable',
 	Literal = 'Literal',
 	Object = 'Object',
 	ObjectLiteral = 'ObjectLiteral',
 	ESSymbol = 'ESSymbol',
 	IndexedAccess = 'IndexedAccess',
-	Tuple = 'Tuple'
+	Tuple = 'Tuple',
+	NotSupported = 'NotSupported'
 }
 
 export interface TypeReflectionBase extends BaseReflection {
@@ -35,6 +34,7 @@ export interface TypeReflectionBase extends BaseReflection {
 
 import { ConditionalTypeReflection } from './conditional/reflection'
 import { IndexTypeReflection } from './index-type/reflection'
+import { IndexedAccessReflection } from './indexed-access/reflection'
 import { IntersectionTypeReflection, UnionTypeReflection } from './intersection/reflection'
 import { LiteralTypeReflection } from './literal/reflection'
 import { MappedTypeReflection } from './mapped/reflection'
@@ -43,6 +43,12 @@ import { TypeReferenceReflection } from './reference/reflection'
 import { SubstitutionTypeReflection } from './substitution/reflection'
 import { ESSymbolReflection } from './symbol/reflection'
 import { TupleReflection } from './tuple/reflection'
+import { TypeParameterReflection } from '../type-parameter/reflection'
+
+export interface NotSupportedTypeReflection extends TypeReflectionBase {
+	kind: ReflectionKind.Type
+	typeKind: TypeKind.NotSupported
+}
 
 export interface PrimitiveTypeReflection extends TypeReflectionBase {
 	typeKind:
@@ -53,6 +59,8 @@ export interface PrimitiveTypeReflection extends TypeReflectionBase {
 		| TypeKind.Number
 		| TypeKind.String
 		| TypeKind.Void
+		| TypeKind.Undefined
+		| TypeKind.Object
 }
 
 export type TypeReflection =
@@ -69,3 +77,6 @@ export type TypeReflection =
 	| ESSymbolReflection
 	| TupleReflection
 	| PrimitiveTypeReflection
+	| TypeParameterReflection
+	| IndexedAccessReflection
+	| NotSupportedTypeReflection

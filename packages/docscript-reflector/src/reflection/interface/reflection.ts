@@ -1,9 +1,9 @@
-import { PropertyReflection } from '../property/reflection'
 import {
 	ReflectionLink,
 	ReflectionWithExports,
 	BaseReflection,
-	ReflectionKind
+	ReflectionKind,
+	Reflection
 } from '../reflection'
 import { TypeParameterReflection } from '../type-parameter/reflection'
 import { TypeReflection } from '../_type/reflection'
@@ -14,8 +14,8 @@ import {
 } from '../signature/reflection'
 
 export interface ReflectionWithProperties {
-	ownProperties?: PropertyReflection[]
-	allProperties?: (PropertyReflection | ReflectionLink)[]
+	ownProperties?: Reflection[]
+	allProperties?: (Reflection | ReflectionLink)[]
 }
 
 export interface ReflectionWithTypeParameters {

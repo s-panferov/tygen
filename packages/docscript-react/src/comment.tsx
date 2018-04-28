@@ -1,19 +1,19 @@
 import * as React from 'react'
 import { BaseReflection } from '@docscript/reflector/src/reflection'
-import { ReflectionView } from './view'
+import { BaseView } from './view'
 import { Markdown } from './ui/markdown'
 
-export class CommentView extends ReflectionView<BaseReflection> {
+export class CommentView extends BaseView<BaseReflection> {
 	render() {
 		const { reflection } = this.props
 		if (!reflection.comments) {
 			return null
 		}
 
-		return reflection.comments.map(comment => {
+		return reflection.comments.map((comment, i) => {
 			switch (comment.kind) {
 				case 'text':
-					return <Markdown source={comment.text} />
+					return <Markdown key={i} source={comment.text} />
 				default:
 					console.warn(`Unknown comment type ${comment.kind}`)
 					return null

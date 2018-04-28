@@ -4,11 +4,11 @@ import { Toolbar } from './ui/toolbar'
 import { parseId } from './helpers'
 import { Layout } from './ui/layout'
 import { Badge } from './ui/badge'
-import { ReflectionView } from './view'
+import { BaseView } from './view'
 import { GroupView } from './group'
 import { Nav } from './ui/nav'
 
-export class ModuleView extends ReflectionView<ESModuleReflection> {
+export class ModuleView extends BaseView<ESModuleReflection> {
 	render() {
 		const { reflection } = this.props
 		const ident = parseId(reflection.id!)

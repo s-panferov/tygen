@@ -1,20 +1,25 @@
 import * as React from 'react'
 import { PropertyReflection } from '@docscript/reflector/src/reflection'
-import { ReflectionView } from './view'
+import { BaseView } from './view'
 import styled from 'styled-components'
 import { Item } from './ui/item'
 import { TypeView } from './type'
 import { CommentView } from './comment'
 
-export class PropertyView extends ReflectionView<PropertyReflection> {
+export class PropertyView extends BaseView<PropertyReflection> {
 	render() {
 		const { reflection } = this.props
+
+		if (!reflection.type) {
+			console.error(reflection)
+		}
 
 		return (
 			<Item
 				name={
 					<span>
-						{reflection.name}: {<TypeView reflection={reflection.type} />}
+						<PropertyName>{reflection.name}</PropertyName>:{' '}
+						{<TypeView reflection={reflection.type} />}
 					</span>
 				}>
 				<CommentView reflection={reflection} />
@@ -22,3 +27,7 @@ export class PropertyView extends ReflectionView<PropertyReflection> {
 		)
 	}
 }
+
+const PropertyName = styled.span`
+	color: #2e86de;
+`

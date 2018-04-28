@@ -30,7 +30,8 @@ export enum ReflectionKind {
 	Method = 'Method',
 	Variable = 'Variable',
 	Package = 'Package',
-	Folder = 'Folder'
+	Folder = 'Folder',
+	NotSupported = 'NotSupported'
 }
 
 export interface ReflectionWithExports extends BaseReflection {

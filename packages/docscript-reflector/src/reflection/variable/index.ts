@@ -1,6 +1,6 @@
 import ts from 'typescript'
 
-import { ReflectionKind } from '../reflection'
+import { ReflectionKind, createLink } from '../reflection'
 import { Context } from '../../context'
 import { symbolId } from '../identifier'
 import { visitType } from '../_type'
@@ -17,7 +17,7 @@ export function visitVariable(symbol: ts.Symbol, ctx: Context): VariableReflecti
 	ctx.registerSymbol(symbol, variableRef)
 
 	let type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
-	variableRef.type = visitType(type, ctx)
+	variableRef.type = createLink(visitType(type, ctx))
 
 	return variableRef
 }

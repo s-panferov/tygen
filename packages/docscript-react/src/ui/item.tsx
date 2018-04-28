@@ -4,7 +4,21 @@ import { Badge } from './badge'
 
 export interface ItemProps {
 	name: React.ReactNode
-	badge?: string
+	badge?:
+		| string
+		| string
+		| string
+		| string
+		| string
+		| string
+		| string
+		| string
+		| string
+		| string
+		| string
+		| string
+		| string
+		| string
 }
 
 export interface ItemState {
@@ -48,15 +62,8 @@ export class Item extends React.Component<ItemProps, ItemState> {
 
 const ItemHeader = styled.div`
 	display: flex;
-	align-items: center;
 
-	padding: 10px 5px;
-	cursor: pointer;
-	height: 10px;
-
-	&:hover {
-		background-color: #eee;
-	}
+	padding: 5px 0px;
 `
 
 const ItemBlock = styled.div`
@@ -68,7 +75,6 @@ const ItemBlock = styled.div`
 
 const ItemName = styled.div`
 	position: relative;
-	margin-left: 5px;
 	font-family: monospace;
 `
 

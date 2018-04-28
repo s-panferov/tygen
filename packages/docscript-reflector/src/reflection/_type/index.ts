@@ -15,7 +15,7 @@ import { visitConditional } from './conditional'
 import { visitMapped } from './mapped'
 import { visitIndexType } from './index-type'
 import { visitSubstitution } from './substitution'
-import { TypeReflection, TypeReflectionBase, TypeKind } from './reflection'
+import { TypeReflection, TypeKind, NotSupportedTypeReflection } from './reflection'
 
 export function visitType(type: ts.Type, ctx: Context): TypeReflection {
 	let existed = ctx.reflectionByType.get(type)
@@ -86,12 +86,7 @@ function visitTypeInternal(type: ts.Type, ctx: Context): TypeReflection {
 				return link
 			} else {
 				debugger
-				let unreachable: TypeReflectionBase = {
-					kind: ReflectionKind.Type,
-					typeKind: TypeKind.Unreachable
-				}
-				ctx.registerType(type, unreachable)
-				return unreachable
+				throw new Error('Unreachable')
 			}
 		} else {
 			debugger
@@ -119,9 +114,9 @@ function visitTypeInternal(type: ts.Type, ctx: Context): TypeReflection {
 
 	debugger
 
-	let reflection: TypeReflectionBase = {
+	let reflection: NotSupportedTypeReflection = {
 		kind: ReflectionKind.Type,
-		typeKind: TypeKind.Unsupported
+		typeKind: TypeKind.NotSupported
 	}
 
 	ctx.registerType(type, reflection)

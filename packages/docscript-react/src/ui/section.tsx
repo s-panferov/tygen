@@ -1,6 +1,8 @@
 import * as React from 'react'
-import styled from 'styled-components'
 import { Foldable } from './foldable'
+
+// @ts-ignore
+import styled, { StyledComponentClass } from 'styled-components'
 
 export interface SectionProps {
 	heading: React.ReactNode

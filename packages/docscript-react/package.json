@@ -12,8 +12,8 @@
   },
   "scripts": {
     "server-start": "nodemon --exec \"node -r module-alias/register -r source-map-support/register dist/server.js\"",
-    "server-watch": "parcel watch --target=node --no-autoinstall src/server.ts",
-    "client-watch": "parcel watch --no-autoinstall src/client.ts",
+    "server-watch": "parcel watch --target=node --no-hmr --no-autoinstall src/server.ts",
+    "client-watch": "parcel watch --no-hmr --no-autoinstall src/client.ts",
     "start": "concurrently -p name -n \"server-watch,client-watch,server\" --allow-restart --restart-tries=0 --restart-after=100 \"yarn run server-watch\" \"yarn run client-watch\" \"yarn run server-start\""
   },
   "devDependencies": {

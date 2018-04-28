@@ -10,12 +10,13 @@ import {
 	ReflectionWithConstructSignatures,
 	ReflectionWithIndexSignatures
 } from './reflection'
+import { TypeParameterReflection } from '..'
 
 export function visitSignature(sig: ts.Signature, ctx: Context): SignatureReflection {
 	const signatureRef: SignatureReflection = {
 		kind: ReflectionKind.Signature,
 		parameters: [],
-		returnType: visitType(sig.getReturnType(), ctx)
+		returnType: createLink(visitType(sig.getReturnType(), ctx))
 	}
 
 	if (sig.typeParameters) {
@@ -23,7 +24,7 @@ export function visitSignature(sig: ts.Signature, ctx: Context): SignatureReflec
 			if (!signatureRef.typeParameters) {
 				signatureRef.typeParameters = []
 			}
-			signatureRef.typeParameters.push(visitType(ty, ctx))
+			signatureRef.typeParameters.push(visitType(ty, ctx) as TypeParameterReflection)
 		})
 	}
 

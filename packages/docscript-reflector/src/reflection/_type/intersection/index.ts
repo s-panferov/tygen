@@ -2,7 +2,7 @@ import * as ts from 'typescript'
 
 import { visitType } from '../index'
 import { TypeKind } from '../reflection'
-import { ReflectionKind } from '../../reflection'
+import { ReflectionKind, createLink } from '../../reflection'
 import { Context } from '../../../context'
 import { IntersectionTypeReflection, UnionTypeReflection } from './reflection'
 
@@ -18,7 +18,7 @@ export function visitIntersection(
 
 	ctx.registerType(type, reflection)
 
-	reflection.types = type.types.map(type => visitType(type, ctx))
+	reflection.types = type.types.map(type => createLink(visitType(type, ctx)))
 
 	return reflection
 }

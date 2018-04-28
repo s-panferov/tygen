@@ -12,6 +12,7 @@ export function visitFunction(symbol: ts.Symbol, ctx: Context): FunctionReflecti
 	let functionRef: FunctionReflection = {
 		id: symbolId(symbol, ctx),
 		kind: ReflectionKind.Function,
+		name: symbol.name,
 		allCallSignatures: []
 	}
 
@@ -29,6 +30,7 @@ export function visitMethod(symbol: ts.Symbol, ctx: Context): MethodReflection {
 	let methodRef: MethodReflection = {
 		id: symbolId(symbol, ctx),
 		kind: ReflectionKind.Method,
+		name: symbol.name,
 		allCallSignatures: []
 	}
 
