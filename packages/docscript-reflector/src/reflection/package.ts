@@ -23,6 +23,7 @@ export interface FolderReflection
 		ReflectionWithReadme,
 		ReflectionWithStructure {
 	kind: ReflectionKind.Folder
+	name: string
 }
 
 export interface Manifest {

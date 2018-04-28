@@ -1,28 +1,42 @@
 import React from 'react'
 
 import { Reflection, ReflectionKind } from '@docscript/reflector/src/reflection'
-import { PackageView } from './package'
-import { ModuleView } from './module'
-import { InterfaceView } from './interface'
+import { PackagePage } from './package'
+import { ModulePage } from './module'
+import { InterfacePage } from './interface'
 import { BaseView } from './view'
-import { VariableView } from './variable'
+import { VariablePage, VariableView } from './variable'
+import { FolderPage } from './folder'
 
-export function renderReflection(ref: Reflection): React.ReactElement<any> {
+export function renderPage(ref: Reflection): React.ReactElement<any> {
 	switch (ref.kind) {
 		case ReflectionKind.Package:
-			return <PackageView reflection={ref} />
+			return <PackagePage reflection={ref} />
+		case ReflectionKind.Folder:
+			return <FolderPage reflection={ref} />
 		case ReflectionKind.ESModule:
-			return <ModuleView reflection={ref} />
+			return <ModulePage reflection={ref} />
 		case ReflectionKind.Interface:
-			return <InterfaceView reflection={ref} />
+			return <InterfacePage reflection={ref} />
 		case ReflectionKind.Variable:
-			return <VariableView reflection={ref} />
+			return <VariablePage reflection={ref} />
 	}
 	return <div>Unknown</div>
 }
 
+export class PageView extends BaseView<Reflection> {
+	render() {
+		return renderPage(this.props.reflection)
+	}
+}
+
 export class ReflectionView extends BaseView<Reflection> {
 	render() {
-		return renderReflection(this.props.reflection)
+		const { reflection: ref } = this.props
+		switch (ref.kind) {
+			case ReflectionKind.Variable:
+				return <VariableView reflection={ref} />
+		}
+		return <div>Unknown</div>
 	}
 }

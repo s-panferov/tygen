@@ -6,37 +6,25 @@ import { parseId } from './helpers'
 import { Layout } from './ui/layout'
 import { Badge } from './ui/badge'
 import { Section } from './ui/section'
-import { RefLink } from './ref-link'
 import { BaseView } from './view'
-import { key } from './helpers'
-import { Nav } from './ui/nav'
+import { renderStructure } from './folder'
+import { Breadcrumb } from './breadcrumb'
 
-export class PackageView extends BaseView<PackageReflection> {
+export class PackagePage extends BaseView<PackageReflection> {
 	render() {
 		const { reflection } = this.props
 		const ident = parseId(reflection.id!)
 
-		const modules = (
-			<Nav key="nav">
-				<Nav.Section heading="Structure">
-					{reflection.modules.map(module => {
-						return (
-							<Nav.Item key={key(module)}>
-								<RefLink reflection={module} />
-							</Nav.Item>
-						)
-					})}
-				</Nav.Section>
-			</Nav>
-		)
+		const structure = renderStructure(reflection)
 
 		return (
 			<div>
 				<Toolbar pkg={ident.pkg} version={ident.version} />
-				<Layout sidebar={[modules]}>
+				<Layout sidebar={[structure]}>
 					<h1>
 						{reflection.manifest.name} <Badge>Package</Badge>
 					</h1>
+					<Breadcrumb reflection={reflection} />
 					<Section heading="README">
 						<Markdown source={reflection.readme || 'The package has no README'} />
 					</Section>

@@ -7,8 +7,9 @@ import { Badge } from './ui/badge'
 import { BaseView } from './view'
 import { GroupView } from './group'
 import { Nav } from './ui/nav'
+import { Breadcrumb } from './breadcrumb'
 
-export class ModuleView extends BaseView<ESModuleReflection> {
+export class ModulePage extends BaseView<ESModuleReflection> {
 	render() {
 		const { reflection } = this.props
 		const ident = parseId(reflection.id!)
@@ -37,6 +38,7 @@ export class ModuleView extends BaseView<ESModuleReflection> {
 					<h1>
 						{reflection.name} <Badge>Module</Badge>
 					</h1>
+					<Breadcrumb reflection={reflection} />
 					<GroupView groups={groups} />
 				</Layout>
 			</div>

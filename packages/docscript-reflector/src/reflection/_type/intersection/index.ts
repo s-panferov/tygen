@@ -32,7 +32,7 @@ export function visitUnion(type: ts.UnionType, ctx: Context): UnionTypeReflectio
 
 	ctx.registerType(type, reflection)
 
-	reflection.types = type.types.map(type => visitType(type, ctx))
+	reflection.types = type.types.map(type => createLink(visitType(type, ctx)))
 
 	return reflection
 }

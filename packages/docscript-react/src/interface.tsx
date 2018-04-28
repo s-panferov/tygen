@@ -9,8 +9,10 @@ import { CommentView } from './comment'
 import { PropertyView } from './property'
 import { Section } from './ui/section'
 import { MethodView } from './method'
+import { Breadcrumb } from './breadcrumb'
+import { TypeParameters } from './type-parameters'
 
-export class InterfaceView extends BaseView<InterfaceReflection> {
+export class InterfacePage extends BaseView<InterfaceReflection> {
 	render() {
 		const { reflection } = this.props
 		const ident = parseId(reflection.id!)
@@ -34,8 +36,13 @@ export class InterfaceView extends BaseView<InterfaceReflection> {
 				<Toolbar pkg={ident.pkg} version={ident.version} />
 				<Layout sidebar={1}>
 					<h1>
-						{reflection.name} <Badge>Interface</Badge>
+						{reflection.name}
+						{reflection.typeParameters && (
+							<TypeParameters typeParameters={reflection.typeParameters} />
+						)}{' '}
+						<Badge>Interface</Badge>
 					</h1>
+					<Breadcrumb reflection={reflection} />
 					<CommentView reflection={reflection} />
 					{sections}
 				</Layout>

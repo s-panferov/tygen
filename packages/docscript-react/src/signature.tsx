@@ -1,14 +1,12 @@
 import * as React from 'react'
-import { BaseView } from './view'
-// import styled from 'styled-components'
-// import { Item } from './ui/item'
-import { CommentView } from './comment'
+import styled from 'styled-components'
+
 import { SignatureReflection } from '../../docscript-reflector/src/reflection/signature/reflection'
 import { TypeParameters } from './type-parameters'
 import { TypeView } from './type'
 import { ReflectionView } from './render'
-import styled from 'styled-components'
-import { Badge } from './ui/badge'
+import { BaseView } from './view'
+import { CommentView } from './comment'
 
 export class SignatureView extends BaseView<SignatureReflection, { name: string }> {
 	render() {
@@ -78,5 +76,4 @@ const SignatureMain = styled.span`
 
 const SignatureBrace = styled.span`
 	color: #666;
-	padding: 2px;
 `

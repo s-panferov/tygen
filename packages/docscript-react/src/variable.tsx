@@ -16,6 +16,12 @@ export class VariableView extends BaseView<VariableReflection> {
 	}
 }
 
+export class VariablePage extends BaseView<VariableReflection> {
+	render() {
+		return <div>Not implemented</div>
+	}
+}
+
 const VariableName = styled.span`
 	color: #40739e;
 `

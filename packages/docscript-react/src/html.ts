@@ -1,11 +1,11 @@
 import { Reflection } from '@docscript/reflector/src/reflection'
 import { renderToString } from 'react-dom/server'
 import { ServerStyleSheet } from 'styled-components'
-import { renderReflection } from './render'
+import { renderPage } from './render'
 
 export function renderHTML(ref: Reflection, _fileName: string): string {
 	let sheet = new ServerStyleSheet()
-	let el = renderReflection(ref)
+	let el = renderPage(ref)
 	let html = renderToString(sheet.collectStyles(el))
 
 	return `

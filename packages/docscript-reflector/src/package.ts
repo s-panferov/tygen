@@ -75,7 +75,7 @@ export class Package {
 		})
 
 		visitReadme(this.folderPath, packageRef)
-		visitFolders(this.volume, [packageRef], ctx)
+		visitFolders(this.volume, packageRef, ctx)
 
 		if (this.manifest.typings && this.volume.existsSync(this.manifest.typings)) {
 			const id = this.volume.readFileSync(this.manifest.typings).toString()
@@ -97,40 +97,31 @@ function visitReadme(folderPath: string, parent: ReflectionWithReadme) {
 
 export function visitFolders(
 	volume: typeof fs,
-	parents: ReflectionWithStructure[],
+	parent: ReflectionWithStructure,
 	ctx: Context,
 	root = '.'
 ) {
-	const lastParent = parents[parents.length - 1]
 	const res = volume.readdirSync(root)
-
-	let addTo: ReflectionWithStructure[]
-
-	if (res.length > 1) {
-		addTo = [lastParent]
-	} else {
-		addTo = parents
-	}
 
 	res.forEach(item => {
 		const fullPath = path.join(root, item)
 		if (volume.statSync(fullPath).isDirectory()) {
 			const folderRef: FolderReflection = {
-				id: `${lastParent.id}::${item}`,
+				id: `${parent.id}::${item}`,
 				kind: ReflectionKind.Folder,
+				name: item,
 				modules: []
 			}
 
 			ctx.registerReflectionById(folderRef)
+			visitFolders(volume, folderRef, ctx, fullPath)
 
-			let ref = createLink(folderRef)
-			if (res.length > 1) {
-				addTo.forEach(parent => {
-					parent.modules.push(ref)
-				})
+			if (res.length === 1) {
+				parent.modules.push(...folderRef.modules)
+			} else {
+				const ref = createLink(folderRef)
+				parent.modules.push(ref)
 			}
-
-			visitFolders(volume, addTo, ctx, fullPath)
 		} else {
 			const id = volume.readFileSync(fullPath).toString()
 			const ref = ctx.reflectionById.get(id)
@@ -138,9 +129,7 @@ export function visitFolders(
 				throw new Error('Unknown reflection')
 			}
 			const link = createLink(ref)
-			addTo.forEach(parent => {
-				parent.modules.push(link)
-			})
+			parent.modules.push(link)
 		}
 	})
 }
