@@ -18,7 +18,7 @@ export class VariableView extends BaseView<VariableReflection> {
 
 export class VariablePage extends BaseView<VariableReflection> {
 	render() {
-		return <div>Not implemented</div>
+		return <div>Variable is not implemented</div>
 	}
 }
 

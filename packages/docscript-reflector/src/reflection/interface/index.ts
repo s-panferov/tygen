@@ -27,6 +27,10 @@ export function visitInterface(symbol: ts.Symbol, ctx: Context): InterfaceReflec
 		name: symbol.name
 	}
 
+	if (symbol.name === 'PackageReflection') {
+		debugger
+	}
+
 	ctx.registerSymbol(symbol, iface)
 
 	const type = ctx.checker.getDeclaredTypeOfSymbol(symbol) as ts.InterfaceType

@@ -47,7 +47,7 @@ export function visitPrimitive(type: ts.Type, ctx: Context): TypeReflection | un
 			kind: ReflectionKind.Type,
 			typeKind: TypeKind.Void
 		}
-	} else if (type.flags & ts.TypeFlags.NotUnionOrUnit) {
+	} else if (type.flags & ts.TypeFlags.NonPrimitive) {
 		reflection = {
 			kind: ReflectionKind.Type,
 			typeKind: TypeKind.Object

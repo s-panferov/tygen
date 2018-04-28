@@ -21,4 +21,5 @@ export interface SignatureReflection extends BaseReflection {
 	parameters: Reflection[]
 	typeParameters?: TypeParameterReflection[]
 	returnType: TypeReflection
+	name: string
 }

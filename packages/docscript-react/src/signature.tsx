@@ -8,15 +8,15 @@ import { ReflectionView } from './render'
 import { BaseView } from './view'
 import { CommentView } from './comment'
 
-export class SignatureView extends BaseView<SignatureReflection, { name: string }> {
+export class SignatureView extends BaseView<SignatureReflection> {
 	render() {
-		const { reflection, name } = this.props
+		const { reflection } = this.props
 
 		return (
 			<div>
 				<SignatureMain>
 					<SignatureHead>
-						<SignatureName>{name}</SignatureName>
+						<SignatureName>{reflection.name}</SignatureName>
 						{reflection.typeParameters && (
 							<TypeParameters typeParameters={reflection.typeParameters} />
 						)}

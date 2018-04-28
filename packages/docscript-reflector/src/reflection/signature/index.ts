@@ -12,11 +12,24 @@ import {
 } from './reflection'
 import { TypeParameterReflection } from '..'
 
+function signatureName(sig: ts.Signature) {
+	const decl = sig.getDeclaration()
+	const symbol: ts.Symbol | undefined = (decl as any).symbol
+	if (symbol) {
+		return symbol.name
+	} else if (decl.name) {
+		return decl.name.getText()
+	} else {
+		return '__call'
+	}
+}
+
 export function visitSignature(sig: ts.Signature, ctx: Context): SignatureReflection {
 	const signatureRef: SignatureReflection = {
 		kind: ReflectionKind.Signature,
 		parameters: [],
-		returnType: createLink(visitType(sig.getReturnType(), ctx))
+		returnType: createLink(visitType(sig.getReturnType(), ctx)),
+		name: signatureName(sig)
 	}
 
 	if (sig.typeParameters) {

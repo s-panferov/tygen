@@ -79,6 +79,8 @@ function generateIdChainForDeclaration(node: ts.Node, ctx: Context, isParent: bo
 		id.push(`<${node.name.getText()}>`)
 	} else if (ts.isPropertyDeclaration(node)) {
 		id.push(`.${node.name.getText()}`)
+	} else if (ts.isPropertyAssignment(node)) {
+		id.push(node.name.getText())
 	} else if (ts.isUnionTypeNode(node)) {
 		id.push('__union__')
 	} else if (ts.isIntersectionTypeNode(node)) {

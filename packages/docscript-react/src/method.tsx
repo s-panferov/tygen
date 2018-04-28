@@ -18,11 +18,7 @@ export class MethodView extends BaseView<MethodReflection> {
 						if (sig.kind === ReflectionKind.Signature) {
 							return (
 								<MethodSignature>
-									<SignatureView
-										key={sig.id || i}
-										reflection={sig}
-										name={reflection.name}
-									/>
+									<SignatureView key={sig.id || i} reflection={sig} />
 								</MethodSignature>
 							)
 						} else {
