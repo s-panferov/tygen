@@ -5,6 +5,12 @@ import { BaseView } from './view'
 import { parseId } from './helpers'
 
 export function hrefFromId(id: string, relativeId?: string) {
+	const parts = (relativeId ? id.replace(relativeId, '') : id).split(/::|->/)
+	let last = parts[parts.length - 1]
+	if (last[0] === '/') {
+		last = last.slice(1)
+	}
+
 	const ident = parseId(id)
 	let href = `/${ident.pkg}/${ident.version}`
 	if (ident.module) {
@@ -12,17 +18,25 @@ export function hrefFromId(id: string, relativeId?: string) {
 	}
 
 	if (ident.items) {
-		href += '/' + ident.items[0]
-		if (ident.items.length > 1) {
-			href += `#` + ident.items.slice(1).join('/')
+		let itemsPart = ''
+		let file = false
+
+		for (const item of ident.items.reverse()) {
+			if (!file && item.file) {
+				if (itemsPart.length > 0) {
+					itemsPart = '#' + itemsPart
+				}
+				file = true
+			}
+
+			itemsPart =
+				item.name +
+				(itemsPart.length > 0 && itemsPart['0'] !== '#' ? '/' + itemsPart : itemsPart)
 		}
+
+		href += '/' + itemsPart
 	}
 
-	const parts = (relativeId ? id.replace(relativeId, '') : id).split('::')
-	let last = parts[parts.length - 1]
-	if (last[0] === '/') {
-		last = last.slice(1)
-	}
 	return {
 		name: last,
 		href

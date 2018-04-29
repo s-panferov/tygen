@@ -3,6 +3,7 @@ import { Reflection } from '@docscript/reflector'
 import { parseId } from './helpers'
 import styled from 'styled-components'
 import { Join } from './ui/join'
+import { hrefFromId } from './ref-link'
 
 export class Breadcrumb extends React.Component<{ reflection: Reflection }> {
 	render() {
@@ -13,42 +14,47 @@ export class Breadcrumb extends React.Component<{ reflection: Reflection }> {
 			return
 		}
 
-		const ident = parseId(id)
+		const links = [] as React.ReactNode[]
+		const regexp = /(->|::|\/|$)/g
 
-		const link = createLink(ident.pkg, ident.version)
-		const packageLink = (
-			<BreadcrumbLink key={link} href={link}>
-				{ident.pkg}
+		const pkg = id.match(/(.*?)->(.*?)(->|$)/)!
+
+		const pkgHref = hrefFromId(pkg[0])
+		links.push(
+			<BreadcrumbLink key={pkg[0]} href={pkgHref.href}>
+				{pkg[1]}
 			</BreadcrumbLink>
 		)
 
-		const moduleLink = ident.module
-			? ident.module.map((module, i) => {
-					const slice = ident.module!.slice(0, i + 1)
-					const link = createLink(ident.pkg, ident.version, ...slice)
-					return (
-						<BreadcrumbLink key={link} href={link}>
-							{module}
-						</BreadcrumbLink>
-					)
-			  })
-			: undefined
+		let rest = id.slice(pkg[0].length)
+		let lastRef: string = pkg[0]
 
-		const identLink = ident.items
-			? ident.items.map((item, i) => {
-					const slice = ident.items!.slice(0, i + 1)
-					const link = createLink(ident.pkg, ident.version, ...ident.module!, ...slice)
-					return <BreadcrumbLink href={link}>{item}</BreadcrumbLink>
-			  })
-			: undefined
+		let res: RegExpExecArray | null
+		while ((res = regexp.exec(rest))) {
+			if (res.index === 0) {
+				break
+			}
+
+			// package always goes with a version
+			let subId = pkg[0] + rest.slice(0, res.index)
+
+			const href = hrefFromId(subId, lastRef)
+			lastRef = subId
+
+			links.push(
+				<BreadcrumbLink key={subId} href={href.href}>
+					{href.name}
+				</BreadcrumbLink>
+			)
+
+			if (res.index >= rest.length - 1) {
+				break
+			}
+		}
 
 		return (
 			<BreadcrumbBody>
-				<Join joinWith={i => <BreadcrumbSep key={i}>/</BreadcrumbSep>}>
-					{packageLink}
-					{moduleLink}
-					{identLink}
-				</Join>
+				<Join joinWith={i => <BreadcrumbSep key={i}>/</BreadcrumbSep>}>{links}</Join>
 			</BreadcrumbBody>
 		)
 	}

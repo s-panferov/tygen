@@ -12,6 +12,8 @@ const client = path.resolve(__dirname, 'client.js')
 console.log('BASE FOLDER', baseFolder)
 console.log('CLIENT', client)
 
+const favicon = require('../asset/favicon.ico')
+
 const server = micro((req: IncomingMessage) => {
 	let url = req.url
 
@@ -19,10 +21,14 @@ const server = micro((req: IncomingMessage) => {
 		return
 	}
 
-	console.log('URL', url)
+	url = decodeURIComponent(url)
 
 	if (url.startsWith('/-/client.js')) {
 		return fs.readFileSync(client)
+	}
+
+	if (url.startsWith('/favicon.ico')) {
+		return fs.readFileSync(path.join(__dirname, favicon))
 	}
 
 	let urlPath = path.join(baseFolder, url)
