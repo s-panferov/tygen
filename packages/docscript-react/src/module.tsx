@@ -22,8 +22,10 @@ export class ModulePage extends BaseView<ESModuleReflection> {
 					{Object.keys(groups).map(group => {
 						const name = GroupView.SectionNames.getName(group)
 						return (
-							<Nav.Item key={group} href="#">
-								<a href={`#${name}`}>{name}</a>
+							<Nav.Item key={group}>
+								<a className="phantom" href={`#${name}`}>
+									{name}
+								</a>
 							</Nav.Item>
 						)
 					})}

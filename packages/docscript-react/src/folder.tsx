@@ -21,7 +21,7 @@ export function renderStructure(reflection: ReflectionWithStructure) {
 			<Nav.Section heading="Structure">
 				{reflection.modules.map(module => {
 					return (
-						<Nav.Item key={key(module)} href="#">
+						<Nav.Item key={key(module)}>
 							<RefLink reflection={module} relativeId={reflection.id} />
 						</Nav.Item>
 					)

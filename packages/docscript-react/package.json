@@ -12,8 +12,8 @@
   },
   "scripts": {
     "server-start": "nodemon --exec \"node -r module-alias/register -r source-map-support/register dist/server.js\"",
-    "server-watch": "parcel watch --target=node --no-hmr --no-autoinstall src/server.ts",
-    "client-watch": "parcel watch --no-hmr --no-autoinstall src/client.ts",
+    "server-watch": "parcel watch --target=node --no-hmr --no-autoinstall --public-url '/-/assets/' src/server.ts",
+    "client-watch": "parcel watch --no-hmr --no-autoinstall src/client.ts --public-url '/-/assets/'",
     "start": "concurrently -p name -n \"server-watch,client-watch,server\" --allow-restart --restart-tries=0 --restart-after=100 \"yarn run server-watch\" \"yarn run client-watch\" \"yarn run server-start\""
   },
   "devDependencies": {
@@ -33,6 +33,7 @@
     "react-dom": "^16.3.1",
     "react-markdown": "^3.3.0",
     "styled-components": "^3.2.6",
-    "classnames": "^2.2.5"
+    "classnames": "^2.2.5",
+    "mime-types": "^2.1.18"
   }
 }

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Reflection } from '@docscript/reflector'
-import { parseId } from './helpers'
 import styled from 'styled-components'
 import { Join } from './ui/join'
 import { hrefFromId } from './ref-link'
@@ -64,8 +63,10 @@ export function createLink(...parts: string[]) {
 	return '/' + parts.join('/')
 }
 
-const BreadcrumbBody = styled.span`
+const BreadcrumbBody = styled.div`
 	font-size: 14px;
+	margin-bottom: 20px;
+	margin-top: -10px;
 `
 const BreadcrumbLink = styled.a``
 const BreadcrumbSep = styled.span`

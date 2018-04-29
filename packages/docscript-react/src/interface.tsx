@@ -8,7 +8,7 @@ import { BaseView } from './view'
 import { CommentView } from './comment'
 import { Section } from './ui/section'
 import { Breadcrumb } from './breadcrumb'
-import { TypeParameters } from './type-parameters'
+import { TypeArguments } from './type-parameters'
 import { ReflectionView } from './render'
 import { TypeView } from './type'
 import { Nav, NavSection } from './ui/nav'
@@ -23,10 +23,10 @@ export class InterfacePage extends BaseView<InterfaceReflection> {
 
 		if (reflection.numberIndexType || reflection.stringIndexType) {
 			if (nav) {
-				navigation.push(<NavSection heading="Index" />)
+				navigation.push(<NavSection key="index" heading="Index" />)
 			} else {
 				sections.push(
-					<Section heading={<h2>Index Signatures</h2>}>
+					<Section key="index" heading={<h2>Index Signatures</h2>}>
 						{reflection.stringIndexType && (
 							<span>
 								String: <TypeView reflection={reflection.stringIndexType} />
@@ -42,12 +42,26 @@ export class InterfacePage extends BaseView<InterfaceReflection> {
 			}
 		}
 
-		if (reflection.allCallSignatures) {
+		if (reflection.constructSignatures) {
 			if (nav) {
-				navigation.push(<NavSection heading="Call" />)
+				navigation.push(<NavSection key="construct" heading="Construct Signatures" />)
 			} else {
 				sections.push(
-					<Section heading={<h2>Call Signatures</h2>}>
+					<Section key="call" heading={<h2>Construct Signatures</h2>}>
+						{reflection.constructSignatures.map((sig, i) => (
+							<ReflectionView reflection={sig} key={sig.id || i} />
+						))}
+					</Section>
+				)
+			}
+		}
+
+		if (reflection.allCallSignatures) {
+			if (nav) {
+				navigation.push(<NavSection key="call" heading="Call Signatures" />)
+			} else {
+				sections.push(
+					<Section key="call" heading={<h2>Call Signatures</h2>}>
 						{reflection.allCallSignatures.map((sig, i) => (
 							<ReflectionView reflection={sig} key={sig.id || i} />
 						))}
@@ -58,13 +72,21 @@ export class InterfacePage extends BaseView<InterfaceReflection> {
 
 		if (reflection.ownProperties) {
 			const properties = reflection.ownProperties.map(prop => {
-				return <ReflectionView reflection={prop} key={prop.id} nav={nav} />
+				return <ReflectionView key={prop.id} reflection={prop} nav={nav} />
 			})
 
 			if (nav) {
-				navigation.push(<NavSection heading="Properties">{properties}</NavSection>)
+				navigation.push(
+					<NavSection key="props" heading="Properties">
+						{properties}
+					</NavSection>
+				)
 			} else {
-				sections.push(<Section heading={<h2>Properties</h2>}>{properties}</Section>)
+				sections.push(
+					<Section key="props" heading={<h2>Properties</h2>}>
+						{properties}
+					</Section>
+				)
 			}
 		}
 
@@ -78,7 +100,7 @@ export class InterfacePage extends BaseView<InterfaceReflection> {
 						<h1>
 							{reflection.name}
 							{reflection.typeParameters && (
-								<TypeParameters typeParameters={reflection.typeParameters} />
+								<TypeArguments types={reflection.typeParameters} />
 							)}{' '}
 							<Badge>Interface</Badge>
 						</h1>

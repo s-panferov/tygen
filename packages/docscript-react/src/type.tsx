@@ -6,6 +6,10 @@ import { ReflectionKind } from '@docscript/reflector/src/reflection'
 import { RefLink } from './ref-link'
 import styled from 'styled-components'
 import { IntersectionTypeView } from './type/intersection'
+import { TypeReferenceView } from './type/type-reference'
+import { TypeParameterView } from './type/type-parameter'
+import { TupleView } from './type/tuple'
+import { ObjectView } from './type/object'
 
 export class TypeView extends BaseView<TypeReflection> {
 	render() {
@@ -39,6 +43,14 @@ export class TypeView extends BaseView<TypeReflection> {
 					case TypeKind.Intersection:
 					case TypeKind.Union:
 						return <IntersectionTypeView reflection={reflection} />
+					case TypeKind.TypeReference:
+						return <TypeReferenceView reflection={reflection} />
+					case TypeKind.TypeParameter:
+						return <TypeParameterView reflection={reflection} />
+					case TypeKind.Tuple:
+						return <TupleView reflection={reflection} />
+					case TypeKind.ObjectLiteral:
+						return <ObjectView reflection={reflection} />
 					default:
 						return 'unsupported ' + reflection.typeKind
 				}

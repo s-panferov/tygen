@@ -41,6 +41,7 @@ export class ReflectionView extends BaseView<Reflection> {
 		const { reflection: ref, nav } = this.props
 		switch (ref.kind) {
 			case ReflectionKind.Variable:
+			case ReflectionKind.Parameter:
 				return <VariableView reflection={ref} nav={nav} />
 			case ReflectionKind.Property:
 				return <PropertyView reflection={ref} nav={nav} />

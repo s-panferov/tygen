@@ -20,20 +20,31 @@ export function renderHTML(ref: Reflection, _fileName: string): string {
 					}
 
 					h1 {
-						border-bottom: 1px solid #ccc;
 						padding-bottom: 5px;
 					}
 
 					h2 {
-						border-bottom: 1px solid #ccc;
 						padding-bottom: 5px;
+					}
+
+					a {
+						text-decoration: none;
+						color: #5352ed;
+					}
+
+					a.phantom {
+						border-bottom: 1px dashed #ccc;
+					}
+
+					a:visited {
+						color: #5352ed;
 					}
 				</style>
 				${sheet.getStyleTags()}
 			</head>
 			<body>
 				<div id='react-app'>${html}</div>
-				<script type="text/javascript" src="/-/client.js" defer async></script>
+				<script type="text/javascript" src="/-/assets/client.js" defer async></script>
 			</body>
 		</html>
 	`

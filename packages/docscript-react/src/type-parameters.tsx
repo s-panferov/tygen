@@ -1,19 +1,20 @@
 import React from 'react'
-import { TypeParameterReflection } from '@docscript/reflector'
 import { Join } from './ui/join'
+import { TypeReflection } from '@docscript/reflector/src/reflection/_type/reflection'
+import { TypeView } from './type'
 
 export interface FoldableProps {
 	title: React.ReactNode
 }
 
-export class TypeParameters extends React.Component<{ typeParameters: TypeParameterReflection[] }> {
+export class TypeArguments extends React.Component<{ types: TypeReflection[] }> {
 	render() {
-		const { typeParameters } = this.props
+		const { types } = this.props
 		return (
 			<span>
 				{'<'}
 				<Join joinWith={i => <span key={i}>, </span>}>
-					{typeParameters.map(ty => <span key={ty.id}>{ty.name}</span>)}
+					{types.map((ty, i) => <TypeView key={ty.id || `ty${i}`} reflection={ty} />)}
 				</Join>
 				{'>'}
 			</span>

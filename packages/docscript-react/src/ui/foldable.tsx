@@ -9,6 +9,9 @@ export interface FoldableState {
 	open: boolean
 }
 
+const Expand = require('../../asset/expand-button.svg')
+const Collapse = require('../../asset/expand-arrow.svg')
+
 export class Foldable extends React.Component<FoldableProps, FoldableState> {
 	state: FoldableState = {
 		open: true
@@ -17,8 +20,12 @@ export class Foldable extends React.Component<FoldableProps, FoldableState> {
 	render() {
 		return (
 			<FoldableBlock>
-				<Plus onClick={this.onClick}>{this.state.open ? '-' : '+'}</Plus>
-				{this.props.title}
+				<FoldableTitle>
+					<Plus onClick={this.onClick}>
+						{this.state.open ? <Icon src={Expand} /> : <Icon src={Collapse} />}
+					</Plus>
+					{this.props.title}
+				</FoldableTitle>
 				{this.state.open && this.props.children}
 			</FoldableBlock>
 		)
@@ -35,17 +42,19 @@ const FoldableBlock = styled.div`
 	position: relative;
 `
 
-const Plus = styled.div`
-	color: #ccc;
-	position: absolute;
-	left: -20px;
-	top: -2px;
-	font-size: 18px;
-	display: block;
-	width: 20px;
-	height: 20px;
+const FoldableTitle = styled.div`
 	display: flex;
 	align-items: center;
-	justify-content: center;
+`
+
+const Plus = styled.div``
+
+const Icon = styled.img`
+	position: relative;
+	left: -10px;
+	width: 0.8em;
+	height: 0.8em;
+	border: 0px solid transparent;
 	cursor: pointer;
+	margin-left: calc(-1em - 0px);
 `

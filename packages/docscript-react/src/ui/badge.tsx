@@ -1,11 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
+import cn from 'classnames'
 
-export interface BadgeProps {}
+export interface BadgeProps {
+	outline?: boolean
+}
 
 export class Badge extends React.Component<BadgeProps> {
 	render() {
-		return <BadgeBlock>{this.props.children}</BadgeBlock>
+		const { outline } = this.props
+		return <BadgeBlock className={cn({ outline })}>{this.props.children}</BadgeBlock>
 	}
 }
 
@@ -17,4 +21,11 @@ const BadgeBlock = styled.span`
 	vertical-align: middle;
 	background-color: #786fa6;
 	color: #fff;
+
+	&.outline {
+		position: absolute;
+		margin-left: -10px;
+		top: 1px;
+		transform: translateX(-100%); // ^2,3
+	}
 `

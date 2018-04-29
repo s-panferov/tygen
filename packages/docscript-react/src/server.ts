@@ -2,8 +2,9 @@ import * as fs from 'fs'
 import * as path from 'path'
 
 const micro = require('micro')
+const mime = require('mime-types')
 
-import { IncomingMessage } from 'http'
+import { IncomingMessage, ServerResponse } from 'http'
 import { renderHTML } from './html'
 
 const baseFolder = path.resolve(process.cwd(), process.env.DOCS || 'docs')
@@ -12,9 +13,10 @@ const client = path.resolve(__dirname, 'client.js')
 console.log('BASE FOLDER', baseFolder)
 console.log('CLIENT', client)
 
-const favicon = require('../asset/favicon.ico')
+const favicon = require('../asset/favicon.ico') as string
+const ASSETS = '/-/assets/'
 
-const server = micro((req: IncomingMessage) => {
+const server = micro((req: IncomingMessage, res: ServerResponse) => {
 	let url = req.url
 
 	if (!url) {
@@ -23,12 +25,14 @@ const server = micro((req: IncomingMessage) => {
 
 	url = decodeURIComponent(url)
 
-	if (url.startsWith('/-/client.js')) {
-		return fs.readFileSync(client)
+	if (url.startsWith('/favicon.ico')) {
+		url = favicon
 	}
 
-	if (url.startsWith('/favicon.ico')) {
-		return fs.readFileSync(path.join(__dirname, favicon))
+	if (url.startsWith(ASSETS)) {
+		const filePath = path.join(__dirname, url.slice(ASSETS.length))
+		res.setHeader('Content-Type', mime.contentType(path.extname(filePath)))
+		return fs.readFileSync(filePath)
 	}
 
 	let urlPath = path.join(baseFolder, url)

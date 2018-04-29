@@ -1,4 +1,6 @@
 import * as React from 'react'
+import cn from 'classnames'
+
 import { Reflection, ReflectionKind } from '@docscript/reflector/src/reflection'
 import styled from 'styled-components'
 import { BaseView } from './view'
@@ -38,7 +40,7 @@ export function hrefFromId(id: string, relativeId?: string) {
 	}
 
 	return {
-		name: last,
+		name: last.replace(/[<>]/g, ''),
 		href
 	}
 }
@@ -47,9 +49,16 @@ export function documentIdFromId(id: string): string | undefined {
 	const ident = parseId(id)
 
 	if (ident.items) {
-		return ident.items.join('/')
-	} else {
-		return undefined
+		let itemsPart = ''
+		for (const item of ident.items.reverse()) {
+			if (item.file && itemsPart.length > 0) {
+				return itemsPart
+			}
+
+			itemsPart =
+				item.name +
+				(itemsPart.length > 0 && itemsPart['0'] !== '#' ? '/' + itemsPart : itemsPart)
+		}
 	}
 }
 
@@ -66,15 +75,23 @@ function createLink(reflection: Reflection, relativeId?: string): { name: string
 	throw new Error(`Unsupported ${JSON.stringify(reflection, null, 4)}`)
 }
 
-export class RefLink extends BaseView<Reflection, { relativeId?: string }> {
+export class RefLink extends BaseView<Reflection, { relativeId?: string; phantom?: boolean }> {
 	render() {
-		const { relativeId } = this.props
+		const { relativeId, phantom } = this.props
 		const { name, href } = createLink(this.props.reflection, relativeId)
-		return <RefLinkBody href={href}>{name}</RefLinkBody>
+		return (
+			<RefLinkBody href={href} className={cn({ phantom })}>
+				{name}
+			</RefLinkBody>
+		)
 	}
 }
 
 const RefLinkBody = styled.a`
 	overflow: hidden;
 	text-overflow: ellipsis;
+
+	&.phantom {
+		text-decoration: none;
+	}
 `

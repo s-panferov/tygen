@@ -2,23 +2,27 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 import { SignatureReflection } from '../../docscript-reflector/src/reflection/signature/reflection'
-import { TypeParameters } from './type-parameters'
+import { TypeArguments } from './type-parameters'
 import { TypeView } from './type'
 import { ReflectionView } from './render'
 import { BaseView } from './view'
 import { CommentView } from './comment'
+import { Badge } from './ui/badge'
 
 export class SignatureView extends BaseView<SignatureReflection> {
 	render() {
 		const { reflection } = this.props
 
 		return (
-			<div>
+			<SignatureBody>
 				<SignatureMain>
 					<SignatureHead>
-						<SignatureName>{reflection.name}</SignatureName>
+						<SignatureName>
+							<Badge outline>fn</Badge>
+							<b>{reflection.name}</b>
+						</SignatureName>
 						{reflection.typeParameters && (
-							<TypeParameters typeParameters={reflection.typeParameters} />
+							<TypeArguments types={reflection.typeParameters} />
 						)}
 						<SignatureBrace>(</SignatureBrace>
 					</SignatureHead>
@@ -27,11 +31,8 @@ export class SignatureView extends BaseView<SignatureReflection> {
 							<SignatureParams>
 								{reflection.parameters.map((param, i) => {
 									return (
-										<SignatureParam>
-											<ReflectionView
-												key={param.id || i}
-												reflection={param}
-											/>
+										<SignatureParam key={param.id || i}>
+											<ReflectionView reflection={param} />
 										</SignatureParam>
 									)
 								})}
@@ -43,7 +44,7 @@ export class SignatureView extends BaseView<SignatureReflection> {
 				<SignatureComment>
 					<CommentView reflection={reflection} />
 				</SignatureComment>
-			</div>
+			</SignatureBody>
 		)
 	}
 }
@@ -52,9 +53,11 @@ const SignatureName = styled.span`
 	color: #c44569;
 `
 
-const SignatureComment = styled.div`
-	margin-left: 20px;
+const SignatureBody = styled.div`
+	margin-bottom: 20px;
 `
+
+const SignatureComment = styled.div``
 
 const SignatureParam = styled.div`
 	& + & {
@@ -72,8 +75,9 @@ const SignatureHead = styled.span`
 
 const SignatureMain = styled.span`
 	font-family: monospace;
+	position: relative;
 `
 
 const SignatureBrace = styled.span`
-	color: #666;
+	color: #ccc;
 `
