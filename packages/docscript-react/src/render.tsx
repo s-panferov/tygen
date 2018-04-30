@@ -4,7 +4,7 @@ import { Reflection, ReflectionKind } from '@docscript/reflector/src/reflection'
 import { PackagePage } from './package'
 import { ModulePage } from './module'
 import { InterfacePage } from './interface'
-import { BaseView } from './view'
+import { BaseView, ViewContext } from './view'
 import { VariablePage, VariableView } from './variable'
 import { FolderPage } from './folder'
 import { PropertyView } from './property'
@@ -19,8 +19,11 @@ export function renderPage(ref: Reflection): React.ReactElement<any> {
 		case ReflectionKind.Folder:
 			return <FolderPage reflection={ref} />
 		case ReflectionKind.ESModule:
+		case ReflectionKind.Module:
+		case ReflectionKind.Namespace:
 			return <ModulePage reflection={ref} />
 		case ReflectionKind.Interface:
+		case ReflectionKind.Class:
 			return <InterfacePage reflection={ref} />
 		case ReflectionKind.Variable:
 			return <VariablePage reflection={ref} />
@@ -32,23 +35,27 @@ export function renderPage(ref: Reflection): React.ReactElement<any> {
 
 export class PageView extends BaseView<Reflection> {
 	render() {
-		return renderPage(this.props.reflection)
+		return (
+			<ViewContext.Provider value={{}}>
+				{renderPage(this.props.reflection)}
+			</ViewContext.Provider>
+		)
 	}
 }
 
 export class ReflectionView extends BaseView<Reflection> {
 	render() {
-		const { reflection: ref, nav } = this.props
+		const { reflection: ref } = this.props
 		switch (ref.kind) {
 			case ReflectionKind.Variable:
 			case ReflectionKind.Parameter:
-				return <VariableView reflection={ref} nav={nav} />
+				return <VariableView reflection={ref} />
 			case ReflectionKind.Property:
-				return <PropertyView reflection={ref} nav={nav} />
+				return <PropertyView reflection={ref} />
 			case ReflectionKind.Method:
-				return <MethodView reflection={ref} nav={nav} />
+				return <MethodView reflection={ref} />
 			case ReflectionKind.Signature:
-				return <SignatureView reflection={ref} nav={nav} />
+				return <SignatureView reflection={ref} />
 		}
 		return <div>Unknown</div>
 	}

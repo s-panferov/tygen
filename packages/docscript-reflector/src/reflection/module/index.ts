@@ -106,22 +106,22 @@ export function visitSourceFile(sourceFile: ts.SourceFile, ctx: Context): ESModu
 	return moduleRef
 }
 
-export function visitContainer(symbol: ts.Symbol, parent: ReflectionWithExports, ctx: Context) {
+export function visitContainer(symbol: ts.Symbol, refl: ReflectionWithExports, ctx: Context) {
 	let exp = symbol.exports
 	if (exp) {
 		exp.forEach(item => {
-			if (hasExport(parent, symbol)) {
+			if (hasExport(refl, item)) {
 				return
 			}
 
-			setVisited(parent, symbol)
+			setVisited(refl, item)
 
 			let reflection = visitSymbol(item, ctx)
 			if (reflection) {
-				if (!parent.exports) {
-					parent.exports = []
+				if (!refl.exports) {
+					refl.exports = []
 				}
-				parent.exports.push(createLink(reflection))
+				refl.exports.push(createLink(reflection))
 			}
 		})
 	}

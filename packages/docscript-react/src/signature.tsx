@@ -5,21 +5,27 @@ import { SignatureReflection } from '../../docscript-reflector/src/reflection/si
 import { TypeArguments } from './type-parameters'
 import { TypeView } from './type'
 import { ReflectionView } from './render'
-import { BaseView } from './view'
+import { BaseView, withContext } from './view'
 import { CommentView } from './comment'
 import { Badge } from './ui/badge'
 
+@withContext
 export class SignatureView extends BaseView<SignatureReflection> {
 	render() {
-		const { reflection } = this.props
+		const { reflection, settings } = this.props
+		const { compact } = settings!
 
 		return (
 			<SignatureBody>
 				<SignatureMain>
 					<SignatureHead>
 						<SignatureName>
-							<Badge outline>fn</Badge>
-							<b>{reflection.name}</b>
+							{!compact && <Badge outline>fn</Badge>}
+							<b>
+								{reflection.name === '__call' || reflection.name === '__type'
+									? ''
+									: reflection.name}
+							</b>
 						</SignatureName>
 						{reflection.typeParameters && (
 							<TypeArguments types={reflection.typeParameters} />
@@ -54,7 +60,9 @@ const SignatureName = styled.span`
 `
 
 const SignatureBody = styled.div`
-	margin-bottom: 20px;
+	& + & {
+		margin-top: 10px;
+	}
 `
 
 const SignatureComment = styled.div``
@@ -79,5 +87,5 @@ const SignatureMain = styled.span`
 `
 
 const SignatureBrace = styled.span`
-	color: #ccc;
+	color: #444;
 `

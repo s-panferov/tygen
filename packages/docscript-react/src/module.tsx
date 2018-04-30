@@ -1,5 +1,9 @@
 import * as React from 'react'
-import { ESModuleReflection } from '@docscript/reflector/src/reflection'
+import {
+	ESModuleReflection,
+	ModuleReflection,
+	NamespaceReflection
+} from '@docscript/reflector/src/reflection'
 import { Toolbar } from './ui/toolbar'
 import { parseId } from './helpers'
 import { Layout } from './ui/layout'
@@ -9,7 +13,9 @@ import { GroupView } from './group'
 import { Nav } from './ui/nav'
 import { Breadcrumb } from './breadcrumb'
 
-export class ModulePage extends BaseView<ESModuleReflection> {
+export class ModulePage extends BaseView<
+	ESModuleReflection | ModuleReflection | NamespaceReflection
+> {
 	render() {
 		const { reflection } = this.props
 		const ident = parseId(reflection.id!)

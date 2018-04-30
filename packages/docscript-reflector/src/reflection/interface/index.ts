@@ -1,6 +1,6 @@
 import ts from 'typescript'
 
-import { ReflectionKind, createLink } from '../reflection'
+import { ReflectionKind } from '../reflection'
 
 import { Context } from '../../context'
 import { visitSymbol } from '../visitor'
@@ -85,22 +85,21 @@ export function visitObjectProperties(
 	parent: ReflectionWithProperties,
 	ctx: Context
 ) {
-	let ifaceType = type as ts.InterfaceTypeWithDeclaredMembers
+	// let ifaceType = type as ts.InterfaceTypeWithDeclaredMembers
+	// if (ifaceType.declaredProperties) {
+	// 	ifaceType.declaredProperties.forEach(property => {
+	// 		let reflection = visitSymbol(property, ctx) as PropertyReflection
+	// 		if (!reflection) {
+	// 			return
+	// 		}
 
-	if (ifaceType.declaredProperties) {
-		ifaceType.declaredProperties.forEach(property => {
-			let reflection = visitSymbol(property, ctx) as PropertyReflection
-			if (!reflection) {
-				return
-			}
+	// 		if (!parent.ownProperties) {
+	// 			parent.ownProperties = []
+	// 		}
 
-			if (!parent.ownProperties) {
-				parent.ownProperties = []
-			}
-
-			parent.ownProperties.push(reflection)
-		})
-	}
+	// 		parent.ownProperties.push(reflection)
+	// 	})
+	// }
 
 	let properties = type.getProperties()
 	properties.forEach(property => {
@@ -113,6 +112,6 @@ export function visitObjectProperties(
 			parent.allProperties = []
 		}
 
-		parent.allProperties.push(createLink(reflection))
+		parent.allProperties.push(reflection)
 	})
 }

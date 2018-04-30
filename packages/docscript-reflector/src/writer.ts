@@ -35,9 +35,6 @@ export class Writer {
 
 	write() {
 		this.context.reflectionById.forEach(reflection => {
-			if (reflection.id === 'typescript->2.8.3->lib/lib.es2015.symbol.wellknown.d.ts->Map') {
-				debugger
-			}
 			if (!IsWritable[reflection.kind]) {
 				return
 			}

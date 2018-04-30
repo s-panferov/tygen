@@ -1,11 +1,13 @@
+import React from 'react'
+
 import { Reflection } from '@docscript/reflector/src/reflection'
 import { renderToString } from 'react-dom/server'
 import { ServerStyleSheet } from 'styled-components'
-import { renderPage } from './render'
+import { PageView } from './render'
 
 export function renderHTML(ref: Reflection, _fileName: string): string {
 	let sheet = new ServerStyleSheet()
-	let el = renderPage(ref)
+	let el = React.createElement(PageView, { reflection: ref })
 	let html = renderToString(sheet.collectStyles(el))
 
 	return `

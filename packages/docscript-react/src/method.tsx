@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { BaseView } from './view'
+import { BaseView, withContext } from './view'
 // import styled from 'styled-components'
 // import { Item } from './ui/item'
 import { MethodReflection } from '../../docscript-reflector/src/reflection/function/reflection'
@@ -9,9 +9,11 @@ import styled from 'styled-components'
 import { NavItem } from './ui/nav'
 import { RefLink, documentIdFromId } from './ref-link'
 
+@withContext
 export class MethodView extends BaseView<MethodReflection> {
 	render() {
-		const { reflection, nav } = this.props
+		const { reflection, settings } = this.props
+		const { nav } = settings!
 
 		if (nav) {
 			return (
@@ -22,7 +24,7 @@ export class MethodView extends BaseView<MethodReflection> {
 		}
 
 		return (
-			<div>
+			<MethodBody>
 				{reflection.allCallSignatures &&
 					reflection.allCallSignatures.map((sig, i) => {
 						if (sig.kind === ReflectionKind.Signature) {
@@ -37,13 +39,23 @@ export class MethodView extends BaseView<MethodReflection> {
 							return <div>unsupported</div>
 						}
 					})}
-			</div>
+			</MethodBody>
 		)
 	}
 }
 
 const MethodSignature = styled.div`
 	& + & {
-		margin-top: 10px;
+		margin-top: 20px;
+	}
+`
+
+const MethodBody = styled.div`
+	&:not(:only-child) {
+		margin-bottom: 20px;
+	}
+
+	&:last-child {
+		margin-bottom: 0px;
 	}
 `

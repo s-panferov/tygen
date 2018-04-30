@@ -41,7 +41,7 @@ function isStatic(node: ts.Node) {
 	return ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Static
 }
 
-function isWritableSymbol(symbol: ts.Symbol) {
+export function isWritableSymbol(symbol: ts.Symbol) {
 	return !!(
 		symbol.flags & ts.SymbolFlags.Interface ||
 		symbol.flags & ts.SymbolFlags.Module ||
@@ -99,6 +99,8 @@ function generateIdChainForDeclaration(node: ts.Node, ctx: Context, isParent: bo
 		id.push('::', `.${node.name.getText()}`)
 	} else if (ts.isPropertyAssignment(node)) {
 		id.push('::', node.name.getText())
+	} else if (ts.isModuleBlock(node)) {
+		// skip
 	} else if (ts.isUnionTypeNode(node)) {
 		id.push('::', '__union__')
 	} else if (ts.isIntersectionTypeNode(node)) {

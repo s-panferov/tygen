@@ -13,7 +13,7 @@ import {
 	ReflectionWithCallSignatures
 } from '../signature/reflection'
 
-export interface ReflectionWithProperties {
+export interface ReflectionWithProperties extends BaseReflection {
 	ownProperties?: Reflection[]
 	allProperties?: (Reflection | ReflectionLink)[]
 }

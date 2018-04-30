@@ -35,12 +35,12 @@ export function visitSymbol(
 		reflection = visitEnumMember(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Interface) {
 		reflection = visitInterface(symbol, ctx)
+	} else if (symbol.flags & ts.SymbolFlags.Method) {
+		reflection = visitMethod(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Property) {
 		reflection = visitProperty(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Function) {
 		reflection = visitFunction(symbol, ctx)
-	} else if (symbol.flags & ts.SymbolFlags.Method) {
-		reflection = visitMethod(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.TypeAlias) {
 		reflection = visitTypeAlias(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Variable) {

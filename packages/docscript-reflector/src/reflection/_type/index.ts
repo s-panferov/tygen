@@ -2,7 +2,7 @@ import * as ts from 'typescript'
 import { visitPrimitive } from './primitive'
 import { visitSymbol } from '../visitor'
 import { Context } from '../../context'
-import { ReflectionKind, ReflectionLink } from '../reflection'
+import { ReflectionKind, ReflectionLink, createLink } from '../reflection'
 import { visitLiteral, visitBooleanLiteral } from './literal'
 import { visitUnion, visitIntersection } from './intersection'
 import { visitESSymbol } from './symbol'
@@ -16,6 +16,7 @@ import { visitMapped } from './mapped'
 import { visitIndexType } from './index-type'
 import { visitSubstitution } from './substitution'
 import { TypeReflection, TypeKind, NotSupportedTypeReflection } from './reflection'
+import { isWritableSymbol } from '../identifier'
 
 export function visitType(type: ts.Type, ctx: Context): TypeReflection {
 	let existed = ctx.reflectionByType.get(type)
@@ -51,6 +52,13 @@ function visitTypeInternal(type: ts.Type, ctx: Context): TypeReflection {
 		} else if (objectType.objectFlags & ts.ObjectFlags.Mapped) {
 			return visitMapped(type, ctx)
 		} else if (!(objectType.objectFlags & ts.ObjectFlags.ClassOrInterface)) {
+			const symbol = objectType.symbol
+			if (symbol && !(symbol.flags & ts.SymbolFlags.TypeLiteral)) {
+				if (isWritableSymbol(symbol)) {
+					const reflection = createLink(visitSymbolInternal(symbol))
+					return reflection
+				}
+			}
 			return visitObjectLiteral(type, ctx)
 		}
 	}
@@ -71,8 +79,7 @@ function visitTypeInternal(type: ts.Type, ctx: Context): TypeReflection {
 		return visitSubstitution(type as ts.SubstitutionType, ctx)
 	}
 
-	let symbol = type.getSymbol()
-	if (symbol) {
+	function visitSymbolInternal(symbol: ts.Symbol) {
 		let reflection = visitSymbol(symbol, ctx, type)
 		if (reflection) {
 			if (reflection.id) {
@@ -90,7 +97,13 @@ function visitTypeInternal(type: ts.Type, ctx: Context): TypeReflection {
 			}
 		} else {
 			debugger
+			throw new Error('Unknown')
 		}
+	}
+
+	let symbol = type.getSymbol()
+	if (symbol) {
+		return visitSymbolInternal(symbol)
 	}
 
 	if (type.flags & ts.TypeFlags.StringOrNumberLiteral) {

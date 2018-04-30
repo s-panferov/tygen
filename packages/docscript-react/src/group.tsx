@@ -10,6 +10,7 @@ export const SectionNames = {
 	[ReflectionKind.TypeAlias]: 'Type Aliases',
 	[ReflectionKind.Function]: 'Functions',
 	[ReflectionKind.Variable]: 'Variables',
+	[ReflectionKind.Module]: 'Modules',
 	getName(group: string) {
 		return this[group] || group
 	}
