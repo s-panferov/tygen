@@ -17,6 +17,7 @@ import { visitIndexType } from './index-type'
 import { visitSubstitution } from './substitution'
 import { TypeReflection, TypeKind, NotSupportedTypeReflection } from './reflection'
 import { isWritableSymbol } from '../identifier'
+import { TypeReferenceReflection } from './reference/reflection'
 
 export function visitType(type: ts.Type, ctx: Context): TypeReflection {
 	let existed = ctx.reflectionByType.get(type)
@@ -36,6 +37,23 @@ function visitTypeInternal(type: ts.Type, ctx: Context): TypeReflection {
 	let primitive = visitPrimitive(type, ctx)
 	if (primitive) {
 		return primitive
+	}
+
+	if (type.aliasSymbol) {
+		const symbolReflection = createLink(visitSymbol(type.aliasSymbol, ctx)!) as ReflectionLink
+		if (type.aliasTypeArguments) {
+			const reflection: TypeReferenceReflection = {
+				kind: ReflectionKind.Type,
+				typeKind: TypeKind.TypeReference,
+				target: symbolReflection,
+				typeArguments: type.aliasTypeArguments.map(ty => visitType(ty, ctx))
+			}
+			ctx.registerType(type, reflection)
+			return reflection
+		} else {
+			ctx.registerType(type, symbolReflection)
+			return symbolReflection
+		}
 	}
 
 	if (type.flags & ts.TypeFlags.Object) {

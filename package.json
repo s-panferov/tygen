@@ -7,7 +7,8 @@
 		"packages/*"
   ],
   "scripts": {
-    "react": "cd packages/docscript-react && DOCS=$(pwd)/../../docs yarn start"
+    "react": "cd packages/docscript-react && DOCS=$(pwd)/../../docs yarn start",
+    "react-build": "cd packages/docscript-react && yarn build"
   },
   "_moduleAliases": {
     "@docscript/reflector": "lib/docscript-reflector/src/index.js",

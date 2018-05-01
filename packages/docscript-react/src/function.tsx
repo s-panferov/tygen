@@ -31,8 +31,7 @@ export class FunctionPage extends BaseView<FunctionReflection> {
 				<Toolbar pkg={ident.pkg} version={ident.version} />
 				<Layout sidebar={1}>
 					<h1>
-						{reflection.name}
-						<Badge>Function</Badge>
+						{reflection.name} <Badge>Function</Badge>
 					</h1>
 					<Breadcrumb reflection={reflection} />
 					{sections}
