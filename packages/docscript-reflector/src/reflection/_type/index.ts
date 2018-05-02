@@ -19,13 +19,13 @@ import { TypeReflection, TypeKind, NotSupportedTypeReflection } from './reflecti
 import { isWritableSymbol } from '../identifier'
 import { TypeReferenceReflection } from './reference/reflection'
 
-export function visitType(type: ts.Type, ctx: Context): TypeReflection {
+export function visitType(type: ts.Type, ctx: Context, skipAlias = false): TypeReflection {
 	let existed = ctx.reflectionByType.get(type)
 	if (existed) {
 		return existed
 	}
 
-	let reflection = visitTypeInternal(type, ctx)
+	let reflection = visitTypeInternal(type, ctx, skipAlias)
 	if (!ctx.reflectionByType.get(type)) {
 		throw new Error('Reflection is not registered')
 	}
@@ -33,13 +33,13 @@ export function visitType(type: ts.Type, ctx: Context): TypeReflection {
 	return reflection
 }
 
-function visitTypeInternal(type: ts.Type, ctx: Context): TypeReflection {
+function visitTypeInternal(type: ts.Type, ctx: Context, skipAlias = false): TypeReflection {
 	let primitive = visitPrimitive(type, ctx)
 	if (primitive) {
 		return primitive
 	}
 
-	if (type.aliasSymbol) {
+	if (!skipAlias && type.aliasSymbol) {
 		const symbolReflection = createLink(visitSymbol(type.aliasSymbol, ctx)!) as ReflectionLink
 		if (type.aliasTypeArguments) {
 			const reflection: TypeReferenceReflection = {

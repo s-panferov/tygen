@@ -11,6 +11,7 @@ import { PropertyView } from './property'
 import { MethodView } from './method'
 import { SignatureView } from './signature'
 import { FunctionPage } from './function'
+import { TypeAliasPage } from './type-alias'
 
 export function renderPage(ref: Reflection): React.ReactElement<any> {
 	switch (ref.kind) {
@@ -29,6 +30,8 @@ export function renderPage(ref: Reflection): React.ReactElement<any> {
 			return <VariablePage reflection={ref} />
 		case ReflectionKind.Function:
 			return <FunctionPage reflection={ref} />
+		case ReflectionKind.TypeAlias:
+			return <TypeAliasPage reflection={ref} />
 	}
 	return <div>Unknown</div>
 }
