@@ -33,7 +33,7 @@ export function renderPage(ref: Reflection): React.ReactElement<any> {
 		case ReflectionKind.TypeAlias:
 			return <TypeAliasPage reflection={ref} />
 	}
-	return <div>Unknown</div>
+	return <div>Unknown {ref.kind}</div>
 }
 
 export class PageView extends BaseView<Reflection> {

@@ -1,5 +1,6 @@
 import * as ts from 'typescript'
 import { Context } from '../context'
+import { isParameter } from './variable'
 
 export function symbolId(symbol: ts.Symbol, ctx: Context): string {
 	return generateIdChainForSymbol(symbol, ctx).join('')
@@ -48,8 +49,7 @@ export function isWritableSymbol(symbol: ts.Symbol) {
 		symbol.flags & ts.SymbolFlags.NamespaceModule ||
 		symbol.flags & ts.SymbolFlags.Class ||
 		symbol.flags & ts.SymbolFlags.Function ||
-		(symbol.flags & ts.SymbolFlags.Variable &&
-			!(symbol.flags & ts.SymbolFlags.FunctionScopedVariable)) ||
+		(symbol.flags & ts.SymbolFlags.Variable && !isParameter(symbol)) ||
 		symbol.flags & ts.SymbolFlags.TypeAlias ||
 		symbol.flags & ts.SymbolFlags.Enum
 	)
