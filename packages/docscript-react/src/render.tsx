@@ -12,6 +12,7 @@ import { MethodView } from './method'
 import { SignatureView } from './signature'
 import { FunctionPage } from './function'
 import { TypeAliasPage } from './type-alias'
+import { EnumPage } from './enum'
 
 export function renderPage(ref: Reflection): React.ReactElement<any> {
 	switch (ref.kind) {
@@ -32,6 +33,8 @@ export function renderPage(ref: Reflection): React.ReactElement<any> {
 			return <FunctionPage reflection={ref} />
 		case ReflectionKind.TypeAlias:
 			return <TypeAliasPage reflection={ref} />
+		case ReflectionKind.Enum:
+			return <EnumPage reflection={ref} />
 	}
 	return <div>Unknown {ref.kind}</div>
 }

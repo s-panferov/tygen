@@ -3,7 +3,7 @@ import * as tg from 'tsutils/typeguard'
 
 import { EnumMemberReflection, EnumReflection } from './reflection'
 import { Context } from '../../context'
-import { visitContainer } from '../module'
+import { visitContainer, VisitResult } from '../module'
 import { symbolId } from '../identifier'
 import { ReflectionKind } from '../reflection'
 
@@ -15,7 +15,17 @@ export function visitEnum(symbol: ts.Symbol, ctx: Context): EnumReflection {
 	}
 
 	ctx.registerSymbol(symbol, enumRef)
-	visitContainer(symbol, enumRef, ctx)
+	visitContainer(symbol, enumRef, ctx, refl => {
+		if (refl.kind === ReflectionKind.EnumMember) {
+			if (!enumRef.members) {
+				enumRef.members = []
+			}
+			enumRef.members.push(refl)
+			return VisitResult.Skip
+		} else {
+			return VisitResult.Export
+		}
+	})
 
 	return enumRef
 }

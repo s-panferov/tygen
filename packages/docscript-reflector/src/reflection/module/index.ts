@@ -106,7 +106,17 @@ export function visitSourceFile(sourceFile: ts.SourceFile, ctx: Context): ESModu
 	return moduleRef
 }
 
-export function visitContainer(symbol: ts.Symbol, refl: ReflectionWithExports, ctx: Context) {
+export enum VisitResult {
+	Skip,
+	Export
+}
+
+export function visitContainer(
+	symbol: ts.Symbol,
+	refl: ReflectionWithExports,
+	ctx: Context,
+	cb?: (refl: Reflection) => VisitResult
+) {
 	let exp = symbol.exports
 	if (exp) {
 		exp.forEach(item => {
@@ -118,10 +128,12 @@ export function visitContainer(symbol: ts.Symbol, refl: ReflectionWithExports, c
 
 			let reflection = visitSymbol(item, ctx)
 			if (reflection) {
-				if (!refl.exports) {
-					refl.exports = []
+				if (!cb || cb(reflection) === VisitResult.Export) {
+					if (!refl.exports) {
+						refl.exports = []
+					}
+					refl.exports.push(createLink(reflection))
 				}
-				refl.exports.push(createLink(reflection))
 			}
 		})
 	}

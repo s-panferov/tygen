@@ -24,7 +24,7 @@ export class ModulePage extends BaseView<
 
 		const sections = (
 			<Nav>
-				<Nav.Section heading="Structure">
+				<Nav.Section heading="Exports">
 					{Object.keys(groups).map(group => {
 						const name = GroupView.SectionNames.getName(group)
 						return (

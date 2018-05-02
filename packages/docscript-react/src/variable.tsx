@@ -46,7 +46,7 @@ export class VariablePage extends BaseView<VariableReflection> {
 					</h1>
 					<Breadcrumb reflection={reflection} />
 					<VariableBody>
-						<VariableName>{reflection.name}</VariableName>
+						var <VariableName>{reflection.name}</VariableName>
 						: <TypeView reflection={reflection.type} />
 					</VariableBody>
 					<CommentView reflection={reflection} />
