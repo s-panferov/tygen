@@ -10,14 +10,24 @@ import { Breadcrumb } from './breadcrumb'
 import { TypeArguments } from './type-parameters'
 import { TypeView } from './type'
 import styled from 'styled-components'
+import { ExportsView } from './exports'
 
 @withContext
 export class TypeAliasPage extends BaseView<TypeAliasReflection> {
 	render() {
 		const { reflection, settings } = this.props
+		const { nav } = settings!
 
 		const ident = parseId(reflection.id!)
 		const sections = [] as React.ReactNode[]
+
+		if (reflection.exports) {
+			sections.push(<ExportsView key="exports" reflection={reflection} />)
+		}
+
+		if (nav) {
+			return sections
+		}
 
 		return (
 			<div>

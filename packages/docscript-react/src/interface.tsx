@@ -16,6 +16,7 @@ import { Nav } from './ui/nav'
 import { PropertiesView } from './properties'
 import { SignaturesView } from './signatures'
 import { IndexSignaturesView } from './index-signatures'
+import { ExportsView } from './exports'
 
 @withContext
 export class InterfacePage extends BaseView<InterfaceReflection | ClassReflection> {
@@ -47,6 +48,10 @@ export class InterfacePage extends BaseView<InterfaceReflection | ClassReflectio
 		}
 
 		sections.push(<PropertiesView key="properties" properties={reflection.allProperties} />)
+
+		if (reflection.exports) {
+			sections.push(<ExportsView key="exports" reflection={reflection} />)
+		}
 
 		if (nav) {
 			return <Nav>{sections}</Nav>

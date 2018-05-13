@@ -8,6 +8,7 @@ import { BaseView } from './view'
 import { Section } from './ui/section'
 import { Breadcrumb } from './breadcrumb'
 import { ReflectionView } from './render'
+import { ExportsView } from './exports'
 
 export class FunctionPage extends BaseView<FunctionReflection> {
 	render() {
@@ -24,6 +25,10 @@ export class FunctionPage extends BaseView<FunctionReflection> {
 					))}
 				</Section>
 			)
+		}
+
+		if (reflection.exports) {
+			sections.push(<ExportsView key="exports" reflection={reflection} />)
 		}
 
 		return (

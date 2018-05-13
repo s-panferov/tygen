@@ -1,4 +1,10 @@
-export { Reflection, ReflectionKind, BaseReflection, ReflectionLink } from './reflection'
+export {
+	Reflection,
+	ReflectionKind,
+	BaseReflection,
+	ReflectionLink,
+	ReflectionWithExports
+} from './reflection'
 export { ClassReflection } from './class/reflection'
 export { EnumReflection, EnumMemberReflection } from './enum/reflection'
 export { FunctionReflection, FunctionBaseReflection } from './function/reflection'
