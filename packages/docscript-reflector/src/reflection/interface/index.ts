@@ -19,6 +19,7 @@ import {
 	InterfaceReflection,
 	ReflectionWithProperties
 } from './reflection'
+import { MethodReflection } from '../function/reflection'
 
 export function visitInterface(symbol: ts.Symbol, ctx: Context): InterfaceReflection {
 	let iface: InterfaceReflection = {
@@ -101,9 +102,10 @@ export function visitObjectProperties(
 	// 	})
 	// }
 
-	let properties = type.getProperties()
+	const properties = type.getProperties()
+
 	properties.forEach(property => {
-		let reflection = visitSymbol(property, ctx) as PropertyReflection
+		const reflection = visitSymbol(property, ctx) as PropertyReflection | MethodReflection
 		if (!reflection) {
 			return
 		}
@@ -114,4 +116,8 @@ export function visitObjectProperties(
 
 		parent.allProperties.push(reflection)
 	})
+}
+
+export function getMergedSymbol(symbol: ts.Symbol, ctx: Context): ts.Symbol | undefined {
+	return (ctx.checker as any).getMergedSymbol(symbol)
 }

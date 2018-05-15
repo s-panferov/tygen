@@ -10,9 +10,9 @@ import { NavItem } from './ui/nav'
 import { RefLink, documentIdFromId } from './ref-link'
 
 @withContext
-export class MethodView extends BaseView<MethodReflection> {
+export class MethodView extends BaseView<MethodReflection, { parentId?: string }> {
 	render() {
-		const { reflection, settings } = this.props
+		const { reflection, settings, parentId } = this.props
 		const { nav } = settings!
 
 		if (nav) {
@@ -32,7 +32,7 @@ export class MethodView extends BaseView<MethodReflection> {
 								<MethodSignature
 									id={documentIdFromId(reflection.id!)}
 									key={sig.id || i}>
-									<SignatureView reflection={sig} />
+									<SignatureView reflection={sig} parentId={parentId} />
 								</MethodSignature>
 							)
 						} else {

@@ -1,10 +1,11 @@
 import ts from 'typescript'
 
-import { ReflectionKind, createLink } from '../reflection'
+import { ReflectionKind, createLink, ReflectionLink } from '../reflection'
 import { Context } from '../../context'
 import { visitType } from '../_type'
 import { symbolId } from '../identifier'
 import { PropertyReflection } from './reflection'
+import { visitSymbol } from '../visitor'
 
 export function visitProperty(symbol: ts.Symbol, ctx: Context): PropertyReflection {
 	let propertyRef: PropertyReflection = {
@@ -21,5 +22,25 @@ export function visitProperty(symbol: ts.Symbol, ctx: Context): PropertyReflecti
 
 	propertyRef.type = typeReflection
 
+	const parentSymbol = getSymbolParent(symbol)
+	if (
+		parentSymbol &&
+		(parentSymbol.flags & ts.SymbolFlags.Interface || parentSymbol.flags & ts.SymbolFlags.Class)
+	) {
+		const parentReflection = parentSymbol && visitSymbol(parentSymbol, ctx)
+		const link = parentReflection && (createLink(parentReflection) as ReflectionLink)
+		if (link) {
+			propertyRef.origin = link
+		}
+	}
+
 	return propertyRef
+}
+
+export function getSymbolParent(symbol: ts.Symbol): ts.Symbol | undefined {
+	if ((symbol as any).parent) {
+		return (symbol as any).parent
+	}
+
+	return
 }

@@ -117,7 +117,8 @@ export function visitContainer(
 	ctx: Context,
 	cb?: (refl: Reflection) => VisitResult
 ) {
-	let exp = symbol.exports
+	// !!symbol.exports check needed because `getExportsOfModule` crashes otherwise
+	let exp = symbol.exports && ctx.checker.getExportsOfModule(symbol)
 	if (exp) {
 		exp.forEach(item => {
 			if (hasExport(refl, item)) {

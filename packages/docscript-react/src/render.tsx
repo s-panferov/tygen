@@ -49,17 +49,17 @@ export class PageView extends BaseView<Reflection> {
 	}
 }
 
-export class ReflectionView extends BaseView<Reflection> {
+export class ReflectionView extends BaseView<Reflection, { parentId?: string }> {
 	render() {
-		const { reflection: ref } = this.props
+		const { reflection: ref, parentId } = this.props
 		switch (ref.kind) {
 			case ReflectionKind.Variable:
 			case ReflectionKind.Parameter:
 				return <VariableView reflection={ref} />
 			case ReflectionKind.Property:
-				return <PropertyView reflection={ref} />
+				return <PropertyView reflection={ref} parentId={parentId} />
 			case ReflectionKind.Method:
-				return <MethodView reflection={ref} />
+				return <MethodView reflection={ref} parentId={parentId} />
 			case ReflectionKind.Signature:
 				return <SignatureView reflection={ref} />
 		}

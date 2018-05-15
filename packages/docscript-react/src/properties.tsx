@@ -9,9 +9,10 @@ import { ViewSettings, withContext } from './view'
 export class PropertiesView extends React.Component<{
 	properties?: Reflection[]
 	settings?: ViewSettings
+	parentId?: string
 }> {
 	render() {
-		const { properties, settings } = this.props
+		const { properties, settings, parentId } = this.props
 		const { nav, compact } = settings!
 
 		if (!properties) {
@@ -19,7 +20,7 @@ export class PropertiesView extends React.Component<{
 		}
 
 		const propViews = properties.map(prop => {
-			return <ReflectionView key={prop.id} reflection={prop} />
+			return <ReflectionView key={prop.id} reflection={prop} parentId={parentId} />
 		})
 
 		if (nav) {

@@ -10,7 +10,8 @@ import {
 	ReflectionWithConstructSignatures,
 	ReflectionWithIndexSignatures
 } from './reflection'
-import { TypeParameterReflection } from '..'
+
+import { TypeParameterReflection, ReflectionLink } from '..'
 
 function signatureName(sig: ts.Signature) {
 	const decl = sig.getDeclaration()
@@ -58,6 +59,24 @@ export function visitSignature(sig: ts.Signature, ctx: Context): SignatureReflec
 		signatureRef.directives = directive
 	}
 
+	if (
+		(ts.isMethodDeclaration(sig.declaration) || ts.isMethodSignature(sig.declaration)) &&
+		sig.declaration.parent
+	) {
+		const parentSymbol = (sig.declaration.parent as any).symbol as ts.Symbol | undefined
+		if (
+			parentSymbol &&
+			(parentSymbol.flags & ts.SymbolFlags.Interface ||
+				parentSymbol.flags & ts.SymbolFlags.Class)
+		) {
+			const parentReflection = parentSymbol && visitSymbol(parentSymbol, ctx)
+			const link = parentReflection && (createLink(parentReflection) as ReflectionLink)
+			if (link) {
+				signatureRef.origin = link
+			}
+		}
+	}
+
 	return signatureRef
 }
 
@@ -67,6 +86,8 @@ export function visitCallSignatures(
 	ctx: Context
 ) {
 	let otype = type as ts.InterfaceTypeWithDeclaredMembers
+
+	// TODO strage place, why two?
 
 	if (otype.declaredCallSignatures) {
 		otype.declaredCallSignatures.forEach(signature => {
@@ -78,7 +99,8 @@ export function visitCallSignatures(
 		})
 	}
 
-	type.getCallSignatures().forEach(signature => {
+	const callSignatures = type.getCallSignatures()
+	callSignatures.forEach(signature => {
 		if (!parent.allCallSignatures) {
 			parent.allCallSignatures = []
 		}

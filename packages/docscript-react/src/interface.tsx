@@ -17,6 +17,7 @@ import { PropertiesView } from './properties'
 import { SignaturesView } from './signatures'
 import { IndexSignaturesView } from './index-signatures'
 import { ExportsView } from './exports'
+import { BaseTypes } from './base-types'
 
 @withContext
 export class InterfacePage extends BaseView<InterfaceReflection | ClassReflection> {
@@ -47,7 +48,13 @@ export class InterfacePage extends BaseView<InterfaceReflection | ClassReflectio
 			)
 		}
 
-		sections.push(<PropertiesView key="properties" properties={reflection.allProperties} />)
+		sections.push(
+			<PropertiesView
+				key="properties"
+				properties={reflection.allProperties}
+				parentId={reflection.id}
+			/>
+		)
 
 		if (reflection.exports) {
 			sections.push(<ExportsView key="exports" reflection={reflection} />)
@@ -78,6 +85,10 @@ export class InterfacePage extends BaseView<InterfaceReflection | ClassReflectio
 							</Badge>
 						</h1>
 						<Breadcrumb reflection={reflection} />
+						<BaseTypes types={reflection.baseTypes} />
+						{reflection.kind === ReflectionKind.Class && (
+							<BaseTypes title="Implements" types={reflection.implements} />
+						)}
 						<CommentView reflection={reflection} />
 						{sections}
 					</Layout>

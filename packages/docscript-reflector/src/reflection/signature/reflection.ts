@@ -1,6 +1,6 @@
 import { ReflectionLink, BaseReflection, Reflection, ReflectionKind } from '../reflection'
 import { TypeReflection } from '../_type/reflection'
-import { TypeParameterReflection } from '@docscript/reflector'
+import { TypeParameterReflection, ReflectionWithOrigin } from '@docscript/reflector'
 
 export interface ReflectionWithCallSignatures {
 	ownCallSignatures?: SignatureReflection[]
@@ -16,7 +16,7 @@ export interface ReflectionWithIndexSignatures {
 	stringIndexType?: TypeReflection
 }
 
-export interface SignatureReflection extends BaseReflection {
+export interface SignatureReflection extends BaseReflection, ReflectionWithOrigin {
 	kind: ReflectionKind.Signature
 	parameters: Reflection[]
 	typeParameters?: TypeParameterReflection[]

@@ -8,11 +8,12 @@ import { ReflectionView } from './render'
 import { BaseView, withContext } from './view'
 import { CommentView } from './comment'
 import { Badge } from './ui/badge'
+import { DefinedIn } from './property'
 
 @withContext
-export class SignatureView extends BaseView<SignatureReflection> {
+export class SignatureView extends BaseView<SignatureReflection, { parentId?: string }> {
 	render() {
-		const { reflection, settings } = this.props
+		const { reflection, settings, parentId } = this.props
 		const { compact } = settings!
 
 		return (
@@ -47,6 +48,7 @@ export class SignatureView extends BaseView<SignatureReflection> {
 					<SignatureBrace>): </SignatureBrace>
 					<TypeView reflection={reflection.returnType} />
 				</SignatureMain>
+				<DefinedIn origin={reflection.origin} parentId={parentId} />
 				<SignatureComment>
 					<CommentView reflection={reflection} />
 				</SignatureComment>
