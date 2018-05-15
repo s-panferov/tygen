@@ -45,12 +45,19 @@ export class DefinedIn extends React.Component<{ origin?: ReflectionLink; parent
 		}
 
 		return (
-			<div>
+			<DefinedInBody>
 				defined in <RefLink reflection={origin} />
-			</div>
+			</DefinedInBody>
 		)
 	}
 }
+
+const DefinedInBody = styled.div`
+	color: #999;
+	font-size: 13px;
+	margin-top: 5px;
+	padding-left: 15px;
+`
 
 const PropertyBody = styled.div`
 	position: relative;

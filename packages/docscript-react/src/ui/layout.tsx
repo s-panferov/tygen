@@ -33,6 +33,7 @@ const Sidebar = styled.div`
 const Content = styled.div`
 	grid-area: content;
 	margin-left: 20px;
+	margin-bottom: 50px;
 `
 
 const ContentInner = styled.div`
