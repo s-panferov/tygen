@@ -10,6 +10,11 @@ import { TypeReferenceView } from './type/type-reference'
 import { TypeParameterView } from './type/type-parameter'
 import { TupleView } from './type/tuple'
 import { ObjectView } from './type/object'
+import { MappedView } from './type/mapped'
+import { IndexedAccessView } from './type/indexed'
+import { ConditionalView } from './type/conditional'
+import { IndexTypeView } from './type/index-type'
+import { ESSymbolView } from './type/symbol'
 
 export class TypeView extends BaseView<TypeReflection> {
 	render() {
@@ -49,8 +54,18 @@ export class TypeView extends BaseView<TypeReflection> {
 						return <TypeParameterView reflection={reflection} />
 					case TypeKind.Tuple:
 						return <TupleView reflection={reflection} />
+					case TypeKind.Mapped:
+						return <MappedView reflection={reflection} />
 					case TypeKind.ObjectLiteral:
 						return <ObjectView reflection={reflection} />
+					case TypeKind.IndexedAccess:
+						return <IndexedAccessView reflection={reflection} />
+					case TypeKind.Conditional:
+						return <ConditionalView reflection={reflection} />
+					case TypeKind.Index:
+						return <IndexTypeView reflection={reflection} />
+					case TypeKind.ESSymbol:
+						return <ESSymbolView reflection={reflection} />
 					default:
 						return 'unsupported ' + reflection.typeKind
 				}

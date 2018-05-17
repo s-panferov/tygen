@@ -5,6 +5,7 @@ import { Reflection, ReflectionKind } from '@docscript/reflector/src/reflection'
 import styled from 'styled-components'
 import { BaseView } from './view'
 import { parseId } from './helpers'
+import { TypeView } from './type'
 
 export function hrefFromId(id: string, relativeId?: string) {
 	const parts = (relativeId ? id.replace(relativeId, '') : id).split(/::|->/)
@@ -77,15 +78,41 @@ function createLink(reflection: Reflection, relativeId?: string): { name: string
 
 export class RefLink extends BaseView<Reflection, { relativeId?: string; phantom?: boolean }> {
 	render() {
-		const { relativeId, phantom } = this.props
+		const { relativeId, phantom, reflection } = this.props
+
+		switch (reflection.kind) {
+			case ReflectionKind.Type:
+				return <TypeView reflection={reflection as any} />
+		}
+
 		const { name, href } = createLink(this.props.reflection, relativeId)
+
+		const names = name.split('/').filter(Boolean)
+		const isPath = names.length > 1
+
 		return (
 			<RefLinkBody href={href} className={cn({ phantom })}>
-				{name}
+				{names.map((name, i) => {
+					return (
+						<Name
+							key={name}
+							className={cn({ main: !isPath || i === names.length - 1 })}>
+							{name}
+							{i !== names.length - 1 ? ' /' : ''}
+						</Name>
+					)
+				})}
 			</RefLinkBody>
 		)
 	}
 }
+
+const Name = styled.span`
+	color: #ccc;
+	&.main {
+		color: inherit;
+	}
+`
 
 const RefLinkBody = styled.a`
 	overflow: hidden;

@@ -14,9 +14,9 @@ export class BaseTypes extends React.Component<{ types?: Reflection[]; title?: s
 			<div>
 				<ExtendsKeyword>{title || 'Extends'}:</ExtendsKeyword>
 				<List>
-					{types.map(type => {
+					{types.map((type, i) => {
 						return (
-							<li>
+							<li key={type.id || i}>
 								<RefLink reflection={type} />
 							</li>
 						)

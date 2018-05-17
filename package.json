@@ -3,11 +3,12 @@
   "version": "0.0.10",
   "private": true,
   "description": "Documentation generator for TypeScript",
-	"workspaces": [
-		"packages/*"
+  "workspaces": [
+    "packages/*"
   ],
   "scripts": {
     "react": "cd packages/docscript-react && DOCS=$(pwd)/../../docs yarn start",
+    "develop": "concurrently -p name -n \"tsc,react\" --allow-restart --restart-tries=0 --restart-after=100 \"yarn run react\" \"yarn exec tsc --watch --pretty\"",
     "react-build": "cd packages/docscript-react && yarn build"
   },
   "_moduleAliases": {

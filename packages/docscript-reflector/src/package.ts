@@ -99,22 +99,24 @@ export function visitFolders(
 	volume: typeof fs,
 	parent: ReflectionWithStructure,
 	ctx: Context,
-	root = '.'
+	root = '.',
+	isRoot: boolean = true
 ) {
 	const res = volume.readdirSync(root)
 
+	// first walk over directories
 	res.forEach(item => {
 		const fullPath = path.join(root, item)
 		if (volume.statSync(fullPath).isDirectory()) {
 			const folderRef: FolderReflection = {
-				id: `${parent.id}->${item}`,
+				id: `${parent.id}${isRoot ? '->' : '/'}${item}`,
 				kind: ReflectionKind.Folder,
 				name: item,
 				modules: []
 			}
 
 			ctx.registerReflectionById(folderRef)
-			visitFolders(volume, folderRef, ctx, fullPath)
+			visitFolders(volume, folderRef, ctx, fullPath, false)
 
 			if (res.length === 1) {
 				parent.modules.push(...folderRef.modules)
@@ -122,7 +124,14 @@ export function visitFolders(
 				const ref = createLink(folderRef)
 				parent.modules.push(ref)
 			}
-		} else {
+		}
+	})
+
+	// then walk over files
+	res.forEach(item => {
+		const fullPath = path.join(root, item)
+
+		if (volume.statSync(fullPath).isFile()) {
 			const id = volume.readFileSync(fullPath).toString()
 			const ref = ctx.reflectionById.get(id)
 			if (!ref) {
