@@ -4,7 +4,7 @@ import { ReflectionKind, createLink } from '../reflection'
 import { Context } from '../../context'
 import { symbolId } from '../identifier'
 import { visitType } from '../_type'
-import { VariableReflection } from './reflection'
+import { VariableReflection, ParameterReflection } from './reflection'
 
 export function isParameter(symbol: ts.Symbol) {
 	if (symbol.declarations) {
@@ -14,16 +14,37 @@ export function isParameter(symbol: ts.Symbol) {
 	}
 }
 
-export function visitVariable(symbol: ts.Symbol, ctx: Context): VariableReflection {
-	let variableRef: VariableReflection = {
-		id: symbolId(symbol, ctx),
-		kind: ReflectionKind.Variable,
-		name: symbol.name,
-		type: undefined as any
-	}
+export function visitVariable(
+	symbol: ts.Symbol,
+	ctx: Context
+): VariableReflection | ParameterReflection {
+	let variableRef: VariableReflection | ParameterReflection
 
 	if (isParameter(symbol)) {
-		variableRef.kind = ReflectionKind.Parameter
+		const decl = symbol.declarations![0]!
+		let rest = false
+		let optional = false
+
+		if (ts.isParameter(decl)) {
+			rest = !!decl.dotDotDotToken
+			optional = !!decl.questionToken
+		}
+
+		variableRef = {
+			id: symbolId(symbol, ctx),
+			kind: ReflectionKind.Parameter,
+			name: symbol.name,
+			type: undefined as any,
+			rest,
+			optional
+		}
+	} else {
+		variableRef = {
+			id: symbolId(symbol, ctx),
+			kind: ReflectionKind.Variable,
+			name: symbol.name,
+			type: undefined as any
+		}
 	}
 
 	ctx.registerSymbol(symbol, variableRef)

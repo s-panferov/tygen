@@ -76,18 +76,21 @@ function createLink(reflection: Reflection, relativeId?: string): { name: string
 	throw new Error(`Unsupported ${JSON.stringify(reflection, null, 4)}`)
 }
 
-export class RefLink extends BaseView<Reflection, { relativeId?: string; phantom?: boolean }> {
+export class RefLink extends BaseView<
+	Reflection,
+	{ relativeId?: string; phantom?: boolean; name?: string }
+> {
 	render() {
-		const { relativeId, phantom, reflection } = this.props
+		const { relativeId, phantom, reflection, name } = this.props
 
 		switch (reflection.kind) {
 			case ReflectionKind.Type:
 				return <TypeView reflection={reflection as any} />
 		}
 
-		const { name, href } = createLink(this.props.reflection, relativeId)
+		const { name: linkName, href } = createLink(this.props.reflection, relativeId)
 
-		const names = name.split('/').filter(Boolean)
+		const names = (name || linkName).split('/').filter(Boolean)
 		const isPath = names.length > 1
 
 		return (

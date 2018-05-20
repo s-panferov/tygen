@@ -24,6 +24,7 @@ export enum TypeKind {
 	ESSymbol = 'ESSymbol',
 	IndexedAccess = 'IndexedAccess',
 	Tuple = 'Tuple',
+	This = 'This',
 	NotSupported = 'NotSupported'
 }
 
@@ -43,6 +44,7 @@ import { TypeReferenceReflection } from './reference/reflection'
 import { SubstitutionTypeReflection } from './substitution/reflection'
 import { ESSymbolReflection } from './symbol/reflection'
 import { TupleReflection } from './tuple/reflection'
+import { ThisReflection } from './this/reflection'
 import { TypeParameterReflection } from '../type-parameter/reflection'
 
 export interface NotSupportedTypeReflection extends TypeReflectionBase {
@@ -79,4 +81,5 @@ export type TypeReflection =
 	| PrimitiveTypeReflection
 	| TypeParameterReflection
 	| IndexedAccessReflection
+	| ThisReflection
 	| NotSupportedTypeReflection

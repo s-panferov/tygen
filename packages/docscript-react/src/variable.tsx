@@ -1,5 +1,9 @@
 import * as React from 'react'
-import { VariableReflection } from '@docscript/reflector/src/reflection'
+import {
+	VariableReflection,
+	ParameterReflection,
+	ReflectionKind
+} from '@docscript/reflector/src/reflection'
 import { BaseView, withContext, ViewContext } from './view'
 import { TypeView } from './type'
 import styled from 'styled-components'
@@ -10,13 +14,16 @@ import { Badge } from './ui/badge'
 import { Breadcrumb } from './breadcrumb'
 import { CommentView } from './comment'
 
-export class VariableView extends BaseView<VariableReflection> {
+export class VariableView extends BaseView<VariableReflection | ParameterReflection> {
 	render() {
 		const { reflection } = this.props
 		return (
 			<span>
-				<ParameterName>{reflection.name}</ParameterName>:{' '}
-				{<TypeView reflection={reflection.type} />}
+				{reflection.kind === ReflectionKind.Parameter && reflection.rest ? '...' : ''}
+				<ParameterName>{reflection.name}</ParameterName>
+				{reflection.kind === ReflectionKind.Parameter && reflection.optional
+					? '?'
+					: ''}: {<TypeView reflection={reflection.type} />}
 			</span>
 		)
 	}

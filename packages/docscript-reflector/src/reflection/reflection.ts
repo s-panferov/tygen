@@ -7,7 +7,7 @@ import { FunctionReflection, MethodReflection } from './function/reflection'
 import { SignatureReflection } from './signature/reflection'
 import { ClassReflection } from './class/reflection'
 import { TypeAliasReflection } from './type-alias/reflection'
-import { VariableReflection } from './variable/reflection'
+import { VariableReflection, ParameterReflection } from './variable/reflection'
 import { TypeReflectionBase } from './_type/reflection'
 import { PackageReflection, FolderReflection } from './package'
 
@@ -65,6 +65,7 @@ export type Reflection =
 	| ClassReflection
 	| TypeAliasReflection
 	| VariableReflection
+	| ParameterReflection
 	| SignatureReflection
 	| TypeReflectionBase
 	| NamespaceReflection

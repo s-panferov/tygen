@@ -15,6 +15,7 @@ import { IndexedAccessView } from './type/indexed'
 import { ConditionalView } from './type/conditional'
 import { IndexTypeView } from './type/index-type'
 import { ESSymbolView } from './type/symbol'
+import { ThisView } from './type/this'
 
 export class TypeView extends BaseView<TypeReflection> {
 	render() {
@@ -66,6 +67,8 @@ export class TypeView extends BaseView<TypeReflection> {
 						return <IndexTypeView reflection={reflection} />
 					case TypeKind.ESSymbol:
 						return <ESSymbolView reflection={reflection} />
+					case TypeKind.This:
+						return <ThisView reflection={reflection} />
 					default:
 						return 'unsupported ' + reflection.typeKind
 				}

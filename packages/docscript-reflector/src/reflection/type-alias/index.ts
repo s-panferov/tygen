@@ -39,7 +39,7 @@ export function visitTypeAlias(symbol: ts.Symbol, ctx: Context): TypeAliasReflec
 
 	// TypeScript has weird TypeAlias resolution logic, aliasSymbol will point to
 	// itself if type is not another type alias
-	typeAliasRef.type = visitType(type, ctx, type.aliasSymbol === symbol)
+	typeAliasRef.type = visitType(type, ctx, { skipAlias: type.aliasSymbol === symbol })
 
 	return typeAliasRef
 }

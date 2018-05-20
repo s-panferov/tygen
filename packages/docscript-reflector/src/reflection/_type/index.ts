@@ -18,14 +18,21 @@ import { visitSubstitution } from './substitution'
 import { TypeReflection, TypeKind, NotSupportedTypeReflection } from './reflection'
 import { isWritableSymbol } from '../identifier'
 import { TypeReferenceReflection } from './reference/reflection'
+import { visitThis } from './this'
 
-export function visitType(type: ts.Type, ctx: Context, skipAlias = false): TypeReflection {
+export function visitType(
+	type: ts.Type,
+	ctx: Context,
+	opts: VisitTypeOptions = {}
+): TypeReflection {
+	let { skipReference = false } = opts
+
 	let existed = ctx.reflectionByType.get(type)
-	if (existed) {
+	if (existed && !skipReference) {
 		return existed
 	}
 
-	let reflection = visitTypeInternal(type, ctx, skipAlias)
+	let reflection = visitTypeInternal(type, ctx, opts)
 	if (!ctx.reflectionByType.get(type)) {
 		throw new Error('Reflection is not registered')
 	}
@@ -33,7 +40,16 @@ export function visitType(type: ts.Type, ctx: Context, skipAlias = false): TypeR
 	return reflection
 }
 
-function visitTypeInternal(type: ts.Type, ctx: Context, skipAlias = false): TypeReflection {
+export interface VisitTypeOptions {
+	skipAlias?: boolean
+	skipReference?: boolean
+}
+
+function visitTypeInternal(
+	type: ts.Type,
+	ctx: Context,
+	{ skipAlias = false, skipReference = false }: VisitTypeOptions = {}
+): TypeReflection {
 	let primitive = visitPrimitive(type, ctx)
 	if (primitive) {
 		return primitive
@@ -58,8 +74,7 @@ function visitTypeInternal(type: ts.Type, ctx: Context, skipAlias = false): Type
 
 	if (type.flags & ts.TypeFlags.Object) {
 		let objectType = type as ts.ObjectType
-		// Visit only exact reference to prevent cycle types
-		if (objectType.objectFlags === ts.ObjectFlags.Reference) {
+		if (objectType.objectFlags & ts.ObjectFlags.Reference && !skipReference) {
 			let reference = objectType as ts.TypeReference
 			if (reference.target.objectFlags & ts.ObjectFlags.Tuple) {
 				return visitTuple(reference, ctx)
@@ -79,6 +94,10 @@ function visitTypeInternal(type: ts.Type, ctx: Context, skipAlias = false): Type
 			}
 			return visitObjectLiteral(type, ctx)
 		}
+	}
+
+	if ((type as any).isThisType) {
+		return visitThis(type, ctx)
 	}
 
 	if (type.flags & ts.TypeFlags.Conditional) {
