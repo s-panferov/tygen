@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Search } from '../search'
 
 export interface ToolbarProps {
 	pkg: string
@@ -14,6 +15,7 @@ export class Toolbar extends React.Component<ToolbarProps> {
 				<Logo>tsdoc.io</Logo>
 				<Package>{pkg}</Package>
 				<Version>{version}</Version>
+				<Search pkg={pkg} version={version} />
 			</ToolbarBlock>
 		)
 	}
@@ -54,4 +56,5 @@ const ToolbarBlock = styled.div`
 	height: 40px;
 	display: flex;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+	z-index: 10;
 `

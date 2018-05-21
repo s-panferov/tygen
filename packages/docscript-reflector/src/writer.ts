@@ -34,6 +34,8 @@ export class Writer {
 	}
 
 	write() {
+		const searchDocuments: any[] = []
+
 		this.context.reflectionById.forEach(reflection => {
 			if (!IsWritable[reflection.kind]) {
 				return
@@ -44,6 +46,10 @@ export class Writer {
 
 			mkdirSyncP(folder)
 			fs.writeFileSync(fileName, JSON.stringify(reflection, null, 4))
+
+			searchDocuments.push(reflection.id)
 		})
+
+		fs.writeFileSync(path.join(this.outDir, 'search.json'), JSON.stringify(searchDocuments))
 	}
 }

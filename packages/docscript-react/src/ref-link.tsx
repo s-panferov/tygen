@@ -95,16 +95,17 @@ export class RefLink extends BaseView<
 
 		return (
 			<RefLinkBody href={href} className={cn({ phantom })}>
-				{names.map((name, i) => {
-					return (
-						<Name
-							key={name}
-							className={cn({ main: !isPath || i === names.length - 1 })}>
-							{name}
-							{i !== names.length - 1 ? ' /' : ''}
-						</Name>
-					)
-				})}
+				{this.props.children ||
+					names.map((name, i) => {
+						return (
+							<Name
+								key={name}
+								className={cn({ main: !isPath || i === names.length - 1 })}>
+								{name}
+								{i !== names.length - 1 ? ' /' : ''}
+							</Name>
+						)
+					})}
 			</RefLinkBody>
 		)
 	}

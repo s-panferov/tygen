@@ -24,11 +24,12 @@
     "@types/react-dom": "^16.0.5",
     "@types/classnames": "^2.2.3",
     "@types/micro": "^7.3.1",
+    "@types/fuzzaldrin-plus": "^0.0.1",
     "source-map-support": "^0.5.4",
     "concurrently": "^3.5.1",
     "parcel-bundler": "^1.7.1",
     "nodemon": "^1.17.3",
-    "babel-plugin-styled-components": "^1.5.1"    
+    "babel-plugin-styled-components": "^1.5.1"
   },
   "dependencies": {
     "micro": "^9.2.0",
@@ -37,6 +38,7 @@
     "react-markdown": "^3.3.0",
     "styled-components": "^3.2.6",
     "classnames": "^2.2.5",
-    "mime-types": "^2.1.18"
+    "mime-types": "^2.1.18",
+    "fuzzaldrin-plus": "^0.6.0"
   }
 }

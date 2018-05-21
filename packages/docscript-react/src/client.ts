@@ -1,7 +1,6 @@
 import * as ReactDOM from 'react-dom'
 
 import { renderPage } from './render'
-
 const url = window.location.pathname
 
 fetch(`${url}/index.json`)

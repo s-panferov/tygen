@@ -41,6 +41,10 @@ export function renderHTML(ref: Reflection, _fileName: string): string {
 					a:visited {
 						color: #5352ed;
 					}
+
+					* {
+						box-sizing: border-box;
+					}
 				</style>
 				${sheet.getStyleTags()}
 			</head>
