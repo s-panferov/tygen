@@ -19,6 +19,13 @@ const IsWritable: { [name: string]: boolean } = {
 	[ReflectionKind.Folder]: true
 }
 
+const IsSearchable: { [name: string]: boolean } = Object.assign({}, IsWritable, {
+	[ReflectionKind.Property]: true,
+	[ReflectionKind.Method]: true,
+	[ReflectionKind.EnumMember]: true,
+	[ReflectionKind.Parameter]: true
+})
+
 export class Writer {
 	context: Context
 	outDir: string
@@ -37,6 +44,10 @@ export class Writer {
 		const searchDocuments: any[] = []
 
 		this.context.reflectionById.forEach(reflection => {
+			if (IsSearchable[reflection.kind]) {
+				searchDocuments.push(reflection.id)
+			}
+
 			if (!IsWritable[reflection.kind]) {
 				return
 			}
@@ -46,8 +57,6 @@ export class Writer {
 
 			mkdirSyncP(folder)
 			fs.writeFileSync(fileName, JSON.stringify(reflection, null, 4))
-
-			searchDocuments.push(reflection.id)
 		})
 
 		fs.writeFileSync(path.join(this.outDir, 'search.json'), JSON.stringify(searchDocuments))

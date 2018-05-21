@@ -14,6 +14,8 @@ export function renderHTML(ref: Reflection, _fileName: string): string {
 		<html>
 			<head>
 				<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css"/>
+				<meta charset="UTF-8">
+				<title>tsdoc - ${(ref as any).name || ref.id}</title>
 				<style>
 					body {
 						font-family: arial;
