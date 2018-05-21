@@ -80,6 +80,11 @@ export class RefLink extends BaseView<
 	Reflection,
 	{ relativeId?: string; phantom?: boolean; name?: string }
 > {
+	static navigateTo(refId: string) {
+		const { href } = hrefFromId(refId)
+		window.location = href as any
+	}
+
 	render() {
 		const { relativeId, phantom, reflection, name } = this.props
 

@@ -8,19 +8,26 @@ import { Join } from './ui/join'
 import { RefLink } from './ref-link'
 
 export interface SearchState {
+	index: number
+	query: string
 	scope: string
 	ready: boolean
+	open: boolean
 	results: string[]
 }
 
 export class Search extends React.Component<{ pkg: string; version: string }, SearchState> {
+	index?: string[]
 	state: SearchState = {
+		index: 0,
+		query: '',
 		scope: 'package',
 		ready: false,
+		open: false,
 		results: []
 	}
 
-	index?: string[]
+	input?: HTMLInputElement
 
 	componentDidMount() {
 		const url = new URL(window.location.toString())
@@ -29,28 +36,47 @@ export class Search extends React.Component<{ pkg: string; version: string }, Se
 			.then(index => index.json())
 			.then(index => {
 				this.index = index
+				this.setState({
+					results: this.updateResults()
+				})
 			})
 			.catch(e => console.error(e))
 
+		const searchIndex = window.localStorage.getItem('searchIndex')
+		const searchScope = window.localStorage.getItem('searchScope') || 'package'
+		const searchQuery = window.localStorage.getItem('searchQuery') || ''
+
 		this.setState({
-			scope: window.localStorage.getItem('scope') || 'package'
+			scope: searchScope,
+			query: searchQuery,
+			index: searchIndex != null ? Number(searchIndex) : 0,
+			results: this.updateResults(searchQuery, searchScope)
 		})
 	}
 
 	render() {
 		const scope = this.state.scope
 		return (
-			<SearchBody>
+			<SearchBody onKeyDown={this.onKeyDown}>
 				<select value={scope} onChange={this.onScopeChange}>
 					<option value={'package'}>Package</option>
 					<option value={'global'}>Global</option>
 				</select>
-				<SearchInput disabled={this.state.ready} onChange={this.onChange} />
-				{this.state.results.length > 0 && (
+				<SearchInput
+					ref={r => (this.input = r)}
+					tabIndex={1}
+					value={this.state.query}
+					disabled={this.state.ready}
+					onFocus={this.onFocus}
+					onBlur={this.onBlur}
+					onClick={this.onFocus}
+					onChange={this.onChange}
+				/>
+				{this.state.open && (
 					<SearchResults>
 						<NotScrollable />
-						{this.state.results.map(res => {
-							return <SearchItem key={res} id={res} />
+						{this.state.results.map((res, i) => {
+							return <SearchItem key={res} id={res} focus={i === this.state.index} />
 						})}
 					</SearchResults>
 				)}
@@ -58,30 +84,69 @@ export class Search extends React.Component<{ pkg: string; version: string }, Se
 		)
 	}
 
-	onChange = (e: React.FormEvent<HTMLInputElement>) => {
-		const query = e.currentTarget.value
-		if (query && this.index) {
-			const scopedQuery =
-				this.state.scope === 'package'
-					? `${this.props.pkg}/${this.props.version}/${query}`
-					: query
+	onFocus = () => {
+		this.setState({
+			open: true
+		})
+	}
 
+	onBlur = () => {
+		this.setState({
+			open: false
+		})
+	}
+
+	onKeyDown = (e: React.KeyboardEvent<EventTarget>) => {
+		const { index, results } = this.state
+		if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+			const nextIndex =
+				e.key === 'ArrowUp'
+					? index > 1 ? index - 1 : 0
+					: index < results.length - 1 ? index + 1 : results.length - 1
+
+			window.localStorage.setItem('searchIndex', nextIndex.toString())
 			this.setState({
-				results: fuzz.filter(this.index, scopedQuery, { maxResults: 50 })
+				index: nextIndex
 			})
-		} else {
+		} else if (e.key === 'Enter') {
+			const ref = results[index]
+			RefLink.navigateTo(ref)
+		} else if (e.key === 'Escape') {
 			this.setState({
-				results: []
+				open: false
 			})
 		}
 	}
 
+	updateResults(query: string = this.state.query, scope = this.state.scope) {
+		if (query && this.index) {
+			const scopedQuery =
+				scope === 'package' ? `${this.props.pkg}/${this.props.version}/${query}` : query
+
+			return fuzz.filter(this.index, scopedQuery, { maxResults: 50 })
+		} else {
+			return []
+		}
+	}
+
+	onChange = (e: React.FormEvent<HTMLInputElement>) => {
+		const query = e.currentTarget.value
+		window.localStorage.setItem('searchQuery', query)
+		window.localStorage.setItem('searchIndex', '0')
+		this.setState({
+			query,
+			index: 0,
+			results: this.updateResults(query)
+		})
+	}
+
 	onScopeChange = (e: React.FormEvent<HTMLSelectElement>) => {
 		const value = e.currentTarget.value
-		window.localStorage.setItem('scope', value)
-		this.setState({
+		window.localStorage.setItem('searchScope', value)
+		this.setState(state => ({
+			results: this.updateResults(state.query, value),
 			scope: value
-		})
+		}))
 	}
 }
 
@@ -100,12 +165,17 @@ class NotScrollable extends React.Component {
 	}
 }
 
-class SearchItem extends React.Component<{ id: string }> {
+class SearchItem extends React.Component<{ id: string; focus: boolean }> {
+	shouldComponentUpdate(nextProps: this['props']) {
+		return this.props.id !== nextProps.id || this.props.focus !== nextProps.focus
+	}
+
 	render() {
+		const { focus } = this.props
 		const id = parseId(this.props.id)
 		return (
 			<RefLink reflection={{ id: this.props.id } as any}>
-				<SearchItemBody>
+				<SearchItemBody className={cn({ focus })}>
 					{id.pkg}&nbsp;<Badge>{id.version}</Badge>&nbsp;
 					{id.module && (
 						<Join
@@ -162,6 +232,10 @@ const SearchItemBody = styled.div`
 
 	&:hover {
 		background-color: #eee;
+	}
+
+	&.focus {
+		background-color: #fef;
 	}
 `
 
