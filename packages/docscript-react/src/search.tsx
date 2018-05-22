@@ -90,11 +90,7 @@ export class Search extends React.Component<{ pkg: string; version: string }, Se
 		})
 	}
 
-	onBlur = () => {
-		this.setState({
-			open: false
-		})
-	}
+	onBlur = () => {}
 
 	onKeyDown = (e: React.KeyboardEvent<EventTarget>) => {
 		const { index, results } = this.state
