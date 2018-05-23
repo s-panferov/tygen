@@ -10,8 +10,10 @@ import { TypeAliasReflection } from './type-alias/reflection'
 import { VariableReflection, ParameterReflection } from './variable/reflection'
 import { TypeReflectionBase } from './_type/reflection'
 import { PackageReflection, FolderReflection } from './package'
+import { InventoryReflection } from '@docscript/reflector/src/reflection/inventory/reflection'
 
 export enum ReflectionKind {
+	Inventory = 'Inventory',
 	Type = 'Type',
 	Signature = 'Signature',
 	Class = 'Class',
@@ -72,6 +74,7 @@ export type Reflection =
 	| ESModuleReflection
 	| PackageReflection
 	| FolderReflection
+	| InventoryReflection
 
 export interface HasId {
 	id: string

@@ -1,46 +1,33 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Search } from '../search'
+import { Search } from './search'
+import { PackagesNav, InventoryProvider } from './packages'
+import { withContext, ViewSettings } from '../view'
 
 export interface ToolbarProps {
-	pkg: string
-	version: string
+	pkg?: string
+	version?: string
+	settings?: ViewSettings
 }
 
+@withContext
 export class Toolbar extends React.Component<ToolbarProps> {
 	render() {
-		const { pkg, version } = this.props
+		const { pkg, version, settings } = this.props
 		return (
 			<ToolbarBlock>
-				<Logo>tsdoc.io</Logo>
-				<Package>{pkg}</Package>
-				<Version>{version}</Version>
+				<Logo href={settings!.contextRoot}>tsdoc.io</Logo>
+				<InventoryProvider>
+					{iv => <PackagesNav pkg={pkg} version={version} inventory={iv} />}
+				</InventoryProvider>
 				<Search pkg={pkg} version={version} />
 			</ToolbarBlock>
 		)
 	}
 }
 
-const Package = styled.div`
-	border-right: 1px solid #ccc;
-	padding: 0 10px;
-	display: flex;
-	align-items: center;
-	font-size: 14px;
-	font-weight: bold;
-	color: #555;
-`
-
-const Version = styled.div`
-	border-right: 1px solid #ccc;
-	padding: 0 10px;
-	display: flex;
-	align-items: center;
-	font-size: 14px;
-	color: #555;
-`
-
-const Logo = styled.div`
+const Logo = styled.a`
+	display: block;
 	border-right: 1px solid #ccc;
 	padding-left: 10px;
 	padding-right: 10px;

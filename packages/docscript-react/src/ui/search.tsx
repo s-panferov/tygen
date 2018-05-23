@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import * as fuzz from 'fuzzaldrin-plus'
-import { parseId } from './helpers'
-import { Badge } from './ui/badge'
+import { parseId } from '../helpers'
+import { Badge } from './badge'
 import cn from 'classnames'
-import { Join } from './ui/join'
-import { RefLink } from './ref-link'
+import { Join } from './join'
+import { RefLink } from '../ref-link'
 
 export interface SearchState {
 	index: number
@@ -16,7 +16,7 @@ export interface SearchState {
 	results: string[]
 }
 
-export class Search extends React.Component<{ pkg: string; version: string }, SearchState> {
+export class Search extends React.Component<{ pkg?: string; version?: string }, SearchState> {
 	index?: string[]
 	state: SearchState = {
 		index: 0,
@@ -146,7 +146,7 @@ export class Search extends React.Component<{ pkg: string; version: string }, Se
 	}
 }
 
-class NotScrollable extends React.Component {
+export class NotScrollable extends React.Component {
 	componentDidMount() {
 		document.body.scrollTop = 0
 		document.body.style.overflow = 'hidden'

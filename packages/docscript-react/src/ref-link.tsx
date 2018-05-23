@@ -107,7 +107,7 @@ export class RefLink extends BaseView<
 								key={name}
 								className={cn({ main: !isPath || i === names.length - 1 })}>
 								{name}
-								{i !== names.length - 1 ? ' /' : ''}
+								{i !== names.length - 1 ? '/' : ''}
 							</Name>
 						)
 					})}

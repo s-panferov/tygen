@@ -8,10 +8,12 @@
     "source-map-support": "^0.5.4",
     "tsutils": "^2.26.1",
     "memfs": "^2.8.0",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "semver": "^5.5.0"
   },
   "devDependencies": {
     "@types/minimist": "^1.2.0",
+    "@types/semver": "^5.5.0",
     "@types/node": "^9.6.4",
     "standard-version": "^4.3.0",
     "typescript": "^2.8.3"

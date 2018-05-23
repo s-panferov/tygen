@@ -6,6 +6,10 @@ export interface File {
 	name: string
 }
 
+export interface ConverterFactory {
+	(argv: any): Converter
+}
+
 export interface Converter {
 	visitReflection(
 		reflection: Reflection,

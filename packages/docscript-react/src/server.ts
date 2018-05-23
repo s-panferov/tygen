@@ -4,6 +4,8 @@ import * as path from 'path'
 const micro = require('micro')
 const mime = require('mime-types')
 
+import minimist from 'minimist'
+
 import { IncomingMessage, ServerResponse } from 'http'
 import { renderHTML } from './html'
 
@@ -15,6 +17,8 @@ console.log('CLIENT', client)
 
 const favicon = require('../asset/favicon.ico') as string
 const ASSETS = '/-/assets/'
+
+const argv = minimist(process.argv.slice(2)) as any
 
 const server = micro((req: IncomingMessage, res: ServerResponse) => {
 	let url = req.url
@@ -43,7 +47,7 @@ const server = micro((req: IncomingMessage, res: ServerResponse) => {
 		let indexPath = path.join(baseFolder, url, 'index.json')
 		if (fs.existsSync(indexPath)) {
 			let content = fs.readFileSync(indexPath).toString()
-			return renderHTML(JSON.parse(content), url)
+			return renderHTML(JSON.parse(content), url, argv)
 		} else {
 			throw new Error(`File not found: ${url}`)
 		}

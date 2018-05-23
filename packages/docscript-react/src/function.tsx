@@ -34,7 +34,7 @@ export class FunctionPage extends BaseView<FunctionReflection> {
 		return (
 			<div>
 				<Toolbar pkg={ident.pkg} version={ident.version} />
-				<Layout sidebar={1}>
+				<Layout sidebar={null}>
 					<h1>
 						{reflection.name} <Badge>Function</Badge>
 					</h1>

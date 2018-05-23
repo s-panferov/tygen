@@ -4,11 +4,17 @@ import { Reflection } from '@docscript/reflector/src/reflection'
 import { renderToString } from 'react-dom/server'
 import { ServerStyleSheet } from 'styled-components'
 import { PageView } from './render'
+import { ReactConverterSettings, normalizeSettings } from './settings'
 
-export function renderHTML(ref: Reflection, _fileName: string): string {
-	let sheet = new ServerStyleSheet()
-	let el = React.createElement(PageView, { reflection: ref })
-	let html = renderToString(sheet.collectStyles(el))
+export function renderHTML(
+	ref: Reflection,
+	_fileName: string,
+	settings: Partial<ReactConverterSettings> = {}
+): string {
+	const sheet = new ServerStyleSheet()
+	const normalizedSettings = normalizeSettings(settings)
+	const el = React.createElement(PageView, { reflection: ref, settings: normalizedSettings })
+	const html = renderToString(sheet.collectStyles(el))
 
 	return `
 		<html>
@@ -48,6 +54,9 @@ export function renderHTML(ref: Reflection, _fileName: string): string {
 						box-sizing: border-box;
 					}
 				</style>
+				<script>
+					window.__argv = ${JSON.stringify(normalizedSettings)}
+				</script>
 				${sheet.getStyleTags()}
 			</head>
 			<body>

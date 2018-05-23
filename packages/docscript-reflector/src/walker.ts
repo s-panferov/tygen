@@ -18,13 +18,17 @@ export class ReflectionWalker {
 			const folderName = path.dirname(fileName)
 			const files = converter.visitReflection(ref, fileName, this)
 			if (files) {
-				files.forEach(file => {
-					const resultPath = path.resolve(folderName, file.name)
-					fse.writeFileSync(resultPath, file.content)
-				})
+				writeFiles(folderName, files)
 			}
 		})
 	}
+}
+
+export function writeFiles(baseFolder: string, files: File[]) {
+	files.forEach(file => {
+		const resultPath = path.resolve(baseFolder, file.name)
+		fse.writeFileSync(resultPath, file.content)
+	})
 }
 
 function walkFolder(targetFolder: string, cb: (fileName: string) => void) {

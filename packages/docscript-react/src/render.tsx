@@ -13,6 +13,8 @@ import { SignatureView } from './signature'
 import { FunctionPage } from './function'
 import { TypeAliasPage } from './type-alias'
 import { EnumPage } from './enum'
+import { ReactConverterSettings } from './settings'
+import { InventoryPage } from './inventory'
 
 export function renderPage(ref: Reflection): React.ReactElement<any> {
 	switch (ref.kind) {
@@ -35,14 +37,16 @@ export function renderPage(ref: Reflection): React.ReactElement<any> {
 			return <TypeAliasPage reflection={ref} />
 		case ReflectionKind.Enum:
 			return <EnumPage reflection={ref} />
+		case ReflectionKind.Inventory:
+			return <InventoryPage reflection={ref} />
 	}
 	return <div>Unknown {ref.kind}</div>
 }
 
-export class PageView extends BaseView<Reflection> {
+export class PageView extends BaseView<Reflection, { settings: ReactConverterSettings }> {
 	render() {
 		return (
-			<ViewContext.Provider value={{}}>
+			<ViewContext.Provider value={this.props.settings}>
 				{renderPage(this.props.reflection)}
 			</ViewContext.Provider>
 		)
