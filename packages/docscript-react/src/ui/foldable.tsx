@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import fs from 'fs'
 
 export interface FoldableProps {
 	title: React.ReactNode
@@ -9,8 +10,25 @@ export interface FoldableState {
 	open: boolean
 }
 
-const Expand = require('../../asset/expand-button.svg')
-const Collapse = require('../../asset/expand-arrow.svg')
+if (typeof btoa === 'undefined') {
+	;(global as any).btoa = function(str) {
+		return new Buffer(str, 'binary').toString('base64')
+	}
+}
+
+if (typeof atob === 'undefined') {
+	;(global as any).atob = function(b64Encoded) {
+		return new Buffer(b64Encoded, 'base64').toString('binary')
+	}
+}
+
+const Expand = `data:image/svg+xml;base64,${btoa(
+	fs.readFileSync('asset/expand-button.svg').toString()
+)}`
+
+const Collapse = `data:image/svg+xml;base64,${btoa(
+	fs.readFileSync('asset/expand-arrow.svg').toString()
+)}`
 
 export class Foldable extends React.Component<FoldableProps, FoldableState> {
 	state: FoldableState = {

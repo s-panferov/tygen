@@ -6,6 +6,7 @@
     "typescript",
     "documentation"
   ],
+  "main": "dist/index.js",
   "alias": {
     "@docscript/reflector": "../docscript-reflector",
     "@docscript/react": "../docscript-react"
@@ -13,9 +14,9 @@
   "scripts": {
     "server-start": "nodemon --exec \"node -r module-alias/register -r source-map-support/register dist/server.js\"",
     "server-watch": "parcel watch --target=node --no-hmr --no-autoinstall --public-url '/-/assets/' src/server.ts",
-    "client-watch": "parcel watch --no-hmr --no-autoinstall src/client.tsx --public-url '/-/assets/'",
+    "client-watch": "parcel watch --no-hmr --no-autoinstall src/index.tsx --public-url '/-/assets/'",
     "server-build": "parcel build --detailed-report --target=node --public-url '/-/assets/' src/server.ts",
-    "client-build": "parcel build --detailed-report src/client.tsx --public-url '/-/assets/'",
+    "client-build": "parcel build --detailed-report src/index.tsx --public-url '/-/assets/'",
     "start": "concurrently -p name -n \"server-watch,client-watch,server\" --allow-restart --restart-tries=0 --restart-after=100 \"yarn run server-watch\" \"yarn run client-watch\" \"yarn run server-start\"",
     "build": "yarn run server-build && yarn run client-build"
   },
@@ -28,14 +29,14 @@
     "@types/minimist": "^1.2.0",
     "source-map-support": "^0.5.4",
     "concurrently": "^3.5.1",
-    "parcel-bundler": "^1.7.1",
+    "parcel-bundler": "^1.8.1",
     "nodemon": "^1.17.3",
     "babel-plugin-styled-components": "^1.5.1"
   },
   "dependencies": {
-    "micro": "^9.2.0",
+    "micro": "^9.3.1",
     "react": "^16.3.2",
-    "react-dom": "^16.3.1",
+    "react-dom": "^16.3.2",
     "react-markdown": "^3.3.0",
     "minimist": "^1.2.0",
     "styled-components": "^3.2.6",

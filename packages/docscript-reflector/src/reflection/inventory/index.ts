@@ -17,6 +17,8 @@ export function updateInventory(outDir: string) {
 
 			if (pkg[0] === '@') {
 				walkFolder(packagePath, pkg)
+			} else if (pkg[0] === '-' || pkg[0] === '_') {
+				continue
 			} else {
 				const versions = semver
 					.sort(

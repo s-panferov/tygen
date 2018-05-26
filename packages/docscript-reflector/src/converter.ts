@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 import { Reflection } from './reflection/reflection'
 import { ReflectionWalker } from './walker'
 
@@ -16,4 +18,6 @@ export interface Converter {
 		fileName: string,
 		walker: ReflectionWalker
 	): File[] | undefined
+
+	emitRuntime?(outDir: string, extra: { fs: typeof fs; main: string }): File[] | undefined
 }

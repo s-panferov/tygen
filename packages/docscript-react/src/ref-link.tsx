@@ -3,8 +3,8 @@ import cn from 'classnames'
 
 import { Reflection, ReflectionKind } from '@docscript/reflector/src/reflection'
 import styled from 'styled-components'
-import { BaseView } from './view'
-import { parseId } from './helpers'
+import { BaseView, withContext, ViewSettings } from './view'
+import { parseId, normalizePath } from './helpers'
 import { TypeView } from './type'
 
 export function hrefFromId(id: string, relativeId?: string) {
@@ -76,17 +76,18 @@ function createLink(reflection: Reflection, relativeId?: string): { name: string
 	throw new Error(`Unsupported ${JSON.stringify(reflection, null, 4)}`)
 }
 
+export function navigateTo(settings: ViewSettings, refId: string) {
+	const href = normalizePath(settings, hrefFromId(refId).href)
+	window.location = href as any
+}
+
+@withContext
 export class RefLink extends BaseView<
 	Reflection,
-	{ relativeId?: string; phantom?: boolean; name?: string }
+	{ relativeId?: string; phantom?: boolean; name?: string; settings?: ViewSettings }
 > {
-	static navigateTo(refId: string) {
-		const { href } = hrefFromId(refId)
-		window.location = href as any
-	}
-
 	render() {
-		const { relativeId, phantom, reflection, name } = this.props
+		const { relativeId, phantom, reflection, name, settings } = this.props
 
 		switch (reflection.kind) {
 			case ReflectionKind.Type:
@@ -98,8 +99,10 @@ export class RefLink extends BaseView<
 		const names = (name || linkName).split('/').filter(Boolean)
 		const isPath = names.length > 1
 
+		const relativeHref = normalizePath(settings!, href)
+
 		return (
-			<RefLinkBody href={href} className={cn({ phantom })}>
+			<RefLinkBody href={relativeHref} className={cn({ phantom })}>
 				{this.props.children ||
 					names.map((name, i) => {
 						return (

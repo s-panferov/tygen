@@ -1,10 +1,12 @@
 import * as React from 'react'
+
 import { Toolbar } from './ui/toolbar'
 import { BaseView, withContext } from './view'
 
 import { InventoryReflection } from '@docscript/reflector/src/reflection/inventory/reflection'
 import styled from 'styled-components'
 import { hrefFromId } from './ref-link'
+import { normalizePath } from './helpers'
 
 @withContext
 export class InventoryPage extends BaseView<InventoryReflection> {
@@ -29,16 +31,15 @@ export class InventoryPage extends BaseView<InventoryReflection> {
 						</thead>
 						<tbody>
 							{reflection.packages.map(pkg => {
+								const href = normalizePath(
+									settings!,
+									hrefFromId(`${pkg.name}->${pkg.versions[0]}`).href
+								)
+
 								return (
 									<PackageRow key={pkg.name}>
 										<td>
-											<PackageRowName
-												href={
-													hrefFromId(`${pkg.name}->${pkg.versions[0]}`)
-														.href
-												}>
-												{pkg.name}
-											</PackageRowName>
+											<PackageRowName href={href}>{pkg.name}</PackageRowName>
 										</td>
 										<td>{pkg.description}</td>
 										<td>{pkg.versions[0]}</td>

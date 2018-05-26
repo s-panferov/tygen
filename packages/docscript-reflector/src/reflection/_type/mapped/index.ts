@@ -25,12 +25,21 @@ export function visitMapped(type: ts.Type, ctx: Context): MappedTypeReflection {
 
 	ctx.registerType(type, reflection)
 
+	// FIXME mapped type structure is somewhat strange in TypeScript
+	if ((type as any).target) {
+		mappedType = (type as any).target
+	}
+
 	if (mappedType.typeParameter) {
 		reflection.typeParameter = visitType(mappedType.typeParameter, ctx)
+	} else {
+		throw new Error('Mapped type should have a type parameter')
 	}
 
 	if (mappedType.constraintType) {
 		reflection.constraintType = visitType(mappedType.constraintType, ctx)
+	} else {
+		throw new Error('Mapped type should have type a constraintType')
 	}
 
 	let template = mappedType.declaration.type

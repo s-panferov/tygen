@@ -1,4 +1,6 @@
 import minimist from 'minimist'
+import fs from 'fs'
+
 import { compileAndGenerate } from './helpers'
 import { ReflectionWalker } from './walker'
 import { updateInventory } from './reflection/inventory'
@@ -25,6 +27,7 @@ switch (command) {
 		updateInventory(argv.out)
 
 		if (argv.with) {
+			const mainFile = require.resolve(argv.with)
 			let converterFactory: ConverterFactory = require(argv.with)
 			if (typeof (converterFactory as any).default !== 'undefined') {
 				converterFactory = (converterFactory as any).default
@@ -34,6 +37,13 @@ switch (command) {
 
 			let visitor = new ReflectionWalker(argv.out)
 			visitor.walk(converter)
+
+			if (converter.emitRuntime) {
+				converter.emitRuntime(argv.out, {
+					fs: fs,
+					main: mainFile
+				})
+			}
 		}
 
 		console.log('Completed!')

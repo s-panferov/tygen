@@ -14,8 +14,7 @@
   "_moduleAliases": {
     "@docscript/reflector": "lib/docscript-reflector/src/index.js",
     "@docscript/reflector/src": "lib/docscript-reflector/src",
-    "@docscript/react": "lib/docscript-react/src/index.js",
-    "@docscript/react/src": "lib/docscript-react/src"
+    "@docscript/react": "packages/docscript-react/dist/index.js"
   },
   "alias": {
     "@docscript/reflector": "packages/docscript-reflector",

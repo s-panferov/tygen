@@ -1,12 +1,13 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { BaseView, ViewContext } from '../view'
+import { BaseView, ViewContext, withContext } from '../view'
 import { ObjectTypeReflection } from '@docscript/reflector/src/reflection/_type/object/reflection'
 import { PropertiesView } from '../properties'
 import { SignaturesView } from '../signatures'
 import { IndexSignaturesView } from '../index-signatures'
 
+@withContext
 export class ObjectView extends BaseView<ObjectTypeReflection> {
 	render() {
 		const { reflection, settings } = this.props

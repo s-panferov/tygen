@@ -1,11 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 import * as fuzz from 'fuzzaldrin-plus'
-import { parseId } from '../helpers'
+import { parseId, normalizePath } from '../helpers'
 import { Badge } from './badge'
 import cn from 'classnames'
 import { Join } from './join'
-import { RefLink } from '../ref-link'
+import { RefLink, navigateTo } from '../ref-link'
+import { SearchReflection } from '../../../docscript-reflector/src/reflection/search/reflection'
+import { BaseView, withContext, ViewSettings } from '../view'
+import { Toolbar } from './toolbar'
 
 export interface SearchState {
 	index: number
@@ -16,13 +19,23 @@ export interface SearchState {
 	results: string[]
 }
 
-export class Search extends React.Component<{ pkg?: string; version?: string }, SearchState> {
-	index?: string[]
+export class SearchPage extends BaseView<SearchReflection> {
+	render() {
+		return <Toolbar pkg={'🔎'} search={this.props.reflection} />
+	}
+}
+
+@withContext
+export class Search extends React.Component<
+	{ pkg?: string; version?: string; reflection?: SearchReflection; settings?: ViewSettings },
+	SearchState
+> {
+	reflection?: SearchReflection = this.props.reflection
 	state: SearchState = {
 		index: 0,
 		query: '',
 		scope: 'package',
-		ready: false,
+		ready: !!this.props.reflection,
 		open: false,
 		results: []
 	}
@@ -30,27 +43,29 @@ export class Search extends React.Component<{ pkg?: string; version?: string }, 
 	input?: HTMLInputElement
 
 	componentDidMount() {
-		const url = new URL(window.location.toString())
-		url.pathname = 'search.json'
-		fetch(url.toString())
-			.then(index => index.json())
-			.then(index => {
-				this.index = index
-				this.setState({
-					results: this.updateResults()
-				})
-			})
-			.catch(e => console.error(e))
-
 		const searchIndex = window.localStorage.getItem('searchIndex')
 		const searchScope = window.localStorage.getItem('searchScope') || 'package'
 		const searchQuery = window.localStorage.getItem('searchQuery') || ''
+
+		if (!this.props.reflection && window.location.protocol !== 'file:') {
+			const url = normalizePath(this.props.settings!, '/_search/index.json')
+			fetch(url.toString())
+				.then(index => index.json())
+				.then((reflection: SearchReflection) => {
+					this.reflection = reflection
+					this.setState({
+						results: this.updateResults()
+					})
+				})
+				.catch(e => console.error(e))
+		}
 
 		this.setState({
 			scope: searchScope,
 			query: searchQuery,
 			index: searchIndex != null ? Number(searchIndex) : 0,
-			results: this.updateResults(searchQuery, searchScope)
+			results: this.updateResults(searchQuery, searchScope),
+			ready: true
 		})
 	}
 
@@ -66,7 +81,7 @@ export class Search extends React.Component<{ pkg?: string; version?: string }, 
 					ref={r => (this.input = r)}
 					tabIndex={1}
 					value={this.state.query}
-					disabled={this.state.ready}
+					disabled={!this.state.ready}
 					onFocus={this.onFocus}
 					onBlur={this.onBlur}
 					onClick={this.onFocus}
@@ -85,6 +100,15 @@ export class Search extends React.Component<{ pkg?: string; version?: string }, 
 	}
 
 	onFocus = () => {
+		if (
+			window.location.protocol === 'file:' &&
+			window.location.pathname.indexOf('_search') === -1
+		) {
+			// Navigate to search page for file mode, because file: does not allow
+			// us to make a fetch request.
+			window.location = normalizePath(this.props.settings!, '/_search') as any
+		}
+
 		this.setState({
 			open: true
 		})
@@ -106,7 +130,7 @@ export class Search extends React.Component<{ pkg?: string; version?: string }, 
 			})
 		} else if (e.key === 'Enter') {
 			const ref = results[index]
-			RefLink.navigateTo(ref)
+			navigateTo(this.props.settings!, ref)
 		} else if (e.key === 'Escape') {
 			this.setState({
 				open: false
@@ -115,11 +139,11 @@ export class Search extends React.Component<{ pkg?: string; version?: string }, 
 	}
 
 	updateResults(query: string = this.state.query, scope = this.state.scope) {
-		if (query && this.index) {
+		if (query && this.reflection) {
 			const scopedQuery =
 				scope === 'package' ? `${this.props.pkg}/${this.props.version}/${query}` : query
 
-			return fuzz.filter(this.index, scopedQuery, { maxResults: 50 })
+			return fuzz.filter(this.reflection.items, scopedQuery, { maxResults: 50 })
 		} else {
 			return []
 		}

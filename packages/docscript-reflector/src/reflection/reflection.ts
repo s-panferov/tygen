@@ -1,3 +1,5 @@
+import { InventoryReflection } from '@docscript/reflector/src/reflection/inventory/reflection'
+
 import { InterfaceReflection } from './interface/reflection'
 import { PropertyReflection } from './property/reflection'
 import { TypeParameterReflection } from './type-parameter/reflection'
@@ -10,7 +12,7 @@ import { TypeAliasReflection } from './type-alias/reflection'
 import { VariableReflection, ParameterReflection } from './variable/reflection'
 import { TypeReflectionBase } from './_type/reflection'
 import { PackageReflection, FolderReflection } from './package'
-import { InventoryReflection } from '@docscript/reflector/src/reflection/inventory/reflection'
+import { SearchReflection } from './search/reflection'
 
 export enum ReflectionKind {
 	Inventory = 'Inventory',
@@ -34,6 +36,7 @@ export enum ReflectionKind {
 	Parameter = 'Parameter',
 	Package = 'Package',
 	Folder = 'Folder',
+	Search = 'Search',
 	NotSupported = 'NotSupported'
 }
 
@@ -75,6 +78,7 @@ export type Reflection =
 	| PackageReflection
 	| FolderReflection
 	| InventoryReflection
+	| SearchReflection
 
 export interface HasId {
 	id: string

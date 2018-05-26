@@ -1,4 +1,6 @@
 import { Reflection, ReflectionKind } from '@docscript/reflector/src/reflection'
+import { ViewSettings } from './view'
+import * as path from 'path'
 
 export interface Identifier {
 	pkg: string
@@ -10,6 +12,18 @@ export interface Identifier {
 export interface IdentifierItem {
 	name: string
 	file: boolean
+}
+
+export function normalizePath(settings: ViewSettings, filePath: string) {
+	let result = path.relative(settings.path, filePath)
+	if (settings.static) {
+		let [main, hash] = result.split('#')
+		result = path.join(main, 'index.html')
+		if (hash) {
+			result += '#' + hash
+		}
+	}
+	return result
 }
 
 export function parseId(id: string): Identifier {

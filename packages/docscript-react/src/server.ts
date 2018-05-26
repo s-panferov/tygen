@@ -39,7 +39,7 @@ const server = micro((req: IncomingMessage, res: ServerResponse) => {
 		return fs.readFileSync(filePath)
 	}
 
-	let urlPath = path.join(baseFolder, url)
+	const urlPath = path.join(baseFolder, url)
 
 	if (fs.existsSync(urlPath) && fs.statSync(urlPath).isFile()) {
 		return fs.readFileSync(urlPath)

@@ -3,10 +3,16 @@ import { Reflection } from '@docscript/reflector'
 import styled from 'styled-components'
 import { Join } from './ui/join'
 import { hrefFromId } from './ref-link'
+import { withContext, ViewSettings } from './view'
+import { normalizePath } from './helpers'
 
-export class Breadcrumb extends React.Component<{ reflection: Reflection }> {
+@withContext
+export class Breadcrumb extends React.Component<{
+	reflection: Reflection
+	settings?: ViewSettings
+}> {
 	render() {
-		const { reflection } = this.props
+		const { reflection, settings } = this.props
 		const { id } = reflection
 
 		if (!id) {
@@ -15,12 +21,11 @@ export class Breadcrumb extends React.Component<{ reflection: Reflection }> {
 
 		const links = [] as React.ReactNode[]
 		const regexp = /(->|::|\/|$)/g
-
 		const pkg = id.match(/(.*?)->(.*?)(->|$)/)!
-
 		const pkgHref = hrefFromId(pkg[0])
+
 		links.push(
-			<BreadcrumbLink key={pkg[0]} href={pkgHref.href}>
+			<BreadcrumbLink key={pkg[0]} href={normalizePath(settings!, pkgHref.href)}>
 				{pkg[1]}
 			</BreadcrumbLink>
 		)
@@ -41,7 +46,7 @@ export class Breadcrumb extends React.Component<{ reflection: Reflection }> {
 			lastRef = subId
 
 			links.push(
-				<BreadcrumbLink key={subId} href={href.href}>
+				<BreadcrumbLink key={subId} href={normalizePath(settings!, href.href)}>
 					{href.name}
 				</BreadcrumbLink>
 			)

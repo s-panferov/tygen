@@ -1,10 +1,14 @@
 import React from 'react'
 
-import { Reflection } from '@docscript/reflector/src/reflection'
+import path from 'path'
+
+import { Reflection, ReflectionKind } from '@docscript/reflector/src/reflection'
 import { renderToString } from 'react-dom/server'
 import { ServerStyleSheet } from 'styled-components'
 import { PageView } from './render'
 import { ReactConverterSettings, normalizeSettings } from './settings'
+import { hrefFromId } from './ref-link'
+import { ViewSettings } from './view'
 
 export function renderHTML(
 	ref: Reflection,
@@ -12,7 +16,16 @@ export function renderHTML(
 	settings: Partial<ReactConverterSettings> = {}
 ): string {
 	const sheet = new ServerStyleSheet()
-	const normalizedSettings = normalizeSettings(settings)
+	const normalizedSettings = normalizeSettings(settings) as ViewSettings
+
+	if (ref.id) {
+		normalizedSettings.path = hrefFromId(ref.id || '').href
+	} else if (ref.kind === ReflectionKind.Search) {
+		normalizedSettings.path = '/_search'
+	} else {
+		normalizedSettings.path = '/'
+	}
+
 	const el = React.createElement(PageView, { reflection: ref, settings: normalizedSettings })
 	const html = renderToString(sheet.collectStyles(el))
 
@@ -55,13 +68,24 @@ export function renderHTML(
 					}
 				</style>
 				<script>
+					const pathname = window.location.pathname
+					const protocol = window.location.protocol
+					if (protocol !== 'file:' && pathname[pathname.length - 1] !== '/') {
+						const base = document.createElement('base')
+						base.setAttribute('href', window.location.pathname + '/')
+						document.head.appendChild(base)
+					}
 					window.__argv = ${JSON.stringify(normalizedSettings)}
+					window.__ref = ${JSON.stringify(ref)}
 				</script>
 				${sheet.getStyleTags()}
 			</head>
 			<body>
 				<div id='react-app'>${html}</div>
-				<script type="text/javascript" src="/-/assets/client.js" defer async></script>
+				<script type="text/javascript" src="${path.relative(
+					normalizedSettings.path,
+					'/-/assets/index.js'
+				)}" defer async></script>
 			</body>
 		</html>
 	`

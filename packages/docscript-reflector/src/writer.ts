@@ -4,6 +4,7 @@ import * as path from 'path'
 
 import { ReflectionKind } from './reflection/reflection'
 import { mkdirSyncP } from './helpers'
+import { SearchReflection } from './reflection/search/reflection'
 
 const IsWritable: { [name: string]: boolean } = {
 	[ReflectionKind.Class]: true,
@@ -41,11 +42,14 @@ export class Writer {
 	}
 
 	write() {
-		const searchDocuments: any[] = []
+		const search: SearchReflection = {
+			kind: ReflectionKind.Search,
+			items: []
+		}
 
 		this.context.reflectionById.forEach(reflection => {
-			if (IsSearchable[reflection.kind]) {
-				searchDocuments.push(reflection.id)
+			if (IsSearchable[reflection.kind] && reflection.id) {
+				search.items.push(reflection.id)
 			}
 
 			if (!IsWritable[reflection.kind]) {
@@ -59,6 +63,11 @@ export class Writer {
 			fs.writeFileSync(fileName, JSON.stringify(reflection, null, 4))
 		})
 
-		fs.writeFileSync(path.join(this.outDir, 'search.json'), JSON.stringify(searchDocuments))
+		const searchDir = path.join(this.outDir, '_search')
+		if (!fs.existsSync(searchDir)) {
+			fs.mkdirSync(searchDir)
+		}
+
+		fs.writeFileSync(path.join(searchDir, 'index.json'), JSON.stringify(search))
 	}
 }

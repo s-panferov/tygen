@@ -15,6 +15,8 @@ export abstract class BaseView<
 export interface ViewSettings extends ReactConverterSettings {
 	nav?: boolean
 	compact?: boolean
+	path: string
+	static?: boolean
 }
 
 export const ViewContext = React.createContext<ViewSettings>()

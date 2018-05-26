@@ -15,6 +15,7 @@ import { TypeAliasPage } from './type-alias'
 import { EnumPage } from './enum'
 import { ReactConverterSettings } from './settings'
 import { InventoryPage } from './inventory'
+import { SearchPage } from './ui/search'
 
 export function renderPage(ref: Reflection): React.ReactElement<any> {
 	switch (ref.kind) {
@@ -39,6 +40,8 @@ export function renderPage(ref: Reflection): React.ReactElement<any> {
 			return <EnumPage reflection={ref} />
 		case ReflectionKind.Inventory:
 			return <InventoryPage reflection={ref} />
+		case ReflectionKind.Search:
+			return <SearchPage reflection={ref} />
 	}
 	return <div>Unknown {ref.kind}</div>
 }

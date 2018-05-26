@@ -37,6 +37,9 @@ export class NavItem extends React.Component {
 const NavItemBlock = styled.div`
 	margin-bottom: 5px;
 	display: block;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 `
 
 export interface NavProps {}

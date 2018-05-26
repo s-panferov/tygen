@@ -19,9 +19,9 @@ export class FunctionPage extends BaseView<FunctionReflection> {
 
 		if (reflection.allCallSignatures) {
 			sections.push(
-				<Section heading={<h2>Call Signatures</h2>}>
+				<Section key="call" heading={<h2>Call Signatures</h2>}>
 					{reflection.allCallSignatures.map((sig, i) => (
-						<ReflectionView reflection={sig} key={sig.id || i} />
+						<ReflectionView key={sig.id || i} reflection={sig} />
 					))}
 				</Section>
 			)
@@ -34,7 +34,7 @@ export class FunctionPage extends BaseView<FunctionReflection> {
 		return (
 			<div>
 				<Toolbar pkg={ident.pkg} version={ident.version} />
-				<Layout sidebar={null}>
+				<Layout sidebar={<span />}>
 					<h1>
 						{reflection.name} <Badge>Function</Badge>
 					</h1>

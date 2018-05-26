@@ -3,24 +3,27 @@ import styled from 'styled-components'
 import { Search } from './search'
 import { PackagesNav, InventoryProvider } from './packages'
 import { withContext, ViewSettings } from '../view'
+import { normalizePath } from '../helpers'
+import { SearchReflection } from '@docscript/reflector/src/reflection/search/reflection'
 
 export interface ToolbarProps {
 	pkg?: string
 	version?: string
 	settings?: ViewSettings
+	search?: SearchReflection
 }
 
 @withContext
 export class Toolbar extends React.Component<ToolbarProps> {
 	render() {
-		const { pkg, version, settings } = this.props
+		const { pkg, version, settings, search } = this.props
 		return (
 			<ToolbarBlock>
-				<Logo href={settings!.contextRoot}>tsdoc.io</Logo>
+				<Logo href={normalizePath(settings!, '/')}>tsdoc.io</Logo>
 				<InventoryProvider>
 					{iv => <PackagesNav pkg={pkg} version={version} inventory={iv} />}
 				</InventoryProvider>
-				<Search pkg={pkg} version={version} />
+				<Search reflection={search} pkg={pkg} version={version} />
 			</ToolbarBlock>
 		)
 	}
@@ -44,4 +47,5 @@ const ToolbarBlock = styled.div`
 	display: flex;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
 	z-index: 10;
+	position: relative;
 `

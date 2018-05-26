@@ -22,14 +22,14 @@ export class IndexSignaturesView extends React.Component<{
 			return <NavSection key="index" heading="Index Signatures" />
 		} else {
 			const string = reflection.stringIndexType && (
-				<IndexSignaturesBody>
+				<IndexSignaturesBody key={'string'}>
 					[key: string]: <TypeView reflection={reflection.stringIndexType} />
 				</IndexSignaturesBody>
 			)
 
 			const number = reflection.numberIndexType && (
-				<IndexSignaturesBody>
-					[key: string]: <TypeView reflection={reflection.numberIndexType} />
+				<IndexSignaturesBody key={'number'}>
+					[key: number]: <TypeView reflection={reflection.numberIndexType} />
 				</IndexSignaturesBody>
 			)
 

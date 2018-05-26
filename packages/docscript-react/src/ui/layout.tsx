@@ -26,13 +26,15 @@ const Sidebar = styled.div`
 	display: flex;
 	flex-direction: column;
 	grid-area: sidebar;
-	min-width: 200px;
+	width: 250px;
 	padding: 20px 10px 20px 20px;
+	background-color: #f1f1f1;
+	min-height: calc(100vh - 40px);
 `
 
 const Content = styled.div`
 	grid-area: content;
-	margin-left: 20px;
+	margin-left: 60px;
 	margin-bottom: 50px;
 `
 

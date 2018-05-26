@@ -6,6 +6,7 @@ import { NotScrollable } from './search'
 import { hrefFromId } from '../ref-link'
 
 import { InventoryReflection } from '@docscript/reflector/src/reflection/inventory/reflection'
+import { normalizePath } from '../helpers'
 
 export interface InventoryProviderState {
 	inventory?: InventoryReflection
@@ -22,7 +23,10 @@ export class InventoryProvider extends React.Component<
 	state: InventoryProviderState = {}
 
 	componentDidMount() {
-		console.log(this.props.settings!.contextRoot)
+		if (window.location.protocol === 'file:') {
+			return
+		}
+
 		fetch(path.join(this.props.settings!.contextRoot, 'index.json'))
 			.then(res => res.json())
 			.then((inventory: InventoryReflection) => {
@@ -53,7 +57,8 @@ export class PackagesNav extends React.Component<
 		return (
 			<InventoryBody onClick={this.onClick}>
 				<Package>
-					{pkg} {version}
+					{pkg}
+					{version ? ' ' + version : null}
 				</Package>
 				{this.state.open &&
 					inventory && (
@@ -77,25 +82,32 @@ export class PackagesNav extends React.Component<
 	}
 }
 
-export class PackageList extends React.Component<{ inventory: InventoryReflection }> {
+@withContext
+export class PackageList extends React.Component<{
+	inventory: InventoryReflection
+	settings?: ViewSettings
+}> {
 	render() {
-		const { inventory } = this.props
+		const { inventory, settings } = this.props
 		return (
 			<div>
 				{inventory.packages.map(pkg => {
+					const href = normalizePath(
+						settings!,
+						hrefFromId(`${pkg.name}->${pkg.versions[0]}`).href
+					)
 					return (
 						<PackageRow key={pkg.name}>
-							<PackageRowName
-								href={hrefFromId(`${pkg.name}->${pkg.versions[0]}`).href}>
-								{pkg.name}
-							</PackageRowName>
+							<PackageRowName href={href}>{pkg.name}</PackageRowName>
 							{pkg.versions.length > 1 && (
 								<PackageRowVersions>
 									{pkg.versions.map(ver => {
+										const href = normalizePath(
+											settings!,
+											hrefFromId(`${pkg.name}->${ver}`).href
+										)
 										return (
-											<PackageRowVersion
-												key={ver}
-												href={hrefFromId(`${pkg.name}->${ver}`).href}>
+											<PackageRowVersion key={ver} href={href}>
 												{ver}
 											</PackageRowVersion>
 										)
