@@ -37,8 +37,7 @@ export function visitSymbol(
 		reflection = visitInterface(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Method) {
 		reflection = visitMethod(symbol, ctx)
-	} else if (symbol.flags & ts.SymbolFlags.Property) {
-	} else if (symbol.flags & ts.SymbolFlags.Accessor) {
+	} else if (symbol.flags & ts.SymbolFlags.Property || symbol.flags & ts.SymbolFlags.Accessor) {
 		reflection = visitProperty(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Function) {
 		reflection = visitFunction(symbol, ctx)
