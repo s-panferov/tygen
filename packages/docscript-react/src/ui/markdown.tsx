@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 
 const ReactMarkdown = require('react-markdown')
 
@@ -11,14 +11,14 @@ export class Markdown extends React.Component<MarkdownProps> {
 	render() {
 		let { source } = this.props
 		return (
-			<MarkdownBody>
+			<div {...styles(MarkdownBody)}>
 				<ReactMarkdown source={source} />
-			</MarkdownBody>
+			</div>
 		)
 	}
 }
 
-const MarkdownBody = styled.div`
+const MarkdownBody = css`
 	p:last-child {
 		margin-bottom: 0;
 	}

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 
 import { SignatureReflection } from '../../docscript-reflector/src/reflection/signature/reflection'
 import { TypeArguments } from './type-parameters'
@@ -17,77 +17,77 @@ export class SignatureView extends BaseView<SignatureReflection, { parentId?: st
 		const { compact } = settings!
 
 		return (
-			<SignatureBody>
-				<SignatureMain>
-					<SignatureHead>
-						<SignatureName>
+			<div {...styles(SignatureBody)}>
+				<span {...styles(SignatureMain)}>
+					<span {...styles(SignatureHead)}>
+						<span {...styles(SignatureName)}>
 							{!compact && <Badge outline>fn</Badge>}
 							<b>
 								{reflection.name === '__call' || reflection.name === '__type'
 									? ''
 									: reflection.name}
 							</b>
-						</SignatureName>
+						</span>
 						{reflection.typeParameters && (
 							<TypeArguments types={reflection.typeParameters} />
 						)}
-						<SignatureBrace>(</SignatureBrace>
-					</SignatureHead>
+						<span {...styles(SignatureBrace)}>(</span>
+					</span>
 					{reflection.parameters &&
 						reflection.parameters.length > 0 && (
-							<SignatureParams>
+							<div {...styles(SignatureParams)}>
 								{reflection.parameters.map((param, i) => {
 									return (
-										<SignatureParam key={param.id || i}>
+										<div {...styles(SignatureParam)} key={param.id || i}>
 											<ReflectionView reflection={param} />
-										</SignatureParam>
+										</div>
 									)
 								})}
-							</SignatureParams>
+							</div>
 						)}
-					<SignatureBrace>): </SignatureBrace>
+					<span {...styles(SignatureBrace)}>): </span>
 					<TypeView reflection={reflection.returnType} />
-				</SignatureMain>
+				</span>
 				<DefinedIn origin={reflection.origin} parentId={parentId} />
-				<SignatureComment>
+				<div {...styles(SignatureComment)}>
 					<CommentView reflection={reflection} />
-				</SignatureComment>
-			</SignatureBody>
+				</div>
+			</div>
 		)
 	}
 }
 
-const SignatureName = styled.span`
+const SignatureName = css`
 	color: #c44569;
 `
 
-const SignatureBody = styled.div`
+const SignatureBody = css`
 	& + & {
 		margin-top: 10px;
 	}
 `
 
-const SignatureComment = styled.div``
+const SignatureComment = css``
 
-const SignatureParam = styled.div`
+const SignatureParam = css`
 	& + & {
 		margin-top: 6px;
 	}
 `
 
-const SignatureParams = styled.div`
+const SignatureParams = css`
 	padding: 6px 0px 6px 20px;
 `
 
-const SignatureHead = styled.span`
+const SignatureHead = css`
 	color: #c44569;
 `
 
-const SignatureMain = styled.span`
+const SignatureMain = css`
 	font-family: monospace;
 	position: relative;
 `
 
-const SignatureBrace = styled.span`
+const SignatureBrace = css`
 	color: #444;
 `

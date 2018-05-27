@@ -1,25 +1,20 @@
 import React from 'react'
-import styled from 'styled-components'
-
-const NavBlock = styled.div`
-	display: flex;
-	flex-direction: column;
-`
+import { css, styles } from 'linaria'
 
 export class NavSection extends React.Component<{ heading: React.ReactNode }> {
 	render() {
 		return (
-			<NavSectionBlock>
-				<NavSectionHeader>{this.props.heading}</NavSectionHeader>
+			<div {...styles(NavSectionBlock)}>
+				<div {...styles(NavSectionHeader)}>{this.props.heading}</div>
 				{this.props.children}
-			</NavSectionBlock>
+			</div>
 		)
 	}
 }
 
-const NavSectionBlock = styled.div``
+const NavSectionBlock = css``
 
-const NavSectionHeader = styled.div`
+const NavSectionHeader = css`
 	text-transform: uppercase;
 	color: #444;
 	font-size: 14px;
@@ -30,11 +25,11 @@ const NavSectionHeader = styled.div`
 
 export class NavItem extends React.Component {
 	render() {
-		return <NavItemBlock>{this.props.children}</NavItemBlock>
+		return <div {...styles(NavItemBlock)}>{this.props.children}</div>
 	}
 }
 
-const NavItemBlock = styled.div`
+const NavItemBlock = css`
 	margin-bottom: 5px;
 	display: block;
 	white-space: nowrap;
@@ -49,6 +44,11 @@ export class Nav extends React.Component<NavProps> {
 	static Item = NavItem
 
 	render() {
-		return <NavBlock>{this.props.children}</NavBlock>
+		return <div {...styles(NavBlock)}>{this.props.children}</div>
 	}
 }
+
+const NavBlock = css`
+	display: flex;
+	flex-direction: column;
+`

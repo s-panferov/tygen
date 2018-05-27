@@ -4,18 +4,50 @@ import path from 'path'
 
 import { Reflection, ReflectionKind } from '@docscript/reflector/src/reflection'
 import { renderToString } from 'react-dom/server'
-import { ServerStyleSheet } from 'styled-components'
 import { PageView } from './render'
 import { ReactConverterSettings, normalizeSettings } from './settings'
 import { hrefFromId } from './ref-link'
 import { ViewSettings } from './view'
+import { css } from 'linaria'
+
+const Body = css`
+	& {
+		font-family: arial;
+		font-size: 16px;
+		color: #222;
+	}
+
+	h1 {
+		padding-bottom: 5px;
+	}
+
+	h2 {
+		padding-bottom: 5px;
+	}
+
+	a {
+		text-decoration: none;
+		color: #5352ed;
+	}
+
+	a.phantom {
+		border-bottom: 1px dashed #ccc;
+	}
+
+	a:visited {
+		color: #5352ed;
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+`
 
 export function renderHTML(
 	ref: Reflection,
 	_fileName: string,
 	settings: Partial<ReactConverterSettings> = {}
 ): string {
-	const sheet = new ServerStyleSheet()
 	const normalizedSettings = normalizeSettings(settings) as ViewSettings
 
 	if (ref.id) {
@@ -27,46 +59,18 @@ export function renderHTML(
 	}
 
 	const el = React.createElement(PageView, { reflection: ref, settings: normalizedSettings })
-	const html = renderToString(sheet.collectStyles(el))
+	const html = renderToString(el)
 
 	return `
 		<html>
 			<head>
 				<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css"/>
+				<link rel="stylesheet" type="text/css" href="${path.relative(
+					normalizedSettings.path,
+					'/-/assets/index.css'
+				)}"/>
 				<meta charset="UTF-8">
 				<title>tsdoc - ${(ref as any).name || ref.id}</title>
-				<style>
-					body {
-						font-family: arial;
-						font-size: 16px;
-						color: #222;
-					}
-
-					h1 {
-						padding-bottom: 5px;
-					}
-
-					h2 {
-						padding-bottom: 5px;
-					}
-
-					a {
-						text-decoration: none;
-						color: #5352ed;
-					}
-
-					a.phantom {
-						border-bottom: 1px dashed #ccc;
-					}
-
-					a:visited {
-						color: #5352ed;
-					}
-
-					* {
-						box-sizing: border-box;
-					}
-				</style>
 				<script>
 					const pathname = window.location.pathname
 					const protocol = window.location.protocol
@@ -78,9 +82,8 @@ export function renderHTML(
 					window.__argv = ${JSON.stringify(normalizedSettings)}
 					window.__ref = ${JSON.stringify(ref)}
 				</script>
-				${sheet.getStyleTags()}
 			</head>
-			<body>
+			<body class="${Body}">
 				<div id='react-app'>${html}</div>
 				<script type="text/javascript" src="${path.relative(
 					normalizedSettings.path,

@@ -4,7 +4,7 @@ import { BaseView } from './view'
 import { TypeReflection, TypeKind } from '@docscript/reflector/src/reflection/_type/reflection'
 import { ReflectionKind } from '@docscript/reflector/src/reflection'
 import { RefLink } from './ref-link'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import { IntersectionTypeView } from './type/intersection'
 import { TypeReferenceView } from './type/type-reference'
 import { TypeParameterView } from './type/type-parameter'
@@ -76,6 +76,10 @@ export class TypeView extends BaseView<TypeReflection> {
 	}
 }
 
-const PrimitiveType = styled.span`
+const PrimitiveTypeCSS = css`
 	color: #10ac84;
 `
+
+export const PrimitiveType = (props: React.HTMLAttributes<any>) => (
+	<span {...styles(PrimitiveTypeCSS, props.className)}>{props.children}</span>
+)

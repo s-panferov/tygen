@@ -1,37 +1,38 @@
 import * as React from 'react'
 import { Foldable } from './foldable'
 
-// @ts-ignore
-import styled, { StyledComponentClass } from 'styled-components'
+import { css, styles } from 'linaria'
 
 export interface SectionProps {
 	heading: React.ReactNode
 }
 
-export const Grid = styled.div`
+export class Section extends React.Component<SectionProps> {
+	static Grid = (props: React.HTMLAttributes<any>) => (
+		<div {...styles(Grid, props.className)}>{props.children}</div>
+	)
+
+	render() {
+		return (
+			<div {...styles(SectionBody)}>
+				<Foldable title={this.props.heading}>
+					<div {...styles(SectionContent)}>{this.props.children}</div>
+				</Foldable>
+			</div>
+		)
+	}
+}
+
+const Grid = css`
 	display: grid;
 	grid-template-columns: repeat(auto-fill, 250px);
 	grid-column-gap: 20px;
 	grid-row-gap: 5px;
 `
 
-export class Section extends React.Component<SectionProps> {
-	static Grid = Grid
-
-	render() {
-		return (
-			<SectionBody>
-				<Foldable title={this.props.heading}>
-					<SectionContent>{this.props.children}</SectionContent>
-				</Foldable>
-			</SectionBody>
-		)
-	}
-}
-
-const SectionContent = styled.div`
+const SectionContent = css`
 	display: flex;
 	flex-direction: column;
 `
 
-const SectionBody = styled.div``
+const SectionBody = css``

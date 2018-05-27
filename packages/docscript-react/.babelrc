@@ -1,12 +1,6 @@
 {
 	"plugins": [
-		[
-			"babel-plugin-styled-components",
-			{
-				"displayName": true,
-				"ssr": true,
-				"preprocess": true
-			}
-		]
+		["linaria/build/babel/preval-extract"],
+		["linaria/build/babel/rewire-imports"]
 	]
 }

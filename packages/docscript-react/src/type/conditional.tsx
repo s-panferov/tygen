@@ -1,5 +1,5 @@
 import * as React from 'react'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 
 import { BaseView } from '../view'
 import { TypeView } from '../type'
@@ -9,24 +9,25 @@ export class ConditionalView extends BaseView<ConditionalTypeReflection> {
 	render() {
 		const { reflection } = this.props
 		return (
-			<ConditionalBody>
+			<span {...styles(ConditionalBody)}>
 				<TypeView reflection={reflection.checkType} /> extends{' '}
 				<TypeView reflection={reflection.extendsType} />
-				<TrueBody>
+				<div {...styles(TrueBody)}>
 					? {reflection.trueType && <TypeView reflection={reflection.trueType} />}
-				</TrueBody>
-				<FalseBody>
+				</div>
+				<div {...styles(FalseBody)}>
 					: {reflection.falseType && <TypeView reflection={reflection.falseType} />}
-				</FalseBody>
-			</ConditionalBody>
+				</div>
+			</span>
 		)
 	}
 }
 
-const ConditionalBody = styled.span``
-const TrueBody = styled.div`
+const ConditionalBody = css``
+const TrueBody = css`
 	padding-left: 20px;
 `
-const FalseBody = styled.div`
+
+const FalseBody = css`
 	padding-left: 20px;
 `

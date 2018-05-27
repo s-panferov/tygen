@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import cn from 'classnames'
 
 export interface BadgeProps {
@@ -9,11 +9,11 @@ export interface BadgeProps {
 export class Badge extends React.Component<BadgeProps> {
 	render() {
 		const { outline } = this.props
-		return <BadgeBlock className={cn({ outline })}>{this.props.children}</BadgeBlock>
+		return <span {...styles(BadgeBlock, cn({ outline }))}>{this.props.children}</span>
 	}
 }
 
-const BadgeBlock = styled.span`
+const BadgeBlock = css`
 	font-size: 0.7em;
 	border-radius: 10px;
 	white-space: nowrap;

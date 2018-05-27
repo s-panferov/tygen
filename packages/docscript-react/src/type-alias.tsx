@@ -9,7 +9,7 @@ import { CommentView } from './comment'
 import { Breadcrumb } from './breadcrumb'
 import { TypeArguments } from './type-parameters'
 import { TypeView } from './type'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import { ExportsView } from './exports'
 
 @withContext
@@ -44,13 +44,13 @@ export class TypeAliasPage extends BaseView<TypeAliasReflection> {
 						<Badge>TypeAlias</Badge>
 					</h1>
 					<Breadcrumb reflection={reflection} />
-					<TypeAliasBody>
-						<TypeAliasName>{reflection.name}</TypeAliasName>
+					<span {...styles(TypeAliasBody)}>
+						<span {...styles(TypeAliasName)}>{reflection.name}</span>
 						{reflection.typeParameters && (
 							<TypeArguments types={reflection.typeParameters} />
 						)}{' '}
 						= <TypeView reflection={reflection.type} />
-					</TypeAliasBody>
+					</span>
 					<CommentView reflection={reflection} />
 					{sections}
 				</Layout>
@@ -59,11 +59,11 @@ export class TypeAliasPage extends BaseView<TypeAliasReflection> {
 	}
 }
 
-const TypeAliasName = styled.span`
+const TypeAliasName = css`
 	color: #2e86de;
 	font-weight: bold;
 `
 
-const TypeAliasBody = styled.span`
+const TypeAliasBody = css`
 	font-family: monospace;
 `

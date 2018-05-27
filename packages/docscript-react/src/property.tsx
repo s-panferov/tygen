@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { PropertyReflection, ReflectionLink } from '@docscript/reflector/src/reflection'
 import { BaseView, withContext } from './view'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import { TypeView } from './type'
 import { CommentView } from './comment'
 import { NavItem } from './ui/nav'
@@ -23,15 +23,15 @@ export class PropertyView extends BaseView<PropertyReflection, { parentId?: stri
 		}
 
 		return (
-			<PropertyBody id={documentIdFromId(reflection.id!)}>
-				<PropertyDef>
+			<div {...styles(PropertyBody)} id={documentIdFromId(reflection.id!)}>
+				<span {...styles(PropertyDef)}>
 					{!compact && <Badge outline>prop</Badge>}
-					<PropertyName>{reflection.name}</PropertyName>:{' '}
+					<span {...styles(PropertyName)}>{reflection.name}</span>:{' '}
 					{<TypeView reflection={reflection.type} />}
-				</PropertyDef>
+				</span>
 				<DefinedIn origin={reflection.origin} parentId={parentId} />
 				<CommentView reflection={reflection} />
-			</PropertyBody>
+			</div>
 		)
 	}
 }
@@ -45,21 +45,21 @@ export class DefinedIn extends React.Component<{ origin?: ReflectionLink; parent
 		}
 
 		return (
-			<DefinedInBody>
+			<div {...styles(DefinedInBody)}>
 				defined in <RefLink reflection={origin} />
-			</DefinedInBody>
+			</div>
 		)
 	}
 }
 
-const DefinedInBody = styled.div`
+const DefinedInBody = css`
 	color: #999;
 	font-size: 13px;
 	margin-top: 5px;
 	padding-left: 15px;
 `
 
-const PropertyBody = styled.div`
+const PropertyBody = css`
 	position: relative;
 	&:not(:only-child) {
 		margin-bottom: 20px;
@@ -70,11 +70,11 @@ const PropertyBody = styled.div`
 	}
 `
 
-const PropertyDef = styled.span`
+const PropertyDef = css`
 	font-family: monospace;
 `
 
-const PropertyName = styled.span`
+const PropertyName = css`
 	color: #2e86de;
 	font-weight: bold;
 	font-family: monospace;

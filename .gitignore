@@ -21,3 +21,4 @@ npm-debug.log
 .test/docs
 yarn-error.log
 .cache
+.linaria-cache

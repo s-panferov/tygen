@@ -7,7 +7,7 @@ import {
 } from '@docscript/reflector/src/reflection/_type/intersection/reflection'
 import { TypeView } from '../type'
 import { TypeKind } from '@docscript/reflector/src/reflection/_type/reflection'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import cn from 'classnames'
 
 export class IntersectionTypeView extends BaseView<
@@ -18,26 +18,26 @@ export class IntersectionTypeView extends BaseView<
 		const sep = reflection.typeKind === TypeKind.Intersection ? '&' : '|'
 		const long = reflection.types.length > 5
 		return (
-			<IntersectionBody className={cn({ long })}>
+			<span {...styles(IntersectionBody, cn({ long }))}>
 				{reflection.types.map((type, i) => {
 					return (
 						<span key={type.id || `${type}-${i}`}>
-							{(long || i !== 0) && <Sep>{sep}</Sep>}
+							{(long || i !== 0) && <span {...styles(Sep)}>{sep}</span>}
 							<TypeView reflection={type} />
 						</span>
 					)
 				})}
-			</IntersectionBody>
+			</span>
 		)
 	}
 }
 
-const Sep = styled.span`
+const Sep = css`
 	padding: 0 2px;
 	color: #ccc;
 `
 
-const IntersectionBody = styled.span`
+const IntersectionBody = css`
 	&.long {
 		display: flex;
 		margin-left: 10px;

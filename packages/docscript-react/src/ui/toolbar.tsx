@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import { Search } from './search'
 import { PackagesNav, InventoryProvider } from './packages'
 import { withContext, ViewSettings } from '../view'
@@ -18,18 +18,20 @@ export class Toolbar extends React.Component<ToolbarProps> {
 	render() {
 		const { pkg, version, settings, search } = this.props
 		return (
-			<ToolbarBlock>
-				<Logo href={normalizePath(settings!, '/')}>tsdoc.io</Logo>
+			<div {...styles(ToolbarBlock)}>
+				<a {...styles(Logo)} href={normalizePath(settings!, '/')}>
+					tsdoc.io
+				</a>
 				<InventoryProvider>
 					{iv => <PackagesNav pkg={pkg} version={version} inventory={iv} />}
 				</InventoryProvider>
 				<Search reflection={search} pkg={pkg} version={version} />
-			</ToolbarBlock>
+			</div>
 		)
 	}
 }
 
-const Logo = styled.a`
+const Logo = css`
 	display: block;
 	border-right: 1px solid #ccc;
 	padding-left: 10px;
@@ -41,7 +43,7 @@ const Logo = styled.a`
 	color: #303952;
 `
 
-const ToolbarBlock = styled.div`
+const ToolbarBlock = css`
 	border-bottom: 1px solid #ccc;
 	height: 40px;
 	display: flex;

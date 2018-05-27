@@ -1,7 +1,7 @@
 import React from 'react'
 import path from 'path'
 import { withContext, ViewSettings } from '../view'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import { NotScrollable } from './search'
 import { hrefFromId } from '../ref-link'
 
@@ -55,19 +55,19 @@ export class PackagesNav extends React.Component<
 	render() {
 		const { inventory, pkg, version } = this.props
 		return (
-			<InventoryBody onClick={this.onClick}>
-				<Package>
+			<div {...styles(InventoryBody)} onClick={this.onClick}>
+				<div {...styles(Package)}>
 					{pkg}
 					{version ? ' ' + version : null}
-				</Package>
+				</div>
 				{this.state.open &&
 					inventory && (
-						<InventoryWindow>
+						<div {...styles(InventoryWindow)}>
 							<NotScrollable />
 							<PackageList inventory={inventory} />
-						</InventoryWindow>
+						</div>
 					)}
-			</InventoryBody>
+			</div>
 		)
 	}
 
@@ -97,24 +97,26 @@ export class PackageList extends React.Component<{
 						hrefFromId(`${pkg.name}->${pkg.versions[0]}`).href
 					)
 					return (
-						<PackageRow key={pkg.name}>
-							<PackageRowName href={href}>{pkg.name}</PackageRowName>
+						<div {...styles(PackageRow)} key={pkg.name}>
+							<a {...styles(PackageRowName)} href={href}>
+								{pkg.name}
+							</a>
 							{pkg.versions.length > 1 && (
-								<PackageRowVersions>
+								<div {...styles(PackageRowVersions)}>
 									{pkg.versions.map(ver => {
 										const href = normalizePath(
 											settings!,
 											hrefFromId(`${pkg.name}->${ver}`).href
 										)
 										return (
-											<PackageRowVersion key={ver} href={href}>
+											<a {...styles(PackageRowVersion)} key={ver} href={href}>
 												{ver}
-											</PackageRowVersion>
+											</a>
 										)
 									})}
-								</PackageRowVersions>
+								</div>
 							)}
-						</PackageRow>
+						</div>
 					)
 				})}
 			</div>
@@ -122,27 +124,27 @@ export class PackageList extends React.Component<{
 	}
 }
 
-const PackageRow = styled.div`
+const PackageRow = css`
 	padding: 5px 10px;
 	&:nth-child(even) {
 		background-color: #f0f0f0;
 	}
 `
-const PackageRowName = styled.a`
+const PackageRowName = css`
 	font-weight: bold;
 	font-size: 14px;
 	display: block;
 `
 
-const PackageRowVersions = styled.div`
+const PackageRowVersions = css`
 	margin-top: 10px;
 `
 
-const PackageRowVersion = styled.a`
+const PackageRowVersion = css`
 	font-size: 12px;
 `
 
-const InventoryBody = styled.div`
+const InventoryBody = css`
 	display: flex;
 	cursor: pointer;
 	position: relative;
@@ -151,7 +153,7 @@ const InventoryBody = styled.div`
 	}
 `
 
-const InventoryWindow = styled.div`
+const InventoryWindow = css`
 	left: -1px;
 	position: absolute;
 	top: 40px;
@@ -164,7 +166,7 @@ const InventoryWindow = styled.div`
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
 `
 
-const Package = styled.div`
+const Package = css`
 	border-right: 1px solid #ccc;
 	padding: 0 10px;
 	display: flex;

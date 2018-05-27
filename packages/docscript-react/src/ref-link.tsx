@@ -2,7 +2,7 @@ import * as React from 'react'
 import cn from 'classnames'
 
 import { Reflection, ReflectionKind } from '@docscript/reflector/src/reflection'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import { BaseView, withContext, ViewSettings } from './view'
 import { parseId, normalizePath } from './helpers'
 import { TypeView } from './type'
@@ -102,31 +102,31 @@ export class RefLink extends BaseView<
 		const relativeHref = normalizePath(settings!, href)
 
 		return (
-			<RefLinkBody href={relativeHref} className={cn({ phantom })}>
+			<a {...styles(RefLinkBody, cn({ phantom }))} href={relativeHref}>
 				{this.props.children ||
 					names.map((name, i) => {
 						return (
-							<Name
+							<span
 								key={name}
-								className={cn({ main: !isPath || i === names.length - 1 })}>
+								{...styles(Name, cn({ main: !isPath || i === names.length - 1 }))}>
 								{name}
 								{i !== names.length - 1 ? '/' : ''}
-							</Name>
+							</span>
 						)
 					})}
-			</RefLinkBody>
+			</a>
 		)
 	}
 }
 
-const Name = styled.span`
+const Name = css`
 	color: #ccc;
 	&.main {
 		color: inherit;
 	}
 `
 
-const RefLinkBody = styled.a`
+const RefLinkBody = css`
 	overflow: hidden;
 	text-overflow: ellipsis;
 

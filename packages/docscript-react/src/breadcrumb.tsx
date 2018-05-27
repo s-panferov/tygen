@@ -1,6 +1,6 @@
 import React from 'react'
 import { Reflection } from '@docscript/reflector'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import { Join } from './ui/join'
 import { hrefFromId } from './ref-link'
 import { withContext, ViewSettings } from './view'
@@ -25,9 +25,12 @@ export class Breadcrumb extends React.Component<{
 		const pkgHref = hrefFromId(pkg[0])
 
 		links.push(
-			<BreadcrumbLink key={pkg[0]} href={normalizePath(settings!, pkgHref.href)}>
+			<a
+				{...styles(BreadcrumbLink)}
+				key={pkg[0]}
+				href={normalizePath(settings!, pkgHref.href)}>
 				{pkg[1]}
-			</BreadcrumbLink>
+			</a>
 		)
 
 		let rest = id.slice(pkg[0].length)
@@ -46,9 +49,12 @@ export class Breadcrumb extends React.Component<{
 			lastRef = subId
 
 			links.push(
-				<BreadcrumbLink key={subId} href={normalizePath(settings!, href.href)}>
+				<a
+					{...styles(BreadcrumbLink)}
+					key={subId}
+					href={normalizePath(settings!, href.href)}>
 					{href.name}
-				</BreadcrumbLink>
+				</a>
 			)
 
 			if (res.index >= rest.length - 1) {
@@ -57,9 +63,16 @@ export class Breadcrumb extends React.Component<{
 		}
 
 		return (
-			<BreadcrumbBody>
-				<Join joinWith={i => <BreadcrumbSep key={i}>/</BreadcrumbSep>}>{links}</Join>
-			</BreadcrumbBody>
+			<div {...styles(BreadcrumbBody)}>
+				<Join
+					joinWith={i => (
+						<span {...styles(BreadcrumbSep)} key={i}>
+							/
+						</span>
+					)}>
+					{links}
+				</Join>
+			</div>
 		)
 	}
 }
@@ -68,13 +81,13 @@ export function createLink(...parts: string[]) {
 	return '/' + parts.join('/')
 }
 
-const BreadcrumbBody = styled.div`
+const BreadcrumbBody = css`
 	font-size: 14px;
 	margin-bottom: 20px;
 	margin-top: -10px;
 `
-const BreadcrumbLink = styled.a``
-const BreadcrumbSep = styled.span`
+const BreadcrumbLink = css``
+const BreadcrumbSep = css`
 	padding: 0 2px;
 	color: #ccc;
 `

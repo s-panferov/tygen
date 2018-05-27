@@ -1,5 +1,5 @@
 import * as React from 'react'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 
 import { BaseView, ViewContext, withContext } from '../view'
 import { ObjectTypeReflection } from '@docscript/reflector/src/reflection/_type/object/reflection'
@@ -12,23 +12,24 @@ export class ObjectView extends BaseView<ObjectTypeReflection> {
 	render() {
 		const { reflection, settings } = this.props
 		return (
-			<ObjectBody>
+			<span {...styles(ObjectBody)}>
 				{'{'}
-				<ObjectInternal>
+				<div {...styles(ObjectInternal)}>
 					<ViewContext.Provider value={Object.assign({}, settings, { compact: true })}>
 						<IndexSignaturesView key="index" reflection={reflection} />
 						<PropertiesView key="props" properties={reflection.allProperties} />
 						<SignaturesView key="call" signatures={reflection.allCallSignatures} />
 					</ViewContext.Provider>
-				</ObjectInternal>
+				</div>
 				{'}'}
-			</ObjectBody>
+			</span>
 		)
 	}
 }
 
-const ObjectBody = styled.span``
-const ObjectInternal = styled.div`
+const ObjectBody = css``
+
+const ObjectInternal = css`
 	margin-left: 20px;
 	padding: 5px;
 `

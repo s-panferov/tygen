@@ -4,7 +4,7 @@ import { Toolbar } from './ui/toolbar'
 import { BaseView, withContext } from './view'
 
 import { InventoryReflection } from '@docscript/reflector/src/reflection/inventory/reflection'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import { hrefFromId } from './ref-link'
 import { normalizePath } from './helpers'
 
@@ -20,7 +20,7 @@ export class InventoryPage extends BaseView<InventoryReflection> {
 		return (
 			<div>
 				<Toolbar pkg={'🏠'} />
-				<InventoryBody>
+				<div {...styles(InventoryBody)}>
 					<table>
 						<thead>
 							<tr>
@@ -37,24 +37,26 @@ export class InventoryPage extends BaseView<InventoryReflection> {
 								)
 
 								return (
-									<PackageRow key={pkg.name}>
+									<tr {...styles(PackageRow)} key={pkg.name}>
 										<td>
-											<PackageRowName href={href}>{pkg.name}</PackageRowName>
+											<a {...styles(PackageRowName)} href={href}>
+												{pkg.name}
+											</a>
 										</td>
 										<td>{pkg.description}</td>
 										<td>{pkg.versions[0]}</td>
-									</PackageRow>
+									</tr>
 								)
 							})}
 						</tbody>
 					</table>
-				</InventoryBody>
+				</div>
 			</div>
 		)
 	}
 }
 
-const InventoryBody = styled.div`
+const InventoryBody = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -69,14 +71,14 @@ const InventoryBody = styled.div`
 	}
 `
 
-const PackageRow = styled.tr`
+const PackageRow = css`
 	padding: 5px 10px;
 	width: 400px;
 	&:nth-child(even) {
 		background-color: #f0f0f0;
 	}
 `
-const PackageRowName = styled.a`
+const PackageRowName = css`
 	font-weight: bold;
 	font-size: 14px;
 	display: block;

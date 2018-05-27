@@ -1,24 +1,10 @@
 import React from 'react'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import { Badge } from './badge'
 
 export interface ItemProps {
 	name: React.ReactNode
-	badge?:
-		| string
-		| string
-		| string
-		| string
-		| string
-		| string
-		| string
-		| string
-		| string
-		| string
-		| string
-		| string
-		| string
-		| string
+	badge?: string
 }
 
 export interface ItemState {
@@ -28,7 +14,7 @@ export interface ItemState {
 export class ItemSignature extends React.Component {
 	render() {
 		const { children } = this.props
-		return <ItemSignatureBody>{children}</ItemSignatureBody>
+		return <div {...styles(ItemSignatureBody)}>{children}</div>
 	}
 }
 
@@ -43,13 +29,13 @@ export class Item extends React.Component<ItemProps, ItemState> {
 		const { children, name, badge } = this.props
 		const { open } = this.state
 		return (
-			<ItemBlock>
-				<ItemHeader onClick={this.onClick}>
+			<div {...styles(ItemBlock)}>
+				<div {...styles(ItemHeader)} onClick={this.onClick}>
 					{badge && <Badge>{badge}</Badge>}
-					<ItemName>{name}</ItemName>
-				</ItemHeader>
+					<div {...styles(ItemName)}>{name}</div>
+				</div>
 				{open && children}
-			</ItemBlock>
+			</div>
 		)
 	}
 
@@ -60,25 +46,25 @@ export class Item extends React.Component<ItemProps, ItemState> {
 	}
 }
 
-const ItemHeader = styled.div`
+const ItemHeader = css`
 	display: flex;
 
 	padding: 5px 0px;
 `
 
-const ItemBlock = styled.div`
+const ItemBlock = css`
 	position: relative;
 	& + & {
 		margin-top: 10px;
 	}
 `
 
-const ItemName = styled.div`
+const ItemName = css`
 	position: relative;
 	font-family: monospace;
 `
 
-const ItemSignatureBody = styled.div`
+const ItemSignatureBody = css`
 	padding: 5px;
 	font-family: monospace;
 	background-color: #f5f5f5;

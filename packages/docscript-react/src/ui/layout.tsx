@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import cn from 'classnames'
 
 export interface LayoutProps {
@@ -9,20 +9,23 @@ export interface LayoutProps {
 export class Layout extends React.Component<LayoutProps> {
 	render() {
 		return (
-			<LayoutBlock
-				className={cn({
-					wide: !!this.props.sidebar
-				})}>
-				{this.props.sidebar && <Sidebar>{this.props.sidebar}</Sidebar>}
-				<Content>
-					<ContentInner>{this.props.children}</ContentInner>
-				</Content>
-			</LayoutBlock>
+			<div
+				{...styles(
+					LayoutBlock,
+					cn({
+						wide: !!this.props.sidebar
+					})
+				)}>
+				{this.props.sidebar && <div {...styles(Sidebar)}>{this.props.sidebar}</div>}
+				<div {...styles(Content)}>
+					<div {...styles(ContentInner)}>{this.props.children}</div>
+				</div>
+			</div>
 		)
 	}
 }
 
-const Sidebar = styled.div`
+const Sidebar = css`
 	display: flex;
 	flex-direction: column;
 	grid-area: sidebar;
@@ -32,17 +35,17 @@ const Sidebar = styled.div`
 	min-height: calc(100vh - 40px);
 `
 
-const Content = styled.div`
+const Content = css`
 	grid-area: content;
 	margin-left: 60px;
 	margin-bottom: 50px;
 `
 
-const ContentInner = styled.div`
+const ContentInner = css`
 	max-width: 900px;
 `
 
-const LayoutBlock = styled.div`
+const LayoutBlock = css`
 	display: flex;
 	justify-content: center;
 

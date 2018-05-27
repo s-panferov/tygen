@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import * as fuzz from 'fuzzaldrin-plus'
 import { parseId, normalizePath } from '../helpers'
 import { Badge } from './badge'
@@ -72,13 +72,14 @@ export class Search extends React.Component<
 	render() {
 		const scope = this.state.scope
 		return (
-			<SearchBody onKeyDown={this.onKeyDown}>
+			<div {...styles(SearchBody)} onKeyDown={this.onKeyDown}>
 				<select value={scope} onChange={this.onScopeChange}>
 					<option value={'package'}>Package</option>
 					<option value={'global'}>Global</option>
 				</select>
-				<SearchInput
-					ref={r => (this.input = r)}
+				<input
+					{...styles(SearchInput)}
+					ref={r => (this.input = r!)}
 					tabIndex={1}
 					value={this.state.query}
 					disabled={!this.state.ready}
@@ -88,14 +89,14 @@ export class Search extends React.Component<
 					onChange={this.onChange}
 				/>
 				{this.state.open && (
-					<SearchResults>
+					<div {...styles(SearchResults)}>
 						<NotScrollable />
 						{this.state.results.map((res, i) => {
 							return <SearchItem key={res} id={res} focus={i === this.state.index} />
 						})}
-					</SearchResults>
+					</div>
 				)}
-			</SearchBody>
+			</div>
 		)
 	}
 
@@ -195,50 +196,60 @@ class SearchItem extends React.Component<{ id: string; focus: boolean }> {
 		const id = parseId(this.props.id)
 		return (
 			<RefLink reflection={{ id: this.props.id } as any}>
-				<SearchItemBody className={cn({ focus })}>
+				<div {...styles(SearchItemBody, cn({ focus }))}>
 					{id.pkg}&nbsp;<Badge>{id.version}</Badge>&nbsp;
 					{id.module && (
 						<Join
 							joinWith={sep => (
-								<SearchItemSep key={'mod-sep' + sep}>/</SearchItemSep>
+								<span {...styles(SearchItemSep)} key={'mod-sep' + sep}>
+									/
+								</span>
 							)}>
 							{id.module.map((mod, i, list) => {
 								return (
-									<SearchItemPart
-										key={'mod' + i}
-										className={cn({
-											main: !id.items && i === list.length - 1
-										})}>
+									<div
+										{...styles(
+											SearchItemPart,
+											cn({
+												main: !id.items && i === list.length - 1
+											})
+										)}
+										key={'mod' + i}>
 										{mod}
-									</SearchItemPart>
+									</div>
 								)
 							})}
 						</Join>
 					)}
-					{id.items && <SearchItemSep>/</SearchItemSep>}
+					{id.items && <span {...styles(SearchItemSep)}>/</span>}
 					{id.items && (
 						<Join
 							joinWith={sep => (
-								<SearchItemSep key={'item-sep' + sep}>/</SearchItemSep>
+								<span {...styles(SearchItemSep)} key={'item-sep' + sep}>
+									/
+								</span>
 							)}>
 							{id.items.map((item, i, list) => {
 								return (
-									<SearchItemPart
+									<div
 										key={'item' + i}
-										className={cn({ main: i === list.length - 1 })}>
+										{...styles(
+											SearchItemPart,
+											cn({ main: i === list.length - 1 })
+										)}>
 										{item.name}
-									</SearchItemPart>
+									</div>
 								)
 							})}
 						</Join>
 					)}
-				</SearchItemBody>
+				</div>
 			</RefLink>
 		)
 	}
 }
 
-const SearchItemBody = styled.div`
+const SearchItemBody = css`
 	height: 30px;
 	display: flex;
 	align-items: center;
@@ -259,18 +270,18 @@ const SearchItemBody = styled.div`
 	}
 `
 
-const SearchItemPart = styled.div`
+const SearchItemPart = css`
 	&.main {
 		font-weight: bold;
 	}
 `
 
-const SearchItemSep = styled.span`
+const SearchItemSep = css`
 	padding: 0 3px;
 	color: #ccc;
 `
 
-const SearchBody = styled.div`
+const SearchBody = css`
 	display: flex;
 	align-items: center;
 	padding: 0 10px;
@@ -278,7 +289,7 @@ const SearchBody = styled.div`
 	position: relative;
 `
 
-const SearchInput = styled.input`
+const SearchInput = css`
 	width: 100%;
 	font-family: monospace;
 	border: none;
@@ -287,7 +298,7 @@ const SearchInput = styled.input`
 	margin-left: 10px;
 `
 
-const SearchResults = styled.div`
+const SearchResults = css`
 	left: -1px;
 	right: 0;
 	position: absolute;

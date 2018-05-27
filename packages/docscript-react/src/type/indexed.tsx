@@ -1,5 +1,5 @@
 import * as React from 'react'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 
 import { BaseView } from '../view'
 import { TypeView } from '../type'
@@ -9,14 +9,14 @@ export class IndexedAccessView extends BaseView<IndexedAccessReflection> {
 	render() {
 		const { reflection } = this.props
 		return (
-			<IndexedAccessBody>
+			<span {...styles(IndexedAccessBody)}>
 				<TypeView reflection={reflection.objectType} />
 				{'['}
 				<TypeView reflection={reflection.indexType} />
 				{']'}
-			</IndexedAccessBody>
+			</span>
 		)
 	}
 }
 
-const IndexedAccessBody = styled.span``
+const IndexedAccessBody = css``

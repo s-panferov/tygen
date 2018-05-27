@@ -1,5 +1,5 @@
 import * as React from 'react'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 
 import { BaseView } from '../view'
 import { TypeParameterReflection } from '@docscript/reflector/src/reflection/type-parameter/reflection'
@@ -7,8 +7,8 @@ import { TypeParameterReflection } from '@docscript/reflector/src/reflection/typ
 export class TypeParameterView extends BaseView<TypeParameterReflection> {
 	render() {
 		const { reflection } = this.props
-		return <TypeParameterBody>{reflection.name}</TypeParameterBody>
+		return <span {...styles(TypeParameterBody)}>{reflection.name}</span>
 	}
 }
 
-const TypeParameterBody = styled.span``
+const TypeParameterBody = css``

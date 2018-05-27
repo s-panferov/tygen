@@ -1,13 +1,13 @@
 import * as React from 'react'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 
 import { BaseView } from '../view'
 import { ESSymbolReflection } from '@docscript/reflector/src/reflection/_type/symbol/reflection'
 
 export class ESSymbolView extends BaseView<ESSymbolReflection> {
 	render() {
-		return <ESSymbolBody>symbol</ESSymbolBody>
+		return <span {...styles(ESSymbolBody)}>symbol</span>
 	}
 }
 
-const ESSymbolBody = styled.span``
+const ESSymbolBody = css``

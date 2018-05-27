@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { EnumReflection } from '@docscript/reflector/src/reflection'
 import { BaseView, withContext, ViewContext } from './view'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import { parseId } from './helpers'
 import { Toolbar } from './ui/toolbar'
 import { Layout } from './ui/layout'
@@ -29,26 +29,30 @@ export class EnumPage extends BaseView<EnumReflection> {
 						{reflection.name} <Badge>Enum</Badge>
 					</h1>
 					<Breadcrumb reflection={reflection} />
-					<EnumBody>
-						enum <EnumName>{reflection.name}</EnumName> {'{'}
-						<EnumMembers>
+					<span {...styles(EnumBody)}>
+						enum <span {...styles(EnumName)}>{reflection.name}</span> {'{'}
+						<div {...styles(EnumMembers)}>
 							{reflection.members &&
 								reflection.members.map(member => {
 									return (
-										<EnumMember
+										<div
+											{...styles(EnumMember)}
 											id={documentIdFromId(member.id!)}
 											key={member.id}>
-											<EnumMemberName>
+											<span {...styles(EnumMemberName)}>
 												<RefLink reflection={member} />
-											</EnumMemberName>{' '}
-											= <EnumValue>{JSON.stringify(member.value)}</EnumValue>
+											</span>{' '}
+											={' '}
+											<span {...styles(EnumValue)}>
+												{JSON.stringify(member.value)}
+											</span>
 											<CommentView reflection={reflection} />
-										</EnumMember>
+										</div>
 									)
 								})}
-						</EnumMembers>
+						</div>
 						{'}'}
-					</EnumBody>
+					</span>
 					<CommentView reflection={reflection} />
 					{sections}
 				</Layout>
@@ -57,27 +61,27 @@ export class EnumPage extends BaseView<EnumReflection> {
 	}
 }
 
-const EnumName = styled.span`
+const EnumName = css`
 	color: #2e86de;
 	font-weight: bold;
 `
 
-const EnumMember = styled.div`
+const EnumMember = css`
 	& + & {
 		margin-top: 10px;
 	}
 `
-const EnumMembers = styled.div`
+const EnumMembers = css`
 	margin: 10px 0 10px 20px;
 `
-const EnumMemberName = styled.span`
+const EnumMemberName = css`
 	color: #2e86de;
 `
 
-const EnumBody = styled.span`
+const EnumBody = css`
 	font-family: monospace;
 `
 
-const EnumValue = styled.span`
+const EnumValue = css`
 	color: #10ac84;
 `

@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { BaseView, withContext } from './view'
-// import styled from 'styled-components'
+// import { css,  styles } from 'linaria'
 // import { Item } from './ui/item'
 import { MethodReflection } from '../../docscript-reflector/src/reflection/function/reflection'
 import { SignatureView } from './signature'
 import { ReflectionKind } from '@docscript/reflector/src/reflection'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import { NavItem } from './ui/nav'
 import { RefLink, documentIdFromId } from './ref-link'
 
@@ -24,33 +24,34 @@ export class MethodView extends BaseView<MethodReflection, { parentId?: string }
 		}
 
 		return (
-			<MethodBody>
+			<div {...styles(MethodBody)}>
 				{reflection.allCallSignatures &&
 					reflection.allCallSignatures.map((sig, i) => {
 						if (sig.kind === ReflectionKind.Signature) {
 							return (
-								<MethodSignature
+								<div
+									{...styles(MethodSignature)}
 									id={documentIdFromId(reflection.id!)}
 									key={sig.id || i}>
 									<SignatureView reflection={sig} parentId={parentId} />
-								</MethodSignature>
+								</div>
 							)
 						} else {
 							return <div>unsupported</div>
 						}
 					})}
-			</MethodBody>
+			</div>
 		)
 	}
 }
 
-const MethodSignature = styled.div`
+const MethodSignature = css`
 	& + & {
 		margin-top: 20px;
 	}
 `
 
-const MethodBody = styled.div`
+const MethodBody = css`
 	&:not(:only-child) {
 		margin-bottom: 20px;
 	}

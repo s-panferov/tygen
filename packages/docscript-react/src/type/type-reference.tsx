@@ -1,5 +1,5 @@
 import * as React from 'react'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 
 import { BaseView } from '../view'
 import { TypeReferenceReflection } from '@docscript/reflector/src/reflection/_type/reference/reflection'
@@ -10,12 +10,12 @@ export class TypeReferenceView extends BaseView<TypeReferenceReflection> {
 	render() {
 		const { reflection } = this.props
 		return (
-			<TypeReferenceBody>
+			<span {...styles(TypeReferenceBody)}>
 				<TypeView reflection={reflection.target} />
 				{reflection.typeArguments && <TypeArguments types={reflection.typeArguments} />}
-			</TypeReferenceBody>
+			</span>
 		)
 	}
 }
 
-const TypeReferenceBody = styled.span``
+const TypeReferenceBody = css``

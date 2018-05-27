@@ -1,5 +1,5 @@
 import * as React from 'react'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 
 import { BaseView } from '../view'
 import { MappedTypeReflection } from '@docscript/reflector/src/reflection/_type/mapped/reflection'
@@ -10,14 +10,14 @@ export class MappedView extends BaseView<MappedTypeReflection> {
 	render() {
 		const { reflection } = this.props
 		return (
-			<MappedBody>
+			<span {...styles(MappedBody)}>
 				{'{ '}
 				[{<RefLink reflection={reflection.typeParameter} />} extends{' '}
 				{<RefLink reflection={reflection.constraintType} />}]:{' '}
 				<TypeView reflection={reflection.templateType} /> {'}'}
-			</MappedBody>
+			</span>
 		)
 	}
 }
 
-const MappedBody = styled.span``
+const MappedBody = css``

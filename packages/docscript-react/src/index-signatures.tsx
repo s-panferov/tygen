@@ -4,7 +4,7 @@ import { Section } from './ui/section'
 import { withContext, ViewSettings } from './view'
 import { ReflectionWithIndexSignatures } from '../../docscript-reflector/src/reflection/signature/reflection'
 import { TypeView } from './type'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 
 @withContext
 export class IndexSignaturesView extends React.Component<{
@@ -22,15 +22,15 @@ export class IndexSignaturesView extends React.Component<{
 			return <NavSection key="index" heading="Index Signatures" />
 		} else {
 			const string = reflection.stringIndexType && (
-				<IndexSignaturesBody key={'string'}>
+				<span {...styles(IndexSignaturesBody)} key={'string'}>
 					[key: string]: <TypeView reflection={reflection.stringIndexType} />
-				</IndexSignaturesBody>
+				</span>
 			)
 
 			const number = reflection.numberIndexType && (
-				<IndexSignaturesBody key={'number'}>
+				<span {...styles(IndexSignaturesBody)} key={'number'}>
 					[key: number]: <TypeView reflection={reflection.numberIndexType} />
-				</IndexSignaturesBody>
+				</span>
 			)
 
 			if (compact) {
@@ -47,6 +47,6 @@ export class IndexSignaturesView extends React.Component<{
 	}
 }
 
-const IndexSignaturesBody = styled.span`
+const IndexSignaturesBody = css`
 	font-family: monospace;
 `

@@ -6,7 +6,7 @@ import {
 } from '@docscript/reflector/src/reflection'
 import { BaseView, withContext, ViewContext } from './view'
 import { TypeView } from './type'
-import styled from 'styled-components'
+import { css, styles } from 'linaria'
 import { parseId } from './helpers'
 import { Toolbar } from './ui/toolbar'
 import { Layout } from './ui/layout'
@@ -20,7 +20,7 @@ export class VariableView extends BaseView<VariableReflection | ParameterReflect
 		return (
 			<span>
 				{reflection.kind === ReflectionKind.Parameter && reflection.rest ? '...' : ''}
-				<ParameterName>{reflection.name}</ParameterName>
+				<span {...styles(ParameterName)}>{reflection.name}</span>
 				{reflection.kind === ReflectionKind.Parameter && reflection.optional
 					? '?'
 					: ''}: {<TypeView reflection={reflection.type} />}
@@ -29,7 +29,7 @@ export class VariableView extends BaseView<VariableReflection | ParameterReflect
 	}
 }
 
-const ParameterName = styled.span`
+const ParameterName = css`
 	color: #40739e;
 `
 
@@ -52,10 +52,10 @@ export class VariablePage extends BaseView<VariableReflection> {
 						{reflection.name} <Badge>Var</Badge>
 					</h1>
 					<Breadcrumb reflection={reflection} />
-					<VariableBody>
-						var <VariableName>{reflection.name}</VariableName>
+					<span {...styles(VariableBody)}>
+						var <span {...styles(VariableName)}>{reflection.name}</span>
 						: <TypeView reflection={reflection.type} />
-					</VariableBody>
+					</span>
 					<CommentView reflection={reflection} />
 					{sections}
 				</Layout>
@@ -64,11 +64,11 @@ export class VariablePage extends BaseView<VariableReflection> {
 	}
 }
 
-const VariableName = styled.span`
+const VariableName = css`
 	color: #2e86de;
 	font-weight: bold;
 `
 
-const VariableBody = styled.span`
+const VariableBody = css`
 	font-family: monospace;
 `
