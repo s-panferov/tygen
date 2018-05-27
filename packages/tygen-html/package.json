@@ -8,6 +8,10 @@
     "generator"
   ],
   "main": "dist/index.js",
+  "files": [
+    "bin",
+    "dist"
+  ],
   "bin": {
     "tygen-html": "./bin/tygen-html.js"
   },

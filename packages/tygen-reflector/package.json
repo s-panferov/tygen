@@ -6,6 +6,10 @@
   "bin": {
     "tygen": "./bin/tygen.js"
   },
+  "files": [
+    "bin",
+    "lib"
+  ],
   "scripts": {
     "build": "tsc"
   },
