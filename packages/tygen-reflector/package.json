@@ -3,6 +3,12 @@
   "version": "0.0.10",
   "description": "Reflector for TypeScript types",
   "typings": "src/index.ts",
+  "bin": {
+    "tygen": "./lib/cli.js"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
   "dependencies": {
     "pkg-up": "^2.0.0",
     "memfs": "^2.8.0",

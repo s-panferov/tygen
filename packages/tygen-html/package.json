@@ -8,6 +8,9 @@
     "generator"
   ],
   "main": "dist/index.js",
+  "bin": {
+    "tygen-server": "./dist/server.js"
+  },
   "alias": {
     "@tygen/reflector": "../tygen-reflector",
     "@tygen/html": "../tygen-html"
@@ -19,7 +22,7 @@
     "server-build": "parcel build --detailed-report --target=node --public-url '/-/assets/' src/server.ts",
     "client-build": "parcel build --detailed-report src/index.tsx --public-url '/-/assets/'",
     "start": "concurrently -p name -n \"server-watch,client-watch,server\" --allow-restart --restart-tries=0 --restart-after=100 \"yarn run server-watch\" \"yarn run client-watch\" \"yarn run server-start\"",
-    "build": "yarn run server-build && yarn run client-build"
+    "build": "NODE_ENV=production yarn run server-build && NODE_ENV=production yarn run client-build"
   },
   "devDependencies": {
     "@types/react": "^16.3.12",

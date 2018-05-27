@@ -16,7 +16,7 @@ npm-debug.log
 /doc
 /bower_components
 .vscode
-/lib
+lib
 /docs
 .test/docs
 yarn-error.log
