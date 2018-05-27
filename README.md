@@ -1,4 +1,4 @@
-# TypeScript documentation generator
+# TypeScript documentation generator [beta]
 
 [![Gitter](https://badges.gitter.im/s-panferov/tygen.svg)](https://gitter.im/s-panferov/tygen?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=s.panferov&url=https://github.com/s-panferov/tygen&title=TyGen&language=TypeScript&tags=github&category=software)
 
@@ -28,7 +28,7 @@ yarn add --dev @tygen/reflector @tygen/html
 If you want all-in-one command to generate ready-to-serve static HTML documentation:
 
 ```
-tygen . --out docs --with @tygen/html
+yarn exec -- tygen generate . --out docs --with @tygen/html
 ```
 
 First argument of the `tygen <source>` command should point to a folder with a `tsconfig.json` file. `tygen` will compile your project with TypeScript compiler and then generate reflections and HTML files.
