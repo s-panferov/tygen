@@ -10,14 +10,15 @@ import { Context } from './context'
 import { Package } from './package'
 
 export function compileAndGenerate(target: string = process.cwd()): Context {
-	let configFilePath = ts.findConfigFile(target, ts.sys.fileExists)!
+	let absolutePath = path.resolve(process.cwd(), target)
+	let configFilePath = ts.findConfigFile(absolutePath, ts.sys.fileExists)!
 
 	console.log('Using TypeScript', ts.version)
 
 	const config = ts.parseJsonConfigFileContent(
 		JSON.parse(fse.readFileSync(configFilePath)),
 		ts.sys,
-		'',
+		absolutePath,
 		undefined,
 		configFilePath
 	)

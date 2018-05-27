@@ -5,6 +5,8 @@ export interface PropertyReflection extends BaseReflection, ReflectionWithOrigin
 	kind: ReflectionKind.Property
 	name: string
 	type: TypeReflection
+	getter?: boolean
+	setter?: boolean
 }
 
 export interface ReflectionWithOrigin extends BaseReflection {

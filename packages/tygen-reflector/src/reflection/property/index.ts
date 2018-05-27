@@ -12,7 +12,9 @@ export function visitProperty(symbol: ts.Symbol, ctx: Context): PropertyReflecti
 		id: symbolId(symbol, ctx),
 		kind: ReflectionKind.Property,
 		name: symbol.name,
-		type: undefined as any
+		type: undefined as any,
+		getter: !!(symbol.flags && ts.SymbolFlags.GetAccessor),
+		setter: !!(symbol.flags && ts.SymbolFlags.SetAccessor)
 	}
 
 	ctx.registerSymbol(symbol, propertyRef)
