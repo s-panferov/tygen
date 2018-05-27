@@ -8,6 +8,9 @@
     "generator"
   ],
   "main": "dist/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "bin",
     "dist"
