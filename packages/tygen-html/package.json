@@ -1,0 +1,47 @@
+{
+  "name": "@tygen/html",
+  "version": "0.0.10",
+  "description": "React frontend for tygen, typescript documentation generator",
+  "keywords": [
+    "typescript",
+    "documentation",
+    "generator"
+  ],
+  "main": "dist/index.js",
+  "alias": {
+    "@tygen/reflector": "../tygen-reflector",
+    "@tygen/html": "../tygen-html"
+  },
+  "scripts": {
+    "server-start": "nodemon --exec \"node -r module-alias/register -r source-map-support/register dist/server.js\"",
+    "server-watch": "parcel watch --target=node --no-hmr --no-autoinstall --public-url '/-/assets/' src/server.ts",
+    "client-watch": "parcel watch --no-hmr --no-autoinstall src/index.tsx --public-url '/-/assets/'",
+    "server-build": "parcel build --detailed-report --target=node --public-url '/-/assets/' src/server.ts",
+    "client-build": "parcel build --detailed-report src/index.tsx --public-url '/-/assets/'",
+    "start": "concurrently -p name -n \"server-watch,client-watch,server\" --allow-restart --restart-tries=0 --restart-after=100 \"yarn run server-watch\" \"yarn run client-watch\" \"yarn run server-start\"",
+    "build": "yarn run server-build && yarn run client-build"
+  },
+  "devDependencies": {
+    "@types/react": "^16.3.12",
+    "@types/react-dom": "^16.0.5",
+    "@types/classnames": "^2.2.3",
+    "@types/micro": "^7.3.1",
+    "@types/fuzzaldrin-plus": "^0.0.1",
+    "@types/minimist": "^1.2.0",
+    "source-map-support": "^0.5.4",
+    "concurrently": "^3.5.1",
+    "parcel-bundler": "^1.8.1",
+    "nodemon": "^1.17.3"
+  },
+  "dependencies": {
+    "micro": "^9.3.1",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-markdown": "^3.3.0",
+    "linaria": "^0.5.0",
+    "minimist": "^1.2.0",
+    "classnames": "^2.2.5",
+    "mime-types": "^2.1.18",
+    "fuzzaldrin-plus": "^0.6.0"
+  }
+}

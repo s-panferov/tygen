@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "esnext",
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@tygen/reflector/*": ["../tygen-reflector/*"]
+    }
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

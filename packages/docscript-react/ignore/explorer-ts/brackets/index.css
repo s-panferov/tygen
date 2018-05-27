@@ -1,9 +1,0 @@
-@import 'theme';
-
-.ts-brackets {
-    &__bracket {
-        &_hover {
-            color: red;
-        }
-    }
-}

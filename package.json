@@ -1,5 +1,5 @@
 {
-  "name": "@docscript/monorepo",
+  "name": "@tygen/monorepo",
   "version": "0.0.10",
   "private": true,
   "description": "Documentation generator for TypeScript",
@@ -7,22 +7,22 @@
     "packages/*"
   ],
   "scripts": {
-    "react": "cd packages/docscript-react && DOCS=$(pwd)/../../docs yarn start",
+    "react": "cd packages/tygen-html && DOCS=$(pwd)/../../docs yarn start",
     "develop": "concurrently -p name -n \"tsc,react\" --allow-restart --restart-tries=0 --restart-after=100 \"yarn run react\" \"yarn exec tsc --watch --pretty\"",
-    "react-build": "cd packages/docscript-react && yarn build"
+    "react-build": "cd packages/tygen-html && yarn build"
   },
   "_moduleAliases": {
-    "@docscript/reflector": "lib/docscript-reflector/src/index.js",
-    "@docscript/reflector/src": "lib/docscript-reflector/src",
-    "@docscript/react": "packages/docscript-react/dist/index.js"
+    "@tygen/reflector": "lib/tygen-reflector/src/index.js",
+    "@tygen/reflector/src": "lib/tygen-reflector/src",
+    "@tygen/html": "packages/tygen-html/dist/index.js"
   },
   "alias": {
-    "@docscript/reflector": "packages/docscript-reflector",
-    "@docscript/react": "packages/docscript-react"
+    "@tygen/reflector": "packages/tygen-reflector",
+    "@tygen/html": "packages/tygen-html"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/docscript/docscript.git"
+    "url": "https://github.com/tygen/tygen.git"
   },
   "keywords": [
     "typescript",
@@ -31,9 +31,9 @@
   "author": "Stanislav Panferov <fnight.m@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/docscript/docscript/issues"
+    "url": "https://github.com/tygen/tygen/issues"
   },
-  "homepage": "https://github.com/docscript/docscript",
+  "homepage": "https://github.com/tygen/tygen",
   "devDependencies": {
     "husky": "^0.14.3",
     "lint-staged": "^7.0.4",
