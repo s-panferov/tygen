@@ -1,6 +1,6 @@
 {
   "name": "@tygen/html",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "description": "React frontend for tygen, typescript documentation generator",
   "keywords": [
     "typescript",
@@ -32,26 +32,26 @@
     "build": "NODE_ENV=production yarn run server-build && NODE_ENV=production yarn run client-build"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.3",
+    "@types/fuzzaldrin-plus": "^0.0.1",
+    "@types/micro": "^7.3.1",
+    "@types/minimist": "^1.2.0",
     "@types/react": "^16.3.12",
     "@types/react-dom": "^16.0.5",
-    "@types/classnames": "^2.2.3",
-    "@types/micro": "^7.3.1",
-    "@types/fuzzaldrin-plus": "^0.0.1",
-    "@types/minimist": "^1.2.0",
-    "source-map-support": "^0.5.4",
     "concurrently": "^3.5.1",
+    "nodemon": "^1.17.3",
     "parcel-bundler": "^1.8.1",
-    "nodemon": "^1.17.3"
+    "source-map-support": "^0.5.4"
   },
   "dependencies": {
+    "classnames": "^2.2.5",
+    "fuzzaldrin-plus": "^0.6.0",
+    "linaria": "^0.5.0",
     "micro": "^9.3.1",
+    "mime-types": "^2.1.18",
+    "minimist": "^1.2.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
-    "react-markdown": "^3.3.0",
-    "linaria": "^0.5.0",
-    "minimist": "^1.2.0",
-    "classnames": "^2.2.5",
-    "mime-types": "^2.1.18",
-    "fuzzaldrin-plus": "^0.6.0"
+    "react-markdown": "^3.3.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@tygen/reflector",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "description": "Reflector for TypeScript types",
   "typings": "src/index.ts",
   "bin": {
@@ -17,17 +17,17 @@
     "build": "tsc"
   },
   "dependencies": {
-    "pkg-up": "^2.0.0",
     "memfs": "^2.8.0",
     "minimist": "^1.2.0",
+    "pkg-up": "^2.0.0",
     "semver": "^5.5.0"
   },
   "devDependencies": {
     "@types/minimist": "^1.2.0",
-    "@types/semver": "^5.5.0",
     "@types/node": "^9.6.4",
-    "standard-version": "^4.3.0",
+    "@types/semver": "^5.5.0",
     "source-map-support": "^0.5.4",
+    "standard-version": "^4.3.0",
     "typescript": "^2.8.3"
   }
 }
