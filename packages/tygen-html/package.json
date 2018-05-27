@@ -9,7 +9,7 @@
   ],
   "main": "dist/index.js",
   "bin": {
-    "tygen-server": "./dist/server.js"
+    "tygen-html": "./bin/tygen-html.js"
   },
   "alias": {
     "@tygen/reflector": "../tygen-reflector",

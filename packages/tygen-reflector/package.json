@@ -4,7 +4,7 @@
   "description": "Reflector for TypeScript types",
   "typings": "src/index.ts",
   "bin": {
-    "tygen": "./lib/cli.js"
+    "tygen": "./bin/tygen.js"
   },
   "scripts": {
     "build": "tsc"
