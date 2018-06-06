@@ -8,8 +8,8 @@ import { Context } from './context'
 import { Package } from './package'
 
 export function compileAndGenerate(target: string = process.cwd()): Context {
-	let absolutePath = path.resolve(process.cwd(), target)
-	let configFilePath = ts.findConfigFile(absolutePath, ts.sys.fileExists)!
+	const absolutePath = path.resolve(process.cwd(), target)
+	const configFilePath = ts.findConfigFile(absolutePath, ts.sys.fileExists)!
 
 	console.log('Using TypeScript', ts.version)
 
@@ -28,10 +28,10 @@ export function compileAndGenerate(target: string = process.cwd()): Context {
 		)
 	}
 
-	let pkg = Package.fromPath(path.join(target, 'package.js'))
+	const pkg = Package.fromPath(path.join(target, 'package.js'))
 	const generator = generateFiles(config.fileNames, pkg.manifest.name, config.options)
 
-	let context = generator.generate()
+	const context = generator.generate()
 	return context
 }
 

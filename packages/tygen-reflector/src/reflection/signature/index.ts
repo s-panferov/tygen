@@ -49,21 +49,24 @@ export function visitSignature(sig: ts.Signature, ctx: Context): SignatureReflec
 		}
 	})
 
-	let comment = sig.getDocumentationComment(ctx.checker)
+	const comment = sig.getDocumentationComment(ctx.checker)
 	if (comment.length > 0) {
 		signatureRef.comments = comment
 	}
 
-	let directive = sig.getJsDocTags()
+	const directive = sig.getJsDocTags()
 	if (directive.length > 0) {
 		signatureRef.directives = directive
 	}
 
+	const declaration = sig.declaration
+
 	if (
-		(ts.isMethodDeclaration(sig.declaration) || ts.isMethodSignature(sig.declaration)) &&
-		sig.declaration.parent
+		declaration &&
+		(ts.isMethodDeclaration(declaration) || ts.isMethodSignature(declaration)) &&
+		declaration.parent
 	) {
-		const parentSymbol = (sig.declaration.parent as any).symbol as ts.Symbol | undefined
+		const parentSymbol = (declaration.parent as any).symbol as ts.Symbol | undefined
 		if (
 			parentSymbol &&
 			(parentSymbol.flags & ts.SymbolFlags.Interface ||

@@ -17,17 +17,16 @@
     "build": "tsc"
   },
   "dependencies": {
-    "memfs": "^2.8.0",
+    "memfs": "^2.9.0",
     "minimist": "^1.2.0",
     "pkg-up": "^2.0.0",
     "semver": "^5.5.0"
   },
   "devDependencies": {
     "@types/minimist": "^1.2.0",
-    "@types/node": "^9.6.4",
+    "@types/node": "^10.3.1",
     "@types/semver": "^5.5.0",
-    "source-map-support": "^0.5.4",
-    "standard-version": "^4.3.0",
-    "typescript": "^2.8.3"
+    "source-map-support": "^0.5.6",
+    "typescript": "^2.9.1"
   }
 }
