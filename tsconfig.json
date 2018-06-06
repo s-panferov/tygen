@@ -9,6 +9,7 @@
       "@tygen/reflector": ["./packages/tygen-reflector"]
     }
   },
+  //comment
   "include": [
     "packages/*/src/**/*"
   ]

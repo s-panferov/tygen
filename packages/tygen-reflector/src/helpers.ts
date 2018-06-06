@@ -2,8 +2,6 @@ import * as ts from 'typescript'
 import * as path from 'path'
 import * as fs from 'fs'
 
-let fse = require('fs-extra')
-
 import { Generator } from './generator'
 import { Module } from './module'
 import { Context } from './context'
@@ -15,8 +13,9 @@ export function compileAndGenerate(target: string = process.cwd()): Context {
 
 	console.log('Using TypeScript', ts.version)
 
-	const config = ts.parseJsonConfigFileContent(
-		JSON.parse(fse.readFileSync(configFilePath)),
+	const jsonConfig = ts.readJsonConfigFile(configFilePath, ts.sys.readFile)
+	const config = ts.parseJsonSourceFileConfigFileContent(
+		jsonConfig,
 		ts.sys,
 		absolutePath,
 		undefined,
