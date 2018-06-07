@@ -51,6 +51,8 @@
     "minimist": "^1.2.0",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
-    "react-markdown": "^3.3.2"
+    "remark-parse": "^5.0.0",
+    "unified": "^7.0.0",
+    "react-syntax-highlighter": "^7.0.4"
   }
 }
