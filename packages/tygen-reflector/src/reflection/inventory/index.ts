@@ -9,10 +9,11 @@ export function updateInventory(outDir: string) {
 
 	function walkFolder(dir: string, scope?: string) {
 		const contents = fs.readdirSync(dir)
+
 		for (const pkg of contents) {
 			const packagePath = path.join(dir, pkg)
 			if (!fs.statSync(packagePath).isDirectory()) {
-				return
+				continue
 			}
 
 			if (pkg[0] === '@') {
