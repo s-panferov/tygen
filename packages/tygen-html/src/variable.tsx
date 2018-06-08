@@ -70,5 +70,5 @@ const VariableName = css`
 `
 
 const VariableBody = css`
-	font-family: monospace;
+	font-family: var(--monospace-font);
 `

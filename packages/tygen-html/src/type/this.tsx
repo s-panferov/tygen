@@ -17,5 +17,5 @@ export class ThisView extends BaseView<ThisReflection> {
 }
 
 const ThisBody = css`
-	font-family: monospace;
+	font-family: var(--monospace-font);
 `

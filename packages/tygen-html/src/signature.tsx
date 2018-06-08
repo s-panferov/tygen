@@ -84,7 +84,7 @@ const SignatureHead = css`
 `
 
 const SignatureMain = css`
-	font-family: monospace;
+	font-family: var(--monospace-font);
 	position: relative;
 `
 

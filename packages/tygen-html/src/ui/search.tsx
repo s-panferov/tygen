@@ -122,8 +122,12 @@ export class Search extends React.Component<
 		if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
 			const nextIndex =
 				e.key === 'ArrowUp'
-					? index > 1 ? index - 1 : 0
-					: index < results.length - 1 ? index + 1 : results.length - 1
+					? index > 1
+						? index - 1
+						: 0
+					: index < results.length - 1
+						? index + 1
+						: results.length - 1
 
 			window.localStorage.setItem('searchIndex', nextIndex.toString())
 			this.setState({
@@ -291,7 +295,7 @@ const SearchBody = css`
 
 const SearchInput = css`
 	width: 100%;
-	font-family: monospace;
+	font-family: var(--monospace-font);
 	border: none;
 	outline: none;
 	border-bottom: 1px solid #ccc;

@@ -65,5 +65,5 @@ const TypeAliasName = css`
 `
 
 const TypeAliasBody = css`
-	font-family: monospace;
+	font-family: var(--monospace-font);
 `

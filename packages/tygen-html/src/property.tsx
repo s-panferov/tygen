@@ -71,11 +71,11 @@ const PropertyBody = css`
 `
 
 const PropertyDef = css`
-	font-family: monospace;
+	font-family: var(--monospace-font);
 `
 
 const PropertyName = css`
 	color: #2e86de;
 	font-weight: bold;
-	font-family: monospace;
+	font-family: var(--monospace-font);
 `

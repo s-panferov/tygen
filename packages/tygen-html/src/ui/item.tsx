@@ -61,11 +61,11 @@ const ItemBlock = css`
 
 const ItemName = css`
 	position: relative;
-	font-family: monospace;
+	font-family: var(--monospace-font);
 `
 
 const ItemSignatureBody = css`
 	padding: 5px;
-	font-family: monospace;
+	font-family: var(--monospace-font);
 	background-color: #f5f5f5;
 `

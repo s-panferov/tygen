@@ -79,7 +79,7 @@ const EnumMemberName = css`
 `
 
 const EnumBody = css`
-	font-family: monospace;
+	font-family: var(--monospace-font);
 `
 
 const EnumValue = css`

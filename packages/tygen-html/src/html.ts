@@ -11,11 +11,15 @@ import { ViewSettings } from './view'
 import { css } from 'linaria'
 
 const Body = css`
-	& {
-		font-family: arial;
-		font-size: 16px;
-		color: #222;
-	}
+	--default-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
+		'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+
+	--monospace-font: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+
+	font-family: var(--default-font);
+
+	font-size: 14px;
+	color: #222;
 
 	h1 {
 		padding-bottom: 5px;

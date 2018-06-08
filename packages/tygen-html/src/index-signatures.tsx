@@ -48,5 +48,5 @@ export class IndexSignaturesView extends React.Component<{
 }
 
 const IndexSignaturesBody = css`
-	font-family: monospace;
+	font-family: var(--monospace-font);
 `
