@@ -26,13 +26,16 @@ export class Section extends React.Component<SectionProps> {
 const Grid = css`
 	display: grid;
 	grid-template-columns: repeat(auto-fill, 250px);
-	grid-column-gap: 20px;
+	grid-column-gap: var(--items-space);
 	grid-row-gap: 5px;
 `
 
 const SectionContent = css`
 	display: flex;
 	flex-direction: column;
+	margin-top: var(--items-space);
 `
 
-const SectionBody = css``
+const SectionBody = css`
+	margin-top: var(--items-space);
+`

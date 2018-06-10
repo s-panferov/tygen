@@ -7,7 +7,7 @@ import { Module } from './module'
 import { Context } from './context'
 import { Package } from './package'
 
-export function compileAndGenerate(target: string = process.cwd()): Context {
+export function compileFolder(target: string = process.cwd()): Context {
 	const absolutePath = path.resolve(process.cwd(), target)
 	const configFilePath = ts.findConfigFile(absolutePath, ts.sys.fileExists)!
 
@@ -32,11 +32,6 @@ export function compileAndGenerate(target: string = process.cwd()): Context {
 	const generator = generateFiles(config.fileNames, pkg.manifest.name, config.options)
 
 	const context = generator.generate()
-	return context
-}
-
-export function write(context: Context): Context {
-	context.write()
 	return context
 }
 

@@ -1,8 +1,6 @@
 import * as fse from 'fs-extra'
 import * as path from 'path'
 
-import { compileAndGenerate } from './helpers'
-
 const testRoot = path.resolve(__dirname, '..', '.test')
 fse.mkdirpSync(testRoot)
 
@@ -48,10 +46,6 @@ export function packageJson() {
 		}
 	`
 	)
-}
-
-export function compile() {
-	return compileAndGenerate(testRoot).write(path.join(testRoot, 'docs'))
 }
 
 export function defaultSetup() {

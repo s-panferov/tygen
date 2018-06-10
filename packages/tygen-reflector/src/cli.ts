@@ -1,10 +1,11 @@
 import minimist from 'minimist'
 import fs from 'fs'
 
-import { compileAndGenerate } from './helpers'
+import { compileFolder } from './helpers'
 import { ReflectionWalker } from './walker'
 import { updateInventory } from './reflection/inventory'
 import { ConverterFactory } from './converter'
+import { Writer } from './writer'
 
 const argv = minimist(process.argv.slice(2))
 
@@ -23,7 +24,12 @@ switch (command) {
 			argv.out === 'docs'
 		}
 
-		compileAndGenerate(target).write(argv.out)
+		const context = compileFolder(target)
+
+		const writer = new Writer(context)
+		writer.writeReflections()
+		writer.writeSources()
+
 		updateInventory(argv.out)
 
 		if (argv.with) {

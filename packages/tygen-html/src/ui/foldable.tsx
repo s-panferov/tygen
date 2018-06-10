@@ -67,6 +67,15 @@ const FoldableBlock = css`
 const FoldableTitle = css`
 	display: flex;
 	align-items: center;
+
+	& h1,
+	& h2,
+	& h3,
+	& h4,
+	& h5 {
+		padding: 0;
+		margin: 0;
+	}
 `
 
 const Plus = css``

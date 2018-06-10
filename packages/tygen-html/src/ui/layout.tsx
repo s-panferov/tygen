@@ -31,7 +31,6 @@ const Sidebar = css`
 	grid-area: sidebar;
 	width: 250px;
 	padding: 20px 10px 20px 20px;
-	background-color: #f1f1f1;
 	min-height: calc(100vh - 40px);
 `
 

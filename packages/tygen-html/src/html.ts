@@ -15,6 +15,7 @@ const Body = css`
 		'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 
 	--monospace-font: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+	--items-space: 26px;
 
 	font-family: var(--default-font);
 
@@ -32,6 +33,10 @@ const Body = css`
 	a {
 		text-decoration: none;
 		color: #5352ed;
+
+		&:hover {
+			text-decoration: underline;
+		}
 	}
 
 	a.phantom {

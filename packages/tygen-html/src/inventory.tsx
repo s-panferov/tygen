@@ -60,14 +60,15 @@ const InventoryBody = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	margin-top: 20px;
+	margin-top: var(--items-space);
 
 	td {
 		padding: 10px;
 	}
 
 	th {
-		text-align: center;
+		text-align: left;
+		padding: 20px 0;
 	}
 `
 
@@ -75,11 +76,10 @@ const PackageRow = css`
 	padding: 5px 10px;
 	width: 400px;
 	&:nth-child(even) {
-		background-color: #f0f0f0;
+		background-color: #f5f5f5;
 	}
 `
 const PackageRowName = css`
-	font-weight: bold;
 	font-size: 14px;
 	display: block;
 `

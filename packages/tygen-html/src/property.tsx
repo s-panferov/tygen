@@ -23,7 +23,9 @@ export class PropertyView extends BaseView<PropertyReflection, { parentId?: stri
 		}
 
 		return (
-			<div {...styles(PropertyBody)} id={documentIdFromId(reflection.id!)}>
+			<div
+				{...styles(PropertyBody, compact ? 'compact' : undefined)}
+				id={documentIdFromId(reflection.id!)}>
 				<span {...styles(PropertyDef)}>
 					{!compact && <Badge outline>prop</Badge>}
 					<span {...styles(PropertyName)}>{reflection.name}</span>:{' '}
@@ -59,23 +61,32 @@ const DefinedInBody = css`
 	padding-left: 15px;
 `
 
+const PropertyName = css`
+	color: #2e86de;
+	font-weight: bold;
+	font-family: var(--monospace-font);
+`
+
 const PropertyBody = css`
 	position: relative;
+
 	&:not(:only-child) {
-		margin-bottom: 20px;
+		margin-bottom: var(--items-space);
 	}
 
 	&:last-child {
 		margin-bottom: 0px;
 	}
+
+	&.compact + &.compact {
+		margin-top: 4px;
+	}
+
+	&.compact .${PropertyName} {
+		font-weight: normal;
+	}
 `
 
 const PropertyDef = css`
-	font-family: var(--monospace-font);
-`
-
-const PropertyName = css`
-	color: #2e86de;
-	font-weight: bold;
 	font-family: var(--monospace-font);
 `

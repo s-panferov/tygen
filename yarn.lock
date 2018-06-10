@@ -26,6 +26,12 @@
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.3.tgz#3f0ff6873da793870e20a260cada55982f38a9e5"
 
+"@types/fs-extra@5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-5.0.2.tgz#235a7e2b56452cc0a6a4809b53e1d1eaffff9c96"
+  dependencies:
+    "@types/node" "*"
+
 "@types/fuzzaldrin-plus@^0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@types/fuzzaldrin-plus/-/fuzzaldrin-plus-0.0.1.tgz#bfe5e25bc5b4066848171baf7a8aaf30e267d30a"
@@ -2475,6 +2481,14 @@ from@~0:
 fs-extra@6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-6.0.0.tgz#0f0afb290bb3deb87978da816fcd3c7797f3a817"
+  dependencies:
+    graceful-fs "^4.1.2"
+    jsonfile "^4.0.0"
+    universalify "^0.1.0"
+
+fs-extra@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-6.0.1.tgz#8abc128f7946e310135ddc93b98bddb410e7a34b"
   dependencies:
     graceful-fs "^4.1.2"
     jsonfile "^4.0.0"

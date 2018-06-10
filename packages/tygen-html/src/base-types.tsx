@@ -11,7 +11,7 @@ export class BaseTypes extends React.Component<{ types?: Reflection[]; title?: s
 		}
 
 		return (
-			<div>
+			<div {...styles(BaseTypesBody)}>
 				<div {...styles(ExtendsKeyword)}>{title || 'Extends'}:</div>
 				<ul {...styles(List)}>
 					{types.map((type, i) => {
@@ -30,6 +30,10 @@ export class BaseTypes extends React.Component<{ types?: Reflection[]; title?: s
 const List = css`
 	margin: 0;
 	margin-top: 10px;
+`
+
+const BaseTypesBody = css`
+	margin-bottom: var(--items-space);
 `
 
 const ExtendsKeyword = css`

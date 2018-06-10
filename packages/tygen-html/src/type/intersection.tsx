@@ -16,7 +16,7 @@ export class IntersectionTypeView extends BaseView<
 	render() {
 		const { reflection } = this.props
 		const sep = reflection.typeKind === TypeKind.Intersection ? '&' : '|'
-		const long = reflection.types.length > 5
+		const long = reflection.types.length > 3
 		return (
 			<span {...styles(IntersectionBody, cn({ long }))}>
 				{reflection.types.map((type, i) => {

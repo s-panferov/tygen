@@ -20,9 +20,11 @@
     "memfs": "^2.9.0",
     "minimist": "^1.2.0",
     "pkg-up": "^2.0.0",
-    "semver": "^5.5.0"
+    "semver": "^5.5.0",
+    "fs-extra": "^6.0.1"
   },
   "devDependencies": {
+    "@types/fs-extra": "5.0.2",
     "@types/minimist": "^1.2.0",
     "@types/node": "^10.3.1",
     "@types/semver": "^5.5.0",

@@ -1,5 +1,6 @@
 import { Context } from './context'
-import * as fs from 'fs'
+import * as fse from 'fs-extra'
+import * as ts from 'typescript'
 import * as path from 'path'
 
 import { ReflectionKind } from './reflection/reflection'
@@ -41,7 +42,7 @@ export class Writer {
 		this.outDir = outDir
 	}
 
-	write() {
+	writeReflections() {
 		const search: SearchReflection = {
 			kind: ReflectionKind.Search,
 			items: []
@@ -60,14 +61,52 @@ export class Writer {
 			let fileName = path.join(folder, 'index.json')
 
 			mkdirSyncP(folder)
-			fs.writeFileSync(fileName, JSON.stringify(reflection, null, 4))
+			fse.writeFileSync(fileName, JSON.stringify(reflection, null, 4))
 		})
 
 		const searchDir = path.join(this.outDir, '_search')
-		if (!fs.existsSync(searchDir)) {
-			fs.mkdirSync(searchDir)
+		if (!fse.existsSync(searchDir)) {
+			fse.mkdirSync(searchDir)
 		}
 
-		fs.writeFileSync(path.join(searchDir, 'index.json'), JSON.stringify(search))
+		fse.writeFileSync(path.join(searchDir, 'index.json'), JSON.stringify(search))
 	}
+
+	writeSources() {
+		const sourcesDir = path.join(this.outDir, '_sources')
+		fse.mkdirpSync(sourcesDir)
+
+		const sourceFiles = this.context.program.getSourceFiles()
+		const serialized: SerializedProgram = {
+			tsconfig: {
+				compilerOptions: this.context.program.getCompilerOptions()
+			},
+			files: createObject(sourceFiles, sourceFile => {
+				return [sourceFile.fileName, { content: sourceFile.getText() }]
+			})
+		}
+
+		fse.writeFileSync(path.join(sourcesDir, 'index.json'), JSON.stringify(serialized))
+		return serialized
+	}
+}
+
+export interface SerializedProgram {
+	tsconfig: {
+		compilerOptions: ts.CompilerOptions
+	}
+	files: { [fileName: string]: { content: string } }
+}
+
+export function createObject<T, R>(
+	arr: ReadonlyArray<T>,
+	key: (item: T) => [string, R]
+): { [key: string]: R } {
+	const obj = {}
+	arr.forEach(item => {
+		const [k, v] = key(item)
+		obj[k] = v
+	})
+
+	return obj
 }

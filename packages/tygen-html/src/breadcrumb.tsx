@@ -83,7 +83,7 @@ export function createLink(...parts: string[]) {
 
 const BreadcrumbBody = css`
 	font-size: 14px;
-	margin-bottom: 20px;
+	margin-bottom: var(--items-space);
 	margin-top: -10px;
 `
 const BreadcrumbLink = css``

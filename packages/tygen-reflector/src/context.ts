@@ -2,7 +2,6 @@ import ts from 'typescript'
 
 import { Generator } from './generator'
 import { Reflection, createLink } from './reflection/reflection'
-import { Writer } from './writer'
 import { TypeReflection } from './reflection/_type/reflection'
 
 export class Context {
@@ -67,11 +66,6 @@ export class Context {
 				})
 			}
 		})
-	}
-
-	write(outDir?: string) {
-		const writer = new Writer(this, outDir)
-		writer.write()
 	}
 }
 

@@ -127,11 +127,10 @@ export class PackageList extends React.Component<{
 const PackageRow = css`
 	padding: 5px 10px;
 	&:nth-child(even) {
-		background-color: #f0f0f0;
+		background-color: #f5f5f5;
 	}
 `
 const PackageRowName = css`
-	font-weight: bold;
 	font-size: 14px;
 	display: block;
 `

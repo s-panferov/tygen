@@ -47,13 +47,13 @@ export class MethodView extends BaseView<MethodReflection, { parentId?: string }
 
 const MethodSignature = css`
 	& + & {
-		margin-top: 20px;
+		margin-top: var(--items-space);
 	}
 `
 
 const MethodBody = css`
 	&:not(:only-child) {
-		margin-bottom: 20px;
+		margin-bottom: var(--items-space);
 	}
 
 	&:last-child {
