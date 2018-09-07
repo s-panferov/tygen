@@ -32,27 +32,27 @@
     "build": "NODE_ENV=production yarn run server-build && NODE_ENV=production yarn run client-build"
   },
   "devDependencies": {
-    "@types/classnames": "^2.2.3",
-    "@types/fuzzaldrin-plus": "^0.0.1",
+    "@types/classnames": "^2.2.6",
+    "@types/fuzzaldrin-plus": "^0.6.0",
     "@types/micro": "^7.3.1",
     "@types/minimist": "^1.2.0",
-    "@types/react-dom": "^16.0.6",
-    "concurrently": "^3.5.1",
-    "nodemon": "^1.17.5",
-    "parcel-bundler": "^1.8.1",
-    "source-map-support": "^0.5.6"
+    "@types/react-dom": "^16.0.7",
+    "concurrently": "^4.0.1",
+    "nodemon": "^1.18.4",
+    "parcel-bundler": "^1.9.7",
+    "source-map-support": "^0.5.9"
   },
   "dependencies": {
-    "classnames": "^2.2.5",
+    "classnames": "^2.2.6",
     "fuzzaldrin-plus": "^0.6.0",
     "linaria": "^0.5.0",
-    "micro": "^9.3.2",
-    "mime-types": "^2.1.18",
+    "micro": "^9.3.3",
+    "mime-types": "^2.1.20",
     "minimist": "^1.2.0",
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0",
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0",
     "remark-parse": "^5.0.0",
     "unified": "^7.0.0",
-    "react-syntax-highlighter": "^7.0.4"
+    "react-syntax-highlighter": "^8.0.1"
   }
 }
