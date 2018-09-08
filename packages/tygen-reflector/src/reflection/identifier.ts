@@ -38,7 +38,7 @@ function generateIdChainForSymbol(symbol: ts.Symbol, ctx: Context): string[] {
 	return id
 }
 
-function isStatic(node: ts.Node) {
+function isStatic(node: ts.Declaration) {
 	return ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Static
 }
 
