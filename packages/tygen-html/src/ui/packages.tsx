@@ -1,7 +1,7 @@
 import React from 'react'
 import path from 'path'
 import { withContext, ViewSettings } from '../view'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 import { NotScrollable } from './search'
 import { hrefFromId } from '../ref-link'
 
@@ -55,14 +55,14 @@ export class PackagesNav extends React.Component<
 	render() {
 		const { inventory, pkg, version } = this.props
 		return (
-			<div {...styles(InventoryBody)} onClick={this.onClick}>
-				<div {...styles(Package)}>
+			<div className={InventoryBody} onClick={this.onClick}>
+				<div className={Package}>
 					{pkg}
 					{version ? ' ' + version : null}
 				</div>
 				{this.state.open &&
 					inventory && (
-						<div {...styles(InventoryWindow)}>
+						<div className={InventoryWindow}>
 							<NotScrollable />
 							<PackageList inventory={inventory} />
 						</div>
@@ -97,19 +97,19 @@ export class PackageList extends React.Component<{
 						hrefFromId(`${pkg.name}->${pkg.versions[0]}`).href
 					)
 					return (
-						<div {...styles(PackageRow)} key={pkg.name}>
-							<a {...styles(PackageRowName)} href={href}>
+						<div className={PackageRow} key={pkg.name}>
+							<a className={PackageRowName} href={href}>
 								{pkg.name}
 							</a>
 							{pkg.versions.length > 1 && (
-								<div {...styles(PackageRowVersions)}>
+								<div className={PackageRowVersions}>
 									{pkg.versions.map(ver => {
 										const href = normalizePath(
 											settings!,
 											hrefFromId(`${pkg.name}->${ver}`).href
 										)
 										return (
-											<a {...styles(PackageRowVersion)} key={ver} href={href}>
+											<a className={PackageRowVersion} key={ver} href={href}>
 												{ver}
 											</a>
 										)

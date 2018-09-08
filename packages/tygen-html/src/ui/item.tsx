@@ -1,5 +1,5 @@
 import React from 'react'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 import { Badge } from './badge'
 
 export interface ItemProps {
@@ -14,7 +14,7 @@ export interface ItemState {
 export class ItemSignature extends React.Component {
 	render() {
 		const { children } = this.props
-		return <div {...styles(ItemSignatureBody)}>{children}</div>
+		return <div className={ItemSignatureBody}>{children}</div>
 	}
 }
 
@@ -29,10 +29,10 @@ export class Item extends React.Component<ItemProps, ItemState> {
 		const { children, name, badge } = this.props
 		const { open } = this.state
 		return (
-			<div {...styles(ItemBlock)}>
-				<div {...styles(ItemHeader)} onClick={this.onClick}>
+			<div className={ItemBlock}>
+				<div className={ItemHeader} onClick={this.onClick}>
 					{badge && <Badge>{badge}</Badge>}
-					<div {...styles(ItemName)}>{name}</div>
+					<div className={ItemName}>{name}</div>
 				</div>
 				{open && children}
 			</div>

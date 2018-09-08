@@ -6,7 +6,7 @@ import {
 } from '@tygen/reflector/src/reflection'
 import { BaseView, withContext, ViewContext } from './view'
 import { TypeView } from './type'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 import { parseId } from './helpers'
 import { Toolbar } from './ui/toolbar'
 import { Layout } from './ui/layout'
@@ -20,7 +20,7 @@ export class VariableView extends BaseView<VariableReflection | ParameterReflect
 		return (
 			<span>
 				{reflection.kind === ReflectionKind.Parameter && reflection.rest ? '...' : ''}
-				<span {...styles(ParameterName)}>{reflection.name}</span>
+				<span className={ParameterName}>{reflection.name}</span>
 				{reflection.kind === ReflectionKind.Parameter && reflection.optional
 					? '?'
 					: ''}: {<TypeView reflection={reflection.type} />}
@@ -52,9 +52,9 @@ export class VariablePage extends BaseView<VariableReflection> {
 						{reflection.name} <Badge>Var</Badge>
 					</h1>
 					<Breadcrumb reflection={reflection} />
-					<span {...styles(VariableBody)}>
-						var <span {...styles(VariableName)}>{reflection.name}</span>
-						: <TypeView reflection={reflection.type} />
+					<span className={VariableBody}>
+						var <span className={VariableName}>{reflection.name}</span>:{' '}
+						<TypeView reflection={reflection.type} />
 					</span>
 					<CommentView reflection={reflection} />
 					{sections}

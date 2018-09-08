@@ -1,5 +1,5 @@
 import React from 'react'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 import { Search } from './search'
 import { PackagesNav, InventoryProvider } from './packages'
 import { withContext, ViewSettings } from '../view'
@@ -18,8 +18,8 @@ export class Toolbar extends React.Component<ToolbarProps> {
 	render() {
 		const { pkg, version, settings, search } = this.props
 		return (
-			<div {...styles(ToolbarBlock)}>
-				<a {...styles(Logo)} href={normalizePath(settings!, '/')}>
+			<div className={ToolbarBlock}>
+				<a className={Logo} href={normalizePath(settings!, '/')}>
 					TyGen
 				</a>
 				<InventoryProvider>

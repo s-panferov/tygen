@@ -1,11 +1,11 @@
 import React from 'react'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 
 export class NavSection extends React.Component<{ heading: React.ReactNode }> {
 	render() {
 		return (
-			<div {...styles(NavSectionBlock)}>
-				<div {...styles(NavSectionHeader)}>{this.props.heading}</div>
+			<div className={NavSectionBlock}>
+				<div className={NavSectionHeader}>{this.props.heading}</div>
 				{this.props.children}
 			</div>
 		)
@@ -25,7 +25,7 @@ const NavSectionHeader = css`
 
 export class NavItem extends React.Component {
 	render() {
-		return <div {...styles(NavItemBlock)}>{this.props.children}</div>
+		return <div className={NavItemBlock}>{this.props.children}</div>
 	}
 }
 
@@ -44,7 +44,7 @@ export class Nav extends React.Component<NavProps> {
 	static Item = NavItem
 
 	render() {
-		return <div {...styles(NavBlock)}>{this.props.children}</div>
+		return <div className={NavBlock}>{this.props.children}</div>
 	}
 }
 

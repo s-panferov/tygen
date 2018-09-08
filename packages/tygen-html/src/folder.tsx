@@ -9,11 +9,11 @@ import { RefLink } from './ref-link'
 import { BaseView } from './view'
 import { key } from './helpers'
 import { Nav } from './ui/nav'
+import { Breadcrumb } from './breadcrumb'
 import {
 	ReflectionWithStructure,
 	FolderReflection
 } from '../../tygen-reflector/src/reflection/package'
-import { Breadcrumb } from './breadcrumb'
 
 export function renderStructure(reflection: ReflectionWithStructure) {
 	return (

@@ -2,9 +2,9 @@ import React from 'react'
 import { NavSection } from './ui/nav'
 import { Section } from './ui/section'
 import { withContext, ViewSettings } from './view'
-import { ReflectionWithIndexSignatures } from '../../tygen-reflector/src/reflection/signature/reflection'
+import { ReflectionWithIndexSignatures } from '@tygen/reflector/src/reflection/signature/reflection'
 import { TypeView } from './type'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 
 @withContext
 export class IndexSignaturesView extends React.Component<{
@@ -22,13 +22,13 @@ export class IndexSignaturesView extends React.Component<{
 			return <NavSection key="index" heading="Index Signatures" />
 		} else {
 			const string = reflection.stringIndexType && (
-				<span {...styles(IndexSignaturesBody)} key={'string'}>
+				<span className={IndexSignaturesBody} key={'string'}>
 					[key: string]: <TypeView reflection={reflection.stringIndexType} />
 				</span>
 			)
 
 			const number = reflection.numberIndexType && (
-				<span {...styles(IndexSignaturesBody)} key={'number'}>
+				<span className={IndexSignaturesBody} key={'number'}>
 					[key: number]: <TypeView reflection={reflection.numberIndexType} />
 				</span>
 			)

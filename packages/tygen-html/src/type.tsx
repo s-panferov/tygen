@@ -4,7 +4,7 @@ import { BaseView } from './view'
 import { TypeReflection, TypeKind } from '@tygen/reflector/src/reflection/_type/reflection'
 import { ReflectionKind } from '@tygen/reflector/src/reflection'
 import { RefLink } from './ref-link'
-import { css, styles } from 'linaria'
+import { css, names } from 'linaria'
 import { IntersectionTypeView } from './type/intersection'
 import { TypeReferenceView } from './type/type-reference'
 import { TypeParameterView } from './type/type-parameter'
@@ -81,5 +81,5 @@ const PrimitiveTypeCSS = css`
 `
 
 export const PrimitiveType = (props: React.HTMLAttributes<any>) => (
-	<span {...styles(PrimitiveTypeCSS, props.className)}>{props.children}</span>
+	<span className={names(PrimitiveTypeCSS, props.className)}>{props.children}</span>
 )

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 
 import { SignatureReflection } from '../../tygen-reflector/src/reflection/signature/reflection'
 import { TypeArguments } from './type-parameters'
@@ -17,10 +17,10 @@ export class SignatureView extends BaseView<SignatureReflection, { parentId?: st
 		const { compact } = settings!
 
 		return (
-			<div {...styles(SignatureBody)}>
-				<span {...styles(SignatureMain)}>
-					<span {...styles(SignatureHead)}>
-						<span {...styles(SignatureName)}>
+			<div className={SignatureBody}>
+				<span className={SignatureMain}>
+					<span className={SignatureHead}>
+						<span className={SignatureName}>
 							{!compact && <Badge outline>fn</Badge>}
 							<b>
 								{reflection.name === '__call' || reflection.name === '__type'
@@ -31,25 +31,25 @@ export class SignatureView extends BaseView<SignatureReflection, { parentId?: st
 						{reflection.typeParameters && (
 							<TypeArguments types={reflection.typeParameters} />
 						)}
-						<span {...styles(SignatureBrace)}>(</span>
+						<span className={SignatureBrace}>(</span>
 					</span>
 					{reflection.parameters &&
 						reflection.parameters.length > 0 && (
-							<div {...styles(SignatureParams)}>
+							<div className={SignatureParams}>
 								{reflection.parameters.map((param, i) => {
 									return (
-										<div {...styles(SignatureParam)} key={param.id || i}>
+										<div className={SignatureParam} key={param.id || i}>
 											<ReflectionView reflection={param} />
 										</div>
 									)
 								})}
 							</div>
 						)}
-					<span {...styles(SignatureBrace)}>): </span>
+					<span className={SignatureBrace}>): </span>
 					<TypeView reflection={reflection.returnType} />
 				</span>
 				<DefinedIn origin={reflection.origin} parentId={parentId} />
-				<div {...styles(SignatureComment)}>
+				<div className={SignatureComment}>
 					<CommentView reflection={reflection} />
 				</div>
 			</div>

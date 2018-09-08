@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 
 import { BaseView, ViewContext, withContext } from '../view'
 import { ObjectTypeReflection } from '@tygen/reflector/src/reflection/_type/object/reflection'
@@ -12,9 +12,9 @@ export class ObjectView extends BaseView<ObjectTypeReflection> {
 	render() {
 		const { reflection, settings } = this.props
 		return (
-			<span {...styles(ObjectBody)}>
+			<span className={ObjectBody}>
 				{'{'}
-				<div {...styles(ObjectInternal)}>
+				<div className={ObjectInternal}>
 					<ViewContext.Provider value={Object.assign({}, settings, { compact: true })}>
 						<IndexSignaturesView key="index" reflection={reflection} />
 						<PropertiesView key="props" properties={reflection.allProperties} />

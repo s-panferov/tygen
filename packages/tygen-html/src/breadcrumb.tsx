@@ -1,6 +1,6 @@
 import React from 'react'
 import { Reflection } from '@tygen/reflector'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 import { Join } from './ui/join'
 import { hrefFromId } from './ref-link'
 import { withContext, ViewSettings } from './view'
@@ -26,7 +26,7 @@ export class Breadcrumb extends React.Component<{
 
 		links.push(
 			<a
-				{...styles(BreadcrumbLink)}
+				className={BreadcrumbLink}
 				key={pkg[0]}
 				href={normalizePath(settings!, pkgHref.href)}>
 				{pkg[1]}
@@ -50,7 +50,7 @@ export class Breadcrumb extends React.Component<{
 
 			links.push(
 				<a
-					{...styles(BreadcrumbLink)}
+					className={BreadcrumbLink}
 					key={subId}
 					href={normalizePath(settings!, href.href)}>
 					{href.name}
@@ -63,10 +63,10 @@ export class Breadcrumb extends React.Component<{
 		}
 
 		return (
-			<div {...styles(BreadcrumbBody)}>
+			<div className={BreadcrumbBody}>
 				<Join
 					joinWith={i => (
-						<span {...styles(BreadcrumbSep)} key={i}>
+						<span className={BreadcrumbSep} key={i}>
 							/
 						</span>
 					)}>

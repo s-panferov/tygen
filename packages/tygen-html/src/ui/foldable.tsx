@@ -1,5 +1,5 @@
 import React from 'react'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 import fs from 'fs'
 
 export interface FoldableProps {
@@ -37,13 +37,13 @@ export class Foldable extends React.Component<FoldableProps, FoldableState> {
 
 	render() {
 		return (
-			<div {...styles(FoldableBlock)}>
-				<div {...styles(FoldableTitle)}>
-					<div {...styles(Plus)} onClick={this.onClick}>
+			<div className={FoldableBlock}>
+				<div className={FoldableTitle}>
+					<div className={Plus} onClick={this.onClick}>
 						{this.state.open ? (
-							<img {...styles(Icon)} src={Expand} />
+							<img className={Icon} src={Expand} />
 						) : (
-							<img {...styles(Icon)} src={Collapse} />
+							<img className={Icon} src={Collapse} />
 						)}
 					</div>
 					{this.props.title}

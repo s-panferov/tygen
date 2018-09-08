@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { PropertyReflection, ReflectionLink } from '@tygen/reflector/src/reflection'
 import { BaseView, withContext } from './view'
-import { css, styles } from 'linaria'
+import { css, names } from 'linaria'
 import { TypeView } from './type'
 import { CommentView } from './comment'
 import { NavItem } from './ui/nav'
@@ -24,11 +24,11 @@ export class PropertyView extends BaseView<PropertyReflection, { parentId?: stri
 
 		return (
 			<div
-				{...styles(PropertyBody, compact ? 'compact' : undefined)}
+				className={names(PropertyBody, compact && 'compact')}
 				id={documentIdFromId(reflection.id!)}>
-				<span {...styles(PropertyDef)}>
+				<span className={PropertyDef}>
 					{!compact && <Badge outline>prop</Badge>}
-					<span {...styles(PropertyName)}>{reflection.name}</span>:{' '}
+					<span className={PropertyName}>{reflection.name}</span>:{' '}
 					{<TypeView reflection={reflection.type} />}
 				</span>
 				<DefinedIn origin={reflection.origin} parentId={parentId} />
@@ -47,7 +47,7 @@ export class DefinedIn extends React.Component<{ origin?: ReflectionLink; parent
 		}
 
 		return (
-			<div {...styles(DefinedInBody)}>
+			<div className={DefinedInBody}>
 				defined in <RefLink reflection={origin} />
 			</div>
 		)

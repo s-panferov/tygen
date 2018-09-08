@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { EnumReflection } from '@tygen/reflector/src/reflection'
 import { BaseView, withContext, ViewContext } from './view'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 import { parseId } from './helpers'
 import { Toolbar } from './ui/toolbar'
 import { Layout } from './ui/layout'
@@ -29,21 +29,21 @@ export class EnumPage extends BaseView<EnumReflection> {
 						{reflection.name} <Badge>Enum</Badge>
 					</h1>
 					<Breadcrumb reflection={reflection} />
-					<span {...styles(EnumBody)}>
-						enum <span {...styles(EnumName)}>{reflection.name}</span> {'{'}
-						<div {...styles(EnumMembers)}>
+					<span className={EnumBody}>
+						enum <span className={EnumName}>{reflection.name}</span> {'{'}
+						<div className={EnumMembers}>
 							{reflection.members &&
 								reflection.members.map(member => {
 									return (
 										<div
-											{...styles(EnumMember)}
+											className={EnumMember}
 											id={documentIdFromId(member.id!)}
 											key={member.id}>
-											<span {...styles(EnumMemberName)}>
+											<span className={EnumMemberName}>
 												<RefLink reflection={member} />
 											</span>{' '}
 											={' '}
-											<span {...styles(EnumValue)}>
+											<span className={EnumValue}>
 												{JSON.stringify(member.value)}
 											</span>
 											<CommentView reflection={reflection} />

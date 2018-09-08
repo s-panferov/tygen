@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 
 import { BaseView } from '../view'
 import { TypeView } from '../type'
@@ -9,13 +9,13 @@ export class ConditionalView extends BaseView<ConditionalTypeReflection> {
 	render() {
 		const { reflection } = this.props
 		return (
-			<span {...styles(ConditionalBody)}>
+			<span className={ConditionalBody}>
 				<TypeView reflection={reflection.checkType} /> extends{' '}
 				<TypeView reflection={reflection.extendsType} />
-				<div {...styles(TrueBody)}>
+				<div className={TrueBody}>
 					? {reflection.trueType && <TypeView reflection={reflection.trueType} />}
 				</div>
-				<div {...styles(FalseBody)}>
+				<div className={FalseBody}>
 					: {reflection.falseType && <TypeView reflection={reflection.falseType} />}
 				</div>
 			</span>

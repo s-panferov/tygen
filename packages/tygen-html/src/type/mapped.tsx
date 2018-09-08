@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 
 import { BaseView } from '../view'
 import { MappedTypeReflection } from '@tygen/reflector/src/reflection/_type/mapped/reflection'
@@ -10,11 +10,10 @@ export class MappedView extends BaseView<MappedTypeReflection> {
 	render() {
 		const { reflection } = this.props
 		return (
-			<span {...styles(MappedBody)}>
-				{'{ '}
-				[{<RefLink reflection={reflection.typeParameter} />} extends{' '}
-				{<RefLink reflection={reflection.constraintType} />}]:{' '}
-				<TypeView reflection={reflection.templateType} /> {'}'}
+			<span className={MappedBody}>
+				{'{ '}[{<RefLink reflection={reflection.typeParameter} />} extends{' '}
+				{<RefLink reflection={reflection.constraintType} />}
+				]: <TypeView reflection={reflection.templateType} /> {'}'}
 			</span>
 		)
 	}

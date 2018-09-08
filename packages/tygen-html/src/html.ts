@@ -1,14 +1,13 @@
 import React from 'react'
-
+import { css } from 'linaria'
 import path from 'path'
+import { renderToString } from 'react-dom/server'
 
 import { Reflection, ReflectionKind } from '@tygen/reflector/src/reflection'
-import { renderToString } from 'react-dom/server'
 import { PageView } from './render'
 import { ReactConverterSettings, normalizeSettings } from './settings'
 import { hrefFromId } from './ref-link'
 import { ViewSettings } from './view'
-import { css } from 'linaria'
 
 const Body = css`
 	--default-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,

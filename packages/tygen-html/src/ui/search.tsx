@@ -1,5 +1,5 @@
 import React from 'react'
-import { css, styles } from 'linaria'
+import { css, names } from 'linaria'
 import * as fuzz from 'fuzzaldrin-plus'
 import { parseId, normalizePath } from '../helpers'
 import { Badge } from './badge'
@@ -72,13 +72,13 @@ export class Search extends React.Component<
 	render() {
 		const scope = this.state.scope
 		return (
-			<div {...styles(SearchBody)} onKeyDown={this.onKeyDown}>
+			<div className={SearchBody} onKeyDown={this.onKeyDown}>
 				<select value={scope} onChange={this.onScopeChange}>
 					<option value={'package'}>Package</option>
 					<option value={'global'}>Global</option>
 				</select>
 				<input
-					{...styles(SearchInput)}
+					className={SearchInput}
 					ref={r => (this.input = r!)}
 					tabIndex={1}
 					value={this.state.query}
@@ -89,7 +89,7 @@ export class Search extends React.Component<
 					onChange={this.onChange}
 				/>
 				{this.state.open && (
-					<div {...styles(SearchResults)}>
+					<div className={SearchResults}>
 						<NotScrollable />
 						{this.state.results.map((res, i) => {
 							return <SearchItem key={res} id={res} focus={i === this.state.index} />
@@ -200,19 +200,22 @@ class SearchItem extends React.Component<{ id: string; focus: boolean }> {
 		const id = parseId(this.props.id)
 		return (
 			<RefLink reflection={{ id: this.props.id } as any}>
-				<div {...styles(SearchItemBody, cn({ focus }))}>
-					{id.pkg}&nbsp;<Badge>{id.version}</Badge>&nbsp;
+				<div className={names(SearchItemBody, cn({ focus }))}>
+					{id.pkg}
+					&nbsp;
+					<Badge>{id.version}</Badge>
+					&nbsp;
 					{id.module && (
 						<Join
 							joinWith={sep => (
-								<span {...styles(SearchItemSep)} key={'mod-sep' + sep}>
+								<span className={SearchItemSep} key={'mod-sep' + sep}>
 									/
 								</span>
 							)}>
 							{id.module.map((mod, i, list) => {
 								return (
 									<div
-										{...styles(
+										className={names(
 											SearchItemPart,
 											cn({
 												main: !id.items && i === list.length - 1
@@ -225,11 +228,11 @@ class SearchItem extends React.Component<{ id: string; focus: boolean }> {
 							})}
 						</Join>
 					)}
-					{id.items && <span {...styles(SearchItemSep)}>/</span>}
+					{id.items && <span className={SearchItemSep}>/</span>}
 					{id.items && (
 						<Join
 							joinWith={sep => (
-								<span {...styles(SearchItemSep)} key={'item-sep' + sep}>
+								<span className={SearchItemSep} key={'item-sep' + sep}>
 									/
 								</span>
 							)}>
@@ -237,7 +240,7 @@ class SearchItem extends React.Component<{ id: string; focus: boolean }> {
 								return (
 									<div
 										key={'item' + i}
-										{...styles(
+										className={names(
 											SearchItemPart,
 											cn({ main: i === list.length - 1 })
 										)}>

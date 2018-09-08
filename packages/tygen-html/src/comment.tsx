@@ -2,7 +2,7 @@ import * as React from 'react'
 import { BaseReflection } from '@tygen/reflector/src/reflection'
 import { BaseView } from './view'
 import { Markdown } from './ui/markdown'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 
 export class CommentView extends BaseView<BaseReflection> {
 	render() {
@@ -12,7 +12,7 @@ export class CommentView extends BaseView<BaseReflection> {
 		}
 
 		return (
-			<div {...styles(CommentBody)}>
+			<div className={CommentBody}>
 				{reflection.comments.map((comment, i) => {
 					switch (comment.kind) {
 						case 'text':

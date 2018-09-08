@@ -4,7 +4,6 @@ import { MarkdownNode } from './markdown-node'
 import { parseMarkdown, Root } from './markdown-parser'
 
 import { gitHubTheme } from './github'
-import { styles } from 'linaria'
 
 import './markdown.css'
 
@@ -57,7 +56,7 @@ export class Markdown extends React.Component<MarkdownProps, MarkdownState> {
 		const { style, html } = this.props
 		if (this.state.root) {
 			return (
-				<div {...styles(gitHubTheme)} style={style} {...html}>
+				<div className={gitHubTheme} style={style} {...html}>
 					<MarkdownNode node={this.state.root} />
 				</div>
 			)

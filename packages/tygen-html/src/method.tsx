@@ -1,11 +1,9 @@
 import * as React from 'react'
 import { BaseView, withContext } from './view'
-// import { css,  styles } from 'linaria'
-// import { Item } from './ui/item'
-import { MethodReflection } from '../../tygen-reflector/src/reflection/function/reflection'
+import { MethodReflection } from '@tygen/reflector/src/reflection/function/reflection'
 import { SignatureView } from './signature'
 import { ReflectionKind } from '@tygen/reflector/src/reflection'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 import { NavItem } from './ui/nav'
 import { RefLink, documentIdFromId } from './ref-link'
 
@@ -24,13 +22,13 @@ export class MethodView extends BaseView<MethodReflection, { parentId?: string }
 		}
 
 		return (
-			<div {...styles(MethodBody)}>
+			<div className={MethodBody}>
 				{reflection.allCallSignatures &&
 					reflection.allCallSignatures.map((sig, i) => {
 						if (sig.kind === ReflectionKind.Signature) {
 							return (
 								<div
-									{...styles(MethodSignature)}
+									className={MethodSignature}
 									id={documentIdFromId(reflection.id!)}
 									key={sig.id || i}>
 									<SignatureView reflection={sig} parentId={parentId} />

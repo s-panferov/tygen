@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 
 import { BaseView } from '../view'
 import { TypeParameterReflection } from '@tygen/reflector/src/reflection/type-parameter/reflection'
@@ -7,7 +7,7 @@ import { TypeParameterReflection } from '@tygen/reflector/src/reflection/type-pa
 export class TypeParameterView extends BaseView<TypeParameterReflection> {
 	render() {
 		const { reflection } = this.props
-		return <span {...styles(TypeParameterBody)}>{reflection.name}</span>
+		return <span className={TypeParameterBody}>{reflection.name}</span>
 	}
 }
 

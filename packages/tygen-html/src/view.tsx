@@ -19,7 +19,7 @@ export interface ViewSettings extends ReactConverterSettings {
 	static?: boolean
 }
 
-export const ViewContext = React.createContext<ViewSettings>()
+export const ViewContext = React.createContext<ViewSettings>({} as any)
 
 export function withContext<P extends { settings?: ViewSettings }>(
 	Class: React.ComponentClass<P>

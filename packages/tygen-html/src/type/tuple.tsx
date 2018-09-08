@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 
 import { BaseView } from '../view'
 import { TupleReflection } from '@tygen/reflector/src/reflection/_type/tuple/reflection'
@@ -10,7 +10,7 @@ export class TupleView extends BaseView<TupleReflection> {
 	render() {
 		const { reflection } = this.props
 		return (
-			<span {...styles(TupleBody)}>
+			<span className={TupleBody}>
 				[
 				<Join joinWith={i => <span key={i}>, </span>}>
 					{reflection.types.map((ty, i) => (

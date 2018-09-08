@@ -4,7 +4,7 @@ import { Toolbar } from './ui/toolbar'
 import { BaseView, withContext } from './view'
 
 import { InventoryReflection } from '@tygen/reflector/src/reflection/inventory/reflection'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 import { hrefFromId } from './ref-link'
 import { normalizePath } from './helpers'
 
@@ -20,7 +20,7 @@ export class InventoryPage extends BaseView<InventoryReflection> {
 		return (
 			<div>
 				<Toolbar pkg={'🏠'} />
-				<div {...styles(InventoryBody)}>
+				<div className={InventoryBody}>
 					<table>
 						<thead>
 							<tr>
@@ -37,9 +37,9 @@ export class InventoryPage extends BaseView<InventoryReflection> {
 								)
 
 								return (
-									<tr {...styles(PackageRow)} key={pkg.name}>
+									<tr className={PackageRow} key={pkg.name}>
 										<td>
-											<a {...styles(PackageRowName)} href={href}>
+											<a className={PackageRowName} href={href}>
 												{pkg.name}
 											</a>
 										</td>

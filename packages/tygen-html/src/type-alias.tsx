@@ -9,7 +9,7 @@ import { CommentView } from './comment'
 import { Breadcrumb } from './breadcrumb'
 import { TypeArguments } from './type-parameters'
 import { TypeView } from './type'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 import { ExportsView } from './exports'
 
 @withContext
@@ -44,8 +44,8 @@ export class TypeAliasPage extends BaseView<TypeAliasReflection> {
 						<Badge>TypeAlias</Badge>
 					</h1>
 					<Breadcrumb reflection={reflection} />
-					<span {...styles(TypeAliasBody)}>
-						<span {...styles(TypeAliasName)}>{reflection.name}</span>
+					<span className={TypeAliasBody}>
+						<span className={TypeAliasName}>{reflection.name}</span>
 						{reflection.typeParameters && (
 							<TypeArguments types={reflection.typeParameters} />
 						)}{' '}

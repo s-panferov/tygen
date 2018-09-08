@@ -1,5 +1,5 @@
 import React from 'react'
-import { css, styles } from 'linaria'
+import { css, names } from 'linaria'
 import cn from 'classnames'
 
 export interface LayoutProps {
@@ -10,15 +10,15 @@ export class Layout extends React.Component<LayoutProps> {
 	render() {
 		return (
 			<div
-				{...styles(
+				className={names(
 					LayoutBlock,
 					cn({
 						wide: !!this.props.sidebar
 					})
 				)}>
-				{this.props.sidebar && <div {...styles(Sidebar)}>{this.props.sidebar}</div>}
-				<div {...styles(Content)}>
-					<div {...styles(ContentInner)}>{this.props.children}</div>
+				{this.props.sidebar && <div className={Sidebar}>{this.props.sidebar}</div>}
+				<div className={Content}>
+					<div className={ContentInner}>{this.props.children}</div>
 				</div>
 			</div>
 		)

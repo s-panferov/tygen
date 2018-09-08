@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 
 import { BaseView } from '../view'
 import { TypeView } from '../type'
@@ -9,7 +9,7 @@ export class IndexTypeView extends BaseView<IndexTypeReflection> {
 	render() {
 		const { reflection } = this.props
 		return (
-			<span {...styles(IndexTypeBody)}>
+			<span className={IndexTypeBody}>
 				keyof <TypeView reflection={reflection.type} />
 			</span>
 		)

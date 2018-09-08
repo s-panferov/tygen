@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Reflection } from '@tygen/reflector/src/reflection'
 import { RefLink } from './ref-link'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 
 export class BaseTypes extends React.Component<{ types?: Reflection[]; title?: string }> {
 	render() {
@@ -11,9 +11,9 @@ export class BaseTypes extends React.Component<{ types?: Reflection[]; title?: s
 		}
 
 		return (
-			<div {...styles(BaseTypesBody)}>
-				<div {...styles(ExtendsKeyword)}>{title || 'Extends'}:</div>
-				<ul {...styles(List)}>
+			<div className={BaseTypesBody}>
+				<div className={ExtendsKeyword}>{title || 'Extends'}:</div>
+				<ul className={List}>
 					{types.map((type, i) => {
 						return (
 							<li key={type.id || i}>

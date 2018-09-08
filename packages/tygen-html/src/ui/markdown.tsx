@@ -1,5 +1,5 @@
 import React from 'react'
-import { css, styles } from 'linaria'
+import { css } from 'linaria'
 
 import { Markdown as MardownRenderer } from '../markdown'
 
@@ -11,7 +11,7 @@ export class Markdown extends React.Component<MarkdownProps> {
 	render() {
 		let { source } = this.props
 		return (
-			<div {...styles(MarkdownBody)}>
+			<div className={MarkdownBody}>
 				<MardownRenderer text={source} />
 			</div>
 		)
