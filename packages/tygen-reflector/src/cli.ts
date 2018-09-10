@@ -7,6 +7,11 @@ import { updateInventory } from './reflection/inventory'
 import { ConverterFactory } from './converter'
 import { Writer } from './writer'
 
+import * as ts from 'typescript'
+
+// @ts-ignore
+global.ts = ts
+
 const argv = minimist(process.argv.slice(2))
 
 export interface Argv {

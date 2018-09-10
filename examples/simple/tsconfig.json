@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "types": [],
+    "typeRoots": [],
+    "lib": ["es2016"]
+  },
+  "files": [
+    "index.d.ts"
+  ]
+}

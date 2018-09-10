@@ -7,11 +7,13 @@ import { Module } from './module'
 import { Context } from './context'
 import { Package } from './package'
 
+import log from 'roarr'
+
 export function compileFolder(target: string = process.cwd()): Context {
 	const absolutePath = path.resolve(process.cwd(), target)
 	const configFilePath = ts.findConfigFile(absolutePath, ts.sys.fileExists)!
 
-	console.log('Using TypeScript', ts.version)
+	log.info(`Using TypeScript ${ts.version}`)
 
 	const jsonConfig = ts.readJsonConfigFile(configFilePath, ts.sys.readFile)
 	const config = ts.parseJsonSourceFileConfigFileContent(
@@ -23,10 +25,11 @@ export function compileFolder(target: string = process.cwd()): Context {
 	)
 
 	if (config.errors.length > 0) {
-		throw new Error(
-			`Cannot build project, tsconfig.json errors: ${JSON.stringify(config.errors)}`
-		)
+		log.error({ errors: config.errors }, `Cannot build project, tsconfig.json has errors`)
+		throw new Error(``)
 	}
+
+	log.trace({ fileNames: config.fileNames }, 'Initial project files')
 
 	const pkg = Package.fromPath(path.join(target, 'package.js'))
 	const generator = generateFiles(config.fileNames, pkg.manifest.name, config.options)
@@ -45,9 +48,12 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): ts.Pr
 				diagnostic.start!
 			)
 			let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')
-			console.error(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`)
+			log.error(
+				{ fileName: diagnostic.file.fileName, line: line + 1, character: character + 1 },
+				message
+			)
 		} else {
-			console.error(`${ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')}`)
+			log.error(ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n'))
 		}
 	})
 

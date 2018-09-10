@@ -21,7 +21,8 @@
     "minimist": "^1.2.0",
     "pkg-up": "^2.0.0",
     "semver": "^5.5.1",
-    "fs-extra": "^7.0.0"
+    "fs-extra": "^7.0.0",
+    "roarr": "^2.11.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^5.0.4",
