@@ -23,7 +23,7 @@ yarn add --dev @tygen/reflector @tygen/html
 
 ## Use
 
-`tygen` has serveral binaries to help you to generate/serve reflections and a documentation.
+`tygen` has several binaries to help you to generate/serve reflections and a documentation.
 
 If you want all-in-one command to generate ready-to-serve static HTML documentation:
 
@@ -42,7 +42,7 @@ Result documentation can be served as static files with any capable web server o
 
 ## What is supported
 
-TypeScript > 2.8.3 is suppoted. I _cannot_ gurantee backward compatibility at this stage, so expect this project to support only several most recent TypeScript versions.
+TypeScript > 2.8.3 is supported. I _cannot_ guarantee backward compatibility at this stage, so expect this project to support only several most recent TypeScript versions.
 
 ## How to contribute
 
@@ -63,7 +63,7 @@ To run this stuff in development mode:
 1.  Run `yarn exec tsc` in the root in the separate shell tab.
 1.  Generate self-reflections by running `node lib/tygen-reflector/src/cli.js . --out docs` in the root.
 
-My vscode debugging confituration:
+My vscode debugging configuration:
 
 ```json
 {
