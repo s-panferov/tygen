@@ -1,9 +1,13 @@
-import { InventoryReflection } from '@tygen/reflector/src/reflection/inventory/reflection'
-
+import { InventoryReflection } from './inventory/reflection'
 import { InterfaceReflection } from './interface/reflection'
 import { PropertyReflection } from './property/reflection'
 import { TypeParameterReflection } from './type-parameter/reflection'
-import { ModuleReflection, NamespaceReflection, ESModuleReflection } from './module/reflection'
+import {
+	ModuleReflection,
+	NamespaceReflection,
+	ESModuleReflection,
+	AmbientFileReflection
+} from './module/reflection'
 import { EnumReflection, EnumMemberReflection } from './enum/reflection'
 import { FunctionReflection, MethodReflection } from './function/reflection'
 import { SignatureReflection } from './signature/reflection'
@@ -27,6 +31,7 @@ export enum ReflectionKind {
 	Module = 'Module',
 	Namespace = 'Namespace',
 	ESModule = 'ESModule',
+	AmbientFile = 'AmbientFile',
 	Interface = 'Interface',
 	HeritageClause = 'HeritageClause',
 	Property = 'Property',
@@ -49,6 +54,11 @@ export interface BaseReflection {
 	kind: ReflectionKind
 	comments?: { kind: string; text: string }[]
 	directives?: { name: string; text?: string }[]
+	definedIn?: {
+		source: string
+		start: number
+		end: number
+	}[]
 }
 
 export interface ReflectionLink extends BaseReflection {
@@ -75,6 +85,7 @@ export type Reflection =
 	| TypeReflectionBase
 	| NamespaceReflection
 	| ESModuleReflection
+	| AmbientFileReflection
 	| PackageReflection
 	| FolderReflection
 	| InventoryReflection

@@ -1,6 +1,6 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import { Module } from './module'
+import { SourceFileMeta } from './file'
 import { ReflectionKind, createLink } from './reflection/reflection'
 import { Context } from './context'
 
@@ -19,7 +19,7 @@ export interface PackageFields {
 	folderPath: string
 	manifestFilePath: string
 	manifest: Manifest
-	modules: Map<string, Module>
+	files: Map<string, SourceFileMeta>
 }
 
 export interface Package extends PackageFields {}
@@ -31,7 +31,7 @@ export class Package {
 		this.folderPath = contents.folderPath
 		this.manifestFilePath = contents.manifestFilePath
 		this.manifest = contents.manifest
-		this.modules = contents.modules
+		this.files = contents.files
 	}
 
 	/**
@@ -51,12 +51,12 @@ export class Package {
 			manifestFilePath,
 			folderPath,
 			manifest: JSON.parse(fs.readFileSync(manifestFilePath).toString()),
-			modules: new Map()
+			files: new Map()
 		})
 	}
 
-	addModule(mod: Module) {
-		this.modules.set(mod.sourceFile.fileName, mod)
+	addFile(mod: SourceFileMeta) {
+		this.files.set(mod.sourceFile.fileName, mod)
 	}
 
 	generate(ctx: Context) {
@@ -69,7 +69,7 @@ export class Package {
 
 		ctx.registerReflectionById(packageRef)
 
-		this.modules.forEach(mod => {
+		this.files.forEach(mod => {
 			this.volume.mkdirpSync(path.dirname(mod.pathInfo.relativePath))
 			this.volume.writeFileSync(mod.pathInfo.relativePath, mod.reflection.id)
 		})

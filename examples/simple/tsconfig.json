@@ -7,9 +7,9 @@
     "noEmit": true,
     "types": [],
     "typeRoots": [],
-    "lib": ["es2016"]
+    "noLib": true
   },
-  "files": [
-    "index.d.ts"
+  "include": [
+    "src/**/*"
   ]
 }

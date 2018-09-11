@@ -5,14 +5,14 @@ import { Package } from './package'
 import { Context } from './context'
 
 import { visitSourceFile } from './reflection/module'
-import { ESModuleReflection } from './reflection/module/reflection'
+import { ESModuleReflection, AmbientFileReflection } from './reflection/module/reflection'
 
-export class Module {
-	sourceFile: ts.SourceFile
+export class SourceFileMeta {
 	pkg: Package
+	sourceFile: ts.SourceFile
 	pathInfo: PathInfo
 
-	reflection!: ESModuleReflection
+	reflection!: ESModuleReflection | AmbientFileReflection
 
 	constructor(pkg: Package, sourceFile: ts.SourceFile) {
 		this.sourceFile = sourceFile as ts.SourceFile

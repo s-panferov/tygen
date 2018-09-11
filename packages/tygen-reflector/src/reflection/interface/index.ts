@@ -117,7 +117,3 @@ export function visitObjectProperties(
 		parent.allProperties.push(reflection)
 	})
 }
-
-export function getMergedSymbol(symbol: ts.Symbol, ctx: Context): ts.Symbol | undefined {
-	return (ctx.checker as any).getMergedSymbol(symbol)
-}

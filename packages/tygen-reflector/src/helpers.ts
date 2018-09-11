@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 
 import { Generator } from './generator'
-import { Module } from './module'
+import { SourceFileMeta } from './file'
 import { Context } from './context'
 import { Package } from './package'
 
@@ -83,8 +83,8 @@ export function generateFiles(
 	return generator
 }
 
-export function generateModule(fileName: string, mainPackage: string): Module | undefined {
-	return generateFiles([fileName], mainPackage).getModule(fileName)
+export function generateFile(fileName: string, mainPackage: string): SourceFileMeta | undefined {
+	return generateFiles([fileName], mainPackage).getFile(fileName)
 }
 
 export function mkdirSyncP(location: string) {

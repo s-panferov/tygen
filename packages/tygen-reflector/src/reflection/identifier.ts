@@ -55,6 +55,25 @@ export function isWritableSymbol(symbol: ts.Symbol) {
 	)
 }
 
+export function generateIdForSourceFile(
+	sourceFile: ts.SourceFile,
+	ctx: Context,
+	addFilePath: boolean = true
+): string[] {
+	let id = [] as string[]
+
+	const fileName = sourceFile.fileName
+	const module = ctx.generator.getFile(fileName)!
+	id.push(module.pkg.manifest.name)
+	id.push('->', module.pkg.manifest.version)
+
+	if (addFilePath) {
+		id.push('->', module.pathInfo.relativePath)
+	}
+
+	return id
+}
+
 function generateIdChainForDeclaration(node: ts.Node, ctx: Context, isParent: boolean): string[] {
 	let id = [] as string[]
 
@@ -67,12 +86,9 @@ function generateIdChainForDeclaration(node: ts.Node, ctx: Context, isParent: bo
 	}
 
 	if (ts.isSourceFile(node)) {
-		const fileName = node.getSourceFile().fileName
-		const module = ctx.generator.getModule(fileName)!
-
-		id.push(module.pkg.manifest.name)
-		id.push('->', module.pkg.manifest.version)
-		id.push('->', module.pathInfo.relativePath)
+		const symbol = ctx.checker.getSymbolAtLocation(node)
+		// !!symbol check is true for ES6 modules and false for ambient declarations
+		id.push(...generateIdForSourceFile(node.getSourceFile(), ctx, !!symbol))
 	} else if (
 		ts.isMethodDeclaration(node) ||
 		ts.isMethodSignature(node) ||
@@ -80,8 +96,10 @@ function generateIdChainForDeclaration(node: ts.Node, ctx: Context, isParent: bo
 		ts.isCallSignatureDeclaration(node) ||
 		ts.isConstructSignatureDeclaration(node)
 	) {
-		const symbol: ts.Symbol | undefined =
+		let symbol: ts.Symbol | undefined =
 			(node as any).symbol || ctx.checker.getSymbolAtLocation(node)
+
+		symbol = symbol && ctx.checker.getMergedSymbol(symbol)
 
 		const name = node.name ? node.name.getText() : symbol ? symbol.name : '__function'
 		const isWritable = symbol && isWritableSymbol(symbol)
@@ -108,6 +126,8 @@ function generateIdChainForDeclaration(node: ts.Node, ctx: Context, isParent: bo
 	} else {
 		let symbol: ts.Symbol | undefined =
 			(node as any).symbol || ctx.checker.getSymbolAtLocation(node)
+
+		symbol = symbol && ctx.checker.getMergedSymbol(symbol)
 
 		if (symbol && symbol.escapedName) {
 			id.push(isWritableSymbol(symbol) ? '->' : '::', symbol.escapedName.toString())

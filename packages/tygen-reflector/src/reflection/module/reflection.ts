@@ -15,3 +15,9 @@ export interface ESModuleReflection extends BaseReflection, ReflectionWithExport
 	name: string
 	folder: string
 }
+
+export interface AmbientFileReflection extends BaseReflection, ReflectionWithExports {
+	kind: ReflectionKind.AmbientFile
+	name: string
+	folder: string
+}

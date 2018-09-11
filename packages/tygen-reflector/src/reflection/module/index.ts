@@ -9,8 +9,13 @@ import {
 } from '../reflection'
 import { Context } from '../../context'
 import { visitSymbol } from '../visitor'
-import { symbolId, declarationId } from '../identifier'
-import { ModuleReflection, NamespaceReflection, ESModuleReflection } from './reflection'
+import { symbolId, declarationId, generateIdForSourceFile } from '../identifier'
+import {
+	ModuleReflection,
+	NamespaceReflection,
+	ESModuleReflection,
+	AmbientFileReflection
+} from './reflection'
 
 export function visitModule(symbol: ts.Symbol, ctx: Context): Reflection {
 	if (symbol.flags & ts.SymbolFlags.ValueModule) {
@@ -39,6 +44,7 @@ export function visitModule(symbol: ts.Symbol, ctx: Context): Reflection {
 
 	const sourceFile = symbol.declarations![0]!.getSourceFile()
 	const reflection = visitSourceFile(sourceFile, ctx)
+
 	ctx.registerSymbol(symbol, reflection)
 
 	return reflection
@@ -46,8 +52,8 @@ export function visitModule(symbol: ts.Symbol, ctx: Context): Reflection {
 
 const visited = new WeakMap<BaseReflection, Set<ts.Symbol>>()
 
-function hasExport(reflection: BaseReflection, symbol: ts.Symbol): boolean {
-	let item = visited.get(reflection)
+function hasExport(parent: BaseReflection, symbol: ts.Symbol): boolean {
+	let item = visited.get(parent)
 	if (!item) {
 		return false
 	}
@@ -55,40 +61,54 @@ function hasExport(reflection: BaseReflection, symbol: ts.Symbol): boolean {
 	return item.has(symbol)
 }
 
-function setVisited(reflection: BaseReflection, symbol: ts.Symbol) {
-	let item = visited.get(reflection)
+function setVisited(parent: BaseReflection, symbol: ts.Symbol) {
+	let item = visited.get(parent)
 	if (!item) {
-		visited.set(reflection, new Set([symbol]))
+		visited.set(parent, new Set([symbol]))
 	} else {
 		item.add(symbol)
 	}
 }
 
-export function visitSourceFile(sourceFile: ts.SourceFile, ctx: Context): ESModuleReflection {
-	const module = ctx.generator.getModule(sourceFile.fileName)!
-	const moduleRef: ESModuleReflection = {
-		id: declarationId(sourceFile, ctx),
-		kind: ReflectionKind.ESModule,
-		name: module.pathInfo.fileName,
-		folder: module.pathInfo.folderName
-	}
-
+export function visitSourceFile(
+	sourceFile: ts.SourceFile,
+	ctx: Context
+): ESModuleReflection | AmbientFileReflection {
+	const file = ctx.generator.getFile(sourceFile.fileName)!
 	const symbol = ctx.checker.getSymbolAtLocation(sourceFile)
-	ctx.registerReflectionById(moduleRef, symbol)
 
 	if (symbol) {
+		// We have symbols only for ES6 modules
+		const moduleRef: ESModuleReflection = {
+			id: declarationId(sourceFile, ctx),
+			kind: ReflectionKind.ESModule,
+			name: file.pathInfo.fileName,
+			folder: file.pathInfo.folderName
+		}
+		ctx.registerReflectionById(moduleRef, symbol)
 		visitContainer(symbol, moduleRef, ctx)
+		return moduleRef
 	} else {
+		const ambientFileRef: AmbientFileReflection = {
+			id: generateIdForSourceFile(sourceFile, ctx).join(''),
+			kind: ReflectionKind.AmbientFile,
+			name: file.pathInfo.fileName,
+			folder: file.pathInfo.folderName
+		}
+
+		ctx.registerReflectionById(ambientFileRef, symbol)
+
+		// Declaration file with global variables
 		function visitNode(node: ts.Node) {
 			let symbol = (node as any).symbol
-			if (symbol && !hasExport(moduleRef, symbol)) {
-				setVisited(moduleRef, symbol)
-				let ref = visitSymbol(symbol, ctx)
-				if (ref) {
-					if (!moduleRef.exports) {
-						moduleRef.exports = []
+			if (symbol && !hasExport(ambientFileRef, symbol)) {
+				setVisited(ambientFileRef, symbol)
+				let reflection = visitSymbol(symbol, ctx)
+				if (reflection) {
+					if (!ambientFileRef.exports) {
+						ambientFileRef.exports = []
 					}
-					moduleRef.exports.push(createLink(ref))
+					ambientFileRef.exports.push(createLink(reflection))
 				}
 			} else {
 				if (ts.isVariableStatement(node)) {
@@ -99,11 +119,9 @@ export function visitSourceFile(sourceFile: ts.SourceFile, ctx: Context): ESModu
 				}
 			}
 		}
-
 		sourceFile.statements.forEach(visitNode)
+		return ambientFileRef
 	}
-
-	return moduleRef
 }
 
 export enum VisitResult {

@@ -1,3 +1,12 @@
+import { TypeParameterReflection } from '../type-parameter/reflection'
+import { TypeReflection } from '../_type/reflection'
+
+import {
+	ReflectionWithConstructSignatures,
+	ReflectionWithIndexSignatures,
+	ReflectionWithCallSignatures
+} from '../signature/reflection'
+
 import {
 	ReflectionLink,
 	ReflectionWithExports,
@@ -5,13 +14,6 @@ import {
 	ReflectionKind,
 	Reflection
 } from '../reflection'
-import { TypeParameterReflection } from '../type-parameter/reflection'
-import { TypeReflection } from '../_type/reflection'
-import {
-	ReflectionWithConstructSignatures,
-	ReflectionWithIndexSignatures,
-	ReflectionWithCallSignatures
-} from '../signature/reflection'
 
 export interface ReflectionWithProperties extends BaseReflection {
 	ownProperties?: Reflection[]

@@ -9,6 +9,8 @@ import { Writer } from './writer'
 
 import * as ts from 'typescript'
 
+require('source-map-support').install()
+
 // @ts-ignore
 global.ts = ts
 

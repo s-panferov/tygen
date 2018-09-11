@@ -1,7 +1,7 @@
 import * as ts from 'typescript'
 
 import { Package } from './package'
-import { Module } from './module'
+import { SourceFileMeta } from './file'
 import { Context } from './context'
 
 import log from 'roarr'
@@ -11,31 +11,22 @@ export class Generator {
 	program: ts.Program
 
 	packages = new Map<string, Package>()
-	modules = new Map<string, Module>()
+	files = new Map<string, SourceFileMeta>()
 
 	constructor(packageName: string, program: ts.Program) {
 		this.packageName = packageName
 		this.program = program
 		let sourceFiles = this.program.getSourceFiles()
 
-		sourceFiles = sourceFiles.filter(sourceFile => {
-			// TODO generate types for TypeScript stdlib separately
-			if (this.program.isSourceFileDefaultLibrary(sourceFile)) {
-				return false
-			}
-
-			return true
-		})
-
 		log.trace({ fileNames: sourceFiles.map(s => s.fileName) }, 'Documentation scope')
 
 		sourceFiles.forEach(sourceFile => {
-			this.addModule(sourceFile)
+			this.addFile(sourceFile)
 		})
 	}
 
-	addModule(sourceFile: ts.SourceFile): Module {
-		let existed = this.modules.get(sourceFile.fileName)
+	addFile(sourceFile: ts.SourceFile): SourceFileMeta {
+		let existed = this.files.get(sourceFile.fileName)
 		if (existed) {
 			return existed
 		}
@@ -45,16 +36,16 @@ export class Generator {
 			this.packages.set(pack.folderPath, pack)
 		}
 
-		let mod = new Module(pack, sourceFile)
+		let mod = new SourceFileMeta(pack, sourceFile)
 
-		pack.addModule(mod)
-		this.modules.set(sourceFile.fileName, mod)
+		pack.addFile(mod)
+		this.files.set(sourceFile.fileName, mod)
 
 		return mod
 	}
 
-	getModule(sourceFileName: string): Module | undefined {
-		return this.modules.get(sourceFileName)
+	getFile(sourceFileName: string): SourceFileMeta | undefined {
+		return this.files.get(sourceFileName)
 	}
 
 	generate() {
@@ -81,21 +72,18 @@ export class Generator {
 
 			log.info(packageInfo, 'Generate package')
 
-			// if (pkg.manifest.name === this.packageName) {
-			pkg.modules.forEach(mod => {
-				log.info({ fileName: mod.sourceFile.fileName }, 'Generate module')
-
-				if (mod.sourceFile.isDeclarationFile) {
-					if (mod.sourceFile.flags & (ts.NodeFlags as any).Ambient) {
-						debugger
-					}
-				}
-
-				mod.generate(context)
+			const files = Array.from(pkg.files.values()).filter(file => {
+				return !context.program.isSourceFileDefaultLibrary(file.sourceFile)
 			})
 
-			pkg.generate(context)
-			// }
+			if (files.length > 0) {
+				files.forEach(file => {
+					log.info({ fileName: file.sourceFile.fileName }, 'Generate module')
+					file.generate(context)
+				})
+
+				pkg.generate(context)
+			}
 		})
 
 		// TODO

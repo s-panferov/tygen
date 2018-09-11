@@ -11,6 +11,7 @@ import { visitFunction, visitMethod } from './function'
 import { visitClass } from './class'
 import { visitTypeAlias } from './type-alias'
 import { visitVariable } from './variable'
+import { generateIdForSourceFile } from './identifier'
 
 export function visitSymbol(
 	symbol: ts.Symbol,
@@ -21,12 +22,20 @@ export function visitSymbol(
 		return ctx.reflectionBySymbol.get(symbol)
 	}
 
+	if (symbol.flags & ts.SymbolFlags.Alias) {
+		symbol = ctx.checker.getAliasedSymbol(symbol)
+	}
+
+	symbol = ctx.checker.getMergedSymbol(symbol)
+
 	ctx.visitedReflections.add(symbol)
 
 	let reflection: Reflection | undefined
 
 	if (symbol.flags & ts.SymbolFlags.Module) {
 		reflection = visitModule(symbol, ctx)
+	} else if (symbol.flags & ts.SymbolFlags.Alias) {
+		reflection = visitVariable(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Enum) {
 		reflection = visitEnum(symbol, ctx)
 	} else if (symbol.flags & ts.SymbolFlags.Class) {
@@ -64,6 +73,16 @@ export function visitSymbol(
 		let directive = symbol.getJsDocTags()
 		if (directive.length > 0) {
 			reflection.directives = directive
+		}
+
+		if (symbol.declarations && symbol.declarations.length) {
+			reflection.definedIn = symbol.declarations.map(decl => {
+				return {
+					source: generateIdForSourceFile(decl.getSourceFile(), ctx).join(''),
+					start: decl.getStart(undefined, true),
+					end: decl.getEnd()
+				}
+			})
 		}
 	}
 
