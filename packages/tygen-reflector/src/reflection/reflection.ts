@@ -49,6 +49,10 @@ export interface ReflectionWithExports extends BaseReflection {
 	exports?: Reflection[]
 }
 
+export interface ReflectionWithGlobals extends BaseReflection {
+	globals?: Reflection[]
+}
+
 export interface BaseReflection {
 	id?: string
 	kind: ReflectionKind

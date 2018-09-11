@@ -7,6 +7,8 @@ import { Context } from './context'
 const { Volume } = require('memfs')
 const closest = require('pkg-up')
 
+import log from 'roarr'
+
 import {
 	Manifest,
 	PackageReflection,
@@ -14,6 +16,7 @@ import {
 	ReflectionWithStructure,
 	FolderReflection
 } from './reflection/package'
+import { ESModuleReflection } from '@tygen/reflector/src/reflection'
 
 export interface PackageFields {
 	folderPath: string
@@ -26,6 +29,7 @@ export interface Package extends PackageFields {}
 
 export class Package {
 	volume = Volume.fromJSON({}) as typeof fs & { mkdirpSync: (path: string) => void }
+	reflection!: PackageReflection
 
 	constructor(contents: PackageFields) {
 		this.folderPath = contents.folderPath
@@ -67,15 +71,35 @@ export class Package {
 			modules: []
 		}
 
-		ctx.registerReflectionById(packageRef)
+		this.reflection = packageRef
+		ctx.registerReflectionWithoutSymbol(packageRef)
 
-		this.files.forEach(mod => {
+		const files = Array.from(this.files.values()).filter(file => {
+			return !ctx.program.isSourceFileDefaultLibrary(file.sourceFile)
+		})
+
+		if (files.length > 0) {
+			files.forEach(file => {
+				log.info({ fileName: file.sourceFile.fileName }, 'Generate module')
+				file.generate(ctx)
+			})
+		}
+
+		files.forEach(mod => {
 			this.volume.mkdirpSync(path.dirname(mod.pathInfo.relativePath))
 			this.volume.writeFileSync(mod.pathInfo.relativePath, mod.reflection.id)
 		})
 
 		visitReadme(this.folderPath, packageRef)
 		visitFolders(this.volume, packageRef, ctx)
+
+		if (this.manifest.main && this.volume.existsSync(this.manifest.main)) {
+			const id = this.volume.readFileSync(this.manifest.main).toString()
+			const ref = ctx.reflectionById.get(id)!
+			const refLink = createLink(ref)
+			packageRef.main = refLink
+			packageRef.exports = (ref as ESModuleReflection).exports
+		}
 
 		if (this.manifest.typings && this.volume.existsSync(this.manifest.typings)) {
 			const id = this.volume.readFileSync(this.manifest.typings).toString()
@@ -115,7 +139,7 @@ export function visitFolders(
 				modules: []
 			}
 
-			ctx.registerReflectionById(folderRef)
+			ctx.registerReflectionWithoutSymbol(folderRef)
 			visitFolders(volume, folderRef, ctx, fullPath, false)
 
 			if (res.length === 1) {

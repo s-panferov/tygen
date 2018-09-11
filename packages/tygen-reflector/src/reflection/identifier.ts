@@ -123,6 +123,8 @@ function generateIdChainForDeclaration(node: ts.Node, ctx: Context, isParent: bo
 		id.push('::', '__union__')
 	} else if (ts.isIntersectionTypeNode(node)) {
 		id.push('::', '__intersection__')
+	} else if (ts.isModuleDeclaration(node)) {
+		id.push('->', node.name.getText().replace(/"/g, `'`))
 	} else {
 		let symbol: ts.Symbol | undefined =
 			(node as any).symbol || ctx.checker.getSymbolAtLocation(node)

@@ -18,18 +18,18 @@ import {
 } from './reflection'
 
 export function visitModule(symbol: ts.Symbol, ctx: Context): Reflection {
-	if (symbol.flags & ts.SymbolFlags.ValueModule) {
+	if (symbol.flags & ts.SymbolFlags.ValueModule && symbol.name.includes(`"`)) {
 		const reflection: ModuleReflection = {
 			id: symbolId(symbol, ctx),
 			kind: ReflectionKind.Module,
-			name: symbol.name,
+			name: symbol.name.replace(/"/g, `'`),
 			exports: []
 		}
 
 		ctx.registerSymbol(symbol, reflection)
 		visitContainer(symbol, reflection, ctx)
 		return reflection
-	} else if (symbol.flags & ts.SymbolFlags.NamespaceModule) {
+	} else {
 		const reflection: NamespaceReflection = {
 			id: symbolId(symbol, ctx),
 			kind: ReflectionKind.Namespace,
@@ -50,9 +50,9 @@ export function visitModule(symbol: ts.Symbol, ctx: Context): Reflection {
 	return reflection
 }
 
-const visited = new WeakMap<BaseReflection, Set<ts.Symbol>>()
+const visited = new WeakMap<BaseReflection, Set<ts.Symbol | string>>()
 
-function hasExport(parent: BaseReflection, symbol: ts.Symbol): boolean {
+function wasVisitedIn(parent: BaseReflection, symbol: ts.Symbol | string): boolean {
 	let item = visited.get(parent)
 	if (!item) {
 		return false
@@ -61,7 +61,7 @@ function hasExport(parent: BaseReflection, symbol: ts.Symbol): boolean {
 	return item.has(symbol)
 }
 
-function setVisited(parent: BaseReflection, symbol: ts.Symbol) {
+function setVisitedIn(parent: BaseReflection, symbol: ts.Symbol | string) {
 	let item = visited.get(parent)
 	if (!item) {
 		visited.set(parent, new Set([symbol]))
@@ -85,7 +85,7 @@ export function visitSourceFile(
 			name: file.pathInfo.fileName,
 			folder: file.pathInfo.folderName
 		}
-		ctx.registerReflectionById(moduleRef, symbol)
+		ctx.registerSymbol(symbol, moduleRef)
 		visitContainer(symbol, moduleRef, ctx)
 		return moduleRef
 	} else {
@@ -96,19 +96,37 @@ export function visitSourceFile(
 			folder: file.pathInfo.folderName
 		}
 
-		ctx.registerReflectionById(ambientFileRef, symbol)
+		ctx.registerReflectionWithoutSymbol(ambientFileRef)
 
 		// Declaration file with global variables
 		function visitNode(node: ts.Node) {
 			let symbol = (node as any).symbol
-			if (symbol && !hasExport(ambientFileRef, symbol)) {
-				setVisited(ambientFileRef, symbol)
+			if (symbol) {
 				let reflection = visitSymbol(symbol, ctx)
-				if (reflection) {
-					if (!ambientFileRef.exports) {
-						ambientFileRef.exports = []
+				if (!reflection) {
+					return
+				}
+
+				if (wasVisitedIn(ambientFileRef, reflection.id!)) {
+					return
+				}
+
+				setVisitedIn(ambientFileRef, reflection.id!)
+
+				const link = createLink(reflection)
+
+				if (!ambientFileRef.exports) {
+					ambientFileRef.exports = []
+				}
+				ambientFileRef.exports.push(link)
+
+				const pkgReflection = file.pkg.reflection
+				if (!wasVisitedIn(pkgReflection, reflection.id!)) {
+					setVisitedIn(pkgReflection, reflection.id!)
+					if (!pkgReflection.globals) {
+						pkgReflection.globals = []
 					}
-					ambientFileRef.exports.push(createLink(reflection))
+					pkgReflection.globals.push(link)
 				}
 			} else {
 				if (ts.isVariableStatement(node)) {
@@ -139,11 +157,11 @@ export function visitContainer(
 	let exp = symbol.exports && ctx.checker.getExportsOfModule(symbol)
 	if (exp) {
 		exp.forEach(item => {
-			if (hasExport(refl, item)) {
+			if (wasVisitedIn(refl, item)) {
 				return
 			}
 
-			setVisited(refl, item)
+			setVisitedIn(refl, item)
 
 			let reflection = visitSymbol(item, ctx)
 			if (reflection) {

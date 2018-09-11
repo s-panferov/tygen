@@ -6,13 +6,5 @@
 	"singleQuote": true,
 	"trailingComma": "none",
 	"bracketSpacing": true,
-	"jsxBracketSameLine": true,
-	"overrides": [
-		{
-			"files": "*.css",
-			"options": {
-				"parser": "postcss"
-			}
-		}
-	]
+	"jsxBracketSameLine": true
 }

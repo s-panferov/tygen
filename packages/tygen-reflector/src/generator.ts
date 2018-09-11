@@ -71,19 +71,7 @@ export class Generator {
 			}
 
 			log.info(packageInfo, 'Generate package')
-
-			const files = Array.from(pkg.files.values()).filter(file => {
-				return !context.program.isSourceFileDefaultLibrary(file.sourceFile)
-			})
-
-			if (files.length > 0) {
-				files.forEach(file => {
-					log.info({ fileName: file.sourceFile.fileName }, 'Generate module')
-					file.generate(context)
-				})
-
-				pkg.generate(context)
-			}
+			pkg.generate(context)
 		})
 
 		// TODO
