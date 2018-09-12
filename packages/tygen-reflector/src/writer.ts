@@ -13,6 +13,7 @@ const IsWritable: { [name: string]: boolean } = {
 	[ReflectionKind.Function]: true,
 	[ReflectionKind.Interface]: true,
 	[ReflectionKind.ESModule]: true,
+	[ReflectionKind.AmbientFile]: true,
 	[ReflectionKind.Module]: true,
 	[ReflectionKind.Namespace]: true,
 	[ReflectionKind.Variable]: true,

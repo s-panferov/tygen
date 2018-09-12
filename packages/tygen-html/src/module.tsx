@@ -1,9 +1,4 @@
 import * as React from 'react'
-import {
-	ESModuleReflection,
-	ModuleReflection,
-	NamespaceReflection
-} from '@tygen/reflector/src/reflection'
 import { Toolbar } from './ui/toolbar'
 import { parseId } from './helpers'
 import { Layout } from './ui/layout'
@@ -13,9 +8,16 @@ import { Nav } from './ui/nav'
 import { Breadcrumb } from './breadcrumb'
 import { ExportsView } from './exports'
 
+import {
+	ESModuleReflection,
+	ModuleReflection,
+	NamespaceReflection,
+	AmbientFileReflection
+} from '@tygen/reflector/src/reflection'
+
 @withContext
 export class ModulePage extends BaseView<
-	ESModuleReflection | ModuleReflection | NamespaceReflection
+	ESModuleReflection | ModuleReflection | NamespaceReflection | AmbientFileReflection
 > {
 	render() {
 		const { reflection, settings } = this.props

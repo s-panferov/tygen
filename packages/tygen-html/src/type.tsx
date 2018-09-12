@@ -16,6 +16,7 @@ import { ConditionalView } from './type/conditional'
 import { IndexTypeView } from './type/index-type'
 import { ESSymbolView } from './type/symbol'
 import { ThisView } from './type/this'
+import { NotIncluded } from './not-included'
 
 export class TypeView extends BaseView<TypeReflection> {
 	render() {
@@ -24,6 +25,8 @@ export class TypeView extends BaseView<TypeReflection> {
 		switch (reflection.kind) {
 			case ReflectionKind.Link:
 				return <RefLink reflection={reflection} />
+			case ReflectionKind.NotIncluded:
+				return <NotIncluded reflection={reflection} />
 			case ReflectionKind.Type:
 				switch (reflection.typeKind) {
 					case TypeKind.Any:

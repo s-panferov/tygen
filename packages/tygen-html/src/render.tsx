@@ -26,6 +26,7 @@ export function renderPage(ref: Reflection): React.ReactElement<any> {
 			return <FolderPage reflection={ref} />
 		case ReflectionKind.ESModule:
 		case ReflectionKind.Module:
+		case ReflectionKind.AmbientFile:
 		case ReflectionKind.Namespace:
 			return <ModulePage reflection={ref} />
 		case ReflectionKind.Interface:
