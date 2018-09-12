@@ -5,13 +5,13 @@ import { visitInterface } from './interface'
 import { visitProperty } from './property'
 import { visitModule } from './module'
 
-import { Reflection } from './reflection'
+import { Reflection, ReflectionKind, NotIncludedReflection } from './reflection'
 import { visitEnum, visitEnumMember } from './enum'
 import { visitFunction, visitMethod } from './function'
 import { visitClass } from './class'
 import { visitTypeAlias } from './type-alias'
 import { visitVariable } from './variable'
-import { generateIdForSourceFile } from './identifier'
+import { generateIdForSourceFile, symbolId } from './identifier'
 
 export function visitSymbol(
 	symbol: ts.Symbol,
@@ -29,6 +29,21 @@ export function visitSymbol(
 	symbol = ctx.checker.getMergedSymbol(symbol)
 
 	ctx.visitedReflections.add(symbol)
+
+	// Exclude some reflections
+	const declaration = symbol.declarations && symbol.declarations[0]
+	if (declaration) {
+		const sourceFile = declaration.getSourceFile()
+		if (ctx.program.isSourceFileDefaultLibrary(sourceFile)) {
+			const reflection: NotIncludedReflection = {
+				kind: ReflectionKind.NotIncluded,
+				name: symbol.name,
+				id: symbolId(symbol, ctx)
+			}
+			ctx.registerSymbol(symbol, reflection)
+			return reflection
+		}
+	}
 
 	let reflection: Reflection | undefined
 

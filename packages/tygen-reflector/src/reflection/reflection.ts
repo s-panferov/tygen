@@ -42,6 +42,7 @@ export enum ReflectionKind {
 	Package = 'Package',
 	Folder = 'Folder',
 	Search = 'Search',
+	NotIncluded = 'NotIncluded',
 	NotSupported = 'NotSupported'
 }
 
@@ -71,6 +72,11 @@ export interface ReflectionLink extends BaseReflection {
 	targetKind: ReflectionKind
 }
 
+export interface NotIncludedReflection extends BaseReflection {
+	kind: ReflectionKind.NotIncluded
+	name: string
+}
+
 export type Reflection =
 	| ReflectionLink
 	| InterfaceReflection
@@ -94,13 +100,16 @@ export type Reflection =
 	| FolderReflection
 	| InventoryReflection
 	| SearchReflection
+	| NotIncludedReflection
 
 export interface HasId {
 	id: string
 }
 
-export function createLink<T extends Reflection>(ref: T): ReflectionLink | T {
-	if (ref.kind === ReflectionKind.Link) {
+export function createLink<T extends Reflection>(
+	ref: T
+): ReflectionLink | NotIncludedReflection | T {
+	if (ref.kind === ReflectionKind.Link || ref.kind === ReflectionKind.NotIncluded) {
 		return ref
 	} else if (ref.id) {
 		return <ReflectionLink>{

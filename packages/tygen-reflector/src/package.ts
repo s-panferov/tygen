@@ -4,9 +4,7 @@ import { SourceFileMeta } from './file'
 import { ReflectionKind, createLink } from './reflection/reflection'
 import { Context } from './context'
 
-const { Volume } = require('memfs')
 const closest = require('pkg-up')
-
 import log from 'roarr'
 
 import {
@@ -16,7 +14,9 @@ import {
 	ReflectionWithStructure,
 	FolderReflection
 } from './reflection/package'
-import { ESModuleReflection } from '@tygen/reflector/src/reflection'
+
+import { ESModuleReflection } from './reflection'
+import { createMemoryFileSystem } from './helpers'
 
 export interface PackageFields {
 	folderPath: string
@@ -28,7 +28,7 @@ export interface PackageFields {
 export interface Package extends PackageFields {}
 
 export class Package {
-	volume = Volume.fromJSON({}) as typeof fs & { mkdirpSync: (path: string) => void }
+	volume = createMemoryFileSystem()
 	reflection!: PackageReflection
 
 	constructor(contents: PackageFields) {

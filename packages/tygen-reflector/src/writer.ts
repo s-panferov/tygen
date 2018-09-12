@@ -4,7 +4,7 @@ import * as ts from 'typescript'
 import * as path from 'path'
 
 import { ReflectionKind } from './reflection/reflection'
-import { mkdirSyncP } from './helpers'
+import { FileSystem } from './helpers'
 import { SearchReflection } from './reflection/search/reflection'
 
 const IsWritable: { [name: string]: boolean } = {
@@ -31,14 +31,16 @@ const IsSearchable: { [name: string]: boolean } = Object.assign({}, IsWritable, 
 export class Writer {
 	context: Context
 	outDir: string
+	fs: FileSystem
 
-	constructor(context: Context, outDir?: string) {
+	constructor(context: Context, outDir?: string, fsImpl: FileSystem = fse as any) {
 		this.context = context
 		if (!outDir) {
 			outDir = path.join(process.cwd(), 'docs')
 		}
 
-		mkdirSyncP(outDir)
+		this.fs = fsImpl
+		this.fs.mkdirpSync(outDir)
 		this.outDir = outDir
 	}
 
@@ -60,21 +62,21 @@ export class Writer {
 			let folder = path.join(this.outDir, reflection.id!.replace(/->|::/g, path.sep))
 			let fileName = path.join(folder, 'index.json')
 
-			mkdirSyncP(folder)
-			fse.writeFileSync(fileName, JSON.stringify(reflection, null, 4))
+			this.fs.mkdirpSync(folder)
+			this.fs.writeFileSync(fileName, JSON.stringify(reflection, null, 4))
 		})
 
 		const searchDir = path.join(this.outDir, '_search')
-		if (!fse.existsSync(searchDir)) {
-			fse.mkdirSync(searchDir)
+		if (!this.fs.existsSync(searchDir)) {
+			this.fs.mkdirSync(searchDir)
 		}
 
-		fse.writeFileSync(path.join(searchDir, 'index.json'), JSON.stringify(search))
+		this.fs.writeFileSync(path.join(searchDir, 'index.json'), JSON.stringify(search))
 	}
 
 	writeSources() {
 		const sourcesDir = path.join(this.outDir, '_sources')
-		fse.mkdirpSync(sourcesDir)
+		this.fs.mkdirpSync(sourcesDir)
 
 		const sourceFiles = this.context.program.getSourceFiles()
 		const serialized: SerializedProgram = {
@@ -86,7 +88,7 @@ export class Writer {
 			})
 		}
 
-		fse.writeFileSync(path.join(sourcesDir, 'index.json'), JSON.stringify(serialized))
+		this.fs.writeFileSync(path.join(sourcesDir, 'index.json'), JSON.stringify(serialized))
 		return serialized
 	}
 }

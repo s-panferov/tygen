@@ -9,6 +9,13 @@ import { Package } from './package'
 
 import log from 'roarr'
 
+const { Volume } = require('memfs')
+
+export type FileSystem = typeof fs & { mkdirpSync: (path: string) => void }
+export function createMemoryFileSystem(): FileSystem {
+	return Volume.fromJSON({}) as any
+}
+
 export function compileFolder(target: string = process.cwd()): Context {
 	const absolutePath = path.resolve(process.cwd(), target)
 	const configFilePath = ts.findConfigFile(absolutePath, ts.sys.fileExists)!
@@ -85,18 +92,4 @@ export function generateFiles(
 
 export function generateFile(fileName: string, mainPackage: string): SourceFileMeta | undefined {
 	return generateFiles([fileName], mainPackage).getFile(fileName)
-}
-
-export function mkdirSyncP(location: string) {
-	let normalizedPath = path.normalize(location)
-	let parsedPathObj = path.parse(normalizedPath)
-	let curDir = parsedPathObj.root
-	let folders = parsedPathObj.dir.split(path.sep)
-	folders.push(parsedPathObj.base)
-	for (let part of folders) {
-		curDir = path.join(curDir, part)
-		if (!fs.existsSync(curDir)) {
-			fs.mkdirSync(curDir)
-		}
-	}
 }

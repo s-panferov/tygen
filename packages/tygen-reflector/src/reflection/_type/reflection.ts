@@ -1,4 +1,9 @@
-import { BaseReflection, ReflectionKind, ReflectionLink } from '../reflection'
+import {
+	BaseReflection,
+	ReflectionKind,
+	ReflectionLink,
+	NotIncludedReflection
+} from '../reflection'
 
 export enum TypeKind {
 	Substitution = 'Substitution',
@@ -82,4 +87,5 @@ export type TypeReflection =
 	| TypeParameterReflection
 	| IndexedAccessReflection
 	| ThisReflection
+	| NotIncludedReflection
 	| NotSupportedTypeReflection
