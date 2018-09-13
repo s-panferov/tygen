@@ -4,11 +4,14 @@
     "module": "esnext",
     "target": "esnext",
     "esModuleInterop": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "baseUrl": ".",
     "paths": {
       "@tygen/reflector/*": ["../tygen-reflector/*"]
-    }
+    },
+    "lib": [
+      "esnext"
+    ]
   },
   "include": [
     "src/**/*"

@@ -13,10 +13,12 @@ import { Layout } from './ui/layout'
 import { Badge } from './ui/badge'
 import { Breadcrumb } from './breadcrumb'
 import { CommentView } from './comment'
+import { prettyRender, PrettyContext, ident } from './prettier'
 
 export class VariableView extends BaseView<VariableReflection | ParameterReflection> {
 	render() {
 		const { reflection } = this.props
+
 		return (
 			<span>
 				{reflection.kind === ReflectionKind.Parameter && reflection.rest ? '...' : ''}
@@ -53,14 +55,40 @@ export class VariablePage extends BaseView<VariableReflection> {
 					</h1>
 					<Breadcrumb reflection={reflection} />
 					<span className={VariableBody}>
-						var <span className={VariableName}>{reflection.name}</span>:{' '}
-						<TypeView reflection={reflection.type} />
+						{prettyRender(<VariableTest reflection={reflection} />)}
 					</span>
 					<CommentView reflection={reflection} />
 					{sections}
 				</Layout>
 			</div>
 		)
+	}
+}
+
+export class VariableTest extends BaseView<VariableReflection> {
+	static contextTypes = PrettyContext
+	render() {
+		const reflection = this.props.reflection
+		return (
+			<React.Fragment>
+				var {ident(this, reflection.name, <VariableAnchor reflection={reflection} />)}:{' '}
+				<GenericType />
+			</React.Fragment>
+		)
+	}
+}
+
+export class VariableAnchor extends React.Component<{ reflection: VariableReflection }> {
+	render() {
+		return <a href="http://google.com">{this.props.reflection.name}</a>
+	}
+}
+
+export class GenericType extends React.Component {
+	symbol = Symbol()
+
+	render() {
+		return `Array<String>`
 	}
 }
 

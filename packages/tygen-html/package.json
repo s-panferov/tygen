@@ -37,6 +37,7 @@
     "@types/micro": "^7.3.1",
     "@types/minimist": "^1.2.0",
     "@types/react-dom": "^16.0.7",
+    "@types/react-test-renderer": "^16.0.2",
     "@types/prettier": "^1.13.2",
     "concurrently": "^4.0.1",
     "nodemon": "^1.18.4",
@@ -54,6 +55,7 @@
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "remark-parse": "^5.0.0",
+    "react-test-renderer": "^16.5.0",
     "unified": "^7.0.0",
     "react-syntax-highlighter": "^8.0.1"
   }
