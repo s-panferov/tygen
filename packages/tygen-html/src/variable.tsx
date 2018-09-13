@@ -85,10 +85,25 @@ export class VariableAnchor extends React.Component<{ reflection: VariableReflec
 }
 
 export class GenericType extends React.Component {
-	symbol = Symbol()
+	static contextTypes = PrettyContext
 
 	render() {
-		return `Array<String>`
+		return (
+			<React.Fragment>
+				{ident(this, 'Array', React.createElement(() => <a href="google.com">Array</a>))}
+				{'<'}
+				{ident(
+					this,
+					'VeryLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongName',
+					React.createElement(() => (
+						<a href="google.com">
+							VeryLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongName
+						</a>
+					))
+				)}
+				{'>'}
+			</React.Fragment>
+		)
 	}
 }
 

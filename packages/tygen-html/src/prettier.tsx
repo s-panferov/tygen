@@ -1,11 +1,8 @@
 const { format } = require('prettier/standalone')
 const typescript = require('prettier/parser-typescript')
-import ReactDOM from 'react-dom/server'
 import TestRenderer from 'react-test-renderer'
 import React from 'react'
 import PropTypes from 'prop-types'
-
-const unescape = require('./unescape')
 
 export interface TreeItem {
 	nodeType: 'component'
@@ -15,7 +12,9 @@ export interface TreeItem {
 	type: any
 }
 
-export function collectString(tree: string | TreeItem | (string | TreeItem)[]) {
+export type Tree = string | TreeItem | (string | TreeItem)[]
+
+export function collectString(tree: Tree) {
 	let res = ''
 	if (typeof tree === 'string') {
 		res += tree
@@ -54,15 +53,17 @@ export function ident(instance: any, name: string, component: React.ReactElement
 	}
 
 	if (!instance.replaces) {
-		instance.replaces = []
+		instance.replaces = {}
 	}
 
 	const length = name.length
-	let id = instance.context.ident.next().value.toString(36) as string
+	let id = ('$' + instance.context.ident.next().value.toString(36) + '$') as string
 
 	if (id.length < length) {
-		id = id.padEnd(id.length, '0')
+		id = id.padEnd(length, '$')
 	}
+
+	instance.replaces[id] = component
 
 	return id
 }
@@ -85,13 +86,45 @@ class ContextProvider extends React.Component {
 
 export function prettyRender(subtree: React.ReactElement<any>) {
 	const test = TestRenderer.create(<ContextProvider>{subtree}</ContextProvider>)
-	const tree = test.toTree()
+	const tree = (test.toTree() as any) as Tree
 
-	const formatted = format(collectString(tree as any), {
+	const formatted = format(collectString(tree), {
 		parser: 'typescript',
 		semi: false,
 		plugins: [typescript]
-	})
+	}) as string
 
-	return formatted
+	const replaces = {} as any
+
+	function walk(tree: Tree) {
+		if (Array.isArray(tree)) {
+			tree.forEach(item => {
+				if (typeof item !== 'string') {
+					Object.assign(replaces, item.instance.replaces)
+					walk(item.rendered)
+				}
+			})
+		} else if (typeof tree !== 'string') {
+			Object.assign(replaces, tree.instance.replaces)
+			walk(tree.rendered)
+		}
+	}
+
+	walk(tree)
+
+	let result = [] as any[]
+
+	let re = /[$][a-z0-9]+[$]+/g
+	let exec: RegExpExecArray | null
+	let lastIndex = 0
+
+	while ((exec = re.exec(formatted))) {
+		result.push(formatted.slice(lastIndex, exec.index))
+		lastIndex = re.lastIndex
+		result.push(replaces[exec[0]])
+	}
+
+	result.push(formatted.slice(lastIndex))
+
+	return result
 }

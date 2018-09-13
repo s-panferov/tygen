@@ -31,6 +31,12 @@
     "start": "concurrently -p name -n \"server-watch,client-watch,server\" --allow-restart --restart-tries=0 --restart-after=100 \"yarn run server-watch\" \"yarn run client-watch\" \"yarn run server-start\"",
     "build": "NODE_ENV=production yarn run server-build && NODE_ENV=production yarn run client-build"
   },
+  "browserslist": [
+    "last 2 Chrome versions"
+  ],
+  "engines": {
+    "node": ">8"
+  },
   "devDependencies": {
     "@types/classnames": "^2.2.6",
     "@types/fuzzaldrin-plus": "^0.6.0",
