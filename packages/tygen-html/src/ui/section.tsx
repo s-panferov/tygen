@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Foldable } from './foldable'
 
-import { css, names } from 'linaria'
+import { css, cx } from 'linaria'
 
 export interface SectionProps {
 	heading: React.ReactNode
@@ -9,7 +9,7 @@ export interface SectionProps {
 
 export class Section extends React.Component<SectionProps> {
 	static Grid = (props: React.HTMLAttributes<any>) => (
-		<div className={names(Grid, props.className)}>{props.children}</div>
+		<div className={cx(Grid, props.className)}>{props.children}</div>
 	)
 
 	render() {

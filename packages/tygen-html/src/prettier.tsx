@@ -1,8 +1,8 @@
-const { format } = require('prettier/standalone')
-const typescript = require('prettier/parser-typescript')
 import TestRenderer from 'react-test-renderer'
 import React from 'react'
 import PropTypes from 'prop-types'
+
+const { format } = require('prettier')
 
 export interface TreeItem {
 	nodeType: 'component'
@@ -33,7 +33,7 @@ export function collectString(tree: Tree) {
 	return res
 }
 
-function* hexid(min, base) {
+function* hexid(min: number, base: number) {
 	let high = base
 	let current = min
 	while (true) {
@@ -68,6 +68,21 @@ export function ident(instance: any, name: string, component: React.ReactElement
 	return id
 }
 
+export function keyword(
+	instance: any,
+	name: string,
+	regexp: RegExp,
+	component: React.ReactElement<any>
+) {
+	if (!instance.keywords) {
+		instance.keywords = {}
+	}
+
+	instance.keywords[name] = { regexp, component }
+
+	return name
+}
+
 export const PrettyContext = {
 	ident: PropTypes.object
 }
@@ -84,6 +99,58 @@ class ContextProvider extends React.Component {
 	}
 }
 
+export class PrettyText<P = {}> extends React.Component<P> {
+	static contextTypes = PrettyContext
+
+	keywords = {} as any
+
+	id(name: string, jsx: React.ReactElement<any>): string {
+		return ident(this, name, jsx)
+	}
+
+	registerKeyword(id: string, regexp: RegExp, component: React.ReactElement<any>) {
+		this.keywords[id] = { regexp, component }
+	}
+}
+
+function parseKeywords(result: string[], keywords: any) {
+	Object.keys(keywords).forEach(key => {
+		let keyword = keywords[key]
+
+		result = [].concat.apply(
+			[],
+			result.map(str => {
+				if (typeof str !== 'string') {
+					return [str]
+				}
+
+				let exec: RegExpExecArray | null
+				let lastIndex = 0
+
+				let re = keyword.regexp
+				re.lastIndex = 0
+
+				let strResult = [] as string[]
+
+				while ((exec = re.exec(str))) {
+					strResult.push(str.slice(lastIndex, exec.index))
+					lastIndex = re.lastIndex
+					const el = React.cloneElement(keyword.component)
+					strResult.push(el as any)
+				}
+
+				strResult.push(str.slice(lastIndex))
+
+				return strResult
+			})
+		)
+	})
+
+	return result
+}
+
+declare const prettierPlugins: any
+
 export function prettyRender(subtree: React.ReactElement<any>) {
 	const test = TestRenderer.create(<ContextProvider>{subtree}</ContextProvider>)
 	const tree = (test.toTree() as any) as Tree
@@ -91,21 +158,24 @@ export function prettyRender(subtree: React.ReactElement<any>) {
 	const formatted = format(collectString(tree), {
 		parser: 'typescript',
 		semi: false,
-		plugins: [typescript]
+		plugins: typeof prettierPlugins !== 'undefined' ? prettierPlugins : undefined
 	}) as string
 
 	const replaces = {} as any
+	const keywords = {} as any
 
 	function walk(tree: Tree) {
 		if (Array.isArray(tree)) {
 			tree.forEach(item => {
 				if (typeof item !== 'string') {
 					Object.assign(replaces, item.instance.replaces)
+					Object.assign(keywords, item.instance.keywords)
 					walk(item.rendered)
 				}
 			})
 		} else if (typeof tree !== 'string') {
 			Object.assign(replaces, tree.instance.replaces)
+			Object.assign(keywords, tree.instance.keywords)
 			walk(tree.rendered)
 		}
 	}
@@ -125,6 +195,16 @@ export function prettyRender(subtree: React.ReactElement<any>) {
 	}
 
 	result.push(formatted.slice(lastIndex))
+
+	result = parseKeywords(result, keywords)
+
+	result = result.map((item, i) => {
+		if (typeof item !== 'string' && item.key === null) {
+			return React.cloneElement(item, { key: '$' + i })
+		} else {
+			return item
+		}
+	})
 
 	return result
 }

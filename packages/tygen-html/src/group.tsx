@@ -11,8 +11,8 @@ export const SectionNames = {
 	[ReflectionKind.Function]: 'Functions',
 	[ReflectionKind.Variable]: 'Variables',
 	[ReflectionKind.Module]: 'Modules',
-	getName(group: string) {
-		return this[group] || group
+	getName(group: string): string {
+		return (this as any)[group] || group
 	}
 }
 

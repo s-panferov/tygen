@@ -1,5 +1,5 @@
 import { TypeReflectionBase, TypeKind } from '../reflection'
-import { ReflectionLink } from '@tygen/reflector'
+import { ReflectionLink } from '../../reflection'
 
 export interface ThisReflection extends TypeReflectionBase {
 	typeKind: TypeKind.This

@@ -5,6 +5,7 @@ import { parseMarkdown, Root } from './markdown-parser'
 
 import { gitHubTheme } from './github'
 
+import 'prismjs/themes/prism-coy.css'
 import './markdown.css'
 
 export type UrlGetter = (fileName: string) => Promise<string> | undefined

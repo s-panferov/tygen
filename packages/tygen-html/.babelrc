@@ -1,6 +1,6 @@
 {
-	"plugins": [
-		["linaria/build/babel/preval-extract"],
-		["linaria/build/babel/rewire-imports"]
-	]
+  "presets": [
+    ["linaria/babel", {}]
+  ],
+  "plugins": ["react-hot-loader/babel"]
 }

@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "composite": false,
     "module": "esnext",
+    "noEmit": true,
     "target": "esnext",
     "esModuleInterop": true,
     "jsx": "react",
@@ -10,9 +12,12 @@
       "@tygen/reflector/*": ["../tygen-reflector/*"]
     },
     "lib": [
-      "esnext"
+      "esnext", "dom"
     ]
   },
+  // "references": [{
+  //   "path": "../tygen-reflector"
+  // }],
   "include": [
     "src/**/*"
   ]

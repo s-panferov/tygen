@@ -1,9 +1,5 @@
 import * as React from 'react'
-import {
-	VariableReflection,
-	ParameterReflection,
-	ReflectionKind
-} from '@tygen/reflector/src/reflection'
+
 import { BaseView, withContext, ViewContext } from './view'
 import { TypeView } from './type'
 import { css } from 'linaria'
@@ -13,7 +9,13 @@ import { Layout } from './ui/layout'
 import { Badge } from './ui/badge'
 import { Breadcrumb } from './breadcrumb'
 import { CommentView } from './comment'
-import { prettyRender, PrettyContext, ident } from './prettier'
+import { prettyRender, PrettyText } from './prettier'
+
+import {
+	VariableReflection,
+	ParameterReflection,
+	ReflectionKind
+} from '@tygen/reflector/src/reflection'
 
 export class VariableView extends BaseView<VariableReflection | ParameterReflection> {
 	render() {
@@ -65,17 +67,21 @@ export class VariablePage extends BaseView<VariableReflection> {
 	}
 }
 
-export class VariableTest extends BaseView<VariableReflection> {
-	static contextTypes = PrettyContext
+export class VariableTest extends PrettyText<{ reflection: VariableReflection }> {
 	render() {
 		const reflection = this.props.reflection
+		this.registerKeyword('var', /var\s/g, <VarKeyword />)
 		return (
 			<React.Fragment>
-				var {ident(this, reflection.name, <VariableAnchor reflection={reflection} />)}:{' '}
+				var {this.id(reflection.name, <VariableAnchor key={1} reflection={reflection} />)}:{' '}
 				<GenericType />
 			</React.Fragment>
 		)
 	}
+}
+
+export function VarKeyword() {
+	return <span style={{ color: 'red' }}>var </span>
 }
 
 export class VariableAnchor extends React.Component<{ reflection: VariableReflection }> {
@@ -84,22 +90,25 @@ export class VariableAnchor extends React.Component<{ reflection: VariableReflec
 	}
 }
 
-export class GenericType extends React.Component {
-	static contextTypes = PrettyContext
-
+export class GenericType extends PrettyText {
 	render() {
 		return (
 			<React.Fragment>
-				{ident(this, 'Array', React.createElement(() => <a href="google.com">Array</a>))}
+				{this.id(
+					'Array',
+					React.createElement(() => <a href="google.com">Array</a>, { key: 2 })
+				)}
 				{'<'}
-				{ident(
-					this,
+				{this.id(
 					'VeryLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongName',
-					React.createElement(() => (
-						<a href="google.com">
-							VeryLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongName
-						</a>
-					))
+					React.createElement(
+						() => (
+							<a href="google.com">
+								VeryLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongName
+							</a>
+						),
+						{ key: 3 }
+					)
 				)}
 				{'>'}
 			</React.Fragment>
@@ -114,4 +123,5 @@ const VariableName = css`
 
 const VariableBody = css`
 	font-family: var(--monospace-font);
+	white-space: pre;
 `

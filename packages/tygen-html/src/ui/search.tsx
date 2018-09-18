@@ -1,5 +1,5 @@
 import React from 'react'
-import { css, names } from 'linaria'
+import { css, cx } from 'linaria'
 import * as fuzz from 'fuzzaldrin-plus'
 import { parseId, normalizePath } from '../helpers'
 import { Badge } from './badge'
@@ -200,7 +200,7 @@ class SearchItem extends React.Component<{ id: string; focus: boolean }> {
 		const id = parseId(this.props.id)
 		return (
 			<RefLink reflection={{ id: this.props.id } as any}>
-				<div className={names(SearchItemBody, cn({ focus }))}>
+				<div className={cx(SearchItemBody, cn({ focus }))}>
 					{id.pkg}
 					&nbsp;
 					<Badge>{id.version}</Badge>
@@ -215,7 +215,7 @@ class SearchItem extends React.Component<{ id: string; focus: boolean }> {
 							{id.module.map((mod, i, list) => {
 								return (
 									<div
-										className={names(
+										className={cx(
 											SearchItemPart,
 											cn({
 												main: !id.items && i === list.length - 1
@@ -240,7 +240,7 @@ class SearchItem extends React.Component<{ id: string; focus: boolean }> {
 								return (
 									<div
 										key={'item' + i}
-										className={names(
+										className={cx(
 											SearchItemPart,
 											cn({ main: i === list.length - 1 })
 										)}>

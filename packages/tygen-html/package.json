@@ -18,24 +18,18 @@
   "bin": {
     "tygen-html": "./bin/tygen-html.js"
   },
-  "alias": {
-    "@tygen/reflector": "../tygen-reflector",
-    "@tygen/html": "../tygen-html"
-  },
   "scripts": {
-    "server-start": "nodemon --exec \"node -r module-alias/register -r source-map-support/register dist/server.js\"",
-    "server-watch": "parcel watch --target=node --no-hmr --no-autoinstall --public-url '/-/assets/' src/server.ts",
-    "client-watch": "parcel watch --no-hmr --no-autoinstall src/index.tsx --public-url '/-/assets/'",
-    "server-build": "parcel build --detailed-report --target=node --public-url '/-/assets/' src/server.ts",
-    "client-build": "parcel build --detailed-report src/index.tsx --public-url '/-/assets/'",
+    "server-start": "nodemon --exec \"node -r module-alias/register -r source-map-support/register dist/server.js --server\"",
+    "server-watch": "webpack --watch --config webpack.server.js",
+    "client-watch": "webpack-dev-server --hot --config webpack.client.js",
     "start": "concurrently -p name -n \"server-watch,client-watch,server\" --allow-restart --restart-tries=0 --restart-after=100 \"yarn run server-watch\" \"yarn run client-watch\" \"yarn run server-start\"",
-    "build": "NODE_ENV=production yarn run server-build && NODE_ENV=production yarn run client-build"
+    "build": "webpack --config webpack.common.js"
   },
   "browserslist": [
     "last 2 Chrome versions"
   ],
   "engines": {
-    "node": ">8"
+    "node": ">= 8.10"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.6",
@@ -48,12 +42,14 @@
     "concurrently": "^4.0.1",
     "nodemon": "^1.18.4",
     "parcel-bundler": "^1.9.7",
-    "source-map-support": "^0.5.9"
+    "source-map-support": "^0.5.9",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.8",
+    "react-hot-loader": "^4.3.8"
   },
   "dependencies": {
     "classnames": "^2.2.6",
     "fuzzaldrin-plus": "^0.6.0",
-    "linaria": "^0.5.0",
     "micro": "^9.3.3",
     "mime-types": "^2.1.20",
     "minimist": "^1.2.0",
@@ -61,6 +57,8 @@
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "remark-parse": "^5.0.0",
+    "url-loader": "^1.1.1",
+    "hard-source-webpack-plugin": "^0.12.0",
     "react-test-renderer": "^16.5.0",
     "unified": "^7.0.0",
     "react-syntax-highlighter": "^8.0.1"

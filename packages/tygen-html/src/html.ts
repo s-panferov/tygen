@@ -1,5 +1,4 @@
 import React from 'react'
-import { css } from 'linaria'
 import path from 'path'
 import { renderToString } from 'react-dom/server'
 
@@ -8,48 +7,7 @@ import { PageView } from './render'
 import { ReactConverterSettings, normalizeSettings } from './settings'
 import { hrefFromId } from './ref-link'
 import { ViewSettings } from './view'
-
-const Body = css`
-	--default-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
-		'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-
-	--monospace-font: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-	--items-space: 26px;
-
-	font-family: var(--default-font);
-
-	font-size: 14px;
-	color: #222;
-
-	h1 {
-		padding-bottom: 5px;
-	}
-
-	h2 {
-		padding-bottom: 5px;
-	}
-
-	a {
-		text-decoration: none;
-		color: #5352ed;
-
-		&:hover {
-			text-decoration: underline;
-		}
-	}
-
-	a.phantom {
-		border-bottom: 1px dashed #ccc;
-	}
-
-	a:visited {
-		color: #5352ed;
-	}
-
-	* {
-		box-sizing: border-box;
-	}
-`
+import { BodyStyle } from './body'
 
 export function renderHTML(
 	ref: Reflection,
@@ -72,6 +30,14 @@ export function renderHTML(
 	return `
 		<html>
 			<head>
+				<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js" defer></script>
+				<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" defer></script>
+				<script crossorigin src="https://unpkg.com/prettier@1.14.2/standalone.js" defer></script>
+				<script crossorigin src="https://unpkg.com/prettier@1.14.2/parser-typescript.js" defer></script>
+				<script type="text/javascript" src="${path.relative(
+					normalizedSettings.path,
+					'/-/assets/index.js'
+				)}" defer></script>
 				<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css"/>
 				<link rel="stylesheet" type="text/css" href="${path.relative(
 					normalizedSettings.path,
@@ -91,12 +57,8 @@ export function renderHTML(
 					window.__ref = ${JSON.stringify(ref)}
 				</script>
 			</head>
-			<body class="${Body}">
+			<body class="${BodyStyle}">
 				<div id='react-app'>${html}</div>
-				<script type="text/javascript" src="${path.relative(
-					normalizedSettings.path,
-					'/-/assets/index.js'
-				)}" defer async></script>
 			</body>
 		</html>
 	`

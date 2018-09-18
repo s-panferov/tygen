@@ -1,5 +1,5 @@
 import React from 'react'
-import { css, names } from 'linaria'
+import { css, cx } from 'linaria'
 import cn from 'classnames'
 
 export interface LayoutProps {
@@ -10,7 +10,7 @@ export class Layout extends React.Component<LayoutProps> {
 	render() {
 		return (
 			<div
-				className={names(
+				className={cx(
 					LayoutBlock,
 					cn({
 						wide: !!this.props.sidebar

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { PropertyReflection, ReflectionLink } from '@tygen/reflector/src/reflection'
 import { BaseView, withContext } from './view'
-import { css, names } from 'linaria'
+import { css, cx } from 'linaria'
 import { TypeView } from './type'
 import { CommentView } from './comment'
 import { NavItem } from './ui/nav'
@@ -24,7 +24,7 @@ export class PropertyView extends BaseView<PropertyReflection, { parentId?: stri
 
 		return (
 			<div
-				className={names(PropertyBody, compact && 'compact')}
+				className={cx(PropertyBody, compact && 'compact')}
 				id={documentIdFromId(reflection.id!)}>
 				<span className={PropertyDef}>
 					{!compact && <Badge outline>prop</Badge>}

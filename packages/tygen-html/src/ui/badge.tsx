@@ -1,5 +1,5 @@
 import React from 'react'
-import { css, names } from 'linaria'
+import { css, cx } from 'linaria'
 import cn from 'classnames'
 
 export interface BadgeProps {
@@ -9,7 +9,7 @@ export interface BadgeProps {
 export class Badge extends React.Component<BadgeProps> {
 	render() {
 		const { outline } = this.props
-		return <span className={names(BadgeBlock, cn({ outline }))}>{this.props.children}</span>
+		return <span className={cx(BadgeBlock, cn({ outline }))}>{this.props.children}</span>
 	}
 }
 

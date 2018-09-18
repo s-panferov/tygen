@@ -105,7 +105,7 @@ export function createObject<T, R>(
 	arr: ReadonlyArray<T>,
 	key: (item: T) => [string, R]
 ): { [key: string]: R } {
-	const obj = {}
+	const obj = {} as any
 	arr.forEach(item => {
 		const [k, v] = key(item)
 		obj[k] = v

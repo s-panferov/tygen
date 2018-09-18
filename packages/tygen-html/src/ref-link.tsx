@@ -2,7 +2,7 @@ import * as React from 'react'
 import cn from 'classnames'
 
 import { Reflection, ReflectionKind } from '@tygen/reflector/src/reflection'
-import { css, names } from 'linaria'
+import { css, cx } from 'linaria'
 import { BaseView, withContext, ViewSettings } from './view'
 import { parseId, normalizePath } from './helpers'
 import { TypeView } from './type'
@@ -34,7 +34,7 @@ export function hrefFromId(id: string, relativeId?: string) {
 
 			itemsPart =
 				item.name +
-				(itemsPart.length > 0 && itemsPart['0'] !== '#' ? '/' + itemsPart : itemsPart)
+				(itemsPart.length > 0 && itemsPart[0] !== '#' ? '/' + itemsPart : itemsPart)
 		}
 
 		href += '/' + itemsPart
@@ -58,7 +58,7 @@ export function documentIdFromId(id: string): string | undefined {
 
 			itemsPart =
 				item.name +
-				(itemsPart.length > 0 && itemsPart['0'] !== '#' ? '/' + itemsPart : itemsPart)
+				(itemsPart.length > 0 && itemsPart[0] !== '#' ? '/' + itemsPart : itemsPart)
 		}
 	}
 }
@@ -102,13 +102,13 @@ export class RefLink extends BaseView<
 		const relativeHref = normalizePath(settings!, href)
 
 		return (
-			<a className={names(RefLinkBody, cn({ phantom }))} href={relativeHref}>
+			<a className={cx(RefLinkBody, cn({ phantom }))} href={relativeHref}>
 				{this.props.children ||
 					linkNames.map((name, i) => {
 						return (
 							<span
 								key={name}
-								className={names(
+								className={cx(
 									Name,
 									cn({ main: !isPath || i === linkNames.length - 1 })
 								)}>

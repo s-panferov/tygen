@@ -7,7 +7,7 @@ import {
 } from '@tygen/reflector/src/reflection/_type/intersection/reflection'
 import { TypeView } from '../type'
 import { TypeKind } from '@tygen/reflector/src/reflection/_type/reflection'
-import { css, names } from 'linaria'
+import { css, cx } from 'linaria'
 import cn from 'classnames'
 
 export class IntersectionTypeView extends BaseView<
@@ -18,7 +18,7 @@ export class IntersectionTypeView extends BaseView<
 		const sep = reflection.typeKind === TypeKind.Intersection ? '&' : '|'
 		const long = reflection.types.length > 3
 		return (
-			<span className={names(IntersectionBody, cn({ long }))}>
+			<span className={cx(IntersectionBody, cn({ long }))}>
 				{reflection.types.map((type, i) => {
 					return (
 						<span key={type.id || `${type}-${i}`}>

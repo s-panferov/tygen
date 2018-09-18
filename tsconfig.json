@@ -1,16 +1,16 @@
 {
   "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "lib",
-    "module": "commonjs",
-    "baseUrl": ".",
-    "paths": {
-      "@tygen/reflector/*": ["./packages/tygen-reflector/*"],
-      "@tygen/reflector": ["./packages/tygen-reflector"]
-    }
-  },
-  //comment
   "include": [
-    "packages/*/src/**/*"
-  ]
+    "packages/*/src/**/*.ts"
+  ],
+  "compilerOptions": {
+    "outDir": "lib"
+  },
+  // "references": [{
+  //     "path": "./packages/tygen-reflector"
+  //   },
+  //   {
+  //     "path": "./packages/tygen-html"
+  //   }
+  // ]
 }

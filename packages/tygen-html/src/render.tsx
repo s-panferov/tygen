@@ -48,7 +48,9 @@ export function renderPage(ref: Reflection): React.ReactElement<any> {
 	return <div>Unknown {ref.kind}</div>
 }
 
-export class PageView extends BaseView<Reflection, { settings: ReactConverterSettings }> {
+const { hot } = require('react-hot-loader')
+
+class PageView_ extends BaseView<Reflection, { settings: ReactConverterSettings }> {
 	render() {
 		return (
 			<ViewContext.Provider value={this.props.settings}>
@@ -57,6 +59,8 @@ export class PageView extends BaseView<Reflection, { settings: ReactConverterSet
 		)
 	}
 }
+
+export const PageView = hot(module)(PageView_)
 
 export class ReflectionView extends BaseView<Reflection, { parentId?: string }> {
 	render() {

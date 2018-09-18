@@ -1,6 +1,9 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
+import { Converter, Reflection, ReflectionWalker } from '@tygen/reflector'
+import { ReactConverterSettings } from './settings'
+
 const micro = require('micro')
 const mime = require('mime-types')
 
@@ -20,38 +23,79 @@ const ASSETS = '/-/assets/'
 
 const argv = minimist(process.argv.slice(2)) as any
 
-const server = micro((req: IncomingMessage, res: ServerResponse) => {
-	let url = req.url
+console.log('!!!!!!!!!!!!!!!!!!!!!!!!!', argv)
 
-	if (!url) {
-		return
-	}
+if (argv.server) {
+	const server = micro((req: IncomingMessage, res: ServerResponse) => {
+		let url = req.url
 
-	url = decodeURIComponent(url)
-
-	if (url.startsWith('/favicon.ico')) {
-		url = favicon
-	}
-
-	if (url.startsWith(ASSETS)) {
-		const filePath = path.join(__dirname, url.slice(ASSETS.length))
-		res.setHeader('Content-Type', mime.contentType(path.extname(filePath)))
-		return fs.readFileSync(filePath)
-	}
-
-	const urlPath = path.join(baseFolder, url)
-
-	if (fs.existsSync(urlPath) && fs.statSync(urlPath).isFile()) {
-		return fs.readFileSync(urlPath)
-	} else {
-		let indexPath = path.join(baseFolder, url, 'index.json')
-		if (fs.existsSync(indexPath)) {
-			let content = fs.readFileSync(indexPath).toString()
-			return renderHTML(JSON.parse(content), url, argv)
-		} else {
-			throw new Error(`File not found: ${url}`)
+		if (!url) {
+			return
 		}
-	}
-})
 
-server.listen(3000)
+		url = decodeURIComponent(url)
+
+		if (url.startsWith('/favicon.ico')) {
+			url = favicon
+		}
+
+		if (url.startsWith(ASSETS)) {
+			const filePath = path.join(__dirname, url.slice(ASSETS.length))
+			res.setHeader('Content-Type', mime.contentType(path.extname(filePath)))
+			return fs.readFileSync(filePath)
+		}
+
+		const urlPath = path.join(baseFolder, url)
+
+		if (fs.existsSync(urlPath) && fs.statSync(urlPath).isFile()) {
+			return fs.readFileSync(urlPath)
+		} else {
+			let indexPath = path.join(baseFolder, url, 'index.json')
+			if (fs.existsSync(indexPath)) {
+				let content = fs.readFileSync(indexPath).toString()
+				return renderHTML(JSON.parse(content), url, argv)
+			} else {
+				throw new Error(`File not found: ${url}`)
+			}
+		}
+	})
+
+	server.listen(3000)
+}
+
+export class ReactConverter implements Converter {
+	options: ReactConverterSettings
+
+	constructor(options: ReactConverterSettings) {
+		this.options = options
+	}
+
+	visitReflection(ref: Reflection, fileName: string, _visitor: ReflectionWalker) {
+		const fileNameWithoutExt = path.basename(fileName, path.extname(fileName))
+		return [
+			{
+				content: renderHTML(ref, fileName, Object.assign({ static: true }, this.options)),
+				name: `${fileNameWithoutExt}.html`
+			}
+		]
+	}
+
+	emitRuntime(outDir: string, extra: { fs: typeof fs; main: string }) {
+		const runtimeDir = path.dirname(extra.main)
+		const metaDir = path.join(outDir, '-')
+		const assetsDir = path.join(metaDir, 'assets')
+
+		try {
+			extra.fs.mkdirSync(metaDir)
+			extra.fs.mkdirSync(assetsDir)
+		} catch (e) {}
+
+		extra.fs.readdirSync(runtimeDir).forEach(item => {
+			extra.fs.copyFileSync(path.join(runtimeDir, item), path.join(assetsDir, item))
+		})
+
+		return undefined
+	}
+}
+
+export default (argv: any) => new ReactConverter(argv)
