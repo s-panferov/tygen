@@ -14,8 +14,8 @@ Big goals:
 
 You can use `npm` or `yarn` to install `tygen`. This project consists of several different packages with different purposes:
 
-*   Package `@tygen/reflector` contains code to reflect TypeScript internal program representation into a set of JSON reflections.
-*   Package `@tygen/html` helps to pre-render JSON reflections into a static HTML or serve them as a web-server. This package written as a modern frontend application in ReactJS and server-side rendering.
+-   Package `@tygen/reflector` contains code to reflect TypeScript internal program representation into a set of JSON reflections.
+-   Package `@tygen/html` helps to pre-render JSON reflections into a static HTML or serve them as a web-server. This package written as a modern frontend application in ReactJS and server-side rendering.
 
 ```
 yarn add --dev @tygen/reflector @tygen/html

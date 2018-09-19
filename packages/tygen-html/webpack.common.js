@@ -1,5 +1,5 @@
 const TerserPlugin = require('terser-webpack-plugin')
-const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const MiniCssExtractPlugin = require("extract-css-chunks-webpack-plugin")
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 const DEVELOPMENT = process.env.NODE_ENV !== 'production'
 
@@ -48,6 +48,10 @@ function buildConfig() {
 					use: [{
 						loader: 'file-loader',
 					}]
+				},
+				{
+					test: /\.css$/,
+					use: [MiniCssExtractPlugin.loader, 'css-loader']
 				}
 			]
 		},
@@ -55,8 +59,10 @@ function buildConfig() {
 			minimizer: [new TerserPlugin()]
 		},
 		plugins: [
-			new MiniCssExtractPlugin(),
-			new HardSourceWebpackPlugin()
+			new MiniCssExtractPlugin({
+				hot: DEVELOPMENT
+			}),
+			new HardSourceWebpackPlugin(),
 		]
 	}
 }

@@ -1,8 +1,6 @@
 const {
 	buildConfig,
-	stats,
-	DEVELOPMENT,
-	MiniCssExtractPlugin
+	stats
 } = require('./webpack.common')
 
 const config = buildConfig()
@@ -29,11 +27,6 @@ const finalConfig = Object.assign({}, config, {
 			'**': 'http://localhost:3000'
 		}
 	},
-})
-
-finalConfig.module.rules.push({
-	test: /\.css$/,
-	use: [DEVELOPMENT ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader']
 })
 
 module.exports = finalConfig

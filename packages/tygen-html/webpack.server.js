@@ -1,5 +1,6 @@
 const nodeExternals = require('webpack-node-externals');
 const path = require('path');
+const webpack = require('webpack');
 
 const {
 	buildConfig,
@@ -11,9 +12,12 @@ const whitelist = [/@tygen/, 'webpack/hot/dev-server', /\.css$/]
 
 const finalConfig = Object.assign({}, config, {
 	entry: {
-		server: './src/server.ts'
+		cli: './src/cli.ts'
 	},
 	target: 'node',
+	node: {
+		__dirname: false
+	},
 	externals: [
 		nodeExternals({
 			whitelist
@@ -25,9 +29,9 @@ const finalConfig = Object.assign({}, config, {
 	]
 })
 
-finalConfig.module.rules.push({
-	test: /\.css$/,
-	use: [MiniCssExtractPlugin.loader, 'css-loader']
-})
+finalConfig.plugins.push(new webpack.optimize.LimitChunkCountPlugin({
+	maxChunks: 1
+}))
+
 
 module.exports = finalConfig
