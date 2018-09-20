@@ -1,11 +1,11 @@
 import * as React from 'react'
 
-import { withContext, BaseView } from './view'
+import { withSettings, BaseView } from './view'
 import { ReflectionWithExports } from '@tygen/reflector/src/reflection'
 import { GroupView } from './group'
 import { Nav } from './ui/nav'
 
-@withContext
+@withSettings
 export class ExportsView extends BaseView<ReflectionWithExports> {
 	render() {
 		const { reflection, settings } = this.props

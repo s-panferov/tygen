@@ -37,5 +37,5 @@ const SectionContent = css`
 `
 
 const SectionBody = css`
-	margin-top: var(--items-space);
+	/* margin-top: var(--items-space); */
 `

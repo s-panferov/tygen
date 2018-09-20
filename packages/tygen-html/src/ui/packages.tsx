@@ -1,6 +1,6 @@
 import React from 'react'
 import path from 'path'
-import { withContext, ViewSettings } from '../view'
+import { withSettings, ViewSettings } from '../view'
 import { css } from 'linaria'
 import { NotScrollable } from './search'
 import { hrefFromId } from '../ref-link'
@@ -12,7 +12,7 @@ export interface InventoryProviderState {
 	inventory?: InventoryReflection
 }
 
-@withContext
+@withSettings
 export class InventoryProvider extends React.Component<
 	{
 		settings?: ViewSettings
@@ -82,7 +82,7 @@ export class PackagesNav extends React.Component<
 	}
 }
 
-@withContext
+@withSettings
 export class PackageList extends React.Component<{
 	inventory: InventoryReflection
 	settings?: ViewSettings

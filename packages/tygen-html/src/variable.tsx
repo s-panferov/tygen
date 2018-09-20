@@ -1,7 +1,7 @@
 import * as React from 'react'
 
-import { BaseView, withContext, ViewContext } from './view'
-import { TypeView } from './type'
+import { BaseView, withSettings, ViewContext } from './view'
+import { TypePre } from './pre/type'
 import { css } from 'linaria'
 import { parseId } from './helpers'
 import { Toolbar } from './ui/toolbar'
@@ -9,7 +9,7 @@ import { Layout } from './ui/layout'
 import { Badge } from './ui/badge'
 import { Breadcrumb } from './breadcrumb'
 import { CommentView } from './comment'
-import { prettyRender, PrettyText } from './prettier'
+import { prettyRender, PrettyCode } from './pre/prettier'
 
 import {
 	VariableReflection,
@@ -27,7 +27,7 @@ export class VariableView extends BaseView<VariableReflection | ParameterReflect
 				<span className={ParameterName}>{reflection.name}</span>
 				{reflection.kind === ReflectionKind.Parameter && reflection.optional
 					? '?'
-					: ''}: {<TypeView reflection={reflection.type} />}
+					: ''}: {<TypePre reflection={reflection.type} />}
 			</span>
 		)
 	}
@@ -37,7 +37,7 @@ const ParameterName = css`
 	color: #40739e;
 `
 
-@withContext
+@withSettings
 export class VariablePage extends BaseView<VariableReflection> {
 	render() {
 		const { reflection, settings } = this.props
@@ -56,8 +56,8 @@ export class VariablePage extends BaseView<VariableReflection> {
 						{reflection.name} <Badge>Var</Badge>
 					</h1>
 					<Breadcrumb reflection={reflection} />
-					<span className={VariableBody}>
-						{prettyRender(<VariableTest reflection={reflection} />)}
+					<span className={BodyStyle}>
+						{prettyRender(<VariablePre reflection={reflection} />)}
 					</span>
 					<CommentView reflection={reflection} />
 					{sections}
@@ -67,61 +67,40 @@ export class VariablePage extends BaseView<VariableReflection> {
 	}
 }
 
-export class VariableTest extends PrettyText<{ reflection: VariableReflection }> {
+export class VariablePre extends PrettyCode<{ reflection: VariableReflection }> {
 	render() {
 		const reflection = this.props.reflection
 		this.registerKeyword('var', /var\s/g, <VarKeyword />)
 		return (
 			<React.Fragment>
-				var {this.id(reflection.name, <VariableAnchor key={1} reflection={reflection} />)}:{' '}
-				<GenericType />
+				let{' '}
+				{this.id(reflection.name, <VariableName key={'name'} reflection={reflection} />)}
 			</React.Fragment>
+		)
+	}
+}
+
+export class VariableName extends React.Component<{ reflection: VariableReflection }> {
+	render() {
+		const { reflection } = this.props
+		return (
+			<a className={NameStyle} href="#">
+				{reflection.name}
+			</a>
 		)
 	}
 }
 
 export function VarKeyword() {
-	return <span style={{ color: 'red' }}>var </span>
+	return <span style={{ color: '#444' }}>var </span>
 }
 
-export class VariableAnchor extends React.Component<{ reflection: VariableReflection }> {
-	render() {
-		return <a href="http://google.com">{this.props.reflection.name}</a>
-	}
-}
-
-export class GenericType extends PrettyText {
-	render() {
-		return (
-			<React.Fragment>
-				{this.id(
-					'Array',
-					React.createElement(() => <a href="google.com">Array</a>, { key: 2 })
-				)}
-				{'<'}
-				{this.id(
-					'VeryLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongName',
-					React.createElement(
-						() => (
-							<a href="google.com">
-								VeryLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongName
-							</a>
-						),
-						{ key: 3 }
-					)
-				)}
-				{'>'}
-			</React.Fragment>
-		)
-	}
-}
-
-const VariableName = css`
+const NameStyle = css`
 	color: #2e86de;
 	font-weight: bold;
 `
 
-const VariableBody = css`
+const BodyStyle = css`
 	font-family: var(--monospace-font);
 	white-space: pre;
 `

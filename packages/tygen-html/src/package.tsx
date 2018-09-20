@@ -9,6 +9,7 @@ import { Section } from './ui/section'
 import { BaseView } from './view'
 import { renderStructure } from './folder'
 import { Breadcrumb } from './breadcrumb'
+import { css } from 'linaria'
 
 export class PackagePage extends BaseView<PackageReflection> {
 	render() {
@@ -18,13 +19,16 @@ export class PackagePage extends BaseView<PackageReflection> {
 		const structure = renderStructure(reflection)
 
 		return (
-			<div>
+			<div className={BodyStyle}>
 				<Toolbar pkg={ident.pkg} version={ident.version} />
-				<Layout sidebar={[structure]}>
-					<h1>
-						{reflection.manifest.name} <Badge>Package</Badge>
-					</h1>
-					<Breadcrumb reflection={reflection} />
+				<Layout
+					sidebar={[structure]}
+					header={
+						<h1>
+							{reflection.manifest.name} <Badge>Package</Badge>
+						</h1>
+					}
+					breadcrumb={<Breadcrumb reflection={reflection} />}>
 					<Section heading="README">
 						<Markdown source={reflection.readme || 'The package has no README'} />
 					</Section>
@@ -33,3 +37,9 @@ export class PackagePage extends BaseView<PackageReflection> {
 		)
 	}
 }
+
+const BodyStyle = css`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`

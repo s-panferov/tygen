@@ -7,7 +7,7 @@ import cn from 'classnames'
 import { Join } from './join'
 import { RefLink, navigateTo } from '../ref-link'
 import { SearchReflection } from '../../../tygen-reflector/src/reflection/search/reflection'
-import { BaseView, withContext, ViewSettings } from '../view'
+import { BaseView, withSettings, ViewSettings } from '../view'
 import { Toolbar } from './toolbar'
 
 export interface SearchState {
@@ -25,7 +25,7 @@ export class SearchPage extends BaseView<SearchReflection> {
 	}
 }
 
-@withContext
+@withSettings
 export class Search extends React.Component<
 	{ pkg?: string; version?: string; reflection?: SearchReflection; settings?: ViewSettings },
 	SearchState

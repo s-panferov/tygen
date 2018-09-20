@@ -3,8 +3,6 @@ declare module 'node-uuid' {
 	export function v4(): string
 }
 
-declare let DEBUG: boolean
-
 declare module 'roarr' {
 	interface LoggingFunction {
 		(context: object, message: string, ...params: any[]): void

@@ -4,15 +4,15 @@ import { Toolbar } from './ui/toolbar'
 import { parseId } from './helpers'
 import { Layout } from './ui/layout'
 import { Badge } from './ui/badge'
-import { BaseView, withContext, ViewContext } from './view'
+import { BaseView, withSettings, ViewContext } from './view'
 import { CommentView } from './comment'
 import { Breadcrumb } from './breadcrumb'
-import { TypeArguments } from './type-parameters'
-import { TypeView } from './type'
+import { TypeArgumentsPre } from './type-parameters'
+import { TypePre } from './pre/type'
 import { css } from 'linaria'
 import { ExportsView } from './exports'
 
-@withContext
+@withSettings
 export class TypeAliasPage extends BaseView<TypeAliasReflection> {
 	render() {
 		const { reflection, settings } = this.props
@@ -39,7 +39,7 @@ export class TypeAliasPage extends BaseView<TypeAliasReflection> {
 					<h1>
 						{reflection.name}
 						{reflection.typeParameters && (
-							<TypeArguments types={reflection.typeParameters} />
+							<TypeArgumentsPre types={reflection.typeParameters} />
 						)}{' '}
 						<Badge>TypeAlias</Badge>
 					</h1>
@@ -47,9 +47,9 @@ export class TypeAliasPage extends BaseView<TypeAliasReflection> {
 					<span className={TypeAliasBody}>
 						<span className={TypeAliasName}>{reflection.name}</span>
 						{reflection.typeParameters && (
-							<TypeArguments types={reflection.typeParameters} />
+							<TypeArgumentsPre types={reflection.typeParameters} />
 						)}{' '}
-						= <TypeView reflection={reflection.type} />
+						= <TypePre reflection={reflection.type} />
 					</span>
 					<CommentView reflection={reflection} />
 					{sections}

@@ -2,15 +2,15 @@ import * as React from 'react'
 import { css } from 'linaria'
 
 import { SignatureReflection } from '../../tygen-reflector/src/reflection/signature/reflection'
-import { TypeArguments } from './type-parameters'
-import { TypeView } from './type'
+import { TypeArgumentsPre } from './type-parameters'
+import { TypePre } from './pre/type'
 import { ReflectionView } from './render'
-import { BaseView, withContext } from './view'
+import { BaseView, withSettings } from './view'
 import { CommentView } from './comment'
 import { Badge } from './ui/badge'
 import { DefinedIn } from './property'
 
-@withContext
+@withSettings
 export class SignatureView extends BaseView<SignatureReflection, { parentId?: string }> {
 	render() {
 		const { reflection, settings, parentId } = this.props
@@ -29,7 +29,7 @@ export class SignatureView extends BaseView<SignatureReflection, { parentId?: st
 							</b>
 						</span>
 						{reflection.typeParameters && (
-							<TypeArguments types={reflection.typeParameters} />
+							<TypeArgumentsPre types={reflection.typeParameters} />
 						)}
 						<span className={SignatureBrace}>(</span>
 					</span>
@@ -46,7 +46,7 @@ export class SignatureView extends BaseView<SignatureReflection, { parentId?: st
 							</div>
 						)}
 					<span className={SignatureBrace}>): </span>
-					<TypeView reflection={reflection.returnType} />
+					<TypePre reflection={reflection.returnType} />
 				</span>
 				<DefinedIn origin={reflection.origin} parentId={parentId} />
 				<div className={SignatureComment}>

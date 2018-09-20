@@ -3,7 +3,7 @@ import { Toolbar } from './ui/toolbar'
 import { parseId } from './helpers'
 import { Layout } from './ui/layout'
 import { Badge } from './ui/badge'
-import { BaseView, withContext, ViewContext } from './view'
+import { BaseView, withSettings, ViewContext } from './view'
 import { Nav } from './ui/nav'
 import { Breadcrumb } from './breadcrumb'
 import { ExportsView } from './exports'
@@ -15,7 +15,7 @@ import {
 	AmbientFileReflection
 } from '@tygen/reflector/src/reflection'
 
-@withContext
+@withSettings
 export class ModulePage extends BaseView<
 	ESModuleReflection | ModuleReflection | NamespaceReflection | AmbientFileReflection
 > {

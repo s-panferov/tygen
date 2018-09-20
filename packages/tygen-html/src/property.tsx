@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { PropertyReflection, ReflectionLink } from '@tygen/reflector/src/reflection'
-import { BaseView, withContext } from './view'
+import { BaseView, withSettings } from './view'
 import { css, cx } from 'linaria'
-import { TypeView } from './type'
+import { TypePre } from './pre/type'
 import { CommentView } from './comment'
 import { NavItem } from './ui/nav'
 import { documentIdFromId, RefLink } from './ref-link'
 import { Badge } from './ui/badge'
 
-@withContext
+@withSettings
 export class PropertyView extends BaseView<PropertyReflection, { parentId?: string }> {
 	render() {
 		const { reflection, settings, parentId } = this.props
@@ -29,7 +29,7 @@ export class PropertyView extends BaseView<PropertyReflection, { parentId?: stri
 				<span className={PropertyDef}>
 					{!compact && <Badge outline>prop</Badge>}
 					<span className={PropertyName}>{reflection.name}</span>:{' '}
-					{<TypeView reflection={reflection.type} />}
+					{<TypePre reflection={reflection.type} />}
 				</span>
 				<DefinedIn origin={reflection.origin} parentId={parentId} />
 				<CommentView reflection={reflection} />

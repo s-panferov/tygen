@@ -99,10 +99,10 @@ class ContextProvider extends React.Component {
 	}
 }
 
-export class PrettyText<P = {}> extends React.Component<P> {
+export class PrettyCode<P = {}> extends React.Component<P> {
 	static contextTypes = PrettyContext
 
-	keywords = {} as any
+	keywords: { [key: string]: { regexp: RegExp; component: React.ReactElement<any> } } = {}
 
 	id(name: string, jsx: React.ReactElement<any>): string {
 		return ident(this, name, jsx)

@@ -1,21 +1,16 @@
 import * as React from 'react'
-import { css } from 'linaria'
 
-import { BaseView } from '../view'
+import { BaseView } from '../../view'
 import { ThisReflection } from '@tygen/reflector/src/reflection/_type/this/reflection'
-import { RefLink } from '../ref-link'
+import { RefLink } from '../../ref-link'
 
 export class ThisView extends BaseView<ThisReflection> {
 	render() {
 		const { reflection } = this.props
 		return (
-			<span className={ThisBody}>
+			<React.Fragment>
 				{reflection.base ? <RefLink name={'this'} reflection={reflection.base} /> : 'this'}
-			</span>
+			</React.Fragment>
 		)
 	}
 }
-
-const ThisBody = css`
-	font-family: var(--monospace-font);
-`

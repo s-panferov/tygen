@@ -13,6 +13,8 @@ export const BodyStyle = css`
 	color: #222;
 
 	h1 {
+		margin-top: 0px;
+		margin-bottom: 0px;
 		padding-bottom: 5px;
 	}
 

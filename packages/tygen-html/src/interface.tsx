@@ -8,18 +8,18 @@ import { Toolbar } from './ui/toolbar'
 import { parseId } from './helpers'
 import { Layout } from './ui/layout'
 import { Badge } from './ui/badge'
-import { BaseView, withContext, ViewContext } from './view'
+import { BaseView, withSettings, ViewContext } from './view'
 import { CommentView } from './comment'
 import { Breadcrumb } from './breadcrumb'
-import { TypeArguments } from './type-parameters'
+import { TypeArgumentsPre } from './type-parameters'
 import { Nav } from './ui/nav'
-import { PropertiesView } from './properties'
-import { SignaturesView } from './signatures'
-import { IndexSignaturesView } from './index-signatures'
+import { PropertiesViewPre } from './properties'
+import { SignaturesPre } from './signatures'
+import { IndexSignaturesPre } from './pre/index-signatures'
 import { ExportsView } from './exports'
 import { BaseTypes } from './base-types'
 
-@withContext
+@withSettings
 export class InterfacePage extends BaseView<InterfaceReflection | ClassReflection> {
 	render() {
 		const { reflection, settings } = this.props
@@ -28,10 +28,10 @@ export class InterfacePage extends BaseView<InterfaceReflection | ClassReflectio
 		const ident = parseId(reflection.id!)
 		const sections = [] as React.ReactNode[]
 
-		sections.push(<IndexSignaturesView key="index" reflection={reflection} />)
+		sections.push(<IndexSignaturesPre key="index" reflection={reflection} />)
 
 		sections.push(
-			<SignaturesView
+			<SignaturesPre
 				key="construct"
 				signatures={reflection.constructSignatures}
 				heading="Construct signatures"
@@ -40,7 +40,7 @@ export class InterfacePage extends BaseView<InterfaceReflection | ClassReflectio
 
 		if (reflection.kind === ReflectionKind.Interface) {
 			sections.push(
-				<SignaturesView
+				<SignaturesPre
 					key="sections"
 					signatures={reflection.allCallSignatures}
 					heading="Call signatures"
@@ -49,7 +49,7 @@ export class InterfacePage extends BaseView<InterfaceReflection | ClassReflectio
 		}
 
 		sections.push(
-			<PropertiesView
+			<PropertiesViewPre
 				key="properties"
 				properties={reflection.allProperties}
 				parentId={reflection.id}
@@ -76,7 +76,7 @@ export class InterfacePage extends BaseView<InterfaceReflection | ClassReflectio
 						<h1>
 							{reflection.name}
 							{reflection.typeParameters && (
-								<TypeArguments types={reflection.typeParameters} />
+								<TypeArgumentsPre types={reflection.typeParameters} />
 							)}{' '}
 							<Badge>
 								{reflection.kind === ReflectionKind.Interface

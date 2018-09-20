@@ -1,7 +1,10 @@
 import React from 'react'
 
 export class Join extends React.Component<{
-	joinWith: (i: number, prev: React.ReactNode) => React.ReactNode
+	joinWith:
+		| React.ReactElement<any>
+		| string
+		| ((i: number, prev: React.ReactNode) => React.ReactNode)
 }> {
 	render() {
 		const { children, joinWith } = this.props
@@ -11,7 +14,8 @@ export class Join extends React.Component<{
 		array.forEach((value, i) => {
 			result.push(value)
 			if (i < array.length - 1) {
-				result.push(joinWith(i, value))
+				let push = typeof joinWith === 'function' ? joinWith(i, value) : joinWith
+				result.push(push)
 			}
 		})
 

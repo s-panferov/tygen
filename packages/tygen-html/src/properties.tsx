@@ -1,19 +1,14 @@
 import { Reflection } from '@tygen/reflector/src/reflection'
 import React from 'react'
 import { ReflectionView } from './render'
-import { NavSection } from './ui/nav'
-import { Section } from './ui/section'
-import { ViewSettings, withContext } from './view'
+import { PrettyCode } from './pre/prettier'
 
-@withContext
-export class PropertiesView extends React.Component<{
+export class PropertiesViewPre extends PrettyCode<{
 	properties?: Reflection[]
-	settings?: ViewSettings
 	parentId?: string
 }> {
 	render() {
-		const { properties, settings, parentId } = this.props
-		const { nav, compact } = settings!
+		const { properties, parentId } = this.props
 
 		if (!properties) {
 			return null
@@ -23,22 +18,6 @@ export class PropertiesView extends React.Component<{
 			return <ReflectionView key={prop.id} reflection={prop} parentId={parentId} />
 		})
 
-		if (nav) {
-			return (
-				<NavSection key="props" heading="Properties">
-					{propViews}
-				</NavSection>
-			)
-		} else {
-			if (compact) {
-				return propViews
-			} else {
-				return (
-					<Section key="props" heading={<h2>Properties</h2>}>
-						{propViews}
-					</Section>
-				)
-			}
-		}
+		return propViews
 	}
 }

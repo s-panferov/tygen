@@ -1,14 +1,14 @@
 import * as React from 'react'
 
 import { Toolbar } from './ui/toolbar'
-import { BaseView, withContext } from './view'
+import { BaseView, withSettings } from './view'
 
 import { InventoryReflection } from '@tygen/reflector/src/reflection/inventory/reflection'
 import { css } from 'linaria'
 import { hrefFromId } from './ref-link'
 import { normalizePath } from './helpers'
 
-@withContext
+@withSettings
 export class InventoryPage extends BaseView<InventoryReflection> {
 	render() {
 		const { settings, reflection } = this.props

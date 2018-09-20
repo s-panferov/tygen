@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { EnumReflection } from '@tygen/reflector/src/reflection'
-import { BaseView, withContext, ViewContext } from './view'
+import { BaseView, withSettings, ViewContext } from './view'
 import { css } from 'linaria'
 import { parseId } from './helpers'
 import { Toolbar } from './ui/toolbar'
@@ -10,7 +10,7 @@ import { Breadcrumb } from './breadcrumb'
 import { CommentView } from './comment'
 import { RefLink, documentIdFromId } from './ref-link'
 
-@withContext
+@withSettings
 export class EnumPage extends BaseView<EnumReflection> {
 	render() {
 		const { reflection, settings } = this.props

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { BaseView, withContext } from './view'
+import { BaseView, withSettings } from './view'
 import { MethodReflection } from '@tygen/reflector/src/reflection/function/reflection'
 import { SignatureView } from './signature'
 import { ReflectionKind } from '@tygen/reflector/src/reflection'
@@ -7,7 +7,7 @@ import { css } from 'linaria'
 import { NavItem } from './ui/nav'
 import { RefLink, documentIdFromId } from './ref-link'
 
-@withContext
+@withSettings
 export class MethodView extends BaseView<MethodReflection, { parentId?: string }> {
 	render() {
 		const { reflection, settings, parentId } = this.props

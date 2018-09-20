@@ -3,9 +3,9 @@ import cn from 'classnames'
 
 import { Reflection, ReflectionKind } from '@tygen/reflector/src/reflection'
 import { css, cx } from 'linaria'
-import { BaseView, withContext, ViewSettings } from './view'
+import { BaseView, withSettings, ViewSettings } from './view'
 import { parseId, normalizePath } from './helpers'
-import { TypeView } from './type'
+import { TypePre } from './pre/type'
 
 export function hrefFromId(id: string, relativeId?: string) {
 	const parts = (relativeId ? id.replace(relativeId, '') : id).split(/::|->/)
@@ -81,7 +81,7 @@ export function navigateTo(settings: ViewSettings, refId: string) {
 	window.location = href as any
 }
 
-@withContext
+@withSettings
 export class RefLink extends BaseView<
 	Reflection,
 	{ relativeId?: string; phantom?: boolean; name?: string; settings?: ViewSettings }
@@ -91,7 +91,7 @@ export class RefLink extends BaseView<
 
 		switch (reflection.kind) {
 			case ReflectionKind.Type:
-				return <TypeView reflection={reflection as any} />
+				return <TypePre reflection={reflection as any} />
 		}
 
 		const { name: linkName, href } = createLink(this.props.reflection, relativeId)

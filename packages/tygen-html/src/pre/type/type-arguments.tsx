@@ -1,8 +1,8 @@
 import React from 'react'
-import { Join } from './ui/join'
+import { Join } from '../../ui/join'
 import { TypeReflection } from '@tygen/reflector/src/reflection/_type/reflection'
-import { TypePre } from './pre/type'
-import { PrettyCode } from './pre/prettier'
+import { TypePre } from '.'
+import { PrettyCode } from '../prettier'
 
 export class TypeArgumentsPre extends PrettyCode<{ types: TypeReflection[] }> {
 	render() {

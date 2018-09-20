@@ -5,6 +5,12 @@ const DEVELOPMENT = process.env.NODE_ENV !== 'production'
 
 const stats = {
 	warningsFilter: /export .* was not found in/,
+	children: false,
+	chunks: false,
+	chunkModules: false,
+	modules: false,
+	reasons: false,
+	usedExports: false,
 }
 
 function buildConfig() {
