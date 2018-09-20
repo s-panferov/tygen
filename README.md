@@ -2,6 +2,8 @@
 
 [![Gitter](https://badges.gitter.im/s-panferov/tygen.svg)](https://gitter.im/s-panferov/tygen?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=s.panferov&url=https://github.com/s-panferov/tygen&title=TyGen&language=TypeScript&tags=github&category=software)
 
+## Currently the project is WIP, expect it to be completely broken!! A working version expected to be ready soon.
+
 This project aims to create a full-featured modern TypeScript documentation generator with support of all the latest TypeScript features. It can build interlinked representation of all project files, so every symbol of your program (and your dependencies) is inspectable, even those dependencies in `@types/*` packages.
 
 Big goals:
