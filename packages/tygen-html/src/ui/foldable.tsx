@@ -9,8 +9,8 @@ export interface FoldableState {
 	open: boolean
 }
 
-const Expand = require('../../asset/expand-button.svg')
-const Collapse = require('../../asset/expand-arrow.svg')
+import Expand from '../../asset/expand-button.svg'
+import Collapse from '../../asset/expand-arrow.svg'
 
 export class Foldable extends React.Component<FoldableProps, FoldableState> {
 	state: FoldableState = {
@@ -23,9 +23,13 @@ export class Foldable extends React.Component<FoldableProps, FoldableState> {
 				<div className={FoldableTitle}>
 					<div className={Plus} onClick={this.onClick}>
 						{this.state.open ? (
-							<img className={Icon} src={Expand} />
+							<svg className={Icon} viewBox={Expand.viewBox}>
+								<use xlinkHref={Expand.id} />
+							</svg>
 						) : (
-							<img className={Icon} src={Collapse} />
+							<svg className={Icon} viewBox={Collapse.viewBox}>
+								<use xlinkHref={Collapse.id} />
+							</svg>
 						)}
 					</div>
 					{this.props.title}
@@ -64,7 +68,7 @@ const Plus = css``
 
 const Icon = css`
 	position: relative;
-	left: -10px;
+	left: -5px;
 	width: 0.8em;
 	height: 0.8em;
 	border: 0px solid transparent;

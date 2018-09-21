@@ -8,7 +8,7 @@ const {
 } = require('./webpack.common')
 
 const config = buildConfig()
-const whitelist = [/@tygen/, 'webpack/hot/dev-server', /\.css$/]
+const whitelist = [/@tygen/, 'webpack/hot/dev-server', /\.css$/, /\.svg$/]
 
 const finalConfig = Object.assign({}, config, {
 	entry: {

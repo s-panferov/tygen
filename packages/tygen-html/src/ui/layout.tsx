@@ -40,6 +40,8 @@ const HeaderStyle = css`
 	margin-left: 30px;
 	margin-top: 10px;
 	margin-bottom: 20px;
+
+	font-family: 'Source Sans Pro';
 `
 
 const Sidebar = css`

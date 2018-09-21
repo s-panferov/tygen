@@ -23,12 +23,12 @@ export class PackagePage extends BaseView<PackageReflection> {
 				<Toolbar pkg={ident.pkg} version={ident.version} />
 				<Layout
 					sidebar={[structure]}
+					breadcrumb={<Breadcrumb reflection={reflection} />}
 					header={
 						<h1>
-							{reflection.manifest.name} <Badge>Package</Badge>
+							<Badge>Package</Badge> {reflection.manifest.name}
 						</h1>
-					}
-					breadcrumb={<Breadcrumb reflection={reflection} />}>
+					}>
 					<Section heading="README">
 						<Markdown source={reflection.readme || 'The package has no README'} />
 					</Section>

@@ -15,12 +15,12 @@ export class Badge extends React.Component<BadgeProps> {
 
 const BadgeBlock = css`
 	font-size: 0.7em;
-	border-radius: 10px;
 	white-space: nowrap;
 	padding: 2px 5px;
 	vertical-align: middle;
-	background-color: #786fa6;
+	/* background-color: #786fa6; */
 	color: #fff;
+	color: #000;
 
 	&.outline {
 		position: absolute;

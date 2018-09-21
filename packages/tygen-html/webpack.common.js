@@ -3,6 +3,8 @@ const MiniCssExtractPlugin = require("extract-css-chunks-webpack-plugin")
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 const DEVELOPMENT = process.env.NODE_ENV !== 'production'
 
+const SpritePlugin = require(`svg-sprite-loader/plugin`)
+
 const stats = {
 	warningsFilter: /export .* was not found in/,
 	children: false,
@@ -44,10 +46,15 @@ function buildConfig() {
 					}]
 				},
 				{
-					test: /\.(png|jpg|gif|svg)$/,
+					test: /\.(png|jpg|gif)$/,
 					use: [{
-						loader: 'url-loader',
+						loader: 'file-loader',
 					}]
+				},
+				{
+					test: /\.svg$/,
+					loader: 'svg-sprite-loader',
+					options: {}
 				},
 				{
 					test: /\.(ico)$/,
@@ -69,6 +76,7 @@ function buildConfig() {
 				hot: DEVELOPMENT
 			}),
 			new HardSourceWebpackPlugin(),
+			new SpritePlugin()
 		]
 	}
 }

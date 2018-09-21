@@ -1,10 +1,11 @@
 import React from 'react'
 import { Reflection } from '@tygen/reflector'
-import { css } from 'linaria'
-import { Join } from './ui/join'
+import { css, cx } from 'linaria'
 import { hrefFromId } from './ref-link'
 import { withSettings, ViewSettings } from './view'
 import { normalizePath } from './helpers'
+
+import homeIcon from '@fortawesome/fontawesome-free/svgs/solid/home.svg'
 
 class BreadcrumbBase extends React.Component<{
 	reflection: Reflection
@@ -22,6 +23,23 @@ class BreadcrumbBase extends React.Component<{
 		const regexp = /(->|::|\/|$)/g
 		const pkg = id.match(/(.*?)->(.*?)(->|$)/)!
 		const pkgHref = hrefFromId(pkg[0])
+
+		links.push(
+			<a
+				className={cx(LinkStyle, HomeLinkStyle)}
+				key="__home"
+				href={normalizePath(settings!, '/')}>
+				<svg
+					viewBox={homeIcon.viewBox}
+					className={HomeIconStyle}
+					width={15}
+					height={15}
+					style={{ color: '#fff' }}>
+					<use href={'#' + homeIcon.id} />
+				</svg>
+				<span className={ArrowStyle}> </span>
+			</a>
+		)
 
 		links.push(
 			<a className={LinkStyle} key={pkg[0]} href={normalizePath(settings!, pkgHref.href)}>
@@ -57,18 +75,7 @@ class BreadcrumbBase extends React.Component<{
 			}
 		}
 
-		return (
-			<div className={BodyStyle}>
-				<Join
-					joinWith={i => (
-						<span className={SepStyle} key={i}>
-							/
-						</span>
-					)}>
-					{links}
-				</Join>
-			</div>
-		)
+		return <div className={BodyStyle}>{links}</div>
 	}
 }
 
@@ -81,17 +88,34 @@ export function createLink(...parts: string[]) {
 const BodyStyle = css`
 	font-size: 14px;
 `
+
 const LinkStyle = css`
+	--color: #5995ed;
+
+	font-size: 12px;
+
 	position: relative;
 	display: inline;
-	background-color: #ccc;
+	background-color: var(--color);
 	padding-left: 15px;
-	margin-left: -10px;
-	line-height: 30px;
-	border: 3px solid #ccc;
+	margin-left: 0px;
+	border-top: 2px solid var(--color);
+	border-bottom: 3px solid var(--color);
+	border-left: 3.2px solid var(--color);
+	border-right: 3.2px solid var(--color);
 	border-top-left-radius: 3px;
 	border-bottom-left-radius: 3px;
-	font-size: 12px;
+
+	color: #fff !important;
+	font-weight: light;
+	font-family: 'Source Sans Pro';
+
+	transition: 0.5s all ease;
+
+	&:hover {
+		--color: #0064c9;
+		color: #fff !important;
+	}
 
 	&:first-child {
 		padding-left: 5px;
@@ -100,6 +124,27 @@ const LinkStyle = css`
 	&:first-child {
 		margin-left: 0px;
 	}
+
+	& + & {
+		border-left: 0;
+		border-top-left-radius: 0px;
+		border-bottom-left-radius: 0px;
+	}
+`
+
+const HomeIconStyle = css`
+	display: inline;
+	position: relative;
+	top: 3px;
+	left: 2px;
+
+	& > * {
+		fill: #fff;
+	}
+`
+
+const HomeLinkStyle = css`
+	--color: rgb(119, 198, 239);
 `
 
 const ArrowStyle = css`
@@ -110,14 +155,16 @@ const ArrowStyle = css`
 		display: block;
 		width: 0;
 		height: 0;
-		border-top: 11px solid transparent; /* Go big on the size, and let overflow hide */
-		border-bottom: 11px solid transparent;
-		border-left: 12px solid #ccc;
+		border-top: 10px solid transparent; /* Go big on the size, and let overflow hide */
+		border-bottom: 10px solid transparent;
+		border-left: 12px solid var(--color);
 		position: absolute;
-		transform: translateY(-50%) translateX(3px);
-		margin-top: -15px;
+		transform: translateY(-50%) translateX(2.6px);
+		margin-top: -6.3px;
 		left: 100%;
 		z-index: 2;
+
+		transition: 0.5s all ease;
 	}
 
 	&::before {
@@ -125,20 +172,16 @@ const ArrowStyle = css`
 		display: block;
 		width: 0;
 		height: 0;
-		border-top: 11px solid transparent;
-		border-bottom: 11px solid transparent;
-		border-left: 10px solid white;
+		border-top: 10px solid transparent;
+		border-bottom: 10px solid transparent;
+		border-left: 12px solid white;
 		position: absolute;
-		transform: translateY(-50%) translateX(3px);
-		margin-top: -15px;
+		transform: translateY(-50%) translateX(2.6px);
+		margin-top: -6.3px;
 		margin-left: 1px;
 		left: 100%;
 		z-index: 1;
-	}
-`
 
-const ItemStyle = css``
-const SepStyle = css`
-	padding: 0 2px;
-	color: #ccc;
+		transition: 0.5s all ease;
+	}
 `
