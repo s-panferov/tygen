@@ -3,11 +3,12 @@ declare module 'linaria' {
 	export function cx(...string: (string | null | undefined | false)[]): string
 }
 
-declare module '*.svg' {
-	const a: {
-		viewBox: string
-		id: string
-	}
+interface SvgSymbol {
+	viewBox: string
+	id: string
+}
 
+declare module '*.svg' {
+	const a: SvgSymbol
 	export default a
 }

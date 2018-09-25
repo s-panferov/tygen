@@ -2,5 +2,5 @@
   "presets": [
     ["linaria/babel", {}]
   ],
-  "plugins": ["react-hot-loader/babel"]
+  "plugins": ["@babel/plugin-syntax-object-rest-spread", "react-hot-loader/babel"]
 }

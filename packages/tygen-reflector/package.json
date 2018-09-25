@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Reflector for TypeScript types",
   "typings": "src/index.ts",
+  "main": "src/index.ts",
   "bin": {
     "tygen": "./bin/tygen.js"
   },

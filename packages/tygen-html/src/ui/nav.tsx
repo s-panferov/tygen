@@ -5,7 +5,7 @@ export class NavSection extends React.Component<{ heading: React.ReactNode }> {
 	render() {
 		return (
 			<div className={NavSectionBlock}>
-				<div className={NavSectionHeader}>{this.props.heading}</div>
+				<h2 className={NavSectionHeader}>{this.props.heading}</h2>
 				{this.props.children}
 			</div>
 		)
@@ -18,6 +18,8 @@ const NavSectionHeader = css`
 	text-transform: uppercase;
 	color: #444;
 	font-size: 14px;
+	margin: 0;
+	padding: 0;
 	font-weight: bold;
 
 	margin-bottom: 10px;

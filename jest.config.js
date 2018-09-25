@@ -1,7 +1,7 @@
 module.exports = {
 	moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
 	transform: {
-		'\\.(ts|tsx)$': '<rootDir>/node_modules/ts-jest/preprocessor.js'
+		'\\.(ts|tsx)$': 'ts-jest'
 	},
 	testMatch: ['<rootDir>/packages/*/src/**/*.spec.(ts|tsx|js)'],
 	moduleNameMapper: {

@@ -4,19 +4,25 @@ import { Markdown } from './ui/markdown'
 import { Toolbar } from './ui/toolbar'
 import { parseId } from './helpers'
 import { Layout } from './ui/layout'
-import { Badge } from './ui/badge'
-import { Section } from './ui/section'
 import { BaseView } from './view'
-import { renderStructure } from './folder'
 import { Breadcrumb } from './breadcrumb'
 import { css } from 'linaria'
+import { Icon } from './ui/icon'
+import { Outline } from './ui/outline'
+
+import PackageIcon from '@fortawesome/fontawesome-free/svgs/solid/cube.svg'
+import BookIcon from '@fortawesome/fontawesome-free/svgs/brands/markdown.svg'
+import { Structure, createStructure } from './structure'
+import { Tree } from './tree'
 
 export class PackagePage extends BaseView<PackageReflection> {
+	tree = (console.log(1), new Tree(createStructure(this.props.reflection)))
+
 	render() {
 		const { reflection } = this.props
 		const ident = parseId(reflection.id!)
 
-		const structure = renderStructure(reflection)
+		const structure = <Structure tree={this.tree} />
 
 		return (
 			<div className={BodyStyle}>
@@ -25,13 +31,14 @@ export class PackagePage extends BaseView<PackageReflection> {
 					sidebar={[structure]}
 					breadcrumb={<Breadcrumb reflection={reflection} />}
 					header={
-						<h1>
-							<Badge>Package</Badge> {reflection.manifest.name}
-						</h1>
+						<Outline
+							icon={<Icon width={20} height={20} sym={PackageIcon} />}
+							header={<h1>{reflection.manifest.name}</h1>}
+						/>
 					}>
-					<Section heading="README">
+					<Outline header={<h2>README</h2>} icon={<Icon sym={BookIcon} />}>
 						<Markdown source={reflection.readme || 'The package has no README'} />
-					</Section>
+					</Outline>
 				</Layout>
 			</div>
 		)

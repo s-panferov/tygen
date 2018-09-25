@@ -14,16 +14,6 @@ export const BodyStyle = css`
 	font-size: 14px;
 	color: #222;
 
-	h1 {
-		margin-top: 0px;
-		margin-bottom: 0px;
-		padding-bottom: 5px;
-	}
-
-	h2 {
-		padding-bottom: 5px;
-	}
-
 	a {
 		text-decoration: none;
 		color: #04b;

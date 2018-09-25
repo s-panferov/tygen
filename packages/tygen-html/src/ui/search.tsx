@@ -82,6 +82,7 @@ export class Search extends React.Component<
 					ref={r => (this.input = r!)}
 					tabIndex={1}
 					value={this.state.query}
+					placeholder="Search for items..."
 					disabled={!this.state.ready}
 					onFocus={this.onFocus}
 					onBlur={this.onBlur}

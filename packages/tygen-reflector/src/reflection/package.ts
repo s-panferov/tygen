@@ -3,7 +3,8 @@ import {
 	ReflectionKind,
 	Reflection,
 	ReflectionWithExports,
-	ReflectionWithGlobals
+	ReflectionWithGlobals,
+	ReflectionLink
 } from './reflection'
 
 export interface PackageReflection
@@ -23,7 +24,7 @@ export interface ReflectionWithReadme {
 
 export interface ReflectionWithStructure {
 	id?: string
-	modules: Reflection[]
+	modules: ReflectionLink[]
 }
 
 export interface FolderReflection

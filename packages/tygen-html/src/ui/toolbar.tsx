@@ -42,7 +42,7 @@ export const Logo = withSettings(LogoBase)
 
 const LogoStyle = css`
 	display: block;
-	padding-left: 30px;
+	padding-left: 40px;
 	padding-right: 10px;
 	font-weight: bold;
 	display: flex;

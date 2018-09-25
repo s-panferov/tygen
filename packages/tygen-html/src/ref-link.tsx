@@ -63,7 +63,10 @@ export function documentIdFromId(id: string): string | undefined {
 	}
 }
 
-function createLink(reflection: Reflection, relativeId?: string): { name: string; href: string } {
+export function createLink(
+	reflection: Reflection,
+	relativeId?: string
+): { name: string; href: string } {
 	switch (reflection.kind) {
 		case ReflectionKind.Link:
 			return hrefFromId(reflection.target, relativeId)

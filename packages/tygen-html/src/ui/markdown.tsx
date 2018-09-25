@@ -19,6 +19,11 @@ export class Markdown extends React.Component<MarkdownProps> {
 }
 
 const MarkdownBody = css`
+	pre {
+		min-width: 0;
+		overflow: scroll;
+	}
+
 	& h1:first-child {
 		padding-top: 0;
 		margin-top: 0;

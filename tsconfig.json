@@ -4,7 +4,8 @@
     "packages/*/src/**/*.ts"
   ],
   "compilerOptions": {
-    "outDir": "lib"
+    "outDir": "lib",
+    "module": "commonjs",
   },
   // "references": [{
   //     "path": "./packages/tygen-reflector"

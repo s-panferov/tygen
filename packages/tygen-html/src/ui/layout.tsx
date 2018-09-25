@@ -31,14 +31,14 @@ export class Layout extends React.Component<LayoutProps> {
 
 const BreadcrumbStyle = css`
 	grid-area: breadcrumb;
-	margin-left: 30px;
+	margin-left: 40px;
 	margin-top: 15px;
 `
 
 const HeaderStyle = css`
 	grid-area: header;
-	margin-left: 30px;
-	margin-top: 10px;
+	margin-left: 40px;
+	margin-top: 25px;
 	margin-bottom: 20px;
 
 	font-family: 'Source Sans Pro';
@@ -48,26 +48,24 @@ const Sidebar = css`
 	display: flex;
 	flex-direction: column;
 	grid-area: sidebar;
-	width: 250px;
-	min-height: calc(100vh - 40px);
-	border-top: 1px solid rgba(0, 0, 0, 0.06);
-	padding-top: 10px;
-	margin-top: -10px;
+	/* padding-top: 10px; */
+	/* margin-top: -10px; */
+	margin-right: 20px;
+	min-width: 250px;
 `
 
 const Content = css`
 	grid-area: content;
-	margin-left: 30px;
+	margin-left: 40px;
 	margin-bottom: 50px;
+	margin-right: 20px;
+
+	min-width: 0;
 `
 
-const ContentInner = css`
-	max-width: 900px;
-`
+const ContentInner = css``
 
 const LayoutBlock = css`
-	display: flex;
-	justify-content: center;
 	max-width: 1118px;
 	width: 100vw;
 
@@ -76,5 +74,21 @@ const LayoutBlock = css`
 		grid-template-areas: 'breadcrumb breadcrumb' 'header header' 'content sidebar';
 		grid-template-columns: 1fr auto;
 		grid-template-rows: min-content min-content 1fr;
+
+		@media (max-width: 600px) {
+			grid-template-areas: 'breadcrumb' 'header' 'sidebar' 'content';
+			grid-template-columns: 1fr;
+			grid-template-rows: min-content;
+
+			.${Sidebar} {
+				margin-left: 40px;
+				margin-bottom: 20px;
+			}
+		}
+	}
+
+	&.narrow {
+		display: flex;
+		justify-content: center;
 	}
 `
