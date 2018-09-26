@@ -1,20 +1,15 @@
 import { observable, computed, action, runInAction } from 'mobx'
-import { score, match, Query, prepareQuery } from 'fuzzaldrin-plus'
 
 export interface FilterResult {
 	score: number
 }
 
-const FuzzOptions = Object.freeze({
-	pathSeparator: '->'
-})
-
-export abstract class TreeItem<T extends ItemInfo = ItemInfo, C extends TextItemInfo = C> {
+export abstract class TreeItem<I extends object = {}, C extends TreeItem = C> {
 	readonly key: string
 
-	children = observable.array<TreeItem<C>>()
+	children = observable.array<C>()
 
-	info!: T
+	info!: ItemInfo & I
 
 	@observable.ref
 	lastFilterResult?: FilterResult
@@ -22,7 +17,7 @@ export abstract class TreeItem<T extends ItemInfo = ItemInfo, C extends TextItem
 	@observable.ref
 	parent?: TreeItem
 
-	constructor(key: string, info: T, children: TreeItem<C>[] = []) {
+	constructor(key: string, info: I, children: C[] = []) {
 		this.key = key
 
 		runInAction(() => {
@@ -31,30 +26,23 @@ export abstract class TreeItem<T extends ItemInfo = ItemInfo, C extends TextItem
 				c.parent = this
 			})
 
-			this.info = observable.object(info, undefined, {
-				proxy: true
-			})
+			this.info = observable.object(info)
 		})
 	}
 
 	@computed
 	get visible(): boolean {
 		if (!this.lastFilterResult) {
-			console.log(this, 'is visible: not search')
 			return true
 		}
 
 		if (this.lastFilterResult.score > 0) {
-			console.log(this, 'is visible: score is ' + this.lastFilterResult.score)
 			return true
 		}
 
 		if (this.children.some(c => c.visible)) {
-			console.log(this, 'is visible, because child is visible')
 			return true
 		}
-
-		console.log(this, 'is not visible')
 
 		return false
 	}
@@ -75,13 +63,13 @@ export abstract class TreeItem<T extends ItemInfo = ItemInfo, C extends TextItem
 
 			return score
 		} else {
-			return this.info.order || 0
+			return Number.MAX_SAFE_INTEGER - (this.info.order || 0)
 		}
 	}
 
 	@computed
-	get flat(): TreeItem<any>[] {
-		const flat: TreeItem<any>[] = []
+	get flat(): (this | C)[] {
+		const flat: (this | C)[] = []
 		if (this.visible) {
 			flat.push(this)
 			this.children
@@ -90,7 +78,7 @@ export abstract class TreeItem<T extends ItemInfo = ItemInfo, C extends TextItem
 					return b.score - a.score
 				})
 				.forEach(c => {
-					flat.push(...c.flat.slice())
+					flat.push(...(c.flat.slice() as any))
 				})
 		}
 		return flat
@@ -105,7 +93,7 @@ export abstract class TreeItem<T extends ItemInfo = ItemInfo, C extends TextItem
 		}
 	}
 
-	abstract filter(query: string, preparedQuery: Query): void
+	abstract filter<O>(query: string, options: O, engine: QueryEngine<O>): void
 
 	@action
 	resetFilter() {
@@ -124,10 +112,10 @@ export interface TextItemInfo extends ItemInfo {
 	text: string
 }
 
-export class TextItem<
-	T extends TextItemInfo = TextItemInfo,
-	C extends TextItemInfo = T
-> extends TreeItem<TextItemInfo & T, C> {
+export class TextItem<T extends object = {}, C extends TreeItem = C> extends TreeItem<
+	TextItemInfo & T,
+	C
+> {
 	InfoType!: T
 
 	lastFilterResult?: FilterResult & { match: number[] }
@@ -138,20 +126,12 @@ export class TextItem<
 	}
 
 	@action
-	filter(query: string, preparedQuery: Query) {
-		this.children.forEach(c => c.filter(query, preparedQuery))
+	filter<O>(query: string, options: O, engine: QueryEngine<O>): void {
+		this.children.forEach(c => c.filter(query, options, engine))
 		this.lastFilterResult = {
-			score: score(this.text, query, {
-				preparedQuery,
-				...FuzzOptions
-			}),
-			match: match(this.text, query, {
-				preparedQuery,
-				...FuzzOptions
-			})
+			score: engine.score(this.text, query, options),
+			match: engine.match(this.text, query, options)
 		}
-
-		// console.log(this, query, preparedQuery, this.lastFilterResult)
 	}
 }
 
@@ -172,10 +152,7 @@ export class Tree<Item extends TreeItem = TreeItem> {
 
 	@computed
 	get flat(): Item[] {
-		this.query
-
 		const flat: Item[] = []
-
 		this.children
 			.slice()
 			.sort((a, b) => {
@@ -188,19 +165,20 @@ export class Tree<Item extends TreeItem = TreeItem> {
 		return flat
 	}
 
-	@observable.ref
-	query!: string
-
 	@action
-	filter(query: string) {
-		this.query = query
-		const preparedQuery = prepareQuery(query, { ...FuzzOptions })
-		console.log(query, preparedQuery)
-		this.children.forEach(c => c.filter(query, preparedQuery))
+	filter<O>(query: string, options: O, engine: QueryEngine<O>) {
+		this.children.forEach(c => c.filter(query, options, engine))
 	}
 
 	@action
 	resetFilter() {
 		this.children.forEach(c => c.resetFilter())
 	}
+}
+
+export interface QueryEngine<O> {
+	Options: O
+
+	score(text: string, query: string, options?: O): number
+	match(text: string, query: string, options?: O): number[]
 }

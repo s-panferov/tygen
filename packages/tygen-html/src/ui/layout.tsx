@@ -52,6 +52,7 @@ const Sidebar = css`
 	/* margin-top: -10px; */
 	margin-right: 20px;
 	min-width: 250px;
+	margin-top: 25px;
 `
 
 const Content = css`
@@ -71,7 +72,7 @@ const LayoutBlock = css`
 
 	&.wide {
 		display: grid;
-		grid-template-areas: 'breadcrumb breadcrumb' 'header header' 'content sidebar';
+		grid-template-areas: 'breadcrumb breadcrumb' 'header sidebar' 'content sidebar';
 		grid-template-columns: 1fr auto;
 		grid-template-rows: min-content min-content 1fr;
 

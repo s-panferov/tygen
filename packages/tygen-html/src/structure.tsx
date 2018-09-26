@@ -1,40 +1,102 @@
 import { Reflection, ReflectionKind } from '@tygen/reflector'
-import { TextItem, Tree, TextItemInfo } from './tree'
+import { TextItem, Tree, QueryEngine, TreeItem } from './tree'
 import React from 'react'
 import { observer } from 'mobx-react'
 
 import { List, WindowScroller, AutoSizer, ListRowProps } from 'react-virtualized'
 import { css, cx } from 'linaria'
-import { reaction } from 'mobx'
 import { createLink } from './ref-link'
 
-export interface HeaderInfo extends TextItemInfo {
-	kind: 'header'
-	text: string
+import { score, match, prepareQuery, IFilterOptions } from 'fuzzaldrin-plus'
+import { observable, action } from 'mobx'
+
+const FuzzOptions = Object.freeze({
+	pathSeparator: '->'
+})
+
+const queryEngine: QueryEngine<IFilterOptions> = {
+	get Options(): IFilterOptions {
+		throw new Error('Virtual')
+	},
+	score,
+	match
 }
 
-export interface LinkInfo extends TextItemInfo {
-	kind: 'link'
-	text: string
-	href: string
-}
+export class HeaderItem extends TextItem<
+	{
+		kind: 'header'
+		text: string
+		selected?: boolean
+	},
+	StructureItem
+> {}
 
-export type StructureInfo = HeaderInfo | LinkInfo
-
-export type HeaderItem = TextItem<HeaderInfo, StructureInfo>
-export const HeaderItem: new (
-	key: string,
-	info: HeaderInfo,
-	children?: StructureItem[]
-) => TextItem<HeaderInfo, StructureInfo> = TextItem
-
-export type LinkItem = TextItem<LinkInfo, TextItemInfo>
-export const LinkItem: new (key: string, info: LinkInfo, children?: StructureItem[]) => TextItem<
-	LinkInfo,
-	StructureInfo
-> = TextItem
+export class LinkItem extends TextItem<
+	{
+		kind: 'link'
+		text: string
+		href: string
+		selected?: boolean
+	},
+	LinkItem
+> {}
 
 export type StructureItem = LinkItem | HeaderItem
+
+export type TreeItemWithSelection = TreeItem<{ selected?: boolean }>
+export type TreeWithSelection = Tree<TreeItemWithSelection>
+
+export class TreeNavigation {
+	private tree: TreeWithSelection
+
+	@observable
+	private index = -1
+
+	@observable.ref
+	current: TreeItemWithSelection | undefined
+
+	constructor(tree: TreeWithSelection) {
+		this.tree = tree
+	}
+
+	reset() {
+		this.modify(() => {
+			this.index = -1
+		})
+	}
+
+	@action
+	private modify(cb: () => void) {
+		if (this.current) {
+			this.current.info.selected = false
+		}
+		cb()
+		this.current = this.tree.flat[this.index]
+		if (this.current) {
+			this.current.info.selected = true
+		}
+	}
+
+	@action
+	down() {
+		this.modify(() => {
+			this.index++
+			if (this.index >= this.tree.flat.length) {
+				this.index = this.tree.flat.length - 1
+			}
+		})
+	}
+
+	@action
+	up() {
+		this.modify(() => {
+			this.index--
+			if (this.index < 0) {
+				this.index = 0
+			}
+		})
+	}
+}
 
 export function createStructure(reflection: Reflection): StructureItem[] {
 	let result = [] as StructureItem[]
@@ -86,22 +148,10 @@ export function createStructure(reflection: Reflection): StructureItem[] {
 }
 
 @observer
-export class Structure extends React.Component<{ tree: Tree<StructureItem> }> {
-	componentDidMount() {
-		reaction(
-			r => {
-				return this.props.tree.flat.slice()
-			},
-			console.log,
-			{
-				onError: e => console.error(e),
-				equals: (a, b) => {
-					return a === b
-				}
-			}
-		)
-	}
-
+export class Structure extends React.Component<{
+	tree: Tree<StructureItem>
+	nav: TreeNavigation
+}> {
 	render() {
 		const { tree } = this.props
 		const flatTree = tree.flat.slice()
@@ -111,6 +161,7 @@ export class Structure extends React.Component<{ tree: Tree<StructureItem> }> {
 				<input
 					className={InputStyle}
 					placeholder="Search for contents..."
+					onKeyDown={this.onKeyDown}
 					onChange={this.onSearch}
 				/>
 				<WindowScroller scrollElement={typeof window !== 'undefined' ? window : undefined}>
@@ -122,11 +173,15 @@ export class Structure extends React.Component<{ tree: Tree<StructureItem> }> {
 										{...{ flatTree }}
 										autoHeight
 										height={height}
-										containerStyle={
-											{
-												// overflowX: 'scroll'
-											}
-										}
+										style={{
+											overflow: 'visible',
+											outline: 'none'
+										}}
+										containerStyle={{
+											// overflowX: 'scroll'
+											overflow: 'visible',
+											outline: 'none'
+										}}
 										isScrolling={isScrolling}
 										onScroll={onChildScroll}
 										overscanRowCount={2}
@@ -147,10 +202,23 @@ export class Structure extends React.Component<{ tree: Tree<StructureItem> }> {
 		)
 	}
 
+	onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'ArrowDown') {
+			e.preventDefault()
+			this.props.nav.down()
+		} else if (e.key === 'ArrowUp') {
+			e.preventDefault()
+			this.props.nav.up()
+		}
+	}
+
+	@action
 	onSearch = (e: React.FormEvent<HTMLInputElement>) => {
+		this.props.nav.reset()
 		const value = e.currentTarget.value
 		if (value) {
-			this.props.tree.filter(value)
+			const preparedQuery = prepareQuery(value, { ...FuzzOptions })
+			this.props.tree.filter(value, { preparedQuery, ...FuzzOptions }, queryEngine)
 		} else {
 			this.props.tree.resetFilter()
 		}
@@ -175,8 +243,10 @@ export class StructureNode extends React.Component<{
 			<div
 				style={{
 					...style,
-					paddingLeft: item.depth * 20
+					paddingLeft: 5 + item.depth * 20,
+					backgroundColor: item.info.selected ? '#f0f0f0' : undefined
 				}}
+				tabIndex={0}
 				className={cx(StructureNodeStyle)}>
 				{item.info.kind === 'header' ? <h4>{item.text}</h4> : item.text}
 			</div>
@@ -187,9 +257,11 @@ export class StructureNode extends React.Component<{
 const InputStyle = css`
 	outline: none;
 	border: none;
-	border-bottom: 1px solid #eee;
+	background-color: #eee;
+	border-radius: 5px;
 	width: 100%;
 	padding: 4px;
+	margin-bottom: 7px;
 `
 
 const StructureNodeStyle = css`
