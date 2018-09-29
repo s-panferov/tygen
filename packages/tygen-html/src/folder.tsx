@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Markdown } from './ui/markdown'
-import { Toolbar } from './ui/toolbar'
+import { Header } from './ui/header'
 import { parseId } from './helpers'
 import { Layout } from './ui/layout'
 import { Badge } from './ui/badge'
@@ -40,7 +40,7 @@ export class FolderPage extends BaseView<FolderReflection> {
 
 		return (
 			<div>
-				<Toolbar pkg={ident.pkg} version={ident.version} />
+				<Header pkg={ident.pkg} version={ident.version} />
 				<Layout sidebar={[structure]}>
 					<h1>
 						{reflection.name} <Badge>Folder</Badge>

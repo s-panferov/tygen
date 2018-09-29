@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { Toolbar } from './ui/toolbar'
+import { Header } from './ui/header'
 import { BaseView, withSettings } from './view'
 
 import { InventoryReflection } from '@tygen/reflector/src/reflection/inventory/reflection'
@@ -19,7 +19,7 @@ export class InventoryPage extends BaseView<InventoryReflection> {
 
 		return (
 			<div>
-				<Toolbar pkg={'🏠'} />
+				<Header pkg={'🏠'} />
 				<div className={InventoryBody}>
 					<table>
 						<thead>

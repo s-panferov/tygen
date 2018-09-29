@@ -182,3 +182,57 @@ export interface QueryEngine<O> {
 	score(text: string, query: string, options?: O): number
 	match(text: string, query: string, options?: O): number[]
 }
+
+export type TreeItemWithSelection = TreeItem<{ selected?: boolean }>
+
+export class TreeNavigation<I extends TreeItemWithSelection> {
+	private tree: Tree<I>
+
+	@observable
+	private index = -1
+
+	@observable.ref
+	current: I | undefined
+
+	constructor(tree: Tree<I>) {
+		this.tree = tree
+	}
+
+	reset() {
+		this.modify(() => {
+			this.index = -1
+		})
+	}
+
+	@action
+	private modify(cb: () => void) {
+		if (this.current) {
+			this.current.info.selected = false
+		}
+		cb()
+		this.current = this.tree.flat[this.index]
+		if (this.current) {
+			this.current.info.selected = true
+		}
+	}
+
+	@action
+	down() {
+		this.modify(() => {
+			this.index++
+			if (this.index >= this.tree.flat.length) {
+				this.index = this.tree.flat.length - 1
+			}
+		})
+	}
+
+	@action
+	up() {
+		this.modify(() => {
+			this.index--
+			if (this.index < 0) {
+				this.index = 0
+			}
+		})
+	}
+}

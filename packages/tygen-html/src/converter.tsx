@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
-import { Converter, Reflection, ReflectionWalker } from '@tygen/reflector'
+import { Converter, Reflection, ReflectionWalker } from '@tygen/reflector/src/runtime'
 import { ReactConverterSettings } from './settings'
 import { renderHTML } from './html'
 

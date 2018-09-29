@@ -8,7 +8,7 @@ import { Join } from './join'
 import { RefLink, navigateTo } from '../ref-link'
 import { SearchReflection } from '../../../tygen-reflector/src/reflection/search/reflection'
 import { BaseView, withSettings, ViewSettings } from '../view'
-import { Toolbar } from './toolbar'
+import { Header } from './header'
 
 export interface SearchState {
 	index: number
@@ -21,7 +21,7 @@ export interface SearchState {
 
 export class SearchPage extends BaseView<SearchReflection> {
 	render() {
-		return <Toolbar pkg={'🔎'} search={this.props.reflection} />
+		return <Header pkg={'🔎'} search={this.props.reflection} />
 	}
 }
 

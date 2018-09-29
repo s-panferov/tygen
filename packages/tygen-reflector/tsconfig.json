@@ -1,8 +1,10 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    // "composite": false,
-    "outDir": "./lib",
+    "composite": false,
+    "outDir": "lib",
+    "noEmit": false,
+    "noEmitOnError": false,
     "target": "esnext",
     "moduleResolution": "node",
     "module": "esnext",

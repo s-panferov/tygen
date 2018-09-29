@@ -1,14 +1,14 @@
 import { Reflection, ReflectionKind } from '@tygen/reflector'
-import { TextItem, Tree, QueryEngine, TreeItem } from './tree'
+import { TextItem, Tree, QueryEngine, TreeNavigation } from './tree'
 import React from 'react'
 import { observer } from 'mobx-react'
 
 import { List, WindowScroller, AutoSizer, ListRowProps } from 'react-virtualized'
 import { css, cx } from 'linaria'
-import { createLink } from './ref-link'
+import { createLink } from '../ref-link'
 
 import { score, match, prepareQuery, IFilterOptions } from 'fuzzaldrin-plus'
-import { observable, action } from 'mobx'
+import { action } from 'mobx'
 
 const FuzzOptions = Object.freeze({
 	pathSeparator: '->'
@@ -42,61 +42,6 @@ export class LinkItem extends TextItem<
 > {}
 
 export type StructureItem = LinkItem | HeaderItem
-
-export type TreeItemWithSelection = TreeItem<{ selected?: boolean }>
-export type TreeWithSelection = Tree<TreeItemWithSelection>
-
-export class TreeNavigation {
-	private tree: TreeWithSelection
-
-	@observable
-	private index = -1
-
-	@observable.ref
-	current: TreeItemWithSelection | undefined
-
-	constructor(tree: TreeWithSelection) {
-		this.tree = tree
-	}
-
-	reset() {
-		this.modify(() => {
-			this.index = -1
-		})
-	}
-
-	@action
-	private modify(cb: () => void) {
-		if (this.current) {
-			this.current.info.selected = false
-		}
-		cb()
-		this.current = this.tree.flat[this.index]
-		if (this.current) {
-			this.current.info.selected = true
-		}
-	}
-
-	@action
-	down() {
-		this.modify(() => {
-			this.index++
-			if (this.index >= this.tree.flat.length) {
-				this.index = this.tree.flat.length - 1
-			}
-		})
-	}
-
-	@action
-	up() {
-		this.modify(() => {
-			this.index--
-			if (this.index < 0) {
-				this.index = 0
-			}
-		})
-	}
-}
 
 export function createStructure(reflection: Reflection): StructureItem[] {
 	let result = [] as StructureItem[]
@@ -150,7 +95,7 @@ export function createStructure(reflection: Reflection): StructureItem[] {
 @observer
 export class Structure extends React.Component<{
 	tree: Tree<StructureItem>
-	nav: TreeNavigation
+	nav: TreeNavigation<StructureItem>
 }> {
 	render() {
 		const { tree } = this.props
@@ -164,7 +109,10 @@ export class Structure extends React.Component<{
 					onKeyDown={this.onKeyDown}
 					onChange={this.onSearch}
 				/>
-				<WindowScroller scrollElement={typeof window !== 'undefined' ? window : undefined}>
+				<WindowScroller
+					serverWidth={250}
+					serverHeight={600}
+					scrollElement={typeof window !== 'undefined' ? window : undefined}>
 					{({ height, isScrolling, registerChild, onChildScroll, scrollTop }: any) => (
 						<AutoSizer disableHeight>
 							{({ width }) => (
@@ -203,12 +151,17 @@ export class Structure extends React.Component<{
 	}
 
 	onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		const { nav } = this.props
 		if (e.key === 'ArrowDown') {
 			e.preventDefault()
-			this.props.nav.down()
+			nav.down()
 		} else if (e.key === 'ArrowUp') {
 			e.preventDefault()
-			this.props.nav.up()
+			nav.up()
+		} else if (e.key === 'Enter') {
+			if (nav.current && nav.current.info.kind === 'link') {
+				window.location.replace(nav.current.info.href)
+			}
 		}
 	}
 
@@ -248,7 +201,11 @@ export class StructureNode extends React.Component<{
 				}}
 				tabIndex={0}
 				className={cx(StructureNodeStyle)}>
-				{item.info.kind === 'header' ? <h4>{item.text}</h4> : item.text}
+				{item.info.kind === 'header' ? (
+					<h4>{item.text}</h4>
+				) : (
+					<a href={item.info.href}>{item.text}</a>
+				)}
 			</div>
 		)
 	}

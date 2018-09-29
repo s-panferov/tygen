@@ -5,6 +5,7 @@
     "module": "esnext",
     "noEmit": true,
     "target": "esnext",
+    "outDir": "lib",
     "esModuleInterop": true,
     "jsx": "react",
     "baseUrl": ".",

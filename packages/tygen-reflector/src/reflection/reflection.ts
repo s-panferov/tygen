@@ -106,9 +106,7 @@ export interface HasId {
 	id: string
 }
 
-export function createLink<T extends Reflection>(
-	ref: T
-): ReflectionLink | NotIncludedReflection | T {
+export function createLink(ref: Reflection): ReflectionLink | NotIncludedReflection {
 	if (ref.kind === ReflectionKind.Link || ref.kind === ReflectionKind.NotIncluded) {
 		return ref
 	} else if (ref.id) {
@@ -118,6 +116,6 @@ export function createLink<T extends Reflection>(
 			targetKind: ref.kind
 		}
 	} else {
-		return ref
+		throw new Error('Cannot create a link to the reflection')
 	}
 }

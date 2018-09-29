@@ -1,28 +1,23 @@
 import React from 'react'
 import { css } from 'linaria'
 import { Search } from './search'
-import { PackagesNav, InventoryProvider } from './packages'
 import { withSettings, ViewSettings } from '../view'
 import { normalizePath } from '../helpers'
 import { SearchReflection } from '@tygen/reflector/src/reflection/search/reflection'
 
-export interface ToolbarProps {
+export interface HeaderProps {
 	pkg?: string
 	version?: string
-	settings?: ViewSettings
 	search?: SearchReflection
 }
 
-export class Toolbar extends React.Component<ToolbarProps> {
+export class Header extends React.Component<HeaderProps> {
 	render() {
 		const { pkg, version, search } = this.props
 		return (
-			<div className={BodyStyle}>
-				<div className={BodyInner}>
+			<div className={HeaderStyle}>
+				<div className={HeaderInner}>
 					<Logo />
-					{/* <InventoryProvider>
-					{iv => <PackagesNav pkg={pkg} version={version} inventory={iv} />}
-				</InventoryProvider> */}
 					<Search reflection={search} pkg={pkg} version={version} />
 				</div>
 			</div>
@@ -52,14 +47,14 @@ const LogoStyle = css`
 	color: #303952;
 `
 
-const BodyInner = css`
+const HeaderInner = css`
 	width: 100vw;
 	max-width: 1118px;
 	display: flex;
 	align-items: center;
 `
 
-const BodyStyle = css`
+const HeaderStyle = css`
 	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 	height: 40px;
 	display: flex;

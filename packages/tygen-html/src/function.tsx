@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { FunctionReflection } from '@tygen/reflector/src/reflection'
-import { Toolbar } from './ui/toolbar'
+import { Header } from './ui/header'
 import { parseId } from './helpers'
 import { Layout } from './ui/layout'
 import { Badge } from './ui/badge'
@@ -33,7 +33,7 @@ export class FunctionPage extends BaseView<FunctionReflection> {
 
 		return (
 			<div>
-				<Toolbar pkg={ident.pkg} version={ident.version} />
+				<Header pkg={ident.pkg} version={ident.version} />
 				<Layout sidebar={<span />}>
 					<h1>
 						{reflection.name} <Badge>Function</Badge>

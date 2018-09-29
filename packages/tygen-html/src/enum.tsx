@@ -3,7 +3,7 @@ import { EnumReflection } from '@tygen/reflector/src/reflection'
 import { BaseView, withSettings, ViewContext } from './view'
 import { css } from 'linaria'
 import { parseId } from './helpers'
-import { Toolbar } from './ui/toolbar'
+import { Header } from './ui/header'
 import { Layout } from './ui/layout'
 import { Badge } from './ui/badge'
 import { Breadcrumb } from './breadcrumb'
@@ -20,7 +20,7 @@ export class EnumPage extends BaseView<EnumReflection> {
 
 		return (
 			<div>
-				<Toolbar pkg={ident.pkg} version={ident.version} />
+				<Header pkg={ident.pkg} version={ident.version} />
 				<Layout
 					sidebar={
 						<ViewContext.Provider value={Object.assign({}, settings, { nav: true })} />
