@@ -4,19 +4,24 @@ const webpack = require('webpack');
 
 const {
 	buildConfig,
-	MiniCssExtractPlugin
 } = require('./webpack.common')
 
 const config = buildConfig()
-const whitelist = [/@tygen/, 'webpack/hot/dev-server', /\.css$/, /\.svg$/]
+const whitelist = [/@tygen/, /\.css$/, /\.svg$/, 'webpack/hot/poll?1000']
 
 const finalConfig = Object.assign({}, config, {
 	entry: {
-		cli: './src/cli.ts'
+		cli: ['webpack/hot/poll?1000', './src/cli.ts']
 	},
+	devtool: false,
 	target: 'node',
 	node: {
-		__dirname: false
+		__filename: false,
+		__dirname: false,
+		console: false,
+		global: false,
+		process: false,
+		Buffer: false,
 	},
 	externals: [
 		nodeExternals({
@@ -26,12 +31,13 @@ const finalConfig = Object.assign({}, config, {
 			whitelist,
 			modulesDir: path.resolve(__dirname, '../../node_modules')
 		})
-	]
+	],
 })
 
 finalConfig.plugins.push(new webpack.optimize.LimitChunkCountPlugin({
 	maxChunks: 1
 }))
 
+finalConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
 
 module.exports = finalConfig

@@ -20,12 +20,15 @@ export class Layout extends React.Component<LayoutProps> {
 				className={cx(
 					LayoutBlock,
 					cn({
-						wide: !!this.props.sidebar
+						wide: !!this.props.sidebar,
+						short: !this.props.sidebar
 					})
 				)}>
-				<div key="breadcrumb" className={BreadcrumbStyle}>
-					{this.props.breadcrumb}
-				</div>
+				{this.props.breadcrumb && (
+					<div key="breadcrumb" className={BreadcrumbStyle}>
+						{this.props.breadcrumb}
+					</div>
+				)}
 				<div key="header" className={HeaderStyle}>
 					{this.props.header}
 				</div>
@@ -48,21 +51,28 @@ export class PageBody extends React.Component {
 	}
 }
 
-export class Page extends React.Component<{ reflection: Reflection; header: React.ReactChild }> {
-	tree = new Tree(createStructure(this.props.reflection))
-	treeNavigation = new TreeNavigation(this.tree)
+export class Page extends React.Component<{
+	reflection?: Reflection
+	header: React.ReactChild
+	short?: boolean
+}> {
+	tree? = this.props.reflection && new Tree(createStructure(this.props.reflection))
+	treeNavigation? = this.tree && new TreeNavigation(this.tree)
 
 	render() {
-		const { reflection } = this.props
-
-		const structure = <Structure tree={this.tree} nav={this.treeNavigation} />
+		const { reflection, short } = this.props
 
 		return (
 			<PageBody>
 				<Header />
 				<Layout
-					sidebar={structure}
-					breadcrumb={<Breadcrumb reflection={reflection} />}
+					sidebar={
+						!short &&
+						this.tree && <Structure tree={this.tree} nav={this.treeNavigation!} />
+					}
+					breadcrumb={
+						reflection && reflection.id && <Breadcrumb reflection={reflection} />
+					}
 					header={this.props.header}>
 					{this.props.children}
 				</Layout>
@@ -135,6 +145,13 @@ const LayoutBlock = css`
 				margin-top: 0;
 			}
 		}
+	}
+
+	&.short {
+		display: grid;
+		grid-template-areas: 'breadcrumb breadcrumb' 'header header' 'content content';
+		grid-template-columns: 1fr auto;
+		grid-template-rows: min-content min-content 1fr;
 	}
 
 	&.narrow {

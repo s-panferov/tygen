@@ -160,7 +160,7 @@ export class Structure extends React.Component<{
 			nav.up()
 		} else if (e.key === 'Enter') {
 			if (nav.current && nav.current.info.kind === 'link') {
-				window.location.replace(nav.current.info.href)
+				window.location.assign(nav.current.info.href)
 			}
 		}
 	}

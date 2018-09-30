@@ -1,3 +1,6 @@
+const path = require('path')
+const webpack = require('webpack');
+
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require("extract-css-chunks-webpack-plugin")
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
@@ -54,7 +57,6 @@ function buildConfig() {
 				{
 					test: /\.svg$/,
 					loader: 'svg-sprite-loader',
-					options: {}
 				},
 				{
 					test: /\.(ico)$/,
@@ -72,10 +74,11 @@ function buildConfig() {
 			minimizer: [new TerserPlugin()]
 		},
 		plugins: [
+			new webpack.NamedModulesPlugin(),
 			new MiniCssExtractPlugin({
 				hot: DEVELOPMENT
 			}),
-			new HardSourceWebpackPlugin(),
+			// new HardSourceWebpackPlugin(),
 			new SpritePlugin()
 		]
 	}

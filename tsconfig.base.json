@@ -6,7 +6,7 @@
         "experimentalDecorators": true,
         "strict": true,
         "declaration": true,
-        "declarationMap": true,
+        // "declarationMap": true,
         "noImplicitAny": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,

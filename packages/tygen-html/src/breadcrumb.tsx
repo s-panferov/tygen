@@ -16,7 +16,7 @@ class BreadcrumbBase extends React.Component<{
 		const { id } = reflection
 
 		if (!id) {
-			return
+			return null
 		}
 
 		const links = [] as React.ReactNode[]

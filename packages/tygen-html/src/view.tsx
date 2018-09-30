@@ -4,7 +4,7 @@ import { ReactConverterSettings } from './settings'
 
 export interface ReflectionViewProps<R extends BaseReflection> {
 	reflection: R
-	settings?: ViewSettings
+	settings: ViewSettings
 }
 
 export abstract class BaseView<

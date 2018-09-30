@@ -15,19 +15,12 @@ import {
 	AmbientFileReflection
 } from '@tygen/reflector/src/reflection'
 
-@withSettings
 export class ModulePage extends BaseView<
 	ESModuleReflection | ModuleReflection | NamespaceReflection | AmbientFileReflection
 > {
 	render() {
 		const { reflection, settings } = this.props
 		const ident = parseId(reflection.id!)
-
-		const nav = (
-			<ViewContext.Provider value={Object.assign({}, settings!, { nav: true })}>
-				<ExportsView reflection={reflection} />
-			</ViewContext.Provider>
-		)
 
 		return (
 			<div>

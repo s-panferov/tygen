@@ -1,27 +1,25 @@
 import * as React from 'react'
 
-import { Header } from './ui/header'
 import { BaseView, withSettings } from './view'
 
 import { InventoryReflection } from '@tygen/reflector/src/reflection/inventory/reflection'
 import { css } from 'linaria'
 import { hrefFromId } from './ref-link'
 import { normalizePath } from './helpers'
+import { Page } from './ui/layout'
+import { Outline } from './ui/outline'
 
-@withSettings
-export class InventoryPage extends BaseView<InventoryReflection> {
+export class InventoryPage_ extends BaseView<InventoryReflection> {
 	render() {
 		const { settings, reflection } = this.props
-		const { nav } = settings!
-		if (nav) {
-			return null
-		}
 
 		return (
-			<div>
-				<Header pkg={'🏠'} />
+			<Page
+				short
+				reflection={reflection}
+				header={<Outline icon={null} header={<h1>Packages</h1>} />}>
 				<div className={InventoryBody}>
-					<table>
+					<table className={InventoryTable}>
 						<thead>
 							<tr>
 								<th>Package</th>
@@ -31,6 +29,7 @@ export class InventoryPage extends BaseView<InventoryReflection> {
 						</thead>
 						<tbody>
 							{reflection.packages.map(pkg => {
+								console.log(pkg)
 								const href = normalizePath(
 									settings!,
 									hrefFromId(`${pkg.name}->${pkg.versions[0]}`).href
@@ -51,25 +50,47 @@ export class InventoryPage extends BaseView<InventoryReflection> {
 						</tbody>
 					</table>
 				</div>
-			</div>
+			</Page>
 		)
 	}
 }
+
+export const InventoryPage = withSettings(InventoryPage_)
 
 const InventoryBody = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	margin-top: var(--items-space);
 
 	td {
-		padding: 10px;
+		padding: 10px 0px;
+		padding-right: 10px;
+	}
+
+	td:first-child {
+		width: 10px;
+		white-space: nowrap;
+	}
+
+	td:last-child {
+		width: 100px;
+		text-align: center;
+	}
+
+	th:last-child {
+		text-align: center;
 	}
 
 	th {
 		text-align: left;
-		padding: 20px 0;
+		padding: 0px 0;
+		padding-bottom: 5px;
+		border-bottom: 1px solid #ccc;
 	}
+`
+
+const InventoryTable = css`
+	width: 100%;
 `
 
 const PackageRow = css`
