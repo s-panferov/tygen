@@ -12,6 +12,16 @@ export class Icon extends React.Component<{ sym: SvgSymbol } & React.SVGAttribut
 	}
 }
 
+export class TSIcon extends React.Component<{ className: string }> {
+	render() {
+		return (
+			<span className={this.props.className}>
+				<span className="tsd-kind-icon" />
+			</span>
+		)
+	}
+}
+
 const IconStyle = css`
 	& * {
 		fill: #daa588;

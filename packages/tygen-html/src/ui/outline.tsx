@@ -2,7 +2,7 @@ import React from 'react'
 import { css, cx } from 'linaria'
 
 export class Outline extends React.Component<{
-	icon: React.ReactNode
+	icon?: React.ReactNode
 	header: React.ReactNode
 	collapsible?: boolean
 }> {

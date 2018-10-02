@@ -56,7 +56,13 @@ function buildConfig() {
 				},
 				{
 					test: /\.svg$/,
+					loader: 'file-loader',
+					include: /tsd.svg$/
+				},
+				{
+					test: /\.svg$/,
 					loader: 'svg-sprite-loader',
+					exclude: /tsd.svg$/
 				},
 				{
 					test: /\.(ico)$/,

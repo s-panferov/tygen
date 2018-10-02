@@ -1,12 +1,5 @@
 import * as React from 'react'
-import { Header } from './ui/header'
-import { parseId } from './helpers'
-import { Layout } from './ui/layout'
-import { Badge } from './ui/badge'
-import { BaseView, withSettings, ViewContext } from './view'
-import { Nav } from './ui/nav'
-import { Breadcrumb } from './breadcrumb'
-import { ExportsView } from './exports'
+import { Page } from './ui/layout'
 
 import {
 	ESModuleReflection,
@@ -15,24 +8,30 @@ import {
 	AmbientFileReflection
 } from '@tygen/reflector/src/reflection'
 
+import { BaseView } from './view'
+import { Outline } from './ui/outline'
+import { TSIcon } from './ui/icon'
+import { GroupView } from './group'
+
 export class ModulePage extends BaseView<
 	ESModuleReflection | ModuleReflection | NamespaceReflection | AmbientFileReflection
 > {
 	render() {
-		const { reflection, settings } = this.props
-		const ident = parseId(reflection.id!)
+		const { reflection } = this.props
+		const groups = GroupView.groupReflections(reflection.exports || [])
 
 		return (
-			<div>
-				<Header pkg={ident.pkg} version={ident.version} />
-				<Layout sidebar={<Nav>{nav}</Nav>}>
-					<h1>
-						{reflection.name} <Badge>Module</Badge>
-					</h1>
-					<Breadcrumb reflection={reflection} />
-					<ExportsView reflection={reflection} />
-				</Layout>
-			</div>
+			<Page
+				short
+				reflection={reflection}
+				header={
+					<Outline
+						icon={<TSIcon className="tsd-kind-module" />}
+						header={<h1>{reflection.name}</h1>}
+					/>
+				}>
+				<GroupView groups={groups} />
+			</Page>
 		)
 	}
 }

@@ -1,12 +1,12 @@
 import React from 'react'
 import path from 'path'
-import { withSettings, ViewSettings } from '../view'
 import { css } from 'linaria'
+
+import { withSettings, ViewSettings } from '../view'
 import { NotScrollable } from './search'
 import { hrefFromId } from '../ref-link'
-
-import { InventoryReflection } from '@tygen/reflector/src/reflection/inventory/reflection'
 import { normalizePath } from '../helpers'
+import { InventoryReflection } from '@tygen/reflector/src/reflection/inventory/reflection'
 
 export interface InventoryProviderState {
 	inventory?: InventoryReflection

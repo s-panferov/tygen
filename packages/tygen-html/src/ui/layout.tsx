@@ -3,8 +3,6 @@ import { css, cx } from 'linaria'
 import cn from 'classnames'
 import { Header } from './header'
 import { Reflection } from '@tygen/reflector'
-import { Tree, TreeNavigation } from './tree'
-import { createStructure, Structure } from './structure'
 import { Breadcrumb } from '../breadcrumb'
 
 export interface LayoutProps {
@@ -54,22 +52,16 @@ export class PageBody extends React.Component {
 export class Page extends React.Component<{
 	reflection?: Reflection
 	header: React.ReactChild
-	short?: boolean
+	sidebar?: React.ReactChild
 }> {
-	tree? = this.props.reflection && new Tree(createStructure(this.props.reflection))
-	treeNavigation? = this.tree && new TreeNavigation(this.tree)
-
 	render() {
-		const { reflection, short } = this.props
+		const { reflection } = this.props
 
 		return (
 			<PageBody>
 				<Header />
 				<Layout
-					sidebar={
-						!short &&
-						this.tree && <Structure tree={this.tree} nav={this.treeNavigation!} />
-					}
+					sidebar={this.props.sidebar}
 					breadcrumb={
 						reflection && reflection.id && <Breadcrumb reflection={reflection} />
 					}

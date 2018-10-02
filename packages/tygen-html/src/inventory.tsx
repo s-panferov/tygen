@@ -1,106 +1,135 @@
 import * as React from 'react'
 
-import { BaseView, withSettings } from './view'
+import { BaseView, withSettings, ViewSettings } from './view'
 
-import { InventoryReflection } from '@tygen/reflector/src/reflection/inventory/reflection'
-import { css } from 'linaria'
+import {
+	InventoryReflection,
+	InventoryPackage
+} from '@tygen/reflector/src/reflection/inventory/reflection'
+import { css, cx } from 'linaria'
 import { hrefFromId } from './ref-link'
 import { normalizePath } from './helpers'
 import { Page } from './ui/layout'
 import { Outline } from './ui/outline'
+import { TreeRender, TreeRowProps } from './ui/tree-render'
+import { Tree, TextItem, TreeNavigation } from './ui/tree'
+import { autobind } from 'core-decorators'
+import { observer } from 'mobx-react'
+
+class PackageItem extends TextItem<InventoryPackage & { selected?: boolean }> {
+	href(settings: ViewSettings) {
+		return normalizePath(
+			settings!,
+			hrefFromId(`${this.info.name}->${this.info.versions[0]}`).href
+		)
+	}
+}
+
+function extractStructure(reflection: InventoryReflection) {
+	return reflection.packages.map(pkg => {
+		return new PackageItem(pkg.name, {
+			text: `${pkg.name}->${pkg.versions[0]}`,
+			...pkg
+		})
+	})
+}
 
 export class InventoryPage_ extends BaseView<InventoryReflection> {
+	tree = new Tree(extractStructure(this.props.reflection), tree => ({
+		nav: new TreeNavigation(tree)
+	}))
+
 	render() {
-		const { settings, reflection } = this.props
+		const { reflection } = this.props
 
 		return (
 			<Page
-				short
 				reflection={reflection}
 				header={<Outline icon={null} header={<h1>Packages</h1>} />}>
-				<div className={InventoryBody}>
-					<table className={InventoryTable}>
-						<thead>
-							<tr>
-								<th>Package</th>
-								<th>Description</th>
-								<th>Version</th>
-							</tr>
-						</thead>
-						<tbody>
-							{reflection.packages.map(pkg => {
-								console.log(pkg)
-								const href = normalizePath(
-									settings!,
-									hrefFromId(`${pkg.name}->${pkg.versions[0]}`).href
-								)
-
-								return (
-									<tr className={PackageRow} key={pkg.name}>
-										<td>
-											<a className={PackageRowName} href={href}>
-												{pkg.name}
-											</a>
-										</td>
-										<td>{pkg.description}</td>
-										<td>{pkg.versions[0]}</td>
-									</tr>
-								)
-							})}
-						</tbody>
-					</table>
-				</div>
+				<TreeRender<PackageItem>
+					tree={this.tree}
+					rowHeight={30}
+					onSelect={this.onSelect}
+					itemRender={this.renderItem}>
+					<div className={PackageRow}>
+						<div className={PackageNameCell}>Package</div>
+						<div className={PackageDescriptionCell}>Description</div>
+						<div className={PackageVersionCell}>Version</div>
+					</div>
+				</TreeRender>
 			</Page>
+		)
+	}
+
+	@autobind
+	renderItem(props: TreeRowProps<PackageItem>) {
+		return <InventoryNode {...props} settings={this.props.settings} />
+	}
+
+	@autobind
+	onSelect(_e: any, item: PackageItem) {
+		window.location.assign(item.href(this.props.settings))
+	}
+}
+
+@observer
+export class InventoryNode extends React.Component<
+	TreeRowProps<PackageItem> & { settings: ViewSettings }
+> {
+	render() {
+		const {
+			item,
+			item: { key, info },
+			settings
+		} = this.props
+		const href = item.href(settings)
+		return (
+			<div key={key} className={cx(PackageRow, info.selected && 'selected')}>
+				<div className={PackageNameCell}>
+					<a className={PackageName} href={href}>
+						{info.name}
+					</a>
+				</div>
+				<div className={PackageDescriptionCell}>{info.description}</div>
+				<div className={PackageVersionCell}>{info.versions[0]}</div>
+			</div>
 		)
 	}
 }
 
 export const InventoryPage = withSettings(InventoryPage_)
 
-const InventoryBody = css`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+const PackageNameCell = css`
+	width: 150px;
+	white-space: nowrap;
+`
+const PackageVersionCell = css`
+	width: 100px;
+	text-align: center;
+`
+const PackageDescriptionCell = css`
+	flex: 1 1 auto;
+`
 
-	td {
+const PackageRow = css`
+	display: flex;
+	padding: 5px 10px;
+
+	&.selected {
+		background-color: #eee;
+	}
+
+	& > div {
 		padding: 10px 0px;
 		padding-right: 10px;
 	}
 
-	td:first-child {
-		width: 10px;
-		white-space: nowrap;
-	}
-
-	td:last-child {
-		width: 100px;
-		text-align: center;
-	}
-
-	th:last-child {
-		text-align: center;
-	}
-
-	th {
-		text-align: left;
-		padding: 0px 0;
-		padding-bottom: 5px;
-		border-bottom: 1px solid #ccc;
-	}
-`
-
-const InventoryTable = css`
-	width: 100%;
-`
-
-const PackageRow = css`
-	padding: 5px 10px;
-	width: 400px;
-	&:nth-child(even) {
+	&:nth-child(odd) {
 		background-color: #f5f5f5;
 	}
 `
-const PackageRowName = css`
+
+const PackageName = css`
 	font-size: 14px;
 	display: block;
 `

@@ -84,8 +84,7 @@ export function navigateTo(settings: ViewSettings, refId: string) {
 	window.location = href as any
 }
 
-@withSettings
-export class RefLink extends BaseView<
+class RefLink_ extends BaseView<
 	Reflection,
 	{ relativeId?: string; phantom?: boolean; name?: string; settings?: ViewSettings }
 > {
@@ -124,6 +123,8 @@ export class RefLink extends BaseView<
 		)
 	}
 }
+
+export const RefLink = withSettings(RefLink_)
 
 const Name = css`
 	color: #ccc;

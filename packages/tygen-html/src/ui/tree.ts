@@ -135,19 +135,24 @@ export class TextItem<T extends object = {}, C extends TreeItem = C> extends Tre
 	}
 }
 
-export class Tree<Item extends TreeItem = TreeItem> {
+export class Tree<Item extends TreeItem, E> {
 	children = observable.array<Item>()
+	ext!: E
 
-	constructor(items: Item[] = []) {
-		let lastOrder: number = 0
-		items.forEach(item => {
-			if (item.info.order) {
-				lastOrder = item.info.order
-			} else {
-				item.info.order = lastOrder++
-			}
+	constructor(items: Item[] = [], ext?: (tree: Tree<Item, {}>) => E) {
+		runInAction(() => {
+			let lastOrder: number = 0
+			items.forEach(item => {
+				if (item.info.order) {
+					lastOrder = item.info.order
+				} else {
+					item.info.order = lastOrder++
+				}
+			})
+
+			this.children.push(...items)
+			this.ext = ext ? ext(this) : ({} as any)
 		})
-		this.children.push(...items)
 	}
 
 	@computed
@@ -186,7 +191,11 @@ export interface QueryEngine<O> {
 export type TreeItemWithSelection = TreeItem<{ selected?: boolean }>
 
 export class TreeNavigation<I extends TreeItemWithSelection> {
-	private tree: Tree<I>
+	private tree: Tree<I, any>
+
+	static ext = <I extends TreeItemWithSelection>(tree: Tree<I, any>): TreeNavigation<I> => {
+		return new TreeNavigation(tree)
+	}
 
 	@observable
 	private index = -1
@@ -194,7 +203,7 @@ export class TreeNavigation<I extends TreeItemWithSelection> {
 	@observable.ref
 	current: I | undefined
 
-	constructor(tree: Tree<I>) {
+	constructor(tree: Tree<I, any>) {
 		this.tree = tree
 	}
 

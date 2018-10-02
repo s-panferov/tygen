@@ -11,6 +11,7 @@ export const SectionNames = {
 	[ReflectionKind.Function]: 'Functions',
 	[ReflectionKind.Variable]: 'Variables',
 	[ReflectionKind.Module]: 'Modules',
+	[ReflectionKind.Namespace]: 'Namespaces',
 	getName(group: string): string {
 		return (this as any)[group] || group
 	}
@@ -52,7 +53,7 @@ export class GroupView extends React.Component<GroupViewProps> {
 export function groupReflections(reflections: Reflection[]): GroupedReflections {
 	let groups: GroupedReflections = {}
 	reflections.forEach(ref => {
-		let kind = ref.kind
+		let kind: ReflectionKind = ref.kind
 		if (ref.kind === ReflectionKind.Link) {
 			kind = ref.targetKind
 		}
