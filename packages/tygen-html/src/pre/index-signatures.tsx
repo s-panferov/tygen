@@ -1,5 +1,5 @@
 import React from 'react'
-import { ReflectionWithIndexSignatures } from '@tygen/reflector/src/reflection/signature/reflection'
+import { ReflectionWithIndexSignatures } from '@tygen/reflector'
 import { TypePre } from './type'
 import { PrettyCode } from './prettier'
 

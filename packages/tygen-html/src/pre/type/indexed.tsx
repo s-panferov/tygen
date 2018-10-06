@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { TypePre } from '.'
-import { IndexedAccessReflection } from '@tygen/reflector/src/reflection/_type/indexed-access/reflection'
+import { IndexedAccessReflection } from '@tygen/reflector'
 import { PrettyCode } from '../prettier'
 
 export class IndexedAccessPre extends PrettyCode<{ reflection: IndexedAccessReflection }> {

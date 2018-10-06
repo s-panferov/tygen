@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { VariableReflection } from '@tygen/reflector/src/reflection/variable/reflection'
+import { VariableReflection, ParameterReflection } from '@tygen/reflector'
 import { TypePre } from './type'
 import { PrettyCode } from './prettier'
 import { css } from 'linaria'
@@ -8,18 +8,38 @@ import { css } from 'linaria'
 export class VariablePre extends PrettyCode<{ reflection: VariableReflection }> {
 	render() {
 		const reflection = this.props.reflection
-		this.registerKeyword('let', /let\s/g, <LetKeyword />)
+		this.keyword('let', /let\s/, <LetKeyword />)
 		return (
 			<React.Fragment>
 				let{' '}
-				{this.id(reflection.name, <VariableName key={'name'} reflection={reflection} />)}:{' '}
-				<TypePre reflection={reflection.type} />
+				{this.id(
+					reflection.name,
+					<VariableName key={reflection.id || reflection.name} reflection={reflection} />
+				)}
+				: <TypePre reflection={reflection.type} />
 			</React.Fragment>
 		)
 	}
 }
 
-export class VariableName extends React.Component<{ reflection: VariableReflection }> {
+export class ParameterPre extends PrettyCode<{ reflection: ParameterReflection }> {
+	render() {
+		const reflection = this.props.reflection
+		return (
+			<React.Fragment>
+				{this.id(
+					reflection.name,
+					<VariableName key={reflection.id || reflection.name} reflection={reflection} />
+				)}
+				: <TypePre reflection={reflection.type} />
+			</React.Fragment>
+		)
+	}
+}
+
+export class VariableName extends React.Component<{
+	reflection: VariableReflection | ParameterReflection
+}> {
 	render() {
 		const { reflection } = this.props
 		return (

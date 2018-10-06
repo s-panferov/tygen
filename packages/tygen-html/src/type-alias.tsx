@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { TypeAliasReflection } from '@tygen/reflector/src/reflection'
+import { TypeAliasReflection } from '@tygen/reflector'
 import { Header } from './ui/header'
 import { parseId } from './helpers'
 import { Layout } from './ui/layout'

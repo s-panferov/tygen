@@ -24,7 +24,7 @@ export type TreeRowProps<I> = ListRowProps & {
 }
 
 export interface ItemRenderer<I> {
-	(opts: TreeRowProps<I>): React.ReactChild
+	(opts: TreeRowProps<I>): React.ReactChild | null
 }
 
 export class NavTree<
@@ -33,7 +33,7 @@ export class NavTree<
 > extends Tree<I, E> {
 	constructor(items: I[] = [], ext?: ((tree: Tree<I, {}>) => E)) {
 		super(items, tree => {
-			return Object.assign({}, ext && ext(tree), { nav: new TreeNavigation(this) })
+			return Object.assign({}, ext && ext(tree), { nav: new TreeNavigation(tree) })
 		})
 	}
 }
@@ -43,7 +43,7 @@ export class TreeRender<I extends TreeItem> extends React.Component<{
 	tree: NavTree<I>
 	itemRender: ItemRenderer<I>
 	rowHeight: number | ((indext: Index & { item: I }) => number)
-	onSelect?: (e: React.KeyboardEvent, item: I) => void
+	onSelect?: (e: React.KeyboardEvent<HTMLElement>, item: I) => void
 }> {
 	@computed
 	private get rowHeight(): number | ((index: Index) => number) {
@@ -70,12 +70,12 @@ export class TreeRender<I extends TreeItem> extends React.Component<{
 				{this.props.children}
 				<WindowScroller
 					serverWidth={250}
-					serverHeight={600}
+					serverHeight={900}
 					scrollElement={typeof window !== 'undefined' ? window : undefined}>
 					{({ height, isScrolling, registerChild, onChildScroll, scrollTop }: any) => (
 						<AutoSizer disableHeight>
 							{({ width }) => (
-								<div className={StructureStyle} ref={registerChild}>
+								<div ref={registerChild}>
 									<List
 										{...{ flatTree }}
 										autoHeight
@@ -144,17 +144,6 @@ export class TreeRender<I extends TreeItem> extends React.Component<{
 		})
 	}
 }
-
-const StructureStyle = css`
-	h1,
-	h2,
-	h3,
-	h4,
-	h5 {
-		margin: 0;
-		padding: 0;
-	}
-`
 
 const InputStyle = css`
 	outline: none;

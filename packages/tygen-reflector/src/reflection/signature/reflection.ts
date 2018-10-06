@@ -5,8 +5,9 @@ import {
 	ReflectionKind,
 	NotIncludedReflection
 } from '../reflection'
-import { TypeReflection } from '../_type/reflection'
-import { TypeParameterReflection, ReflectionWithOrigin } from '@tygen/reflector'
+
+import { TypeReflection, TypeParameterReflection } from '../_type/reflection'
+import { ReflectionWithOrigin } from '../property/reflection'
 
 export interface ReflectionWithCallSignatures {
 	ownCallSignatures?: SignatureReflection[]

@@ -1,10 +1,10 @@
-import { BaseReflection } from '@tygen/reflector/src/reflection'
+import { BaseReflection } from '@tygen/reflector'
 import React from 'react'
 import { ReactConverterSettings } from './settings'
 
 export interface ReflectionViewProps<R extends BaseReflection> {
 	reflection: R
-	settings: ViewSettings
+	settings?: ViewSettings
 }
 
 export abstract class BaseView<

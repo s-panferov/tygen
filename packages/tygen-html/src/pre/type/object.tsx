@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { ObjectTypeReflection } from '@tygen/reflector/src/reflection/_type/object/reflection'
+import { ObjectTypeReflection } from '@tygen/reflector'
 import { BaseView, ViewContext, withSettings } from '../../view'
 import { PropertiesViewPre } from '../../properties'
 import { SignaturesPre } from '../../signatures'

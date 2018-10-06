@@ -3,7 +3,7 @@ import { css } from 'linaria'
 import { Search } from './search'
 import { withSettings, ViewSettings } from '../view'
 import { normalizePath } from '../helpers'
-import { SearchReflection } from '@tygen/reflector/src/reflection/search/reflection'
+import { SearchReflection } from '@tygen/reflector'
 
 export interface HeaderProps {
 	pkg?: string

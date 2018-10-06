@@ -11,11 +11,7 @@ import { Breadcrumb } from './breadcrumb'
 import { CommentView } from './comment'
 import { prettyRender, PrettyCode } from './pre/prettier'
 
-import {
-	VariableReflection,
-	ParameterReflection,
-	ReflectionKind
-} from '@tygen/reflector/src/reflection'
+import { VariableReflection, ParameterReflection, ReflectionKind } from '@tygen/reflector'
 
 export class VariableView extends BaseView<VariableReflection | ParameterReflection> {
 	render() {
@@ -70,11 +66,14 @@ export class VariablePage extends BaseView<VariableReflection> {
 export class VariablePre extends PrettyCode<{ reflection: VariableReflection }> {
 	render() {
 		const reflection = this.props.reflection
-		this.registerKeyword('var', /var\s/g, <VarKeyword />)
+		this.keyword('var', /var\s/g, <VarKeyword />)
 		return (
 			<React.Fragment>
 				let{' '}
-				{this.id(reflection.name, <VariableName key={'name'} reflection={reflection} />)}
+				{this.id(
+					reflection.name,
+					<VariableName key={reflection.id || reflection.name} reflection={reflection} />
+				)}
 			</React.Fragment>
 		)
 	}

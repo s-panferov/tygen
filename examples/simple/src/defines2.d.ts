@@ -1,4 +1,4 @@
-declare interface Test {
+declare interface Test<T> {
 	split(separator: string | RegExp, limit?: number): string[]
 }
 

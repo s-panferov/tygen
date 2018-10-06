@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { EnumReflection } from '@tygen/reflector/src/reflection/enum/reflection'
+import { EnumReflection } from '@tygen/reflector'
 import { PrettyCode } from './prettier'
 
 export class EnumPre extends PrettyCode<{ reflection: EnumReflection }> {

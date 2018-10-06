@@ -2,10 +2,7 @@ import * as React from 'react'
 
 import { BaseView, withSettings, ViewSettings } from './view'
 
-import {
-	InventoryReflection,
-	InventoryPackage
-} from '@tygen/reflector/src/reflection/inventory/reflection'
+import { InventoryReflection, InventoryPackage } from '@tygen/reflector'
 import { css, cx } from 'linaria'
 import { hrefFromId } from './ref-link'
 import { normalizePath } from './helpers'
@@ -102,6 +99,11 @@ export const InventoryPage = withSettings(InventoryPage_)
 const PackageNameCell = css`
 	width: 150px;
 	white-space: nowrap;
+
+	@media (max-width: 500px) {
+		width: auto;
+		flex: 1 1 auto;
+	}
 `
 const PackageVersionCell = css`
 	width: 100px;
@@ -109,6 +111,10 @@ const PackageVersionCell = css`
 `
 const PackageDescriptionCell = css`
 	flex: 1 1 auto;
+
+	@media (max-width: 500px) {
+		display: none;
+	}
 `
 
 const PackageRow = css`

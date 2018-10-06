@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { TypePre } from '.'
-import { ConditionalTypeReflection } from '@tygen/reflector/src/reflection/_type/conditional/reflection'
+import { ConditionalTypeReflection } from '@tygen/reflector'
 import { PrettyCode } from '../prettier'
 
 export class ConditionalTypePre extends PrettyCode<{ reflection: ConditionalTypeReflection }> {

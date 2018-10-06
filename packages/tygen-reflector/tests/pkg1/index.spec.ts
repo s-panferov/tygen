@@ -1,5 +1,10 @@
 import path from 'path'
-import { compileFolder, Writer, createMemoryFileSystem, ReflectionKind } from '@tygen/reflector'
+import {
+	compileFolder,
+	Writer,
+	createMemoryFileSystem,
+	ReflectionKind
+} from '@tygen/reflector/runtime'
 
 it('works', () => {
 	const ctx = compileFolder(path.join(__dirname, 'package'))

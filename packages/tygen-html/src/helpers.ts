@@ -1,4 +1,4 @@
-import { Reflection, ReflectionKind } from '@tygen/reflector/src/reflection'
+import { Reflection, ReflectionKind } from '@tygen/reflector'
 import { ViewSettings } from './view'
 import * as path from 'path'
 

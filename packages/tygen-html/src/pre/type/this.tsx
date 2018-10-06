@@ -1,15 +1,19 @@
 import * as React from 'react'
 
 import { BaseView } from '../../view'
-import { ThisReflection } from '@tygen/reflector/src/reflection/_type/this/reflection'
-import { RefLink } from '../../ref-link'
+import { ThisReflection } from '@tygen/reflector'
+import { RefLinkPre } from '../../ref-link'
 
-export class ThisView extends BaseView<ThisReflection> {
+export class ThisPre extends BaseView<ThisReflection> {
 	render() {
 		const { reflection } = this.props
 		return (
 			<React.Fragment>
-				{reflection.base ? <RefLink name={'this'} reflection={reflection.base} /> : 'this'}
+				{reflection.base ? (
+					<RefLinkPre name={'this'} reflection={reflection.base} />
+				) : (
+					'this'
+				)}
 			</React.Fragment>
 		)
 	}

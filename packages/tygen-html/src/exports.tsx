@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { BaseView } from './view'
-import { ReflectionWithExports } from '@tygen/reflector/src/reflection'
+import { ReflectionWithExports } from '@tygen/reflector'
 import { GroupView } from './group'
 
 export class ExportsView extends BaseView<ReflectionWithExports> {

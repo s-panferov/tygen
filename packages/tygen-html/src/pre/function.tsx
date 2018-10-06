@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { FunctionReflection } from '@tygen/reflector/src/reflection/function/reflection'
+import { FunctionReflection } from '@tygen/reflector'
 import { PrettyCode } from './prettier'
 import { SignaturePre } from './signature'
 

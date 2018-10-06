@@ -1,9 +1,8 @@
 import * as React from 'react'
-
-import { TypeReflection, TypeKind } from '@tygen/reflector/src/reflection/_type/reflection'
-import { ReflectionKind } from '@tygen/reflector/src/reflection'
-import { RefLink } from '../../ref-link'
 import { css, cx } from 'linaria'
+
+import { TypeReflection, TypeKind, ReflectionKind } from '@tygen/reflector'
+import { RefLinkPre } from '../../ref-link'
 import { IntersectionTypePre } from './intersection'
 import { TypeReferencePre } from './type-reference'
 import { TypeParameterPre } from './type-parameter'
@@ -13,29 +12,29 @@ import { MappedTypePre } from './mapped'
 import { IndexedAccessPre } from './indexed'
 import { ConditionalTypePre } from './conditional'
 import { IndexTypePre } from './index-type'
-import { ThisView } from './this'
-import { NotIncluded } from '../../not-included'
+import { ThisPre } from './this'
+import { NotIncludedPre } from '../../not-included'
 import { PrettyCode } from '../prettier'
 
 export class TypePre extends PrettyCode<{ reflection: TypeReflection }> {
 	render() {
-		this.registerKeyword('any', /any/, <PrimitiveType>any</PrimitiveType>)
-		this.registerKeyword('boolean', /boolean/, <PrimitiveType>boolean</PrimitiveType>)
-		this.registerKeyword('never', /never/, <PrimitiveType>never</PrimitiveType>)
-		this.registerKeyword('null', /null/, <PrimitiveType>null</PrimitiveType>)
-		this.registerKeyword('number', /number/, <PrimitiveType>number</PrimitiveType>)
-		this.registerKeyword('string', /string/, <PrimitiveType>string</PrimitiveType>)
-		this.registerKeyword('void', /void/, <PrimitiveType>void</PrimitiveType>)
-		this.registerKeyword('object', /object/, <PrimitiveType>object</PrimitiveType>)
-		this.registerKeyword('undefined', /undefined/, <PrimitiveType>undefined</PrimitiveType>)
+		this.keyword('any', /any/, <PrimitiveType>any</PrimitiveType>)
+		this.keyword('boolean', /boolean/, <PrimitiveType>boolean</PrimitiveType>)
+		this.keyword('never', /never/, <PrimitiveType>never</PrimitiveType>)
+		this.keyword('null', /null/, <PrimitiveType>null</PrimitiveType>)
+		this.keyword('number', /number/, <PrimitiveType>number</PrimitiveType>)
+		this.keyword('string', /string/, <PrimitiveType>string</PrimitiveType>)
+		this.keyword('void', /void/, <PrimitiveType>void</PrimitiveType>)
+		this.keyword('object', /object/, <PrimitiveType>object</PrimitiveType>)
+		this.keyword('undefined', /undefined/, <PrimitiveType>undefined</PrimitiveType>)
 
 		const { reflection } = this.props
 
 		switch (reflection.kind) {
 			case ReflectionKind.Link:
-				return <RefLink reflection={reflection} />
+				return <RefLinkPre reflection={reflection} />
 			case ReflectionKind.NotIncluded:
-				return <NotIncluded reflection={reflection} />
+				return <NotIncludedPre reflection={reflection} />
 			case ReflectionKind.Type:
 				switch (reflection.typeKind) {
 					case TypeKind.Any:
@@ -80,7 +79,7 @@ export class TypePre extends PrettyCode<{ reflection: TypeReflection }> {
 					case TypeKind.Index:
 						return <IndexTypePre reflection={reflection} />
 					case TypeKind.This:
-						return <ThisView reflection={reflection} />
+						return <ThisPre reflection={reflection} />
 					default:
 						return 'unsupported ' + reflection.typeKind
 				}

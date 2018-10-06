@@ -1,11 +1,12 @@
 import * as React from 'react'
 import cn from 'classnames'
 
-import { Reflection, ReflectionKind } from '@tygen/reflector/src/reflection'
+import { Reflection, ReflectionKind } from '@tygen/reflector'
 import { css, cx } from 'linaria'
-import { BaseView, withSettings, ViewSettings } from './view'
+import { withSettings, ViewSettings } from './view'
 import { parseId, normalizePath } from './helpers'
 import { TypePre } from './pre/type'
+import { PrettyCode, prettyRender } from './pre/prettier'
 
 export function hrefFromId(id: string, relativeId?: string) {
 	const parts = (relativeId ? id.replace(relativeId, '') : id).split(/::|->/)
@@ -42,6 +43,7 @@ export function hrefFromId(id: string, relativeId?: string) {
 
 	return {
 		name: last.replace(/[<>]/g, ''),
+		id: last.replace(/[<>'"]/g, '_'),
 		href
 	}
 }
@@ -66,7 +68,7 @@ export function documentIdFromId(id: string): string | undefined {
 export function createLink(
 	reflection: Reflection,
 	relativeId?: string
-): { name: string; href: string } {
+): { name: string; href: string; id: string } {
 	switch (reflection.kind) {
 		case ReflectionKind.Link:
 			return hrefFromId(reflection.target, relativeId)
@@ -84,27 +86,48 @@ export function navigateTo(settings: ViewSettings, refId: string) {
 	window.location = href as any
 }
 
-class RefLink_ extends BaseView<
-	Reflection,
-	{ relativeId?: string; phantom?: boolean; name?: string; settings?: ViewSettings }
-> {
+export class RefLinkPre extends PrettyCode<RefLinkProps> {
 	render() {
-		const { relativeId, phantom, reflection, name, settings } = this.props
-
+		const { relativeId, reflection, name } = this.props
 		switch (reflection.kind) {
 			case ReflectionKind.Type:
 				return <TypePre reflection={reflection as any} />
 		}
 
-		const { name: linkName, href } = createLink(this.props.reflection, relativeId)
+		let linkName = name || createLink(this.props.reflection, relativeId).name
+		return this.id(linkName, <RefLink {...this.props} />)
+	}
+}
 
+export interface RefLinkProps {
+	className?: string
+	reflection: Reflection
+	relativeId?: string
+	phantom?: boolean
+	name?: string
+}
+
+class RefLink_ extends React.Component<RefLinkProps & { settings: ViewSettings }> {
+	render() {
+		const { relativeId, phantom, reflection, name, settings } = this.props
+
+		if (!reflection.id) {
+			switch (reflection.kind) {
+				case ReflectionKind.Type:
+					return prettyRender(<TypePre reflection={reflection as any} />)
+			}
+		}
+
+		const { name: linkName, href } = createLink(this.props.reflection, relativeId)
 		const linkNames = (name || linkName).split('/').filter(Boolean)
 		const isPath = linkNames.length > 1
 
 		const relativeHref = normalizePath(settings!, href)
 
 		return (
-			<a className={cx(RefLinkBody, cn({ phantom }))} href={relativeHref}>
+			<a
+				className={cx(RefLinkBody, cn({ phantom }), this.props.className)}
+				href={relativeHref}>
 				{this.props.children ||
 					linkNames.map((name, i) => {
 						return (

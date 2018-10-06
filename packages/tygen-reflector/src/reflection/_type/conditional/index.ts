@@ -2,7 +2,7 @@ import * as ts from 'typescript'
 
 import { visitType } from '../index'
 import { TypeKind } from '../reflection'
-import { ReflectionKind, createLink } from '../../reflection'
+import { ReflectionKind } from '../../reflection'
 import { Context } from '../../../context'
 import { ConditionalTypeReflection } from './reflection'
 
@@ -23,11 +23,11 @@ export function visitConditional(
 		reflection.inferTypeParameters = type.root.inferTypeParameters.map(ty => visitType(ty, ctx))
 	}
 
-	reflection.checkType = createLink(visitType(type.root.checkType, ctx))
-	reflection.extendsType = createLink(visitType(type.root.extendsType, ctx))
+	reflection.checkType = visitType(type.root.checkType, ctx)
+	reflection.extendsType = visitType(type.root.extendsType, ctx)
 
-	reflection.trueType = createLink(visitType(type.root.trueType, ctx))
-	reflection.falseType = createLink(visitType(type.root.falseType, ctx))
+	reflection.trueType = visitType(type.root.trueType, ctx)
+	reflection.falseType = visitType(type.root.falseType, ctx)
 
 	return reflection
 }

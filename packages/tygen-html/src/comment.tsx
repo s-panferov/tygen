@@ -1,18 +1,17 @@
 import * as React from 'react'
-import { BaseReflection } from '@tygen/reflector/src/reflection'
-import { BaseView } from './view'
+import { BaseReflection } from '@tygen/reflector'
 import { Markdown } from './ui/markdown'
-import { css } from 'linaria'
+import { css, cx } from 'linaria'
 
-export class CommentView extends BaseView<BaseReflection> {
+export class CommentView extends React.Component<{ reflection: BaseReflection; inline?: boolean }> {
 	render() {
-		const { reflection } = this.props
+		const { reflection, inline } = this.props
 		if (!reflection.comments) {
 			return null
 		}
 
 		return (
-			<div className={CommentBody}>
+			<div className={cx(CommentBody, inline && 'inline')}>
 				{reflection.comments.map((comment, i) => {
 					switch (comment.kind) {
 						case 'text':
@@ -29,4 +28,13 @@ export class CommentView extends BaseView<BaseReflection> {
 
 const CommentBody = css`
 	margin: 10px 0px;
+
+	&.inline {
+		display: inline-block;
+		opacity: 0.5;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
 `

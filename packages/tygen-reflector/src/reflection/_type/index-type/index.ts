@@ -2,7 +2,7 @@ import * as ts from 'typescript'
 
 import { visitType } from '../index'
 import { TypeKind } from '../reflection'
-import { ReflectionKind, createLink } from '../../reflection'
+import { ReflectionKind } from '../../reflection'
 import { Context } from '../../../context'
 import { IndexTypeReflection } from './reflection'
 
@@ -16,7 +16,7 @@ export function visitIndexType(type: ts.IndexType, ctx: Context): IndexTypeRefle
 	ctx.registerType(type, reflection)
 
 	if (type.type) {
-		reflection.type = createLink(visitType(type.type, ctx))
+		reflection.type = visitType(type.type, ctx)
 	}
 
 	return reflection

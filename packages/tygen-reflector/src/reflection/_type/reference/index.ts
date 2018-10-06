@@ -19,13 +19,13 @@ export function visitReference(type: ts.TypeReference, ctx: Context): TypeRefere
 	if (type.symbol) {
 		reflection.target = createLink(visitSymbol(type.symbol, ctx)!) as TypeReflection
 	} else {
-		reflection.target = createLink(
-			visitType(type.target, ctx, { skipReference: type.target === type })!
-		) as TypeReflection
+		reflection.target = visitType(type.target, ctx, {
+			skipReference: type.target === type
+		})! as TypeReflection
 	}
 
 	reflection.typeArguments =
-		type.typeArguments && type.typeArguments.map(arg => createLink(visitType(arg, ctx)))
+		type.typeArguments && type.typeArguments.map(arg => visitType(arg, ctx))
 
 	return reflection
 }

@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { BaseView } from '../../view'
-import { TypeReferenceReflection } from '@tygen/reflector/src/reflection/_type/reference/reflection'
+import { TypeReferenceReflection } from '@tygen/reflector'
 import { TypePre } from '.'
 import { TypeArgumentsPre } from '../../type-parameters'
 

@@ -13,14 +13,14 @@ export function visitProperty(symbol: ts.Symbol, ctx: Context): PropertyReflecti
 		kind: ReflectionKind.Property,
 		name: symbol.name,
 		type: undefined as any,
-		getter: !!(symbol.flags && ts.SymbolFlags.GetAccessor),
-		setter: !!(symbol.flags && ts.SymbolFlags.SetAccessor)
+		getter: !!(symbol.flags & ts.SymbolFlags.GetAccessor),
+		setter: !!(symbol.flags & ts.SymbolFlags.SetAccessor)
 	}
 
 	ctx.registerSymbol(symbol, propertyRef)
 
 	let type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
-	let typeReflection = createLink(visitType(type, ctx))
+	let typeReflection = visitType(type, ctx)
 
 	propertyRef.type = typeReflection
 

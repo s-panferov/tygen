@@ -2,7 +2,7 @@ import React from 'react'
 import path from 'path'
 import { renderToString } from 'react-dom/server'
 
-import { Reflection, ReflectionKind } from '@tygen/reflector/src/reflection'
+import { Reflection, ReflectionKind } from '@tygen/reflector'
 import { PageView } from './render'
 import { ReactConverterSettings, normalizeSettings } from './settings'
 import { hrefFromId } from './ref-link'
@@ -40,6 +40,7 @@ export function renderHTML(
 				)}" defer></script>
 				<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css"/>
 				<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+				<link href="https://fonts.googleapis.com/css?family=Fira+Mono" rel="stylesheet">
 				<link rel="stylesheet" type="text/css" href="${path.relative(
 					normalizedSettings.path,
 					'/-/assets/index.css'

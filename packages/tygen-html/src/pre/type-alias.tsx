@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { TypeAliasReflection } from '@tygen/reflector/src/reflection/type-alias/reflection'
+import { TypeAliasReflection } from '@tygen/reflector'
 import { TypePre } from './type'
 import { PrettyCode } from './prettier'
 import { TypeArgumentsPre } from './type/type-arguments'

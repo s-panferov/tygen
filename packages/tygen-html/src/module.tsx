@@ -6,7 +6,7 @@ import {
 	ModuleReflection,
 	NamespaceReflection,
 	AmbientFileReflection
-} from '@tygen/reflector/src/reflection'
+} from '@tygen/reflector'
 
 import { BaseView } from './view'
 import { Outline } from './ui/outline'
@@ -22,7 +22,6 @@ export class ModulePage extends BaseView<
 
 		return (
 			<Page
-				short
 				reflection={reflection}
 				header={
 					<Outline

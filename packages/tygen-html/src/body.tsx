@@ -6,7 +6,7 @@ export const BodyStyle = css`
 	--default-font: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica,
 		Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 
-	--monospace-font: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+	--monospace-font: 'Fira Mono', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
 	--items-space: 26px;
 
 	font-family: var(--default-font);

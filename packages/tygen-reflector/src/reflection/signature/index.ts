@@ -29,7 +29,7 @@ export function visitSignature(sig: ts.Signature, ctx: Context): SignatureReflec
 	const signatureRef: SignatureReflection = {
 		kind: ReflectionKind.Signature,
 		parameters: [],
-		returnType: createLink(visitType(sig.getReturnType(), ctx)),
+		returnType: visitType(sig.getReturnType(), ctx),
 		name: signatureName(sig)
 	}
 
@@ -108,7 +108,7 @@ export function visitCallSignatures(
 			parent.allCallSignatures = []
 		}
 		let reflection = visitSignature(signature, ctx)
-		parent.allCallSignatures.push(createLink(reflection))
+		parent.allCallSignatures.push(reflection)
 	})
 }
 

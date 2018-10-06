@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Reflection } from '@tygen/reflector/src/reflection'
+import { Reflection } from '@tygen/reflector'
 import { RefLink } from './ref-link'
 import { css } from 'linaria'
 

@@ -6,7 +6,7 @@ import { withSettings, ViewSettings } from '../view'
 import { NotScrollable } from './search'
 import { hrefFromId } from '../ref-link'
 import { normalizePath } from '../helpers'
-import { InventoryReflection } from '@tygen/reflector/src/reflection/inventory/reflection'
+import { InventoryReflection } from '@tygen/reflector'
 
 export interface InventoryProviderState {
 	inventory?: InventoryReflection

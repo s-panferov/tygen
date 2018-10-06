@@ -1,15 +1,17 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "composite": false,
+    "composite": true,
     "outDir": "lib",
-    "noEmit": false,
     "noEmitOnError": false,
-    "target": "esnext",
-    "moduleResolution": "node",
-    "module": "esnext",
-    "baseUrl": "."
+    "module": "commonjs",
+    "lib": [
+      "esnext"
+    ]
   },
+  "files": [
+    "runtime.ts"
+  ],
   "include": [
     "src/**/*"
   ]

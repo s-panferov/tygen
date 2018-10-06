@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { PackageReflection, ReflectionKind } from '@tygen/reflector/src/reflection'
+import { PackageReflection, ReflectionKind } from '@tygen/reflector'
 import { Markdown } from './ui/markdown'
 import { Page } from './ui/layout'
 import { BaseView } from './view'

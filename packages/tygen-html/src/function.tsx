@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { FunctionReflection } from '@tygen/reflector/src/reflection'
+import { FunctionReflection } from '@tygen/reflector'
 import { Header } from './ui/header'
 import { parseId } from './helpers'
 import { Layout } from './ui/layout'

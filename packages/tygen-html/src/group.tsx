@@ -1,8 +1,12 @@
 import React from 'react'
-import { Reflection, ReflectionKind } from '@tygen/reflector/src/reflection/reflection'
-import { Section } from './ui/section'
-import { RefLink } from './ref-link'
-import { key } from './helpers'
+import { Reflection, ReflectionKind } from '@tygen/reflector'
+import { RefLink, createLink } from './ref-link'
+import { observer } from 'mobx-react'
+import { TreeRowProps, NavTree, TreeRender } from './ui/tree-render'
+import { TextItem } from './ui/tree'
+import { css, cx } from 'linaria'
+import { CommentView } from './comment'
+import { autobind } from 'core-decorators'
 
 export const SectionNames = {
 	[ReflectionKind.Interface]: 'Interfaces',
@@ -17,7 +21,45 @@ export const SectionNames = {
 	}
 }
 
+export class HeaderItem extends TextItem<
+	{
+		selected?: boolean
+	},
+	ModuleItem
+> {}
+
+export class ReflectionItem extends TextItem<
+	{
+		reflection: Reflection
+		href: string
+		selected?: boolean
+	},
+	ReflectionItem
+> {}
+
+export type ModuleItem = HeaderItem | ReflectionItem
+
 export type GroupedReflections = { [key: string]: Reflection[] }
+
+function extractStructure(groups: GroupedReflections) {
+	return Object.keys(groups).map(key => {
+		const items = groups[key]
+		return new HeaderItem(
+			key,
+			{
+				text: SectionNames.getName(key)
+			},
+			items.map(reflection => {
+				const link = createLink(reflection)
+				return new ReflectionItem(link.id, {
+					text: link.name,
+					href: link.href,
+					reflection
+				})
+			})
+		)
+	})
+}
 
 export interface GroupViewProps {
 	groups: GroupedReflections
@@ -25,30 +67,119 @@ export interface GroupViewProps {
 
 export class GroupView extends React.Component<GroupViewProps> {
 	static groupReflections = groupReflections
-	static SectionNames = SectionNames
+
+	tree = new NavTree(extractStructure(this.props.groups))
 
 	render() {
-		let { groups } = this.props
+		return (
+			<TreeRender<ModuleItem>
+				tree={this.tree}
+				rowHeight={i => (i.item instanceof HeaderItem ? 40 : 30)}
+				onSelect={this.onSelect}
+				itemRender={this.renderItem}
+			/>
+		)
+	}
+
+	@autobind
+	renderItem(props: TreeRowProps<ModuleItem>) {
+		if (props.item instanceof HeaderItem) {
+			return <HeaderNode {...props} />
+		} else if (props.item instanceof ReflectionItem) {
+			return <ReflectionNode {...props as TreeRowProps<ReflectionItem>} />
+		} else {
+			return null
+		}
+	}
+
+	@autobind
+	onSelect(e: React.KeyboardEvent<HTMLElement>, item: ModuleItem) {
+		if (item instanceof ReflectionItem) {
+			const link = e.currentTarget.parentElement!.querySelector<HTMLElement>(
+				`#${item.key} a`
+			)!
+			if (link) {
+				link.click()
+			}
+		}
+	}
+}
+
+@observer
+export class HeaderNode extends React.Component<TreeRowProps<HeaderItem>> {
+	render() {
+		const {
+			item: { key, info },
+			style
+		} = this.props
 
 		return (
-			<div>
-				{Object.keys(groups).map(group => {
-					let reflections = groups[group]
-					let name = SectionNames.getName(group)
-					return (
-						<Section key={group} heading={<h2 id={name}>{name}</h2>}>
-							<Section.Grid>
-								{reflections.map(module => {
-									return <RefLink key={key(module)} reflection={module} />
-								})}
-							</Section.Grid>
-						</Section>
-					)
-				})}
+			<h3 key={key} style={style} className={cx(HeaderRow, info.selected && 'selected')}>
+				{info.text}
+			</h3>
+		)
+	}
+}
+
+@observer
+export class ReflectionNode extends React.Component<TreeRowProps<ReflectionItem>> {
+	render() {
+		const {
+			item: { key, info },
+			style
+		} = this.props
+
+		return (
+			<div
+				id={key}
+				key={key}
+				style={style}
+				className={cx(ItemRow, info.selected && 'selected')}>
+				<div className={ItemNameCell}>
+					<RefLink reflection={info.reflection} />
+				</div>
+				<div className={ItemDescriptionCell}>
+					<CommentView reflection={info.reflection} />
+				</div>
 			</div>
 		)
 	}
 }
+
+const HeaderRow = css`
+	display: flex;
+	align-items: center;
+
+	&.selected {
+		background-color: #eee;
+	}
+
+	margin: 0;
+	padding: 0;
+`
+
+const ItemRow = css`
+	display: flex;
+	align-items: center;
+
+	&.selected {
+		background-color: #eee;
+	}
+
+	& > div {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+`
+
+const ItemNameCell = css`
+	width: 150px;
+	white-space: nowrap;
+`
+
+const ItemDescriptionCell = css`
+	flex: 1 1 auto;
+`
 
 export function groupReflections(reflections: Reflection[]): GroupedReflections {
 	let groups: GroupedReflections = {}

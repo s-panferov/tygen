@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { TupleReflection } from '@tygen/reflector/src/reflection/_type/tuple/reflection'
+import { TupleReflection } from '@tygen/reflector'
 import { TypePre } from '.'
 import { Join } from '../../ui/join'
 import { PrettyCode } from '../prettier'

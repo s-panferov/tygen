@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { EnumReflection } from '@tygen/reflector/src/reflection'
+import { EnumReflection } from '@tygen/reflector'
 import { BaseView, withSettings, ViewContext } from './view'
 import { css } from 'linaria'
 import { parseId } from './helpers'

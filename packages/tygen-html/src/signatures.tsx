@@ -1,6 +1,6 @@
 import React from 'react'
 import { ReflectionView } from './render'
-import { Reflection } from '@tygen/reflector/src/reflection'
+import { Reflection } from '@tygen/reflector'
 import { PrettyCode } from './pre/prettier'
 
 export class SignaturesPre extends PrettyCode<{

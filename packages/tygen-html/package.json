@@ -20,8 +20,8 @@
   },
   "scripts": {
     "server-start": "node dist/cli.js --server",
-    "server-watch": "webpack --watch --config webpack.server.js",
-    "client-watch": "webpack-dev-server --hot --config webpack.client.js",
+    "server-watch": "webpack --watch --progress --config webpack.server.js",
+    "client-watch": "webpack-dev-server  --progress --hot --config webpack.client.js",
     "start": "concurrently -p name -n \"server-watch,client-watch,server\" \"yarn run server-watch\" \"yarn run client-watch\" \"yarn run server-start\"",
     "build": "webpack --config webpack.common.js"
   },

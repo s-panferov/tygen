@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { PropertyReflection, ReflectionLink } from '@tygen/reflector/src/reflection'
+import { PropertyReflection, ReflectionLink } from '@tygen/reflector'
 import { BaseView, withSettings } from './view'
 import { css, cx } from 'linaria'
 import { TypePre } from './pre/type'

@@ -1,17 +1,27 @@
 import * as React from 'react'
 
-import { MethodReflection } from '@tygen/reflector/src/reflection/function/reflection'
+import { MethodReflection, ReflectionKind } from '@tygen/reflector'
 import { PrettyCode } from './prettier'
 import { SignaturePre } from './signature'
+import { Join } from '../ui/join'
 
 export class MethodPre extends PrettyCode<{ reflection: MethodReflection }> {
 	render() {
 		const { reflection } = this.props
-		return (
-			reflection.ownCallSignatures &&
-			reflection.ownCallSignatures.map(sig => {
-				return <SignaturePre reflection={sig} />
-			})
-		)
+		if (reflection.allCallSignatures) {
+			return (
+				<React.Fragment>
+					<Join joinWith={`;\n`}>
+						{reflection.allCallSignatures.map((sig, i) => {
+							if (sig.kind === ReflectionKind.Signature) {
+								return <SignaturePre key={sig.id || i} reflection={sig} />
+							}
+						})}
+					</Join>
+				</React.Fragment>
+			)
+		} else {
+			return null
+		}
 	}
 }

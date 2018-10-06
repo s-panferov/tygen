@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ReflectionKind, Reflection } from '@tygen/reflector/src/reflection'
+import { ReflectionKind, Reflection } from '@tygen/reflector'
 
 import { PackagePage } from './package'
 import { ModulePage } from './module'
@@ -17,6 +17,7 @@ import { EnumPage } from './enum'
 import { ReactConverterSettings } from './settings'
 import { InventoryPage } from './inventory'
 import { SearchPage } from './ui/search'
+import { convertColorThemeToCSS, colorTheme } from './color'
 
 export function renderPage(ref: Reflection): React.ReactElement<any> {
 	switch (ref.kind) {
@@ -54,6 +55,11 @@ class PageView_ extends BaseView<Reflection, { settings: ReactConverterSettings 
 	render() {
 		return (
 			<ViewContext.Provider value={this.props.settings}>
+				<style
+					dangerouslySetInnerHTML={{
+						__html: convertColorThemeToCSS(colorTheme)
+					}}
+				/>
 				{renderPage(this.props.reflection)}
 			</ViewContext.Provider>
 		)

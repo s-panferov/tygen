@@ -44,7 +44,12 @@ function buildConfig() {
 					}, {
 						loader: 'ts-loader',
 						options: {
-							transpileOnly: true
+							transpileOnly: true,
+							compilerOptions: {
+								composite: false,
+								declaration: false,
+								declarationMap: false
+							}
 						}
 					}]
 				},

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Join } from '../../ui/join'
-import { TypeReflection } from '@tygen/reflector/src/reflection/_type/reflection'
+import { TypeReflection } from '@tygen/reflector'
 import { TypePre } from '.'
 import { PrettyCode } from '../prettier'
 

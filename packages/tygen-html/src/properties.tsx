@@ -1,4 +1,4 @@
-import { Reflection } from '@tygen/reflector/src/reflection'
+import { Reflection } from '@tygen/reflector'
 import React from 'react'
 import { ReflectionView } from './render'
 import { PrettyCode } from './pre/prettier'
