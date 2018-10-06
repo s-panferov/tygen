@@ -3,10 +3,9 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "lib",
-    "noEmitOnError": false,
     "module": "commonjs",
     "lib": [
-      "esnext"
+      "esnext", "dom"
     ]
   },
   "files": [
