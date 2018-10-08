@@ -16,7 +16,7 @@ export function updateInventory(outDir: string) {
 				continue
 			}
 
-			if (pkg[0] === '@') {
+			if (pkg.indexOf('@') !== -1) {
 				walkFolder(packagePath, pkg)
 			} else if (pkg[0] === '-' || pkg[0] === '_') {
 				continue

@@ -2,7 +2,7 @@ import * as ts from 'typescript'
 import { visitPrimitive } from './primitive'
 import { visitSymbol } from '../visitor'
 import { Context } from '../../context'
-import { ReflectionKind, ReflectionLink, createLink } from '../reflection'
+import { ReflectionKind, ReflectionLink, createLink, NotSupportedReflection } from '../reflection'
 import { visitLiteral, visitBooleanLiteral } from './literal'
 import { visitUnion, visitIntersection } from './intersection'
 import { visitESSymbol } from './symbol'
@@ -15,10 +15,10 @@ import { visitConditional } from './conditional'
 import { visitMapped } from './mapped'
 import { visitIndexType } from './index-type'
 import { visitSubstitution } from './substitution'
-import { TypeReflection, TypeKind, NotSupportedTypeReflection } from './reflection'
 import { isWritableSymbol } from '../identifier'
 import { TypeReferenceReflection } from './reference/reflection'
 import { visitThis } from './this'
+import { TypeReflection } from './reflection'
 
 export function visitType(
 	type: ts.Type,
@@ -59,8 +59,7 @@ function visitTypeInternal(
 		const symbolReflection = createLink(visitSymbol(type.aliasSymbol, ctx)!) as ReflectionLink
 		if (type.aliasTypeArguments) {
 			const reflection: TypeReferenceReflection = {
-				kind: ReflectionKind.Type,
-				typeKind: TypeKind.TypeReference,
+				kind: ReflectionKind.TypeReference,
 				target: symbolReflection,
 				typeArguments: type.aliasTypeArguments.map(ty => visitType(ty, ctx))
 			}
@@ -122,8 +121,7 @@ function visitTypeInternal(
 			if (reflection.id) {
 				let link: ReflectionLink = {
 					kind: ReflectionKind.Link,
-					target: reflection.id,
-					targetKind: reflection.kind
+					target: reflection.id
 				}
 
 				ctx.registerType(type, link)
@@ -162,11 +160,8 @@ function visitTypeInternal(
 		}
 	}
 
-	debugger
-
-	let reflection: NotSupportedTypeReflection = {
-		kind: ReflectionKind.Type,
-		typeKind: TypeKind.NotSupported
+	let reflection: NotSupportedReflection = {
+		kind: ReflectionKind.NotSupported
 	}
 
 	ctx.registerType(type, reflection)

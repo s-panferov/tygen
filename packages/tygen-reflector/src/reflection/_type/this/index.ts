@@ -1,15 +1,13 @@
 import * as ts from 'typescript'
 
-import { TypeKind } from '../reflection'
-import { ReflectionKind, createLink, ReflectionLink } from '../../reflection'
+import { createLink, ReflectionLink, ReflectionKind } from '../../reflection'
 import { Context } from '../../../context'
 import { ThisReflection } from './reflection'
 import { visitSymbol } from '../../visitor'
 
 export function visitThis(type: ts.Type, ctx: Context): ThisReflection {
 	let reflection: ThisReflection = {
-		kind: ReflectionKind.Type,
-		typeKind: TypeKind.This
+		kind: ReflectionKind.ThisType
 	}
 
 	if (type.symbol) {

@@ -8,7 +8,7 @@ import { SignatureReflection } from './signature/reflection'
 import { ClassReflection } from './class/reflection'
 import { TypeAliasReflection } from './type-alias/reflection'
 import { VariableReflection, ParameterReflection } from './variable/reflection'
-import { TypeReflection } from './_type/reflection'
+import { TypeReflection, TypeParameterReflection } from './_type/reflection'
 import { PackageReflection, FolderReflection } from './package'
 import { SearchReflection } from './search/reflection'
 
@@ -21,11 +21,10 @@ import {
 
 export enum ReflectionKind {
 	Inventory = 'Inventory',
-	Type = 'Type',
 	Signature = 'Signature',
 	Class = 'Class',
-	TypeLiteral = 'TypeLiteral',
 	TypeAlias = 'TypeAlias',
+	TypeParameter = 'TypeParameter',
 	Enum = 'Enum',
 	EnumMember = 'EnumMember',
 	Link = 'Link',
@@ -43,6 +42,31 @@ export enum ReflectionKind {
 	Package = 'Package',
 	Folder = 'Folder',
 	Search = 'Search',
+	SubstitutionType = 'SubstitutionType',
+	IndexType = 'IndexType',
+	ConditionalType = 'ConditionalType',
+	MappedType = 'MappedType',
+	AnyType = 'AnyType',
+	UndefinedType = 'UndefinedType',
+	BooleanType = 'BooleanType',
+	TypeParameterType = 'TypeParameterType',
+	TypeReference = 'TypeReference',
+	NeverType = 'NeverType',
+	NullType = 'NullType',
+	IntersectionType = 'IntersectionType',
+	UnionType = 'UnionType',
+	NumberType = 'NumberType',
+	StringType = 'StringType',
+	VoidType = 'VoidType',
+	LinkType = 'LinkType',
+	LiteralType = 'LiteralType',
+	ObjectType = 'ObjectType',
+	ObjectLiteralType = 'ObjectLiteralType',
+	ESSymbolType = 'ESSymbolType',
+	IndexedAccessType = 'IndexedAccessType',
+	TupleType = 'TupleType',
+	ThisType = 'ThisType',
+	UnknownType = 'UnknownType',
 	NotIncluded = 'NotIncluded',
 	NotSupported = 'NotSupported'
 }
@@ -55,13 +79,26 @@ export interface ReflectionWithGlobals extends BaseReflection {
 	globals?: Reflection[]
 }
 
+export interface IdentifierSegment {
+	name: string
+	keywords?: string[]
+	kind: ReflectionKind
+	version?: string
+}
+
+export type Identifier = {
+	segments: IdentifierSegment[]
+	fileName: string
+	anchor: string
+}
+
 export interface BaseReflection {
-	id?: string
+	id?: Identifier
 	kind: ReflectionKind
 	comments?: { kind: string; text: string }[]
 	directives?: { name: string; text?: string }[]
 	definedIn?: {
-		source: string
+		source: Identifier
 		start: number
 		end: number
 	}[]
@@ -69,13 +106,16 @@ export interface BaseReflection {
 
 export interface ReflectionLink extends BaseReflection {
 	kind: ReflectionKind.Link
-	target: string
-	targetKind: ReflectionKind
+	target: Identifier
 }
 
 export interface NotIncludedReflection extends BaseReflection {
 	kind: ReflectionKind.NotIncluded
 	name: string
+}
+
+export interface NotSupportedReflection extends BaseReflection {
+	kind: ReflectionKind.NotSupported
 }
 
 export type Reflection =
@@ -89,6 +129,7 @@ export type Reflection =
 	| MethodReflection
 	| ClassReflection
 	| TypeAliasReflection
+	| TypeParameterReflection
 	| VariableReflection
 	| ParameterReflection
 	| SignatureReflection
@@ -100,6 +141,7 @@ export type Reflection =
 	| FolderReflection
 	| InventoryReflection
 	| SearchReflection
+	| NotSupportedReflection
 	| NotIncludedReflection
 
 export interface HasId {
@@ -112,8 +154,7 @@ export function createLink(ref: Reflection): ReflectionLink | NotIncludedReflect
 	} else if (ref.id) {
 		return <ReflectionLink>{
 			kind: ReflectionKind.Link,
-			target: ref.id,
-			targetKind: ref.kind
+			target: ref.id
 		}
 	} else {
 		throw new Error('Cannot create a link to the reflection')

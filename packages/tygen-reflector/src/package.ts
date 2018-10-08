@@ -17,6 +17,7 @@ import {
 
 import { ESModuleReflection } from './reflection'
 import { createMemoryFileSystem } from './helpers'
+import { identifier, stringifyId } from './reflection/identifier'
 
 export interface PackageFields {
 	folderPath: string
@@ -66,7 +67,13 @@ export class Package {
 	generate(ctx: Context) {
 		const packageRef: PackageReflection = {
 			kind: ReflectionKind.Package,
-			id: `${this.manifest.name}->${this.manifest.version}`,
+			id: identifier([
+				{
+					kind: ReflectionKind.Package,
+					name: this.manifest.name,
+					version: this.manifest.version
+				}
+			]),
 			manifest: this.manifest,
 			modules: []
 		}
@@ -87,7 +94,7 @@ export class Package {
 
 		files.forEach(mod => {
 			this.volume.mkdirpSync(path.dirname(mod.pathInfo.relativePath))
-			this.volume.writeFileSync(mod.pathInfo.relativePath, mod.reflection.id)
+			this.volume.writeFileSync(mod.pathInfo.relativePath, stringifyId(mod.reflection.id!))
 		})
 
 		visitReadme(this.folderPath, packageRef)
@@ -124,7 +131,7 @@ export function visitFolders(
 	parent: ReflectionWithStructure,
 	ctx: Context,
 	root = '.',
-	isRoot: boolean = true
+	_isRoot: boolean = true
 ) {
 	const res = volume.readdirSync(root)
 
@@ -133,7 +140,10 @@ export function visitFolders(
 		const fullPath = path.join(root, item)
 		if (volume.statSync(fullPath).isDirectory()) {
 			const folderRef: FolderReflection = {
-				id: `${parent.id}${isRoot ? '->' : '/'}${item}`,
+				id: identifier([
+					...(parent.id ? parent.id.segments : []),
+					{ kind: ReflectionKind.Folder, name: item }
+				]),
 				kind: ReflectionKind.Folder,
 				name: item,
 				modules: []

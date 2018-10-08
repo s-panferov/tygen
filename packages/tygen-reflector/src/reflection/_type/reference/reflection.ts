@@ -1,7 +1,8 @@
-import { TypeReflectionBase, TypeKind, TypeReflection } from '../reflection'
+import { TypeReflection } from '../reflection'
+import { BaseReflection, ReflectionKind } from '../../reflection'
 
-export interface TypeReferenceReflection extends TypeReflectionBase {
-	typeKind: TypeKind.TypeReference
+export interface TypeReferenceReflection extends BaseReflection {
+	kind: ReflectionKind.TypeReference
 	target: TypeReflection
 	typeArguments?: TypeReflection[]
 }

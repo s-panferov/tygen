@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
 
-import { TypeReflection, TypeKind } from './reflection'
+import { TypeReflection } from './reflection'
 import { ReflectionKind } from '../reflection'
 import { Context } from '../../context'
 
@@ -9,48 +9,43 @@ export function visitPrimitive(type: ts.Type, ctx: Context): TypeReflection | un
 
 	if (type.flags & ts.TypeFlags.Any) {
 		reflection = {
-			kind: ReflectionKind.Type,
-			typeKind: TypeKind.Any
+			kind: ReflectionKind.AnyType
 		}
 	} else if (type.flags & ts.TypeFlags.Boolean) {
 		reflection = {
-			kind: ReflectionKind.Type,
-			typeKind: TypeKind.Boolean
+			kind: ReflectionKind.BooleanType
 		}
 	} else if (type.flags & ts.TypeFlags.Never) {
 		reflection = {
-			kind: ReflectionKind.Type,
-			typeKind: TypeKind.Never
+			kind: ReflectionKind.NeverType
 		}
 	} else if (type.flags & ts.TypeFlags.Null) {
 		reflection = {
-			kind: ReflectionKind.Type,
-			typeKind: TypeKind.Null
+			kind: ReflectionKind.NullType
 		}
 	} else if (type.flags & ts.TypeFlags.Undefined) {
 		reflection = {
-			kind: ReflectionKind.Type,
-			typeKind: TypeKind.Undefined
+			kind: ReflectionKind.UndefinedType
 		}
 	} else if (type.flags & ts.TypeFlags.Number) {
 		reflection = {
-			kind: ReflectionKind.Type,
-			typeKind: TypeKind.Number
+			kind: ReflectionKind.NumberType
 		}
 	} else if (type.flags & ts.TypeFlags.String) {
 		reflection = {
-			kind: ReflectionKind.Type,
-			typeKind: TypeKind.String
+			kind: ReflectionKind.StringType
 		}
 	} else if (type.flags & ts.TypeFlags.Void) {
 		reflection = {
-			kind: ReflectionKind.Type,
-			typeKind: TypeKind.Void
+			kind: ReflectionKind.VoidType
+		}
+	} else if (type.flags & ts.TypeFlags.Unknown) {
+		reflection = {
+			kind: ReflectionKind.UnknownType
 		}
 	} else if (type.flags & ts.TypeFlags.NonPrimitive) {
 		reflection = {
-			kind: ReflectionKind.Type,
-			typeKind: TypeKind.Object
+			kind: ReflectionKind.ObjectType
 		}
 	}
 

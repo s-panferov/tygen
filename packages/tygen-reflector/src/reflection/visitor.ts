@@ -10,7 +10,7 @@ import { visitEnum, visitEnumMember } from './enum'
 import { visitFunction, visitMethod } from './function'
 import { visitClass } from './class'
 import { visitTypeAlias } from './type-alias'
-import { visitVariable } from './variable'
+import { visitVariable, isParameter } from './variable'
 import { generateIdForSourceFile, symbolId } from './identifier'
 
 export function visitSymbol(
@@ -47,36 +47,52 @@ export function visitSymbol(
 
 	let reflection: Reflection | undefined
 
-	if (symbol.flags & ts.SymbolFlags.Module) {
-		reflection = visitModule(symbol, ctx)
-	} else if (symbol.flags & ts.SymbolFlags.Alias) {
-		reflection = visitVariable(symbol, ctx)
-	} else if (symbol.flags & ts.SymbolFlags.Enum) {
-		reflection = visitEnum(symbol, ctx)
-	} else if (symbol.flags & ts.SymbolFlags.Class) {
-		reflection = visitClass(symbol, ctx)
-	} else if (symbol.flags & ts.SymbolFlags.EnumMember) {
-		reflection = visitEnumMember(symbol, ctx)
-	} else if (symbol.flags & ts.SymbolFlags.Interface) {
-		reflection = visitInterface(symbol, ctx)
-	} else if (symbol.flags & ts.SymbolFlags.Method) {
-		reflection = visitMethod(symbol, ctx)
-	} else if (symbol.flags & ts.SymbolFlags.Property || symbol.flags & ts.SymbolFlags.Accessor) {
-		reflection = visitProperty(symbol, ctx)
-	} else if (symbol.flags & ts.SymbolFlags.Function) {
-		reflection = visitFunction(symbol, ctx)
-	} else if (symbol.flags & ts.SymbolFlags.TypeAlias) {
-		reflection = visitTypeAlias(symbol, ctx)
-	} else if (symbol.flags & ts.SymbolFlags.Variable) {
-		reflection = visitVariable(symbol, ctx)
-	} else if (
-		(symbol.flags & ts.SymbolFlags.ExportStar) |
-		(symbol.flags & ts.SymbolFlags.ExportValue) |
-		(symbol.flags & ts.SymbolFlags.Alias)
-	) {
-	} else {
-		debugger
-		throw new Error('Unknown symbol')
+	switch (symbolToKnownReflectionKind(symbol)) {
+		case ReflectionKind.Module:
+			reflection = visitModule(symbol, ctx)
+			break
+		case ReflectionKind.Variable:
+			reflection = visitVariable(symbol, ctx)
+			break
+		case ReflectionKind.Enum:
+			reflection = visitEnum(symbol, ctx)
+			break
+		case ReflectionKind.Class:
+			reflection = visitClass(symbol, ctx)
+			break
+		case ReflectionKind.EnumMember:
+			reflection = visitEnumMember(symbol, ctx)
+			break
+		case ReflectionKind.Interface:
+			reflection = visitInterface(symbol, ctx)
+			break
+		case ReflectionKind.Method:
+			reflection = visitMethod(symbol, ctx)
+			break
+		case ReflectionKind.Property:
+			reflection = visitProperty(symbol, ctx)
+			break
+		case ReflectionKind.Function:
+			reflection = visitFunction(symbol, ctx)
+			break
+		case ReflectionKind.TypeAlias:
+			reflection = visitTypeAlias(symbol, ctx)
+			break
+		case ReflectionKind.Variable:
+		case ReflectionKind.Parameter:
+			reflection = visitVariable(symbol, ctx)
+			break
+		default:
+			if (
+				(symbol.flags & ts.SymbolFlags.ExportStar) |
+				(symbol.flags & ts.SymbolFlags.ExportValue) |
+				(symbol.flags & ts.SymbolFlags.Alias)
+			) {
+				// just ignore
+			} else {
+				debugger
+				throw new Error('Unknown symbol')
+			}
 	}
 
 	if (reflection) {
@@ -93,7 +109,7 @@ export function visitSymbol(
 		if (symbol.declarations && symbol.declarations.length) {
 			reflection.definedIn = symbol.declarations.map(decl => {
 				return {
-					source: generateIdForSourceFile(decl.getSourceFile(), ctx).join(''),
+					source: generateIdForSourceFile(decl.getSourceFile(), ctx),
 					start: decl.getStart(undefined, true),
 					end: decl.getEnd()
 				}
@@ -107,4 +123,38 @@ export function visitSymbol(
 	}
 
 	return reflection
+}
+
+export function symbolToKnownReflectionKind(symbol: ts.Symbol): ReflectionKind | undefined {
+	if (symbol.flags & ts.SymbolFlags.Module) {
+		return ReflectionKind.Module
+	} else if (symbol.flags & ts.SymbolFlags.Alias) {
+		return ReflectionKind.Variable
+	} else if (symbol.flags & ts.SymbolFlags.Enum) {
+		return ReflectionKind.Enum
+	} else if (symbol.flags & ts.SymbolFlags.Class) {
+		return ReflectionKind.Class
+	} else if (symbol.flags & ts.SymbolFlags.EnumMember) {
+		return ReflectionKind.EnumMember
+	} else if (symbol.flags & ts.SymbolFlags.Interface) {
+		return ReflectionKind.Interface
+	} else if (symbol.flags & ts.SymbolFlags.Method) {
+		return ReflectionKind.Method
+	} else if (symbol.flags & ts.SymbolFlags.Property || symbol.flags & ts.SymbolFlags.Accessor) {
+		return ReflectionKind.Property
+	} else if (symbol.flags & ts.SymbolFlags.Function) {
+		return ReflectionKind.Function
+	} else if (symbol.flags & ts.SymbolFlags.TypeAlias) {
+		return ReflectionKind.TypeAlias
+	} else if (symbol.flags & ts.SymbolFlags.Variable) {
+		if (isParameter(symbol)) {
+			return ReflectionKind.Parameter
+		} else {
+			return ReflectionKind.Variable
+		}
+	} else if (symbol.flags & ts.SymbolFlags.TypeLiteral) {
+		return ReflectionKind.LiteralType
+	}
+
+	return undefined
 }

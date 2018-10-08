@@ -2,58 +2,22 @@ import {
 	BaseReflection,
 	ReflectionKind,
 	ReflectionLink,
-	NotIncludedReflection
+	NotIncludedReflection,
+	NotSupportedReflection
 } from '../reflection'
 
-export enum TypeKind {
-	Substitution = 'Substitution',
-	Index = 'Index',
-	Conditional = 'Conditional',
-	Mapped = 'Mapped',
-	Any = 'Any',
-	Undefined = 'Undefined',
-	Boolean = 'Boolean',
-	TypeParameter = 'TypeParameter',
-	TypeReference = 'TypeReference',
-	Never = 'Never',
-	Null = 'Null',
-	Intersection = 'Intersection',
-	Union = 'Union',
-	Number = 'Number',
-	String = 'String',
-	Void = 'Void',
-	Link = 'Link',
-	Literal = 'Literal',
-	Object = 'Object',
-	ObjectLiteral = 'ObjectLiteral',
-	ESSymbol = 'ESSymbol',
-	IndexedAccess = 'IndexedAccess',
-	Tuple = 'Tuple',
-	This = 'This',
-	NotSupported = 'NotSupported'
-}
-
-export interface TypeReflectionBase extends BaseReflection {
-	kind: ReflectionKind.Type
-	typeKind: TypeKind
-}
-
-export interface NotSupportedTypeReflection extends TypeReflectionBase {
-	kind: ReflectionKind.Type
-	typeKind: TypeKind.NotSupported
-}
-
-export interface PrimitiveTypeReflection extends TypeReflectionBase {
-	typeKind:
-		| TypeKind.Any
-		| TypeKind.Boolean
-		| TypeKind.Never
-		| TypeKind.Null
-		| TypeKind.Number
-		| TypeKind.String
-		| TypeKind.Void
-		| TypeKind.Undefined
-		| TypeKind.Object
+export interface PrimitiveTypeReflection extends BaseReflection {
+	kind:
+		| ReflectionKind.AnyType
+		| ReflectionKind.BooleanType
+		| ReflectionKind.NeverType
+		| ReflectionKind.NullType
+		| ReflectionKind.NumberType
+		| ReflectionKind.StringType
+		| ReflectionKind.VoidType
+		| ReflectionKind.UndefinedType
+		| ReflectionKind.ObjectType
+		| ReflectionKind.UnknownType
 }
 
 import { ConditionalTypeReflection } from './conditional/reflection'
@@ -102,4 +66,4 @@ export type TypeReflection =
 	| IndexedAccessReflection
 	| ThisReflection
 	| NotIncludedReflection
-	| NotSupportedTypeReflection
+	| NotSupportedReflection

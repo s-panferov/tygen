@@ -1,5 +1,5 @@
-import { TypeReflectionBase, TypeKind } from '../reflection'
+import { BaseReflection, ReflectionKind } from '../../reflection'
 
-export interface ESSymbolReflection extends TypeReflectionBase {
-	typeKind: TypeKind.ESSymbol
+export interface ESSymbolReflection extends BaseReflection {
+	kind: ReflectionKind.ESSymbolType
 }

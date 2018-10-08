@@ -1,7 +1,8 @@
-import { TypeReflectionBase, TypeKind, TypeReflection } from '../reflection'
+import { TypeReflection } from '../reflection'
+import { BaseReflection, ReflectionKind } from '../../reflection'
 
-export interface ConditionalTypeReflection extends TypeReflectionBase {
-	typeKind: TypeKind.Conditional
+export interface ConditionalTypeReflection extends BaseReflection {
+	kind: ReflectionKind.ConditionalType
 	checkType: TypeReflection
 	extendsType: TypeReflection
 	trueType?: TypeReflection

@@ -1,10 +1,9 @@
 import * as ts from 'typescript'
 
 import { visitType } from '../index'
-import { TypeKind } from '../reflection'
-import { ReflectionKind } from '../../reflection'
 import { Context } from '../../../context'
 import { MappedTypeReflection } from './reflection'
+import { ReflectionKind } from '../../reflection'
 
 export interface MappedType extends ts.Type {
 	declaration: ts.MappedTypeNode
@@ -14,8 +13,7 @@ export interface MappedType extends ts.Type {
 
 export function visitMapped(type: ts.Type, ctx: Context): MappedTypeReflection {
 	const reflection: MappedTypeReflection = {
-		kind: ReflectionKind.Type,
-		typeKind: TypeKind.Mapped,
+		kind: ReflectionKind.MappedType,
 		typeParameter: undefined as any,
 		templateType: undefined as any,
 		constraintType: undefined as any

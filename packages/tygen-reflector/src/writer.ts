@@ -6,6 +6,7 @@ import * as path from 'path'
 import { ReflectionKind } from './reflection/reflection'
 import { FileSystem } from './helpers'
 import { SearchReflection } from './reflection/search/reflection'
+import { stringifyId } from './reflection/identifier'
 
 const IsWritable: { [name: string]: boolean } = {
 	[ReflectionKind.Class]: true,
@@ -60,7 +61,7 @@ export class Writer {
 				return
 			}
 
-			let folder = path.join(this.outDir, reflection.id!.replace(/->|::/g, path.sep))
+			let folder = path.join(this.outDir, stringifyId(reflection.id!))
 			let fileName = path.join(folder, 'index.json')
 
 			this.fs.mkdirpSync(folder)

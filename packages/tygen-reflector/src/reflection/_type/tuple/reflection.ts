@@ -1,6 +1,7 @@
-import { TypeReflectionBase, TypeKind, TypeReflection } from '../reflection'
+import { TypeReflection } from '../reflection'
+import { BaseReflection, ReflectionKind } from '../../reflection'
 
-export interface TupleReflection extends TypeReflectionBase {
-	typeKind: TypeKind.Tuple
+export interface TupleReflection extends BaseReflection {
+	kind: ReflectionKind.TupleType
 	types: TypeReflection[]
 }

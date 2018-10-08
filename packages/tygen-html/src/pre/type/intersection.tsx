@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { IntersectionTypeReflection, UnionTypeReflection, TypeKind } from '@tygen/reflector'
+import { IntersectionTypeReflection, UnionTypeReflection, ReflectionKind } from '@tygen/reflector'
 
 import { TypePre } from '.'
 import { PrettyCode } from '../prettier'
@@ -11,7 +11,7 @@ export class IntersectionTypePre extends PrettyCode<{
 }> {
 	render() {
 		const { reflection } = this.props
-		const sep = reflection.typeKind === TypeKind.Intersection ? '&' : '|'
+		const sep = reflection.kind === ReflectionKind.IntersectionType ? '&' : '|'
 
 		return (
 			<React.Fragment>

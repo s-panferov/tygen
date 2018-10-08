@@ -1,7 +1,6 @@
-import { TypeReflectionBase, TypeKind } from '../reflection'
-import { ReflectionLink } from '../../reflection'
+import { ReflectionLink, BaseReflection, ReflectionKind } from '../../reflection'
 
-export interface ThisReflection extends TypeReflectionBase {
-	typeKind: TypeKind.This
+export interface ThisReflection extends BaseReflection {
+	kind: ReflectionKind.ThisType
 	base?: ReflectionLink
 }

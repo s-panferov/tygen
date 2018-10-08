@@ -9,7 +9,7 @@ import {
 } from '../reflection'
 import { Context } from '../../context'
 import { visitSymbol } from '../visitor'
-import { symbolId, declarationId, generateIdForSourceFile } from '../identifier'
+import { symbolId, declarationId, generateIdForSourceFile, stringifyId } from '../identifier'
 import {
 	ModuleReflection,
 	NamespaceReflection,
@@ -22,7 +22,7 @@ export function visitModule(symbol: ts.Symbol, ctx: Context): Reflection {
 		const reflection: ModuleReflection = {
 			id: symbolId(symbol, ctx),
 			kind: ReflectionKind.Module,
-			name: symbol.name.replace(/"/g, `'`),
+			name: symbol.name.replace(/"/g, ''),
 			exports: []
 		}
 
@@ -90,7 +90,7 @@ export function visitSourceFile(
 		return moduleRef
 	} else {
 		const ambientFileRef: AmbientFileReflection = {
-			id: generateIdForSourceFile(sourceFile, ctx).join(''),
+			id: generateIdForSourceFile(sourceFile, ctx),
 			kind: ReflectionKind.AmbientFile,
 			name: file.pathInfo.fileName,
 			folder: file.pathInfo.folderName
@@ -107,11 +107,13 @@ export function visitSourceFile(
 					return
 				}
 
-				if (wasVisitedIn(ambientFileRef, reflection.id!)) {
+				const stringId = stringifyId(reflection.id!)
+
+				if (wasVisitedIn(ambientFileRef, stringId)) {
 					return
 				}
 
-				setVisitedIn(ambientFileRef, reflection.id!)
+				setVisitedIn(ambientFileRef, stringId)
 
 				const link = createLink(reflection)
 
@@ -121,8 +123,8 @@ export function visitSourceFile(
 				ambientFileRef.exports.push(link)
 
 				const pkgReflection = file.pkg.reflection
-				if (!wasVisitedIn(pkgReflection, reflection.id!)) {
-					setVisitedIn(pkgReflection, reflection.id!)
+				if (!wasVisitedIn(pkgReflection, stringId)) {
+					setVisitedIn(pkgReflection, stringId)
 					if (!pkgReflection.globals) {
 						pkgReflection.globals = []
 					}

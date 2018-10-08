@@ -1,6 +1,6 @@
-import { TypeReflectionBase, TypeKind } from '../reflection'
+import { ReflectionKind, BaseReflection } from '../../reflection'
 
-export interface LiteralTypeReflection extends TypeReflectionBase {
-	typeKind: TypeKind.Literal
+export interface LiteralTypeReflection extends BaseReflection {
+	kind: ReflectionKind.LiteralType
 	value: number | string | boolean
 }

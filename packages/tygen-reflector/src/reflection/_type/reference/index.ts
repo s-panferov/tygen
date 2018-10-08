@@ -1,16 +1,15 @@
 import * as ts from 'typescript'
 
 import { visitType } from '../index'
-import { TypeKind, TypeReflection } from '../reflection'
-import { ReflectionKind, createLink } from '../../reflection'
 import { Context } from '../../../context'
 import { TypeReferenceReflection } from './reflection'
 import { visitSymbol } from '../../visitor'
+import { ReflectionKind, createLink } from '../../reflection'
+import { TypeReflection } from '../reflection'
 
 export function visitReference(type: ts.TypeReference, ctx: Context): TypeReferenceReflection {
 	const reflection: TypeReferenceReflection = {
-		kind: ReflectionKind.Type,
-		typeKind: TypeKind.TypeReference,
+		kind: ReflectionKind.TypeReference,
 		target: undefined as any
 	}
 

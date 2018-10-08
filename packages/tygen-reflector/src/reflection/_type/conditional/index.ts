@@ -1,18 +1,16 @@
 import * as ts from 'typescript'
 
 import { visitType } from '../index'
-import { TypeKind } from '../reflection'
-import { ReflectionKind } from '../../reflection'
 import { Context } from '../../../context'
 import { ConditionalTypeReflection } from './reflection'
+import { ReflectionKind } from '../../reflection'
 
 export function visitConditional(
 	type: ts.ConditionalType,
 	ctx: Context
 ): ConditionalTypeReflection {
 	const reflection: ConditionalTypeReflection = {
-		kind: ReflectionKind.Type,
-		typeKind: TypeKind.Conditional,
+		kind: ReflectionKind.ConditionalType,
 		checkType: undefined as any,
 		extendsType: undefined as any
 	}

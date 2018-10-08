@@ -1,10 +1,8 @@
-import { TypeReflectionBase, TypeKind } from '../_type/reflection'
-import { ReflectionKind } from '../reflection'
+import { ReflectionKind, BaseReflection } from '../reflection'
 
-export interface TypeParameterReflection extends TypeReflectionBase {
+export interface TypeParameterReflection extends BaseReflection {
 	name: string
-	kind: ReflectionKind.Type
-	typeKind: TypeKind.TypeParameter
+	kind: ReflectionKind.TypeParameter
 	constraint?: never
 	default?: never
 	expression?: never

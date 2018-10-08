@@ -1,14 +1,12 @@
 import * as ts from 'typescript'
 
-import { TypeKind } from '../reflection'
-import { ReflectionKind } from '../../reflection'
 import { Context } from '../../../context'
 import { LiteralTypeReflection } from './reflection'
+import { ReflectionKind } from '../../reflection'
 
 export function visitLiteral(type: ts.LiteralType, ctx: Context): LiteralTypeReflection {
 	let reflection: LiteralTypeReflection = {
-		kind: ReflectionKind.Type,
-		typeKind: TypeKind.Literal,
+		kind: ReflectionKind.LiteralType,
 		value: type.value
 	}
 
@@ -19,8 +17,7 @@ export function visitLiteral(type: ts.LiteralType, ctx: Context): LiteralTypeRef
 export function visitBooleanLiteral(type: ts.Type, ctx: Context): LiteralTypeReflection {
 	let intristicName = (type as any).intrinsicName
 	let reflection: LiteralTypeReflection = {
-		kind: ReflectionKind.Type,
-		typeKind: TypeKind.Literal,
+		kind: ReflectionKind.LiteralType,
 		value: intristicName === 'true'
 	}
 	ctx.registerType(type, reflection)

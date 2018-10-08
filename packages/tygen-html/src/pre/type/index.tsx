@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { css, cx } from 'linaria'
 
-import { TypeReflection, TypeKind, ReflectionKind } from '@tygen/reflector'
+import { TypeReflection, ReflectionKind } from '@tygen/reflector'
 import { RefLinkPre } from '../../ref-link'
 import { IntersectionTypePre } from './intersection'
 import { TypeReferencePre } from './type-reference'
@@ -35,62 +35,59 @@ export class TypePre extends PrettyCode<{ reflection: TypeReflection }> {
 				return <RefLinkPre reflection={reflection} />
 			case ReflectionKind.NotIncluded:
 				return <NotIncludedPre reflection={reflection} />
-			case ReflectionKind.Type:
-				switch (reflection.typeKind) {
-					case TypeKind.Any:
-						return 'any'
-					case TypeKind.Boolean:
-						return 'boolean'
-					case TypeKind.Never:
-						return 'never'
-					case TypeKind.Null:
-						return 'null'
-					case TypeKind.Number:
-						return 'number'
-					case TypeKind.String:
-						return 'string'
-					case TypeKind.Void:
-						return 'void'
-					case TypeKind.Object:
-						return 'object'
-					case TypeKind.Undefined:
-						return 'undefined'
-					case TypeKind.ESSymbol:
-						return 'symbol'
-					case TypeKind.Literal:
-						return JSON.stringify(reflection.value)
-					case TypeKind.Intersection:
-					case TypeKind.Union:
-						return <IntersectionTypePre reflection={reflection} />
-					case TypeKind.TypeReference:
-						return <TypeReferencePre reflection={reflection} />
-					case TypeKind.TypeParameter:
-						return <TypeParameterPre reflection={reflection} />
-					case TypeKind.Tuple:
-						return <TuplePre reflection={reflection} />
-					case TypeKind.Mapped:
-						return <MappedTypePre reflection={reflection} />
-					case TypeKind.ObjectLiteral:
-						return <ObjectView reflection={reflection} />
-					case TypeKind.IndexedAccess:
-						return <IndexedAccessPre reflection={reflection} />
-					case TypeKind.Conditional:
-						return <ConditionalTypePre reflection={reflection} />
-					case TypeKind.Index:
-						return <IndexTypePre reflection={reflection} />
-					case TypeKind.This:
-						return <ThisPre reflection={reflection} />
-					default:
-						return 'unsupported ' + reflection.typeKind
-				}
+			case ReflectionKind.AnyType:
+				return 'any'
+			case ReflectionKind.BooleanType:
+				return 'boolean'
+			case ReflectionKind.NeverType:
+				return 'never'
+			case ReflectionKind.NullType:
+				return 'null'
+			case ReflectionKind.NumberType:
+				return 'number'
+			case ReflectionKind.StringType:
+				return 'string'
+			case ReflectionKind.VoidType:
+				return 'void'
+			case ReflectionKind.ObjectType:
+				return 'object'
+			case ReflectionKind.UndefinedType:
+				return 'undefined'
+			case ReflectionKind.ESSymbolType:
+				return 'symbol'
+			case ReflectionKind.LiteralType:
+				return JSON.stringify(reflection.value)
+			case ReflectionKind.IntersectionType:
+			case ReflectionKind.UnionType:
+				return <IntersectionTypePre reflection={reflection} />
+			case ReflectionKind.TypeReference:
+				return <TypeReferencePre reflection={reflection} />
+			case ReflectionKind.TypeParameter:
+				return <TypeParameterPre reflection={reflection} />
+			case ReflectionKind.TupleType:
+				return <TuplePre reflection={reflection} />
+			case ReflectionKind.MappedType:
+				return <MappedTypePre reflection={reflection} />
+			case ReflectionKind.ObjectLiteralType:
+				return <ObjectView reflection={reflection} />
+			case ReflectionKind.IndexedAccessType:
+				return <IndexedAccessPre reflection={reflection} />
+			case ReflectionKind.ConditionalType:
+				return <ConditionalTypePre reflection={reflection} />
+			case ReflectionKind.IndexType:
+				return <IndexTypePre reflection={reflection} />
+			case ReflectionKind.ThisType:
+				return <ThisPre reflection={reflection} />
+			default:
+				return 'unsupported ' + reflection.kind
 		}
 	}
 }
 
-const PrimitiveTypeCSS = css`
+const PrimitiveTypeStyle = css`
 	color: #10ac84;
 `
 
 export const PrimitiveType = (props: React.HTMLAttributes<any>) => (
-	<span className={cx(PrimitiveTypeCSS, props.className)}>{props.children}</span>
+	<span className={cx(PrimitiveTypeStyle, props.className)}>{props.children}</span>
 )

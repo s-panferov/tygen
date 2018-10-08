@@ -3,6 +3,7 @@ import ts from 'typescript'
 import { Generator } from './generator'
 import { Reflection, createLink } from './reflection/reflection'
 import { TypeReflection } from './reflection/_type/reflection'
+import { stringifyId } from './reflection/identifier'
 
 export class Context {
 	generator: Generator
@@ -11,7 +12,7 @@ export class Context {
 
 	visitedReflections = new Set<ts.Symbol>()
 
-	reflectionById = new Map<String, Reflection>()
+	reflectionById = new Map<string, Reflection>()
 
 	reflectionBySymbol = new Map<ts.Symbol, Reflection>()
 	symbolByReflection = new Map<Reflection, ts.Symbol>()
@@ -38,15 +39,17 @@ export class Context {
 
 	registerReflectionWithoutSymbol(reflection: Reflection, symbol?: ts.Symbol) {
 		if (reflection.id) {
-			if (this.reflectionById.has(reflection.id)) {
-				let conflict = this.symbolByReflection.get(this.reflectionById.get(reflection.id)!)!
+			const stringId = stringifyId(reflection.id)
+			const current = this.reflectionById.get(stringId)
+			if (current) {
+				let conflict = this.symbolByReflection.get(current)!
 				if (!symbol || !areSymbolsEqual(symbol, conflict)) {
 					debugger
-					console.error(`Duplicate ID for symbol: ${reflection.id}`)
+					console.error(`Duplicate ID for symbol`, reflection.id)
 					return
 				}
 			}
-			this.reflectionById.set(reflection.id, reflection)
+			this.reflectionById.set(stringId, reflection)
 		}
 	}
 
