@@ -1,9 +1,10 @@
 import * as React from 'react'
 
 import { VariableReflection, ParameterReflection } from '@tygen/reflector'
-import { TypePre } from './type'
+import { ReflectionPre } from './index'
 import { PrettyCode } from './prettier'
 import { css } from 'linaria'
+import { getKey } from '../ref-link'
 
 export class VariablePre extends PrettyCode<{ reflection: VariableReflection }> {
 	render() {
@@ -14,9 +15,9 @@ export class VariablePre extends PrettyCode<{ reflection: VariableReflection }> 
 				let{' '}
 				{this.id(
 					reflection.name,
-					<VariableName key={reflection.id || reflection.name} reflection={reflection} />
+					<VariableName key={getKey(reflection)} reflection={reflection} />
 				)}
-				: <TypePre reflection={reflection.type} />
+				: <ReflectionPre reflection={reflection.type} />
 			</React.Fragment>
 		)
 	}
@@ -29,9 +30,9 @@ export class ParameterPre extends PrettyCode<{ reflection: ParameterReflection }
 			<React.Fragment>
 				{this.id(
 					reflection.name,
-					<VariableName key={reflection.id || reflection.name} reflection={reflection} />
+					<VariableName key={getKey(reflection)} reflection={reflection} />
 				)}
-				: <TypePre reflection={reflection.type} />
+				: <ReflectionPre reflection={reflection.type} />
 			</React.Fragment>
 		)
 	}

@@ -2,8 +2,8 @@
   "name": "@tygen/reflector",
   "version": "0.1.0",
   "description": "Reflector for TypeScript types",
-  "typings": "src/index.ts",
-  "main": "src/index.ts",
+  "typings": "lib/src/index.d.ts",
+  "main": "lib/src/index.js",
   "bin": {
     "tygen": "./bin/tygen.js"
   },
@@ -32,7 +32,7 @@
     "@types/node": "^10.9.4",
     "@types/semver": "^5.5.0",
     "@types/jest": "^23.3.2",
-    "typescript": "^3.1.1",
+    "typescript": "^3.1.2",
     "jest": "^23.6.0",
     "ts-jest": "^23.1.4"
   }

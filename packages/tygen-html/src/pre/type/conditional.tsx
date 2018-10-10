@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { TypePre } from '.'
+import { ReflectionPre } from '../index'
 import { ConditionalTypeReflection } from '@tygen/reflector'
 import { PrettyCode } from '../prettier'
 
@@ -9,10 +9,10 @@ export class ConditionalTypePre extends PrettyCode<{ reflection: ConditionalType
 		const { reflection } = this.props
 		return (
 			<React.Fragment>
-				<TypePre reflection={reflection.checkType} /> extends{' '}
-				<TypePre reflection={reflection.extendsType} />?{' '}
-				{reflection.trueType && <TypePre reflection={reflection.trueType} />}:{' '}
-				{reflection.falseType && <TypePre reflection={reflection.falseType} />}
+				<ReflectionPre reflection={reflection.checkType} /> extends{' '}
+				<ReflectionPre reflection={reflection.extendsType} />?{' '}
+				{reflection.trueType && <ReflectionPre reflection={reflection.trueType} />}:{' '}
+				{reflection.falseType && <ReflectionPre reflection={reflection.falseType} />}
 			</React.Fragment>
 		)
 	}

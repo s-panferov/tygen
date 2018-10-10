@@ -1,7 +1,7 @@
 import React from 'react'
 import { Join } from '../ui/join'
 import { TypeReflection } from '@tygen/reflector'
-import { TypePre } from './type'
+import { ReflectionPre } from './index'
 import { PrettyCode } from './prettier'
 import { getKey } from '../ref-link'
 
@@ -14,7 +14,7 @@ export class TypeArgumentsPre extends PrettyCode<{ types: TypeReflection[] }> {
 				{'<'}
 				<Join joinWith=",">
 					{types.map((ty, i) => (
-						<TypePre key={getKey(ty) || `ty${i}`} reflection={ty} />
+						<ReflectionPre key={getKey(ty) || `ty${i}`} reflection={ty} />
 					))}
 				</Join>
 				{'>'}

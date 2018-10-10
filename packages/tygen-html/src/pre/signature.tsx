@@ -1,11 +1,10 @@
 import * as React from 'react'
 
 import { SignatureReflection } from '@tygen/reflector'
-import { TypePre } from './type'
+import { ReflectionPre } from './index'
 import { PrettyCode } from './prettier'
 import { TypeArgumentsPre } from './type-parameters'
 import { Join } from '../ui/join'
-import { ReflectionPre } from '.'
 import { CommentView } from '../comment'
 import { getKey } from '../ref-link'
 
@@ -28,7 +27,7 @@ export class SignaturePre extends PrettyCode<{ reflection: SignatureReflection }
 						return <ReflectionPre key={getKey(param) || i} reflection={param} />
 					})}
 				</Join>
-				): <TypePre reflection={reflection.returnType} />
+				): <ReflectionPre reflection={reflection.returnType} />
 				{br}
 			</React.Fragment>
 		)

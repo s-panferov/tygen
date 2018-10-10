@@ -1,7 +1,5 @@
 {
-  "compilerOptions": {
-    "noEmit": true
-  },
+  "files": [],
   "references": [{
       "path": "./packages/tygen-reflector"
     },

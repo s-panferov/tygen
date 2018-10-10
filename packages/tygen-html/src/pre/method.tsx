@@ -4,6 +4,7 @@ import { MethodReflection, ReflectionKind } from '@tygen/reflector'
 import { PrettyCode } from './prettier'
 import { SignaturePre } from './signature'
 import { Join } from '../ui/join'
+import { getKey } from '../ref-link'
 
 export class MethodPre extends PrettyCode<{ reflection: MethodReflection }> {
 	render() {
@@ -14,7 +15,7 @@ export class MethodPre extends PrettyCode<{ reflection: MethodReflection }> {
 					<Join joinWith={`;\n`}>
 						{reflection.allCallSignatures.map((sig, i) => {
 							if (sig.kind === ReflectionKind.Signature) {
-								return <SignaturePre key={sig.id || i} reflection={sig} />
+								return <SignaturePre key={getKey(sig.id) || i} reflection={sig} />
 							}
 						})}
 					</Join>

@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { PropertyReflection } from '@tygen/reflector'
-import { TypePre } from './type'
+import { ReflectionPre } from './index'
 import { PrettyCode } from './prettier'
 import { CommentView } from '../comment'
 
@@ -12,7 +12,7 @@ export class PropertyPre extends PrettyCode<{ reflection: PropertyReflection }> 
 		return (
 			<React.Fragment>
 				{this.doc(<CommentView inline reflection={reflection} />)}
-				{reflection.name}: <TypePre reflection={reflection.type} />;{br}
+				{reflection.name}: <ReflectionPre reflection={reflection.type} />;{br}
 			</React.Fragment>
 		)
 	}

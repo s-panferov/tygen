@@ -1,6 +1,6 @@
 import React from 'react'
 import { ReflectionWithIndexSignatures } from '@tygen/reflector'
-import { TypePre } from './type'
+import { ReflectionPre } from './index'
 import { PrettyCode } from './prettier'
 
 export class IndexSignaturesPre extends PrettyCode<{
@@ -14,13 +14,13 @@ export class IndexSignaturesPre extends PrettyCode<{
 
 		const string = reflection.stringIndexType && (
 			<React.Fragment>
-				[key: string]: <TypePre reflection={reflection.stringIndexType} />
+				[key: string]: <ReflectionPre reflection={reflection.stringIndexType} />
 			</React.Fragment>
 		)
 
 		const number = reflection.numberIndexType && (
 			<React.Fragment>
-				[key: number]: <TypePre reflection={reflection.numberIndexType} />
+				[key: number]: <ReflectionPre reflection={reflection.numberIndexType} />
 			</React.Fragment>
 		)
 

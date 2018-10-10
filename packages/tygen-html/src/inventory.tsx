@@ -1,24 +1,20 @@
 import * as React from 'react'
 
-import { BaseView, withSettings, ViewSettings } from './view'
+import { withSettings, ViewSettings } from './view'
 
 import { InventoryReflection, InventoryPackage } from '@tygen/reflector'
 import { css, cx } from 'linaria'
-import { hrefFromId } from './ref-link'
-import { normalizePath } from './helpers'
 import { Page } from './ui/layout'
 import { Outline } from './ui/outline'
 import { TreeRender, TreeRowProps } from './ui/tree-render'
 import { Tree, TextItem, TreeNavigation } from './ui/tree'
 import { autobind } from 'core-decorators'
 import { observer } from 'mobx-react'
+import { normalizePath } from './helpers'
 
 class PackageItem extends TextItem<InventoryPackage & { selected?: boolean }> {
-	href(settings: ViewSettings) {
-		return normalizePath(
-			settings!,
-			hrefFromId(`${this.info.name}->${this.info.versions[0]}`).href
-		)
+	href() {
+		return `/${this.info.name}/${this.info.versions[0]}`
 	}
 }
 
@@ -31,7 +27,10 @@ function extractStructure(reflection: InventoryReflection) {
 	})
 }
 
-export class InventoryPage_ extends BaseView<InventoryReflection> {
+export class InventoryPage_ extends React.Component<{
+	reflection: InventoryReflection
+	settings: ViewSettings
+}> {
 	tree = new Tree(extractStructure(this.props.reflection), tree => ({
 		nav: new TreeNavigation(tree)
 	}))
@@ -64,10 +63,19 @@ export class InventoryPage_ extends BaseView<InventoryReflection> {
 	}
 
 	@autobind
-	onSelect(_e: any, item: PackageItem) {
-		window.location.assign(item.href(this.props.settings))
+	onSelect(e: React.KeyboardEvent<HTMLElement>, item: PackageItem) {
+		if (item instanceof PackageItem) {
+			const link = e.currentTarget.parentElement!.querySelector<HTMLElement>(
+				`#${item.key} a`
+			)!
+			if (link) {
+				link.click()
+			}
+		}
 	}
 }
+
+export const InventoryPage = withSettings(InventoryPage_)
 
 @observer
 export class InventoryNode extends React.Component<
@@ -79,7 +87,7 @@ export class InventoryNode extends React.Component<
 			item: { key, info },
 			settings
 		} = this.props
-		const href = item.href(settings)
+		const href = normalizePath(settings, item.href())
 		return (
 			<div key={key} className={cx(PackageRow, info.selected && 'selected')}>
 				<div className={PackageNameCell}>
@@ -93,8 +101,6 @@ export class InventoryNode extends React.Component<
 		)
 	}
 }
-
-export const InventoryPage = withSettings(InventoryPage_)
 
 const PackageNameCell = css`
 	width: 150px;

@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { IntersectionTypeReflection, UnionTypeReflection, ReflectionKind } from '@tygen/reflector'
 
-import { TypePre } from '.'
+import { ReflectionPre } from '../index'
 import { PrettyCode } from '../prettier'
 import { Join } from '../../ui/join'
 import { getKey } from '../../ref-link'
@@ -18,7 +18,7 @@ export class IntersectionTypePre extends PrettyCode<{
 			<React.Fragment>
 				<Join joinWith={sep}>
 					{reflection.types.map((type, i) => (
-						<TypePre key={getKey(type) || i} reflection={type} />
+						<ReflectionPre key={getKey(type) || i} reflection={type} />
 					))}
 				</Join>
 			</React.Fragment>

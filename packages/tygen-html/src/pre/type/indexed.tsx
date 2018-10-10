@@ -1,6 +1,7 @@
 import * as React from 'react'
-import { TypePre } from '.'
 import { IndexedAccessReflection } from '@tygen/reflector'
+
+import { ReflectionPre } from '../index'
 import { PrettyCode } from '../prettier'
 
 export class IndexedAccessPre extends PrettyCode<{ reflection: IndexedAccessReflection }> {
@@ -8,9 +9,9 @@ export class IndexedAccessPre extends PrettyCode<{ reflection: IndexedAccessRefl
 		const { reflection } = this.props
 		return (
 			<React.Fragment>
-				<TypePre reflection={reflection.objectType} />
+				<ReflectionPre reflection={reflection.objectType} />
 				{'['}
-				<TypePre reflection={reflection.indexType} />
+				<ReflectionPre reflection={reflection.indexType} />
 				{']'}
 			</React.Fragment>
 		)

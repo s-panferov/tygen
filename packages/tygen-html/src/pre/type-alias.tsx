@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { TypeAliasReflection } from '@tygen/reflector'
-import { TypePre } from './type'
+import { ReflectionPre } from './index'
 import { PrettyCode } from './prettier'
 import { TypeArgumentsPre } from './type/type-arguments'
 
@@ -19,7 +19,7 @@ export class TypeAliasPre extends PrettyCode<{ reflection: TypeAliasReflection }
 							{'>'}
 						</React.Fragment>
 					)}
-				= <TypePre reflection={reflection.type} />
+				= <ReflectionPre reflection={reflection.type} />
 			</React.Fragment>
 		)
 	}

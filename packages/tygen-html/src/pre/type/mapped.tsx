@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { MappedTypeReflection } from '@tygen/reflector'
-import { TypePre } from '.'
+import { ReflectionPre } from '../index'
 import { PrettyCode } from '../prettier'
 
 export class MappedTypePre extends PrettyCode<{ reflection: MappedTypeReflection }> {
@@ -9,9 +9,9 @@ export class MappedTypePre extends PrettyCode<{ reflection: MappedTypeReflection
 		const { reflection } = this.props
 		return (
 			<React.Fragment>
-				{'{ '}[{<TypePre reflection={reflection.typeParameter} />} extends{' '}
-				{<TypePre reflection={reflection.constraintType} />}
-				]: <TypePre reflection={reflection.templateType} /> {'}'}
+				{'{ '}[{<ReflectionPre reflection={reflection.typeParameter} />} extends{' '}
+				{<ReflectionPre reflection={reflection.constraintType} />}
+				]: <ReflectionPre reflection={reflection.templateType} /> {'}'}
 			</React.Fragment>
 		)
 	}

@@ -1,15 +1,14 @@
 import React from 'react'
-import { css, cx } from 'linaria'
+import * as path from 'path'
+import { css } from 'linaria'
 import * as fuzz from 'fuzzaldrin-plus'
+
+import { SearchReflection, ReflectionId } from '@tygen/reflector'
+
 import { normalizePath } from '../helpers'
-import { Badge } from './badge'
-import cn from 'classnames'
-import { Join } from './join'
-import { RefLink, navigateTo, getKey } from '../ref-link'
-import { SearchReflection } from '../../../tygen-reflector/src/reflection/search/reflection'
-import { BaseView, ViewSettings } from '../view'
+import { navigateTo, getKey, RefLink } from '../ref-link'
+import { BaseView, ViewSettings, withSettings } from '../view'
 import { Header } from './header'
-import { ReflectionId } from '@tygen/reflector'
 
 export interface SearchState {
 	index: number
@@ -20,17 +19,26 @@ export interface SearchState {
 	results: ReflectionId[]
 }
 
+interface ReflectionIdWithSearchPattern extends ReflectionId {
+	searchPattern?: string
+}
+
+interface SearchReflectionWithPattern extends SearchReflection {
+	items: ReflectionIdWithSearchPattern[]
+}
+
 export class SearchPage extends BaseView<SearchReflection> {
 	render() {
 		return <Header pkg={'🔎'} search={this.props.reflection} />
 	}
 }
 
-export class Search extends React.Component<
-	{ pkg?: string; version?: string; reflection?: SearchReflection; settings?: ViewSettings },
+export class Search_ extends React.Component<
+	{ pkg?: string; version?: string; reflection?: SearchReflection; settings: ViewSettings },
 	SearchState
 > {
-	reflection?: SearchReflection = this.props.reflection
+	reflection?: SearchReflectionWithPattern = this.props.reflection
+
 	state: SearchState = {
 		index: 0,
 		query: '',
@@ -52,6 +60,9 @@ export class Search extends React.Component<
 				.then(index => index.json())
 				.then((reflection: SearchReflection) => {
 					this.reflection = reflection
+					this.reflection.items.forEach(item => {
+						item.searchPattern = path.join(item.fileName, item.anchor)
+					})
 					this.setState({
 						results: this.updateResults()
 					})
@@ -112,7 +123,7 @@ export class Search extends React.Component<
 		) {
 			// Navigate to search page for file mode, because file: does not allow
 			// us to make a fetch request.
-			window.location = normalizePath(this.props.settings!, '/_search') as any
+			window.location = normalizePath(this.props.settings, '/_search') as any
 		}
 
 		this.setState({
@@ -140,7 +151,7 @@ export class Search extends React.Component<
 			})
 		} else if (e.key === 'Enter') {
 			const ref = results[index]
-			navigateTo(this.props.settings!, ref)
+			navigateTo(this.props.settings, ref)
 		} else if (e.key === 'Escape') {
 			this.setState({
 				open: false
@@ -153,7 +164,10 @@ export class Search extends React.Component<
 			const scopedQuery =
 				scope === 'package' ? `${this.props.pkg}/${this.props.version}/${query}` : query
 
-			return fuzz.filter(this.reflection.items, scopedQuery, { maxResults: 50 })
+			return fuzz.filter(this.reflection.items, scopedQuery, {
+				key: 'searchPattern',
+				maxResults: 50
+			})
 		} else {
 			return []
 		}
@@ -180,6 +194,8 @@ export class Search extends React.Component<
 	}
 }
 
+export const Search = withSettings(Search_)
+
 export class NotScrollable extends React.Component {
 	componentDidMount() {
 		document.body.scrollTop = 0
@@ -201,97 +217,9 @@ class SearchItem extends React.Component<{ id: ReflectionId; focus: boolean }> {
 	}
 
 	render() {
-		const { focus } = this.props
-		const id = parseId(this.props.id)
-		return (
-			<RefLink reflection={{ id: this.props.id } as any}>
-				<div className={cx(SearchItemBody, cn({ focus }))}>
-					{id.pkg}
-					&nbsp;
-					<Badge>{id.version}</Badge>
-					&nbsp;
-					{id.module && (
-						<Join
-							joinWith={sep => (
-								<span className={SearchItemSep} key={'mod-sep' + sep}>
-									/
-								</span>
-							)}>
-							{id.module.map((mod, i, list) => {
-								return (
-									<div
-										className={cx(
-											SearchItemPart,
-											cn({
-												main: !id.items && i === list.length - 1
-											})
-										)}
-										key={'mod' + i}>
-										{mod}
-									</div>
-								)
-							})}
-						</Join>
-					)}
-					{id.items && <span className={SearchItemSep}>/</span>}
-					{id.items && (
-						<Join
-							joinWith={sep => (
-								<span className={SearchItemSep} key={'item-sep' + sep}>
-									/
-								</span>
-							)}>
-							{id.items.map((item, i, list) => {
-								return (
-									<div
-										key={'item' + i}
-										className={cx(
-											SearchItemPart,
-											cn({ main: i === list.length - 1 })
-										)}>
-										{item.name}
-									</div>
-								)
-							})}
-						</Join>
-					)}
-				</div>
-			</RefLink>
-		)
+		return <RefLink reflectionId={this.props.id} />
 	}
 }
-
-const SearchItemBody = css`
-	height: 30px;
-	display: flex;
-	align-items: center;
-	padding: 0 10px;
-	color: #222;
-	cursor: pointer;
-
-	&:nth-child(even) {
-		background-color: #f0f0f0;
-	}
-
-	&:hover {
-		background-color: #eee;
-	}
-
-	&.focus {
-		background-color: #fef;
-	}
-`
-
-const SearchItemPart = css`
-	&.main {
-		font-weight: bold;
-	}
-`
-
-const SearchItemSep = css`
-	padding: 0 3px;
-	color: #ccc;
-`
 
 const SearchBody = css`
 	display: flex;

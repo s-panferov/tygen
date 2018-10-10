@@ -3,15 +3,14 @@
   "compilerOptions": {
     "composite": true,
     "module": "esnext",
-    "noEmit": true,
     "target": "esnext",
     "outDir": "lib",
     "esModuleInterop": true,
     "jsx": "react",
-    "baseUrl": ".",
-    "paths": {
-      "@tygen/reflector/*": ["../tygen-reflector/*"]
-    },
+    // "baseUrl": ".",
+    // "paths": {
+    //   "@tygen/reflector/*": ["../tygen-reflector/*"]
+    // },
     "lib": [
       "esnext", "dom"
     ]
