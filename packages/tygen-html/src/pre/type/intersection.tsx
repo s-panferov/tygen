@@ -5,6 +5,7 @@ import { IntersectionTypeReflection, UnionTypeReflection, ReflectionKind } from 
 import { TypePre } from '.'
 import { PrettyCode } from '../prettier'
 import { Join } from '../../ui/join'
+import { getKey } from '../../ref-link'
 
 export class IntersectionTypePre extends PrettyCode<{
 	reflection: IntersectionTypeReflection | UnionTypeReflection
@@ -17,7 +18,7 @@ export class IntersectionTypePre extends PrettyCode<{
 			<React.Fragment>
 				<Join joinWith={sep}>
 					{reflection.types.map((type, i) => (
-						<TypePre key={type.id || i} reflection={type} />
+						<TypePre key={getKey(type) || i} reflection={type} />
 					))}
 				</Join>
 			</React.Fragment>

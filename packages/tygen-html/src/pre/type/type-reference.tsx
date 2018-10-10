@@ -3,7 +3,7 @@ import * as React from 'react'
 import { BaseView } from '../../view'
 import { TypeReferenceReflection } from '@tygen/reflector'
 import { TypePre } from '.'
-import { TypeArgumentsPre } from '../../type-parameters'
+import { TypeArgumentsPre } from '../type-parameters'
 
 export class TypeReferencePre extends BaseView<TypeReferenceReflection> {
 	render() {

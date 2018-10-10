@@ -1,14 +1,15 @@
 import React from 'react'
 import { css, cx } from 'linaria'
 import * as fuzz from 'fuzzaldrin-plus'
-import { parseId, normalizePath } from '../helpers'
+import { normalizePath } from '../helpers'
 import { Badge } from './badge'
 import cn from 'classnames'
 import { Join } from './join'
-import { RefLink, navigateTo } from '../ref-link'
+import { RefLink, navigateTo, getKey } from '../ref-link'
 import { SearchReflection } from '../../../tygen-reflector/src/reflection/search/reflection'
-import { BaseView, withSettings, ViewSettings } from '../view'
+import { BaseView, ViewSettings } from '../view'
 import { Header } from './header'
+import { ReflectionId } from '@tygen/reflector'
 
 export interface SearchState {
 	index: number
@@ -16,7 +17,7 @@ export interface SearchState {
 	scope: string
 	ready: boolean
 	open: boolean
-	results: string[]
+	results: ReflectionId[]
 }
 
 export class SearchPage extends BaseView<SearchReflection> {
@@ -25,7 +26,6 @@ export class SearchPage extends BaseView<SearchReflection> {
 	}
 }
 
-@withSettings
 export class Search extends React.Component<
 	{ pkg?: string; version?: string; reflection?: SearchReflection; settings?: ViewSettings },
 	SearchState
@@ -46,7 +46,6 @@ export class Search extends React.Component<
 		const searchIndex = window.localStorage.getItem('searchIndex')
 		const searchScope = window.localStorage.getItem('searchScope') || 'package'
 		const searchQuery = window.localStorage.getItem('searchQuery') || ''
-
 		if (!this.props.reflection && window.location.protocol !== 'file:') {
 			const url = normalizePath(this.props.settings!, '/_search/index.json')
 			fetch(url.toString())
@@ -59,7 +58,6 @@ export class Search extends React.Component<
 				})
 				.catch(e => console.error(e))
 		}
-
 		this.setState({
 			scope: searchScope,
 			query: searchQuery,
@@ -93,7 +91,13 @@ export class Search extends React.Component<
 					<div className={SearchResults}>
 						<NotScrollable />
 						{this.state.results.map((res, i) => {
-							return <SearchItem key={res} id={res} focus={i === this.state.index} />
+							return (
+								<SearchItem
+									key={getKey(res)}
+									id={res}
+									focus={i === this.state.index}
+								/>
+							)
 						})}
 					</div>
 				)}
@@ -191,7 +195,7 @@ export class NotScrollable extends React.Component {
 	}
 }
 
-class SearchItem extends React.Component<{ id: string; focus: boolean }> {
+class SearchItem extends React.Component<{ id: ReflectionId; focus: boolean }> {
 	shouldComponentUpdate(nextProps: this['props']) {
 		return this.props.id !== nextProps.id || this.props.focus !== nextProps.focus
 	}

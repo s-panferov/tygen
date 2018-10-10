@@ -1,4 +1,10 @@
-import { BaseReflection, ReflectionKind, ReflectionWithExports } from '../reflection'
+import {
+	BaseReflection,
+	ReflectionKind,
+	ReflectionWithExports,
+	ReflectionPath
+} from '../reflection'
+
 import { ReflectionWithCallSignatures } from '../signature/reflection'
 
 export interface FunctionBaseReflection extends BaseReflection, ReflectionWithCallSignatures {
@@ -6,9 +12,11 @@ export interface FunctionBaseReflection extends BaseReflection, ReflectionWithCa
 }
 
 export interface FunctionReflection extends ReflectionWithExports, FunctionBaseReflection {
+	id: ReflectionPath
 	kind: ReflectionKind.Function
 }
 
 export interface MethodReflection extends FunctionBaseReflection {
+	id: ReflectionPath
 	kind: ReflectionKind.Method
 }

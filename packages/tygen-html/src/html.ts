@@ -5,7 +5,7 @@ import { renderToString } from 'react-dom/server'
 import { Reflection, ReflectionKind } from '@tygen/reflector'
 import { PageView } from './render'
 import { ReactConverterSettings, normalizeSettings } from './settings'
-import { hrefFromId } from './ref-link'
+import { createLink } from './ref-link'
 import { ViewSettings } from './view'
 import { BodyStyle } from './body'
 
@@ -17,7 +17,7 @@ export function renderHTML(
 	const normalizedSettings = normalizeSettings(settings) as ViewSettings
 
 	if (ref.id) {
-		normalizedSettings.path = hrefFromId(ref.id || '').href
+		normalizedSettings.path = createLink(ref.id).href
 	} else if (ref.kind === ReflectionKind.Search) {
 		normalizedSettings.path = '/_search'
 	} else {

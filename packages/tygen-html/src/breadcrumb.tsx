@@ -1,9 +1,11 @@
 import React from 'react'
-import { Reflection } from '@tygen/reflector'
 import { css, cx } from 'linaria'
-import { hrefFromId } from './ref-link'
+
+import { Reflection } from '@tygen/reflector'
+
 import { withSettings, ViewSettings } from './view'
 import { normalizePath } from './helpers'
+import { RefLink } from './ref-link'
 
 import homeIcon from '@fortawesome/fontawesome-free/svgs/solid/home.svg'
 
@@ -20,9 +22,6 @@ class BreadcrumbBase extends React.Component<{
 		}
 
 		const links = [] as React.ReactNode[]
-		const regexp = /(->|::|\/|$)/g
-		const pkg = id.match(/(.*?)->(.*?)(->|$)/)!
-		const pkgHref = hrefFromId(pkg[0])
 
 		links.push(
 			<a
@@ -41,49 +40,26 @@ class BreadcrumbBase extends React.Component<{
 			</a>
 		)
 
-		links.push(
-			<a className={LinkStyle} key={pkg[0]} href={normalizePath(settings!, pkgHref.href)}>
-				{pkg[1]}
-				<span className={ArrowStyle}> </span>
-			</a>
-		)
-
-		let rest = id.slice(pkg[0].length)
-		let lastRef: string = pkg[0]
-
-		let res: RegExpExecArray | null
-		while ((res = regexp.exec(rest))) {
-			if (res.index === 0) {
-				break
-			}
-
-			// package always goes with a version
-			let subId = pkg[0] + rest.slice(0, res.index)
-
-			const href = hrefFromId(subId, lastRef)
-			lastRef = subId
-
+		id.forEach(id => {
 			links.push(
-				<a className={LinkStyle} key={subId} href={normalizePath(settings!, href.href)}>
-					{href.name}
-					<span className={ArrowStyle}> </span>
-				</a>
+				<RefLink className={LinkStyle} reflectionId={id}>
+					{({ name }) => {
+						return (
+							<React.Fragment>
+								{name}
+								<span className={ArrowStyle}> </span>
+							</React.Fragment>
+						)
+					}}
+				</RefLink>
 			)
-
-			if (res.index >= rest.length - 1) {
-				break
-			}
-		}
+		})
 
 		return <div className={BodyStyle}>{links}</div>
 	}
 }
 
 export const Breadcrumb = withSettings(BreadcrumbBase)
-
-export function createLink(...parts: string[]) {
-	return '/' + parts.join('/')
-}
 
 const BodyStyle = css`
 	font-size: 14px;

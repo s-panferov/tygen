@@ -1,12 +1,11 @@
 import * as React from 'react'
 
 import { ObjectTypeReflection } from '@tygen/reflector'
-import { BaseView, ViewContext, withSettings } from '../../view'
+import { BaseView, ViewContext } from '../../view'
 import { PropertiesViewPre } from '../../properties'
 import { SignaturesPre } from '../../signatures'
 import { IndexSignaturesPre } from '../index-signatures'
 
-@withSettings
 export class ObjectView extends BaseView<ObjectTypeReflection> {
 	render() {
 		const { reflection, settings } = this.props

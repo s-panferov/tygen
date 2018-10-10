@@ -6,11 +6,8 @@ import { PackagePage } from './package'
 import { ModulePage } from './module'
 import { InterfacePage } from './interface'
 import { BaseView, ViewContext } from './view'
-import { VariablePage, VariableView } from './variable'
+import { VariablePage } from './variable'
 import { FolderPage } from './folder'
-import { PropertyView } from './property'
-import { MethodView } from './method'
-import { SignatureView } from './signature'
 import { FunctionPage } from './function'
 import { TypeAliasPage } from './type-alias'
 import { EnumPage } from './enum'
@@ -18,6 +15,8 @@ import { ReactConverterSettings } from './settings'
 import { InventoryPage } from './inventory'
 import { SearchPage } from './ui/search'
 import { convertColorThemeToCSS, colorTheme } from './color'
+
+const { hot } = require('react-hot-loader')
 
 export function renderPage(ref: Reflection): React.ReactElement<any> {
 	switch (ref.kind) {
@@ -49,8 +48,6 @@ export function renderPage(ref: Reflection): React.ReactElement<any> {
 	return <div>Unknown {ref.kind}</div>
 }
 
-const { hot } = require('react-hot-loader')
-
 class PageView_ extends BaseView<Reflection, { settings: ReactConverterSettings }> {
 	render() {
 		return (
@@ -67,21 +64,3 @@ class PageView_ extends BaseView<Reflection, { settings: ReactConverterSettings 
 }
 
 export const PageView = hot(module)(PageView_)
-
-export class ReflectionView extends BaseView<Reflection, { parentId?: string }> {
-	render() {
-		const { reflection: ref, parentId } = this.props
-		switch (ref.kind) {
-			case ReflectionKind.Variable:
-			case ReflectionKind.Parameter:
-				return <VariableView reflection={ref} />
-			case ReflectionKind.Property:
-				return <PropertyView reflection={ref} parentId={parentId} />
-			case ReflectionKind.Method:
-				return <MethodView reflection={ref} parentId={parentId} />
-			case ReflectionKind.Signature:
-				return <SignatureView reflection={ref} />
-		}
-		return <div>Unknown</div>
-	}
-}

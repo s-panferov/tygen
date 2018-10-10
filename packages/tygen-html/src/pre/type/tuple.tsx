@@ -4,6 +4,7 @@ import { TupleReflection } from '@tygen/reflector'
 import { TypePre } from '.'
 import { Join } from '../../ui/join'
 import { PrettyCode } from '../prettier'
+import { getKey } from '../../ref-link'
 
 export class TuplePre extends PrettyCode<{ reflection: TupleReflection }> {
 	render() {
@@ -14,7 +15,7 @@ export class TuplePre extends PrettyCode<{ reflection: TupleReflection }> {
 				[
 				<Join joinWith=",">
 					{reflection.types.map((ty, i) => (
-						<TypePre key={ty.id || `ty-${i}`} reflection={ty} />
+						<TypePre key={getKey(ty) || `ty-${i}`} reflection={ty} />
 					))}
 				</Join>
 				]

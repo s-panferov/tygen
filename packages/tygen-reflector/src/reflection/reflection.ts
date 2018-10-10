@@ -79,26 +79,24 @@ export interface ReflectionWithGlobals extends BaseReflection {
 	globals?: Reflection[]
 }
 
-export interface IdentifierSegment {
+export interface ReflectionId {
 	name: string
-	keywords?: string[]
 	kind: ReflectionKind
+	fileName: string
+	anchor: string
+	keywords?: string[]
 	version?: string
 }
 
-export type Identifier = {
-	segments: IdentifierSegment[]
-	fileName: string
-	anchor: string
-}
+export type ReflectionPath = ReflectionId[]
 
 export interface BaseReflection {
-	id?: Identifier
+	id?: ReflectionPath
 	kind: ReflectionKind
 	comments?: { kind: string; text: string }[]
 	directives?: { name: string; text?: string }[]
 	definedIn?: {
-		source: Identifier
+		source: ReflectionId
 		start: number
 		end: number
 	}[]
@@ -106,7 +104,7 @@ export interface BaseReflection {
 
 export interface ReflectionLink extends BaseReflection {
 	kind: ReflectionKind.Link
-	target: Identifier
+	target: ReflectionId
 }
 
 export interface NotIncludedReflection extends BaseReflection {
@@ -154,7 +152,7 @@ export function createLink(ref: Reflection): ReflectionLink | NotIncludedReflect
 	} else if (ref.id) {
 		return <ReflectionLink>{
 			kind: ReflectionKind.Link,
-			target: ref.id
+			target: ref.id[ref.id.length - 1]
 		}
 	} else {
 		throw new Error('Cannot create a link to the reflection')

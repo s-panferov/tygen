@@ -1,128 +1,88 @@
 import * as React from 'react'
 import cn from 'classnames'
 
-import { Reflection, ReflectionKind } from '@tygen/reflector'
+import { Reflection, ReflectionId, ReflectionPath } from '@tygen/reflector'
 import { css, cx } from 'linaria'
 import { withSettings, ViewSettings } from './view'
-import { parseId, normalizePath } from './helpers'
-import { TypePre } from './pre/type'
-import { PrettyCode, prettyRender } from './pre/prettier'
+import { normalizePath } from './helpers'
+import { PrettyCode } from './pre/prettier'
 
-export function hrefFromId(id: string, relativeId?: string) {
-	const parts = (relativeId ? id.replace(relativeId, '') : id).split(/::|->/)
-	let last = parts[parts.length - 1]
-	if (last[0] === '/') {
-		last = last.slice(1)
-	}
-
-	const ident = parseId(id)
-	let href = `/${ident.pkg}/${ident.version}`
-	if (ident.module) {
-		href += '/' + ident.module.join('/')
-	}
-
-	if (ident.items) {
-		let itemsPart = ''
-		let file = false
-
-		for (const item of ident.items.reverse()) {
-			if (!file && item.file) {
-				if (itemsPart.length > 0) {
-					itemsPart = '#' + itemsPart
-				}
-				file = true
-			}
-
-			itemsPart =
-				item.name +
-				(itemsPart.length > 0 && itemsPart[0] !== '#' ? '/' + itemsPart : itemsPart)
-		}
-
-		href += '/' + itemsPart
-	}
-
-	return {
-		name: last.replace(/[<>]/g, ''),
-		id: last.replace(/[<>'"]/g, '_'),
-		href
-	}
-}
-
-export function documentIdFromId(id: string): string | undefined {
-	const ident = parseId(id)
-
-	if (ident.items) {
-		let itemsPart = ''
-		for (const item of ident.items.reverse()) {
-			if (item.file && itemsPart.length > 0) {
-				return itemsPart
-			}
-
-			itemsPart =
-				item.name +
-				(itemsPart.length > 0 && itemsPart[0] !== '#' ? '/' + itemsPart : itemsPart)
-		}
-	}
-}
-
-export function createLink(
-	reflection: Reflection,
-	relativeId?: string
-): { name: string; href: string; id: string } {
-	switch (reflection.kind) {
-		case ReflectionKind.Link:
-			return hrefFromId(reflection.target, relativeId)
-	}
-
-	if (reflection.id) {
-		return hrefFromId(reflection.id, relativeId)
-	}
-
-	throw new Error(`Unsupported ${JSON.stringify(reflection, null, 4)}`)
-}
-
-export function navigateTo(settings: ViewSettings, refId: string) {
-	const href = normalizePath(settings, hrefFromId(refId).href)
+export function navigateTo(settings: ViewSettings, id: ReflectionId) {
+	const href = normalizePath(settings, id.fileName) + '#' + id.anchor
 	window.location = href as any
+}
+
+export interface PreparedLink {
+	name: string
+	href: string
+}
+
+function getReflectionId(input: Reflection | ReflectionId | ReflectionPath): ReflectionId {
+	let id: ReflectionId | ReflectionPath
+	let reflection = input as Reflection
+	if (reflection.id) {
+		id = reflection.id
+	} else {
+		id = input as ReflectionId | ReflectionPath
+	}
+	const lastId = Array.isArray(id) ? id[id.length - 1] : id
+	return lastId
+}
+
+export function getKey(
+	input: Reflection | ReflectionId | ReflectionPath | undefined
+): string | undefined {
+	if (!input) {
+		return undefined
+	}
+	return getReflectionId(input).anchor
+}
+
+export function createLink(id: Reflection | ReflectionId | ReflectionPath): PreparedLink {
+	const lastId = getReflectionId(id)
+	return {
+		href: lastId.fileName + '#' + lastId.anchor,
+		name: lastId.name
+	}
 }
 
 export class RefLinkPre extends PrettyCode<RefLinkProps> {
 	render() {
-		const { relativeId, reflection, name } = this.props
-		switch (reflection.kind) {
-			case ReflectionKind.Type:
-				return <TypePre reflection={reflection as any} />
+		const { reflection, reflectionId, name } = this.props
+		const id = reflection ? reflection.id : reflectionId
+		if (!id) {
+			throw new Error('Cannot build a link for a reflection without an Id')
 		}
 
-		let linkName = name || createLink(this.props.reflection, relativeId).name
+		const linkName = name || createLink(id).name
 		return this.id(linkName, <RefLink {...this.props} />)
 	}
 }
 
 export interface RefLinkProps {
 	className?: string
-	reflection: Reflection
-	relativeId?: string
+	reflection?: Reflection
+	reflectionId?: ReflectionPath | ReflectionId
+	relativeId?: ReflectionPath | ReflectionId
 	phantom?: boolean
 	name?: string
+	children?: React.ReactElement<any> | ((link: PreparedLink) => React.ReactChild)
 }
 
 class RefLink_ extends React.Component<RefLinkProps & { settings: ViewSettings }> {
 	render() {
-		const { relativeId, phantom, reflection, name, settings } = this.props
+		const { phantom, reflection, name, settings, reflectionId } = this.props
 
-		if (!reflection.id) {
-			switch (reflection.kind) {
-				case ReflectionKind.Type:
-					return prettyRender(<TypePre reflection={reflection as any} />)
-			}
+		const id = reflection ? reflection.id : reflectionId
+		if (!id) {
+			throw new Error('Cannot build a link for a reflection without an Id')
 		}
 
-		const { name: linkName, href } = createLink(this.props.reflection, relativeId)
+		const { name: linkName, href } = createLink(id)
 		const linkNames = (name || linkName).split('/').filter(Boolean)
 		const isPath = linkNames.length > 1
 
-		const relativeHref = normalizePath(settings!, href)
+		const relativeHref = normalizePath(settings, href)
 
 		return (
 			<a

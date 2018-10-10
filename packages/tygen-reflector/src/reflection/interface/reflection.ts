@@ -12,7 +12,8 @@ import {
 	ReflectionWithExports,
 	BaseReflection,
 	ReflectionKind,
-	Reflection
+	Reflection,
+	ReflectionPath
 } from '../reflection'
 
 export interface ReflectionWithProperties extends BaseReflection {
@@ -40,6 +41,7 @@ export interface InterfaceReflection
 		ReflectionWithTypeParameters,
 		ReflectionWithCallSignatures,
 		ReflectionWithBaseTypes {
+	id: ReflectionPath
 	kind: ReflectionKind.Interface
 	name: string
 }

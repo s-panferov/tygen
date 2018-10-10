@@ -1,4 +1,10 @@
-import { ReflectionKind, ReflectionWithExports, BaseReflection, Reflection } from '../reflection'
+import {
+	ReflectionKind,
+	ReflectionWithExports,
+	BaseReflection,
+	Reflection,
+	ReflectionPath
+} from '../reflection'
 import {
 	ObjectLikeReflection,
 	ReflectionWithTypeParameters,
@@ -16,6 +22,7 @@ export interface ClassReflection
 		ReflectionWithTypeParameters,
 		ReflectionWithBaseTypes,
 		ReflectionWithImplements {
+	id: ReflectionPath
 	kind: ReflectionKind.Class
 	name: string
 }

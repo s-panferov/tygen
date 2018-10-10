@@ -17,7 +17,7 @@ import {
 
 import { ESModuleReflection } from './reflection'
 import { createMemoryFileSystem } from './helpers'
-import { identifier, stringifyId } from './reflection/identifier'
+import { stringifyId, concatIdentifier } from './reflection/identifier'
 
 export interface PackageFields {
 	folderPath: string
@@ -67,13 +67,11 @@ export class Package {
 	generate(ctx: Context) {
 		const packageRef: PackageReflection = {
 			kind: ReflectionKind.Package,
-			id: identifier([
-				{
-					kind: ReflectionKind.Package,
-					name: this.manifest.name,
-					version: this.manifest.version
-				}
-			]),
+			id: concatIdentifier([], {
+				kind: ReflectionKind.Package,
+				name: this.manifest.name,
+				version: this.manifest.version
+			}),
 			manifest: this.manifest,
 			modules: []
 		}
@@ -140,10 +138,10 @@ export function visitFolders(
 		const fullPath = path.join(root, item)
 		if (volume.statSync(fullPath).isDirectory()) {
 			const folderRef: FolderReflection = {
-				id: identifier([
-					...(parent.id ? parent.id.segments : []),
-					{ kind: ReflectionKind.Folder, name: item }
-				]),
+				id: concatIdentifier(parent.id || [], {
+					kind: ReflectionKind.Folder,
+					name: item
+				}),
 				kind: ReflectionKind.Folder,
 				name: item,
 				modules: []

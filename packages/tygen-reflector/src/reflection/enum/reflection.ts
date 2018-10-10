@@ -1,4 +1,9 @@
-import { BaseReflection, ReflectionKind, ReflectionWithExports } from '../reflection'
+import {
+	BaseReflection,
+	ReflectionKind,
+	ReflectionWithExports,
+	ReflectionPath
+} from '../reflection'
 
 export interface EnumMemberReflection extends BaseReflection {
 	name: string
@@ -7,6 +12,7 @@ export interface EnumMemberReflection extends BaseReflection {
 }
 
 export interface EnumReflection extends ReflectionWithExports, BaseReflection {
+	id: ReflectionPath
 	name: string
 	kind: ReflectionKind.Enum
 	members?: EnumMemberReflection[]

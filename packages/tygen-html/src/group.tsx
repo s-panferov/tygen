@@ -31,14 +31,12 @@ export class HeaderItem extends TextItem<
 export class ReflectionItem extends TextItem<
 	{
 		reflection: Reflection
-		href: string
 		selected?: boolean
 	},
 	ReflectionItem
 > {}
 
 export type ModuleItem = HeaderItem | ReflectionItem
-
 export type GroupedReflections = { [key: string]: Reflection[] }
 
 function extractStructure(groups: GroupedReflections) {
@@ -50,10 +48,9 @@ function extractStructure(groups: GroupedReflections) {
 				text: SectionNames.getName(key)
 			},
 			items.map(reflection => {
-				const link = createLink(reflection)
-				return new ReflectionItem(link.id, {
+				const link = createLink(reflection.id!)
+				return new ReflectionItem(link.href, {
 					text: link.name,
-					href: link.href,
 					reflection
 				})
 			})
@@ -186,7 +183,7 @@ export function groupReflections(reflections: Reflection[]): GroupedReflections 
 	reflections.forEach(ref => {
 		let kind: ReflectionKind = ref.kind
 		if (ref.kind === ReflectionKind.Link) {
-			kind = ref.targetKind
+			kind = ref.target.kind
 		}
 
 		if (!groups[kind]) {

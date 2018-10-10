@@ -53,16 +53,21 @@ export class Writer {
 		}
 
 		this.context.reflectionById.forEach(reflection => {
-			if (IsSearchable[reflection.kind] && reflection.id) {
-				search.items.push(reflection.id)
+			if (
+				IsSearchable[reflection.kind] &&
+				reflection.id &&
+				// Make only top-level items searchable
+				reflection.id.every(id => IsSearchable[id.kind])
+			) {
+				search.items.push(reflection.id[reflection.id.length - 1])
 			}
 
 			if (!IsWritable[reflection.kind]) {
 				return
 			}
 
-			let folder = path.join(this.outDir, stringifyId(reflection.id!))
-			let fileName = path.join(folder, 'index.json')
+			const folder = path.join(this.outDir, stringifyId(reflection.id!))
+			const fileName = path.join(folder, 'index.json')
 
 			this.fs.mkdirpSync(folder)
 			this.fs.writeFileSync(fileName, JSON.stringify(reflection, null, 4))

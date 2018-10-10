@@ -1,9 +1,12 @@
 import * as React from 'react'
-import { BaseReflection } from '@tygen/reflector'
+import { Reflection } from '@tygen/reflector'
 import { Markdown } from './ui/markdown'
 import { css, cx } from 'linaria'
 
-export class CommentView extends React.Component<{ reflection: BaseReflection; inline?: boolean }> {
+export class CommentView extends React.Component<{
+	reflection: Reflection
+	inline?: boolean
+}> {
 	render() {
 		const { reflection, inline } = this.props
 		if (!reflection.comments) {

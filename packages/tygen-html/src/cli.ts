@@ -18,6 +18,7 @@ if (argv.server) {
 	let obj = { handler: serverRequest.bind(null, argv) }
 	const requestListener = (req: any, res: any) => run(req, res, obj.handler)
 	const server = new Server(requestListener).listen(3000)
+	;(global as any).server = server
 
 	console.log('Started...', {
 		hot: !!module.hot

@@ -108,8 +108,9 @@ export function visitSymbol(
 
 		if (symbol.declarations && symbol.declarations.length) {
 			reflection.definedIn = symbol.declarations.map(decl => {
+				const sourceId = generateIdForSourceFile(decl.getSourceFile(), ctx)
 				return {
-					source: generateIdForSourceFile(decl.getSourceFile(), ctx),
+					source: sourceId[sourceId.length - 1],
 					start: decl.getStart(undefined, true),
 					end: decl.getEnd()
 				}

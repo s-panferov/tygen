@@ -1,6 +1,6 @@
-import { BaseReflection, ReflectionKind, Identifier } from '../reflection'
+import { BaseReflection, ReflectionKind, ReflectionId } from '../reflection'
 
 export interface SearchReflection extends BaseReflection {
 	kind: ReflectionKind.Search
-	items: Identifier[]
+	items: ReflectionId[]
 }

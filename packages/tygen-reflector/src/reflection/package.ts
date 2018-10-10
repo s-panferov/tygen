@@ -6,7 +6,7 @@ import {
 	ReflectionWithGlobals,
 	ReflectionLink,
 	NotIncludedReflection,
-	Identifier
+	ReflectionPath
 } from './reflection'
 
 export interface PackageReflection
@@ -25,7 +25,7 @@ export interface ReflectionWithReadme {
 }
 
 export interface ReflectionWithStructure {
-	id?: Identifier
+	id?: ReflectionPath
 	modules: (ReflectionLink | NotIncludedReflection)[]
 }
 

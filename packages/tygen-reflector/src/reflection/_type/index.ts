@@ -121,7 +121,7 @@ function visitTypeInternal(
 			if (reflection.id) {
 				let link: ReflectionLink = {
 					kind: ReflectionKind.Link,
-					target: reflection.id
+					target: reflection.id[reflection.id.length - 1]
 				}
 
 				ctx.registerType(type, link)

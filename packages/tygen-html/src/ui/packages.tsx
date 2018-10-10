@@ -2,9 +2,8 @@ import React from 'react'
 import path from 'path'
 import { css } from 'linaria'
 
-import { withSettings, ViewSettings } from '../view'
+import { ViewSettings } from '../view'
 import { NotScrollable } from './search'
-import { hrefFromId } from '../ref-link'
 import { normalizePath } from '../helpers'
 import { InventoryReflection } from '@tygen/reflector'
 
@@ -12,7 +11,6 @@ export interface InventoryProviderState {
 	inventory?: InventoryReflection
 }
 
-@withSettings
 export class InventoryProvider extends React.Component<
 	{
 		settings?: ViewSettings
@@ -82,7 +80,6 @@ export class PackagesNav extends React.Component<
 	}
 }
 
-@withSettings
 export class PackageList extends React.Component<{
 	inventory: InventoryReflection
 	settings?: ViewSettings
