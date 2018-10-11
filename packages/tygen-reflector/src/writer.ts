@@ -60,7 +60,7 @@ export class Writer {
 				return
 			}
 
-			let folder = path.join(this.outDir, reflection.id!.replace(/->|::/g, path.sep))
+			let folder = path.join(this.outDir, reflection.id!.replace(/->|::|"/g, path.sep))
 			let fileName = path.join(folder, 'index.json')
 
 			this.fs.mkdirpSync(folder)
