@@ -1,10 +1,10 @@
-/// <reference no-default-lib="true"/>
+// /// <reference no-default-lib="true"/>
 
-interface Array<T> {}
-interface Boolean {}
-interface Function {}
-interface IArguments {}
-interface Number {}
-interface Object {}
-interface RegExp {}
-interface String {}
+// interface Array<T> {}
+// interface Boolean {}
+// interface Function {}
+// interface IArguments {}
+// interface Number {}
+// interface Object {}
+// interface RegExp {}
+// interface String {}

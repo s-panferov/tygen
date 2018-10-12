@@ -1,6 +1,6 @@
 import React from 'react'
 import { Reflection, ReflectionKind } from '@tygen/reflector'
-import { RefLink, createLink } from './ref-link'
+import { RefLink, getKey, formatLink } from './ref-link'
 import { observer } from 'mobx-react'
 import { TreeRowProps, NavTree, TreeRender } from './ui/tree-render'
 import { TextItem } from './ui/tree'
@@ -48,8 +48,8 @@ function extractStructure(groups: GroupedReflections) {
 				text: SectionNames.getName(key)
 			},
 			items.map(reflection => {
-				const link = createLink(reflection.id!)
-				return new ReflectionItem(link.href, {
+				const link = formatLink(reflection)
+				return new ReflectionItem(getKey(reflection)!, {
 					text: link.name,
 					reflection
 				})

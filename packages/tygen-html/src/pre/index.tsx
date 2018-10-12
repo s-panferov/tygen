@@ -21,7 +21,7 @@ import { IndexedAccessPre } from './type/indexed'
 import { ConditionalTypePre } from './type/conditional'
 import { IndexTypePre } from './type/index-type'
 import { ThisPre } from './type/this'
-import { NotIncludedPre } from '../not-included'
+import { NotIncludedPre } from './not-included'
 
 export class ReflectionPre extends PrettyCode<{ reflection: Reflection }> {
 	render() {

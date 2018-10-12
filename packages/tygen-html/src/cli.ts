@@ -2,7 +2,7 @@
 
 require('source-map-support').install()
 
-import minimist from 'minimist'
+import yargs from 'yargs'
 
 import { serverRequest } from './server'
 import { ReactConverter } from './converter'
@@ -12,7 +12,7 @@ import { Server } from 'http'
 export { ReactConverter }
 export default (argv: any) => new ReactConverter(argv)
 
-const argv = minimist(process.argv.slice(2))
+const argv = yargs.argv
 
 if (argv.server) {
 	let obj = { handler: serverRequest.bind(null, argv) }

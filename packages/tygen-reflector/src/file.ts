@@ -11,13 +11,15 @@ export class SourceFileMeta {
 	pkg: Package
 	sourceFile: ts.SourceFile
 	pathInfo: PathInfo
+	included: boolean
 
 	reflection!: ESModuleReflection | AmbientFileReflection
 
-	constructor(pkg: Package, sourceFile: ts.SourceFile) {
+	constructor(pkg: Package, sourceFile: ts.SourceFile, included: boolean) {
 		this.sourceFile = sourceFile as ts.SourceFile
 		this.pkg = pkg
 		this.pathInfo = getPathInfo(sourceFile.fileName, pkg)
+		this.included = included
 	}
 
 	generate(ctx: Context) {

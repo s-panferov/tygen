@@ -26,7 +26,6 @@ export function serverRequest(argv: object, req: IncomingMessage, res: ServerRes
 
 	if (url.startsWith(ASSETS)) {
 		const filePath = path.join(__dirname, url.slice(ASSETS.length))
-		console.log(filePath)
 		res.setHeader('Content-Type', mime.contentType(path.extname(filePath)))
 		return fs.readFileSync(filePath)
 	}

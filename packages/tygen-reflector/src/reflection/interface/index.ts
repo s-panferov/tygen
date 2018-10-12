@@ -106,6 +106,7 @@ export function visitObjectProperties(
 
 	properties.forEach(property => {
 		const reflection = visitSymbol(property, ctx) as PropertyReflection | MethodReflection
+
 		if (!reflection) {
 			return
 		}

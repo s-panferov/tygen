@@ -13,7 +13,6 @@ const finalConfig = Object.assign({}, config, {
 	entry: {
 		cli: ['webpack/hot/poll?1000', './src/cli.ts']
 	},
-	devtool: false,
 	target: 'node',
 	node: {
 		__filename: false,
@@ -39,5 +38,7 @@ finalConfig.plugins.push(new webpack.optimize.LimitChunkCountPlugin({
 }))
 
 finalConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
+
+finalConfig.output.devtoolModuleFilenameTemplate = '[absolute-resource-path]'
 
 module.exports = finalConfig

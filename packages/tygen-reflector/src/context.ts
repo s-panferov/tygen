@@ -4,11 +4,13 @@ import { Generator } from './generator'
 import { Reflection, createLink } from './reflection/reflection'
 import { TypeReflection } from './reflection/_type/reflection'
 import { stringifyId } from './reflection/identifier'
+import { Options } from './options'
 
 export class Context {
 	generator: Generator
 	program: ts.Program
 	checker: ts.TypeChecker
+	options: Options
 
 	visitedReflections = new Set<ts.Symbol>()
 
@@ -21,6 +23,7 @@ export class Context {
 	typeByReflection = new Map<TypeReflection, ts.Type>()
 
 	constructor(generator: Generator) {
+		this.options = generator.options
 		this.generator = generator
 		this.program = generator.program
 		this.checker = generator.program.getTypeChecker()

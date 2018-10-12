@@ -7,7 +7,7 @@
     "noEmit": true,
     "types": [],
     "typeRoots": [],
-    "noLib": true
+    // "noLib": true
   },
   "include": [
     "src/**/*"

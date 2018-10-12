@@ -11,13 +11,9 @@ import { visitFunction, visitMethod } from './function'
 import { visitClass } from './class'
 import { visitTypeAlias } from './type-alias'
 import { visitVariable, isParameter } from './variable'
-import { generateIdForSourceFile, symbolId } from './identifier'
+import { generateIdForSourceFile, symbolId, idFromPath } from './identifier'
 
-export function visitSymbol(
-	symbol: ts.Symbol,
-	ctx: Context,
-	_type?: ts.Type
-): Reflection | undefined {
+export function visitSymbol(symbol: ts.Symbol, ctx: Context): Reflection | undefined {
 	if (ctx.visitedReflections.has(symbol)) {
 		return ctx.reflectionBySymbol.get(symbol)
 	}
@@ -34,11 +30,10 @@ export function visitSymbol(
 	const declaration = symbol.declarations && symbol.declarations[0]
 	if (declaration) {
 		const sourceFile = declaration.getSourceFile()
-		if (ctx.program.isSourceFileDefaultLibrary(sourceFile)) {
+		if (!ctx.generator.shouldFileBeIncluded(sourceFile)) {
 			const reflection: NotIncludedReflection = {
 				kind: ReflectionKind.NotIncluded,
-				name: symbol.name,
-				id: symbolId(symbol, ctx)
+				target: idFromPath(symbolId(symbol, ctx))
 			}
 			ctx.registerSymbol(symbol, reflection)
 			return reflection
@@ -110,7 +105,7 @@ export function visitSymbol(
 			reflection.definedIn = symbol.declarations.map(decl => {
 				const sourceId = generateIdForSourceFile(decl.getSourceFile(), ctx)
 				return {
-					source: sourceId[sourceId.length - 1],
+					source: idFromPath(sourceId),
 					start: decl.getStart(undefined, true),
 					end: decl.getEnd()
 				}

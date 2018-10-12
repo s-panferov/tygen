@@ -1,8 +1,4 @@
 {
-  "presets": [
-    ["linaria/babel", {
-      "displayName": true
-    }]
-  ],
+  "presets": [],
   "plugins": ["@babel/plugin-syntax-object-rest-spread", "react-hot-loader/babel"]
 }

@@ -20,7 +20,6 @@ const stats = {
 
 function buildConfig() {
 	return {
-		// devtool: 'cheap-module-eval-source-map',
 		devtool: 'source-map',
 		mode: DEVELOPMENT ? 'development' : 'production',
 		stats,
@@ -35,24 +34,26 @@ function buildConfig() {
 					test: /\.(tsx?|jsx?)$/,
 					exclude: /(node_modules|bower_components)/,
 					use: [{
-						loader: 'linaria/loader',
-						options: {
-							sourceMap: true,
-							displayName: true
+							loader: 'linaria/loader',
+							options: {
+								sourceMap: true,
+								displayName: true
+							}
 						},
-					}, {
-						loader: 'babel-loader',
-					}, {
-						loader: 'ts-loader',
-						options: {
-							transpileOnly: true,
-							compilerOptions: {
-								composite: false,
-								declaration: false,
-								declarationMap: false
+						{
+							loader: 'babel-loader',
+						}, {
+							loader: 'ts-loader',
+							options: {
+								transpileOnly: true,
+								compilerOptions: {
+									composite: false,
+									declaration: false,
+									declarationMap: false
+								}
 							}
 						}
-					}]
+					]
 				},
 				{
 					test: /\.(png|jpg|gif)$/,

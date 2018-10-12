@@ -16,10 +16,10 @@ import { TypeParameterReflection, ReflectionLink } from '..'
 function signatureName(sig: ts.Signature) {
 	const decl = sig.getDeclaration()
 	const symbol: ts.Symbol | undefined = (decl as any).symbol
-	if (symbol) {
-		return symbol.name
-	} else if (decl.name) {
+	if (decl && decl.name) {
 		return decl.name.getText()
+	} else if (symbol && symbol.name) {
+		return symbol.name
 	} else {
 		return '__call'
 	}

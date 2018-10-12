@@ -15,7 +15,7 @@ import { visitConditional } from './conditional'
 import { visitMapped } from './mapped'
 import { visitIndexType } from './index-type'
 import { visitSubstitution } from './substitution'
-import { isWritableSymbol } from '../identifier'
+import { isWritableSymbol, idFromPath } from '../identifier'
 import { TypeReferenceReflection } from './reference/reflection'
 import { visitThis } from './this'
 import { TypeReflection } from './reflection'
@@ -116,12 +116,15 @@ function visitTypeInternal(
 	}
 
 	function visitSymbolInternal(symbol: ts.Symbol) {
-		let reflection = visitSymbol(symbol, ctx, type)
+		let reflection = visitSymbol(symbol, ctx)
 		if (reflection) {
-			if (reflection.id) {
+			if (reflection.kind === ReflectionKind.NotIncluded) {
+				ctx.registerType(type, reflection)
+				return reflection
+			} else if (reflection.id) {
 				let link: ReflectionLink = {
 					kind: ReflectionKind.Link,
-					target: reflection.id[reflection.id.length - 1]
+					target: idFromPath(reflection.id)
 				}
 
 				ctx.registerType(type, link)

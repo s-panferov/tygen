@@ -18,6 +18,7 @@ import {
 	ESModuleReflection,
 	AmbientFileReflection
 } from './module/reflection'
+import { idFromPath } from './identifier'
 
 export enum ReflectionKind {
 	Inventory = 'Inventory',
@@ -109,7 +110,7 @@ export interface ReflectionLink extends BaseReflection {
 
 export interface NotIncludedReflection extends BaseReflection {
 	kind: ReflectionKind.NotIncluded
-	name: string
+	target: ReflectionId
 }
 
 export interface NotSupportedReflection extends BaseReflection {
@@ -152,7 +153,7 @@ export function createLink(ref: Reflection): ReflectionLink | NotIncludedReflect
 	} else if (ref.id) {
 		return <ReflectionLink>{
 			kind: ReflectionKind.Link,
-			target: ref.id[ref.id.length - 1]
+			target: idFromPath(ref.id)
 		}
 	} else {
 		throw new Error('Cannot create a link to the reflection')

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import cn from 'classnames'
 
-import { Reflection, ReflectionId, ReflectionPath } from '@tygen/reflector'
+import { Reflection, ReflectionId, ReflectionPath, ReflectionKind } from '@tygen/reflector'
 import { css, cx } from 'linaria'
 import { withSettings, ViewSettings } from './view'
 import { normalizePath } from './helpers'
@@ -22,6 +22,11 @@ function getReflectionId(input: Reflection | ReflectionId | ReflectionPath): Ref
 	let reflection = input as Reflection
 	if (reflection.id) {
 		id = reflection.id
+	} else if (
+		reflection.kind === ReflectionKind.Link ||
+		reflection.kind == ReflectionKind.NotIncluded
+	) {
+		id = reflection.target
 	} else {
 		id = input as ReflectionId | ReflectionPath
 	}
@@ -38,23 +43,24 @@ export function getKey(
 	return getReflectionId(input).anchor
 }
 
-export function createLink(id: Reflection | ReflectionId | ReflectionPath): PreparedLink {
+export function formatLink(id: Reflection | ReflectionId | ReflectionPath): PreparedLink {
 	const lastId = getReflectionId(id)
 	return {
-		href: lastId.fileName + '#' + lastId.anchor,
+		href: '/' + lastId.fileName + '#' + lastId.anchor,
 		name: lastId.name
 	}
 }
 
 export class RefLinkPre extends PrettyCode<RefLinkProps> {
 	render() {
-		const { reflection, reflectionId, name } = this.props
-		const id = reflection ? reflection.id : reflectionId
-		if (!id) {
+		const { reflection, reflectionId, preparedLink, name } = this.props
+		const idFrom = reflection || reflectionId
+		const link = preparedLink || (idFrom ? formatLink(idFrom) : undefined)
+		if (!link) {
 			throw new Error('Cannot build a link for a reflection without an Id')
 		}
 
-		const linkName = name || createLink(id).name
+		const linkName = name || link.name
 		return this.id(linkName, <RefLink {...this.props} />)
 	}
 }
@@ -64,6 +70,7 @@ export interface RefLinkProps {
 	reflection?: Reflection
 	reflectionId?: ReflectionPath | ReflectionId
 	relativeId?: ReflectionPath | ReflectionId
+	preparedLink?: PreparedLink
 	phantom?: boolean
 	name?: string
 	children?: React.ReactElement<any> | ((link: PreparedLink) => React.ReactChild)
@@ -71,14 +78,17 @@ export interface RefLinkProps {
 
 class RefLink_ extends React.Component<RefLinkProps & { settings: ViewSettings }> {
 	render() {
-		const { phantom, reflection, name, settings, reflectionId } = this.props
+		const { phantom, reflection, name, settings, reflectionId, preparedLink } = this.props
 
-		const id = reflection ? reflection.id : reflectionId
-		if (!id) {
+		const idFrom = reflection || reflectionId
+		const link = preparedLink || (idFrom ? formatLink(idFrom) : undefined)
+
+		if (!link) {
+			console.error(idFrom, preparedLink)
 			throw new Error('Cannot build a link for a reflection without an Id')
 		}
 
-		const { name: linkName, href } = createLink(id)
+		const { name: linkName, href } = link
 		const linkNames = (name || linkName).split('/').filter(Boolean)
 		const isPath = linkNames.length > 1
 
@@ -88,20 +98,22 @@ class RefLink_ extends React.Component<RefLinkProps & { settings: ViewSettings }
 			<a
 				className={cx(RefLinkBody, cn({ phantom }), this.props.className)}
 				href={relativeHref}>
-				{this.props.children ||
-					linkNames.map((name, i) => {
-						return (
-							<span
-								key={name}
-								className={cx(
-									Name,
-									cn({ main: !isPath || i === linkNames.length - 1 })
-								)}>
-								{name}
-								{i !== linkNames.length - 1 ? '/' : ''}
-							</span>
-						)
-					})}
+				{typeof this.props.children === 'function'
+					? this.props.children(link)
+					: this.props.children ||
+					  linkNames.map((name, i) => {
+							return (
+								<span
+									key={name}
+									className={cx(
+										Name,
+										cn({ main: !isPath || i === linkNames.length - 1 })
+									)}>
+									{name}
+									{i !== linkNames.length - 1 ? '/' : ''}
+								</span>
+							)
+					  })}
 			</a>
 		)
 	}

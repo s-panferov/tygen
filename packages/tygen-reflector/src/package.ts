@@ -79,9 +79,7 @@ export class Package {
 		this.reflection = packageRef
 		ctx.registerReflectionWithoutSymbol(packageRef)
 
-		const files = Array.from(this.files.values()).filter(file => {
-			return !ctx.program.isSourceFileDefaultLibrary(file.sourceFile)
-		})
+		const files = Array.from(this.files.values()).filter(file => file.included)
 
 		if (files.length > 0) {
 			files.forEach(file => {

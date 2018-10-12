@@ -16,7 +16,7 @@ export class SignaturePre extends PrettyCode<{ reflection: SignatureReflection }
 		const br = `\n`
 		return (
 			<React.Fragment>
-				{this.doc(<CommentView inline reflection={reflection} />)}
+				{reflection.comments && this.doc(<CommentView inline reflection={reflection} />)}
 				{name}
 				{reflection.typeParameters && (
 					<TypeArgumentsPre types={reflection.typeParameters} />

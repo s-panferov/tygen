@@ -4,15 +4,23 @@ import { isParameter } from './variable'
 import { ReflectionPath, ReflectionId, ReflectionKind } from './reflection'
 import { symbolToKnownReflectionKind } from './visitor'
 
-export function symbolId(symbol: ts.Symbol, ctx: Context): ReflectionPath {
-	return generateIdChainForSymbol(symbol, ctx)
+export function symbolId(
+	symbol: ts.Symbol,
+	ctx: Context,
+	parentSymbol?: ts.Symbol
+): ReflectionPath {
+	return generateIdChainForSymbol(symbol, ctx, parentSymbol)
 }
 
 export function declarationId(node: ts.Node, ctx: Context): ReflectionPath {
 	return generateIdChainForDeclaration(node, ctx, false)
 }
 
-function generateIdChainForSymbol(symbol: ts.Symbol, ctx: Context): ReflectionPath {
+function generateIdChainForSymbol(
+	symbol: ts.Symbol,
+	ctx: Context,
+	parentSymbol?: ts.Symbol
+): ReflectionPath {
 	let id = [] as ReflectionId[]
 
 	if (!symbol) {
@@ -25,7 +33,7 @@ function generateIdChainForSymbol(symbol: ts.Symbol, ctx: Context): ReflectionPa
 		let node = declarations[0]!
 		return generateIdChainForDeclaration(node, ctx, false)
 	} else {
-		let parent = (symbol as any).parent
+		let parent = (symbol as any).parent || parentSymbol
 		if (parent) {
 			id.push(...generateIdChainForSymbol(parent, ctx))
 		}
@@ -47,7 +55,15 @@ function generateIdChainForSymbol(symbol: ts.Symbol, ctx: Context): ReflectionPa
 		}
 	}
 
+	if (id[0].kind !== ReflectionKind.Package) {
+		throw new Error('Strange id, please investigate')
+	}
+
 	return id
+}
+
+export function idFromPath(reflectionPath: ReflectionPath): ReflectionId {
+	return reflectionPath[reflectionPath.length - 1]
 }
 
 export function concatIdentifier(
@@ -74,9 +90,18 @@ export function concatIdentifier(
 		}
 	})
 
+	if (!writable.length) {
+		throw new Error('At least one of the ID segments should be writable')
+	}
+
+	if (finalSegments[0].kind !== ReflectionKind.Package) {
+		throw new Error('Typical ID should start with a Package')
+	}
+
 	finalSegment.fileName = writable.map(stringifySegment).join('/')
+
 	finalSegment.anchor = slugify(
-		[writable[writable.length - 1]]
+		[idFromPath(writable)]
 			.concat(anchor)
 			.map(stringifySegment)
 			.join('/')

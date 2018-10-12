@@ -4,6 +4,7 @@
     "composite": true,
     "outDir": "lib",
     "module": "commonjs",
+    "sourceMap": true,
     "lib": [
       "esnext", "dom"
     ]
@@ -12,6 +13,6 @@
     "runtime.ts"
   ],
   "include": [
-    "src/**/*"
+    "src/**/*",
   ]
 }

@@ -8,10 +8,19 @@ import { PropertyReflection } from './reflection'
 import { visitSymbol } from '../visitor'
 
 export function visitProperty(symbol: ts.Symbol, ctx: Context): PropertyReflection {
+	// This property is "virtual". This may happen when, for example, an interface is
+	// extends a `Record` or a `Pick` type.
+	const isTransient = symbol.flags & ts.SymbolFlags.Transient
+
+	const decls = symbol.getDeclarations() as ts.PropertyDeclaration[]
+
+	// Getting name from a declaration to preserve `[Symbol.xxx]: ...` properties
+	const name = decls && decls.length > 0 && decls[0].name ? decls[0].name.getText() : symbol.name
+
 	let propertyRef: PropertyReflection = {
-		id: symbolId(symbol, ctx),
+		id: !isTransient ? symbolId(symbol, ctx) : undefined,
 		kind: ReflectionKind.Property,
-		name: symbol.name,
+		name: name,
 		type: undefined as any,
 		getter: !!(symbol.flags & ts.SymbolFlags.GetAccessor),
 		setter: !!(symbol.flags & ts.SymbolFlags.SetAccessor)

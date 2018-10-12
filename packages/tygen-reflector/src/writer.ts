@@ -6,7 +6,7 @@ import * as path from 'path'
 import { ReflectionKind } from './reflection/reflection'
 import { FileSystem } from './helpers'
 import { SearchReflection } from './reflection/search/reflection'
-import { stringifyId } from './reflection/identifier'
+import { stringifyId, idFromPath } from './reflection/identifier'
 
 const IsWritable: { [name: string]: boolean } = {
 	[ReflectionKind.Class]: true,
@@ -59,7 +59,7 @@ export class Writer {
 				// Make only top-level items searchable
 				reflection.id.every(id => IsSearchable[id.kind])
 			) {
-				search.items.push(reflection.id[reflection.id.length - 1])
+				search.items.push(idFromPath(reflection.id))
 			}
 
 			if (!IsWritable[reflection.kind]) {

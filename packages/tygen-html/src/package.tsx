@@ -8,7 +8,7 @@ import { Outline } from './ui/outline'
 
 import PackageIcon from '@fortawesome/fontawesome-free/svgs/solid/cube.svg'
 import BookIcon from '@fortawesome/fontawesome-free/svgs/brands/markdown.svg'
-import { createLink } from './ref-link'
+import { formatLink } from './ref-link'
 import { Tree, TreeNavigation } from './ui/tree'
 import { StructureItem, HeaderItem, LinkItem, Sidebar } from './ui/sidebar'
 
@@ -26,7 +26,7 @@ export function createStructure(reflection: PackageReflection): StructureItem[] 
 							kind: 'header' as 'header'
 						},
 						reflection.modules.map(mod => {
-							const link = createLink(mod)
+							const link = formatLink(mod)
 							return new LinkItem(link.href, {
 								kind: 'link',
 								text: link.name,
@@ -46,7 +46,7 @@ export function createStructure(reflection: PackageReflection): StructureItem[] 
 							kind: 'header'
 						},
 						reflection.exports.map(mod => {
-							const link = createLink(mod)
+							const link = formatLink(mod)
 							return new LinkItem(link.href, {
 								kind: 'link',
 								text: link.name,
