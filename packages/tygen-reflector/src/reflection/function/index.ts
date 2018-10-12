@@ -8,8 +8,10 @@ import { visitCallSignatures } from '../signature'
 import { symbolId } from '../identifier'
 import { FunctionReflection, MethodReflection } from './reflection'
 
-export function escapeName(name: string): string {
-	return name.replace(/[@"'\-]/g, '')
+export function nameFromDeclaration(symbol: ts.Symbol) {
+	const decls = symbol.getDeclarations() as ts.PropertyDeclaration[]
+	// Getting name from a declaration to preserve `[Symbol.xxx]: ...` properties
+	return decls && decls.length > 0 && decls[0].name ? decls[0].name.getText() : symbol.name
 }
 
 export function visitFunction(symbol: ts.Symbol, ctx: Context): FunctionReflection {
@@ -17,7 +19,7 @@ export function visitFunction(symbol: ts.Symbol, ctx: Context): FunctionReflecti
 		id: symbolId(symbol, ctx),
 		kind: ReflectionKind.Function,
 		// escape internal typescript names like __@iterator
-		name: escapeName(symbol.name),
+		name: nameFromDeclaration(symbol),
 		allCallSignatures: []
 	}
 
@@ -35,7 +37,7 @@ export function visitMethod(symbol: ts.Symbol, ctx: Context): MethodReflection {
 	let methodRef: MethodReflection = {
 		id: symbolId(symbol, ctx),
 		kind: ReflectionKind.Method,
-		name: escapeName(symbol.name),
+		name: symbol.name,
 		allCallSignatures: []
 	}
 
