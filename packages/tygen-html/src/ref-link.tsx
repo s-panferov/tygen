@@ -15,6 +15,7 @@ export function navigateTo(settings: ViewSettings, id: ReflectionId) {
 export interface PreparedLink {
 	name: string
 	href: string
+	anchor: string
 }
 
 function getReflectionId(input: Reflection | ReflectionId | ReflectionPath): ReflectionId {
@@ -47,7 +48,8 @@ export function formatLink(id: Reflection | ReflectionId | ReflectionPath): Prep
 	const lastId = getReflectionId(id)
 	return {
 		href: '/' + lastId.fileName + '#' + lastId.anchor,
-		name: lastId.name
+		name: lastId.name,
+		anchor: lastId.anchor
 	}
 }
 
@@ -96,6 +98,7 @@ class RefLink_ extends React.Component<RefLinkProps & { settings: ViewSettings }
 
 		return (
 			<a
+				id={link.anchor}
 				className={cx(RefLinkBody, cn({ phantom }), this.props.className)}
 				href={relativeHref}>
 				{typeof this.props.children === 'function'

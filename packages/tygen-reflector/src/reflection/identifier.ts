@@ -235,7 +235,10 @@ function generateIdChainForDeclaration(
 		}
 
 		id = concatIdentifier(id, {
-			kind: ReflectionKind.Method,
+			kind:
+				symbol && symbol.flags & ts.SymbolFlags.Function
+					? ReflectionKind.Function
+					: ReflectionKind.Method,
 			name: name,
 			keywords
 		})

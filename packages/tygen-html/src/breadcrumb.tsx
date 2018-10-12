@@ -73,7 +73,7 @@ const LinkStyle = css`
 	position: relative;
 	display: inline;
 	background-color: var(--color);
-	padding-left: 15px;
+	padding-left: 20px;
 	margin-left: 0px;
 	border-top: 2px solid var(--color);
 	border-bottom: 3px solid var(--color);

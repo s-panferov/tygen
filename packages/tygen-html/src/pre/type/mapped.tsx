@@ -9,7 +9,7 @@ export class MappedTypePre extends PrettyCode<{ reflection: MappedTypeReflection
 		const { reflection } = this.props
 		return (
 			<React.Fragment>
-				{'{ '}[{<ReflectionPre reflection={reflection.typeParameter} />} extends{' '}
+				{'{ '}[{<ReflectionPre reflection={reflection.typeParameter} />} in{' '}
 				{<ReflectionPre reflection={reflection.constraintType} />}
 				]: <ReflectionPre reflection={reflection.templateType} /> {'}'}
 			</React.Fragment>
