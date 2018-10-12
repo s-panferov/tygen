@@ -30,10 +30,10 @@ yarn add --dev @tygen/reflector @tygen/html
 If you want all-in-one command to generate ready-to-serve static HTML documentation:
 
 ```
-yarn exec -- tygen generate . --out docs --with @tygen/html
+yarn exec -- tygen generate --project=. --out=docs --with=@tygen/html
 ```
 
-First argument of the `tygen <source>` command should point to a folder with a `tsconfig.json` file. `tygen` will compile your project with TypeScript compiler and then generate reflections and HTML files.
+First argument of the `tygen --project <source>` command should point to a folder with a `tsconfig.json` file. `tygen` will compile your project with TypeScript compiler and then generate reflections and HTML files.
 
 Please take note:
 
@@ -44,7 +44,7 @@ Result documentation can be served as static files with any capable web server o
 
 ## What is supported
 
-TypeScript > 2.8.3 is supported. I _cannot_ guarantee backward compatibility at this stage, so expect this project to support only several most recent TypeScript versions.
+TypeScript > 3.0 is supported. I _cannot_ guarantee backward compatibility at this stage, so expect this project to support only several most recent TypeScript versions.
 
 ## How to contribute
 
@@ -74,7 +74,7 @@ My vscode debugging configuration:
 	"request": "launch",
 	"program": "${workspaceRoot}/lib/tygen-reflector/src/cli.js",
 	"stopOnEntry": false,
-	"args": ["generate", ".", "--out", "docs", "--with", "@tygen/html"],
+	"args": ["generate", "--project", ".", "--out", "docs", "--with", "@tygen/html"],
 	"cwd": "${workspaceRoot}/",
 	"runtimeExecutable": "node",
 	"runtimeArgs": ["--nolazy", "--stack_size=90000" /*, "-r", "module-alias/register" */],
