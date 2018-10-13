@@ -18,6 +18,7 @@ import {
 	ESModuleReflection,
 	AmbientFileReflection
 } from './module/reflection'
+
 import { idFromPath } from './identifier'
 
 export enum ReflectionKind {
@@ -91,16 +92,19 @@ export interface ReflectionId {
 
 export type ReflectionPath = ReflectionId[]
 
+export const ExcludedFlag = Symbol('Excluded')
 export interface BaseReflection {
 	id?: ReflectionPath
 	kind: ReflectionKind
 	comments?: { kind: string; text: string }[]
-	directives?: { name: string; text?: string }[]
+	tags?: { name: string; text?: string }[]
 	definedIn?: {
 		source: ReflectionId
 		start: number
 		end: number
 	}[]
+
+	[ExcludedFlag]?: boolean
 }
 
 export interface ReflectionLink extends BaseReflection {
@@ -151,11 +155,35 @@ export function createLink(ref: Reflection): ReflectionLink | NotIncludedReflect
 	if (ref.kind === ReflectionKind.Link || ref.kind === ReflectionKind.NotIncluded) {
 		return ref
 	} else if (ref.id) {
-		return <ReflectionLink>{
-			kind: ReflectionKind.Link,
-			target: idFromPath(ref.id)
+		const summary = extractSummary(ref)
+		if (ref[ExcludedFlag]) {
+			return <NotIncludedReflection>{
+				kind: ReflectionKind.NotIncluded,
+				target: idFromPath(ref.id),
+				tags: summary ? [{ name: 'summary', text: summary }] : undefined
+			}
+		} else {
+			return <ReflectionLink>{
+				kind: ReflectionKind.Link,
+				target: idFromPath(ref.id),
+				tags: summary ? [{ name: 'summary', text: summary }] : undefined
+			}
 		}
 	} else {
 		throw new Error('Cannot create a link to the reflection')
+	}
+}
+
+export function extractSummary(ref: Reflection): string | undefined {
+	if (ref.tags) {
+		const summary = ref.tags.find(tag => tag.name === 'summary')
+		if (summary) {
+			return summary.text
+		}
+	} else if (ref.comments) {
+		const doc = ref.comments.find(comment => comment.kind === 'text')
+		if (doc) {
+			return doc.text.split('\n', 1)[0].slice(0, 200)
+		}
 	}
 }

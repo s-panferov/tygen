@@ -54,9 +54,9 @@ export function visitSignature(sig: ts.Signature, ctx: Context): SignatureReflec
 		signatureRef.comments = comment
 	}
 
-	const directive = sig.getJsDocTags()
-	if (directive.length > 0) {
-		signatureRef.directives = directive
+	const tags = sig.getJsDocTags()
+	if (tags.length > 0) {
+		signatureRef.tags = tags
 	}
 
 	const declaration = sig.declaration

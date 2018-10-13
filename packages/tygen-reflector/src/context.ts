@@ -1,7 +1,7 @@
 import ts from 'typescript'
 
 import { Generator } from './generator'
-import { Reflection, createLink } from './reflection/reflection'
+import { Reflection, createLink, ExcludedFlag } from './reflection/reflection'
 import { TypeReflection } from './reflection/_type/reflection'
 import { stringifyId } from './reflection/identifier'
 import { Options } from './options'
@@ -35,6 +35,19 @@ export class Context {
 	}
 
 	registerSymbol(symbol: ts.Symbol, reflection: Reflection) {
+		// Exclude some reflections. This code is here because
+		// we need to mark symbol as excluded BEFORE staring to
+		// make links to it
+		const declarations = symbol.declarations
+		if (declarations) {
+			const excluded = declarations
+				.map(d => d.getSourceFile())
+				.every(s => !this.generator.shouldFileBeIncluded(s))
+			if (excluded) {
+				reflection[ExcludedFlag] = true
+			}
+		}
+
 		this.reflectionBySymbol.set(symbol, reflection)
 		this.symbolByReflection.set(reflection, symbol)
 		this.registerReflectionWithoutSymbol(reflection, symbol)

@@ -7,7 +7,7 @@ import { PageView } from './render'
 import { ReactConverterSettings, normalizeSettings } from './settings'
 import { formatLink } from './ref-link'
 import { ViewSettings } from './view'
-import { BodyStyle } from './body'
+import { BodyStyle } from './theme/body'
 
 export function renderHTML(
 	ref: Reflection,
@@ -26,6 +26,8 @@ export function renderHTML(
 
 	const el = React.createElement(PageView, { reflection: ref, settings: normalizedSettings })
 	const html = renderToString(el)
+
+	const name = (ref as any).name || (ref.id && ref.id[ref.id.length - 1].name)
 
 	return `
 		<html>
@@ -46,7 +48,7 @@ export function renderHTML(
 					'/-/assets/index.css'
 				)}"/>
 				<meta charset="UTF-8">
-				<title>tsdoc - ${(ref as any).name || ref.id}</title>
+				<title>${name} - TypeScript</title>
 				<script>
 					const pathname = window.location.pathname
 					const protocol = window.location.protocol

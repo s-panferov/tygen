@@ -1,6 +1,7 @@
 import { css } from 'linaria'
+import { StyleVariables } from './variables'
 
-export const gitHubTheme = css`
+export const MarkdownStyle = css`
 	@font-face {
 		font-family: octicons-link;
 		src: url(data:font/woff;charset=utf-8;base64,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)
@@ -11,11 +12,12 @@ export const gitHubTheme = css`
 	-webkit-text-size-adjust: 100%;
 	line-height: 1.5;
 	color: #24292e;
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
-		'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+	/* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
+		'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; */
 	font-size: 14px;
 	line-height: 1.5;
 	word-wrap: break-word;
+	white-space: normal;
 
 	.pl-c {
 		color: #6a737d;
@@ -181,7 +183,7 @@ export const gitHubTheme = css`
 	code,
 	kbd,
 	pre {
-		font-family: monospace, monospace;
+		font-family: var(${StyleVariables.FontFamilyMono});
 		font-size: 1em;
 	}
 
@@ -331,14 +333,14 @@ export const gitHubTheme = css`
 	}
 
 	code {
-		font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+		font-family: var(${StyleVariables.FontFamily});
 		font-size: 12px;
 	}
 
 	pre {
 		margin-top: 0;
 		margin-bottom: 0;
-		font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+		font-family: var(${StyleVariables.FontFamilyMono});
 		font-size: 12px;
 	}
 
@@ -677,7 +679,7 @@ export const gitHubTheme = css`
 	kbd {
 		display: inline-block;
 		padding: 3px 5px;
-		font: 11px 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+		font: 11px var(${StyleVariables.FontFamilyMono});
 		line-height: 10px;
 		color: #444d56;
 		vertical-align: middle;

@@ -14,7 +14,7 @@ import { EnumPage } from './enum'
 import { ReactConverterSettings } from './settings'
 import { InventoryPage } from './inventory'
 import { SearchPage } from './ui/search'
-import { convertColorThemeToCSS, colorTheme } from './color'
+import { convertColorThemeToCSS, colorTheme } from './theme/color'
 
 const { hot } = require('react-hot-loader')
 

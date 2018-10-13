@@ -1,6 +1,6 @@
 # TypeScript documentation generator [beta]
 
-[![Gitter](https://badges.gitter.im/s-panferov/tygen.svg)](https://gitter.im/s-panferov/tygen?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=s.panferov&url=https://github.com/s-panferov/tygen&title=TyGen&language=TypeScript&tags=github&category=software)
+[![Gitter](https://badges.gitter.im/s-panferov/tygen.svg)](https://gitter.im/s-panferov/tygen?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 <span class="badge-patreon"><a href="https://www.patreon.com/spanferov" title="Donate to this project using Patreon"><img src="https://img.shields.io/badge/patreon-donate-yellow.svg" alt="Patreon donate button" /></a></span>
 
 ## Currently the project is WIP, expect it to be completely broken!! A working version expected to be ready soon.

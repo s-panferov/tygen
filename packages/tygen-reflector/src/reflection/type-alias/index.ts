@@ -4,7 +4,7 @@ import { Context } from '../../context'
 import { symbolId } from '../identifier'
 import { visitType } from '../_type'
 import { TypeAliasReflection } from './reflection'
-import { visitTypeParameter } from '../type-parameter'
+import { visitSymbol } from '../visitor'
 // import { visitTypeParameter } from '../type-parameter'
 
 export function visitTypeAlias(symbol: ts.Symbol, ctx: Context): TypeAliasReflection {
@@ -26,7 +26,7 @@ export function visitTypeAlias(symbol: ts.Symbol, ctx: Context): TypeAliasReflec
 				decl.typeParameters.forEach(tyNode => {
 					let tyParam = ctx.checker.getTypeAtLocation(tyNode)
 					if (tyParam) {
-						typeAliasRef.typeParameters!.push(visitTypeParameter(tyParam, ctx))
+						typeAliasRef.typeParameters!.push(visitSymbol(tyParam.symbol, ctx) as any)
 					}
 				})
 			}

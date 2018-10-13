@@ -9,13 +9,12 @@ import { visitESSymbol } from './symbol'
 import { visitIndexedAccess } from './indexed-access'
 import { visitReference } from './reference'
 import { visitObjectLiteral } from './object'
-import { visitTypeParameter } from '../type-parameter'
 import { visitTuple } from './tuple'
 import { visitConditional } from './conditional'
 import { visitMapped } from './mapped'
 import { visitIndexType } from './index-type'
 import { visitSubstitution } from './substitution'
-import { isWritableSymbol, idFromPath } from '../identifier'
+import { isWritableSymbol } from '../identifier'
 import { TypeReferenceReflection } from './reference/reflection'
 import { visitThis } from './this'
 import { TypeReflection } from './reflection'
@@ -107,10 +106,6 @@ function visitTypeInternal(
 		return visitIndexType(type as ts.IndexType, ctx)
 	}
 
-	if (type.flags & ts.TypeFlags.TypeParameter) {
-		return visitTypeParameter(type, ctx)
-	}
-
 	if (type.flags & ts.TypeFlags.Substitution) {
 		return visitSubstitution(type as ts.SubstitutionType, ctx)
 	}
@@ -118,15 +113,8 @@ function visitTypeInternal(
 	function visitSymbolInternal(symbol: ts.Symbol) {
 		let reflection = visitSymbol(symbol, ctx)
 		if (reflection) {
-			if (reflection.kind === ReflectionKind.NotIncluded) {
-				ctx.registerType(type, reflection)
-				return reflection
-			} else if (reflection.id) {
-				let link: ReflectionLink = {
-					kind: ReflectionKind.Link,
-					target: idFromPath(reflection.id)
-				}
-
+			if (reflection.id) {
+				const link = createLink(reflection)
 				ctx.registerType(type, link)
 				return link
 			} else {

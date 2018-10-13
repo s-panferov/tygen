@@ -92,7 +92,7 @@ export class Pretty extends React.Component<{ children: React.ReactElement<any> 
 			<div
 				style={{
 					whiteSpace: 'pre',
-					fontFamily: 'var(--monospace-font)',
+					fontFamily: 'var(--font-mono)',
 					lineHeight: '1.3em'
 				}}>
 				{prettyRender(this.props.children)}

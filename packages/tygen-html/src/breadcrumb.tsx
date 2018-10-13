@@ -106,6 +106,10 @@ const LinkStyle = css`
 		border-top-left-radius: 0px;
 		border-bottom-left-radius: 0px;
 	}
+
+	&:focus {
+		outline: none;
+	}
 `
 
 const HomeIconStyle = css`

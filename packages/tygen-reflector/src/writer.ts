@@ -3,7 +3,7 @@ import * as fse from 'fs-extra'
 import * as ts from 'typescript'
 import * as path from 'path'
 
-import { ReflectionKind } from './reflection/reflection'
+import { ReflectionKind, ExcludedFlag } from './reflection/reflection'
 import { FileSystem } from './helpers'
 import { SearchReflection } from './reflection/search/reflection'
 import { stringifyId, idFromPath } from './reflection/identifier'
@@ -53,6 +53,10 @@ export class Writer {
 		}
 
 		this.context.reflectionById.forEach(reflection => {
+			if (reflection[ExcludedFlag]) {
+				return
+			}
+
 			if (
 				IsSearchable[reflection.kind] &&
 				reflection.id &&

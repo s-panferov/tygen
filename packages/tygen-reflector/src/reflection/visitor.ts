@@ -5,40 +5,27 @@ import { visitInterface } from './interface'
 import { visitProperty } from './property'
 import { visitModule } from './module'
 
-import { Reflection, ReflectionKind, NotIncludedReflection } from './reflection'
+import { Reflection, ReflectionKind } from './reflection'
 import { visitEnum, visitEnumMember } from './enum'
 import { visitFunction, visitMethod } from './function'
 import { visitClass } from './class'
 import { visitTypeAlias } from './type-alias'
 import { visitVariable, isParameter } from './variable'
-import { generateIdForSourceFile, symbolId, idFromPath } from './identifier'
+import { generateIdForSourceFile, idFromPath } from './identifier'
+import { visitTypeParameter } from './type-parameter'
 
 export function visitSymbol(symbol: ts.Symbol, ctx: Context): Reflection | undefined {
-	if (ctx.visitedReflections.has(symbol)) {
-		return ctx.reflectionBySymbol.get(symbol)
-	}
-
 	if (symbol.flags & ts.SymbolFlags.Alias) {
 		symbol = ctx.checker.getAliasedSymbol(symbol)
 	}
 
 	symbol = ctx.checker.getMergedSymbol(symbol)
 
-	ctx.visitedReflections.add(symbol)
-
-	// Exclude some reflections
-	const declaration = symbol.declarations && symbol.declarations[0]
-	if (declaration) {
-		const sourceFile = declaration.getSourceFile()
-		if (!ctx.generator.shouldFileBeIncluded(sourceFile)) {
-			const reflection: NotIncludedReflection = {
-				kind: ReflectionKind.NotIncluded,
-				target: idFromPath(symbolId(symbol, ctx))
-			}
-			ctx.registerSymbol(symbol, reflection)
-			return reflection
-		}
+	if (ctx.visitedReflections.has(symbol)) {
+		return ctx.reflectionBySymbol.get(symbol)
 	}
+
+	ctx.visitedReflections.add(symbol)
 
 	let reflection: Reflection | undefined
 
@@ -73,6 +60,9 @@ export function visitSymbol(symbol: ts.Symbol, ctx: Context): Reflection | undef
 		case ReflectionKind.TypeAlias:
 			reflection = visitTypeAlias(symbol, ctx)
 			break
+		case ReflectionKind.TypeParameter:
+			reflection = visitTypeParameter(symbol, ctx)
+			break
 		case ReflectionKind.Variable:
 		case ReflectionKind.Parameter:
 			reflection = visitVariable(symbol, ctx)
@@ -92,13 +82,14 @@ export function visitSymbol(symbol: ts.Symbol, ctx: Context): Reflection | undef
 
 	if (reflection) {
 		let comment = symbol.getDocumentationComment(ctx.checker)
+
 		if (comment.length > 0) {
 			reflection.comments = comment
 		}
 
-		let directive = symbol.getJsDocTags()
-		if (directive.length > 0) {
-			reflection.directives = directive
+		let tags = symbol.getJsDocTags()
+		if (tags.length > 0) {
+			reflection.tags = tags
 		}
 
 		if (symbol.declarations && symbol.declarations.length) {
@@ -116,6 +107,10 @@ export function visitSymbol(symbol: ts.Symbol, ctx: Context): Reflection | undef
 	if (reflection && !ctx.reflectionBySymbol.get(symbol)) {
 		debugger
 		throw new Error('Symbol reflection was not registered')
+	}
+
+	if (!reflection) {
+		debugger
 	}
 
 	return reflection
@@ -142,6 +137,8 @@ export function symbolToKnownReflectionKind(symbol: ts.Symbol): ReflectionKind |
 		return ReflectionKind.Function
 	} else if (symbol.flags & ts.SymbolFlags.TypeAlias) {
 		return ReflectionKind.TypeAlias
+	} else if (symbol.flags & ts.SymbolFlags.TypeParameter) {
+		return ReflectionKind.TypeParameter
 	} else if (symbol.flags & ts.SymbolFlags.Variable) {
 		if (isParameter(symbol)) {
 			return ReflectionKind.Parameter

@@ -3,7 +3,7 @@ import * as React from 'react'
 import { MarkdownNode } from './markdown-node'
 import { parseMarkdown, Root } from './markdown-parser'
 
-import { gitHubTheme } from './github'
+import { MarkdownStyle } from '../theme/markdown'
 
 import 'prismjs/themes/prism-coy.css'
 import './markdown.css'
@@ -57,7 +57,7 @@ export class Markdown extends React.Component<MarkdownProps, MarkdownState> {
 		const { style, html } = this.props
 		if (this.state.root) {
 			return (
-				<div className={gitHubTheme} style={style} {...html}>
+				<div className={MarkdownStyle} style={style} {...html}>
 					<MarkdownNode node={this.state.root} />
 				</div>
 			)

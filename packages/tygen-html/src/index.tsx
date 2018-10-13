@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { PageView } from './render'
 
-import './body'
+import './theme/body'
 
 if (typeof window !== 'undefined') {
 	ReactDOM.hydrate(

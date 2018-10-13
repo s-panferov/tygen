@@ -136,7 +136,7 @@ export class ReflectionNode extends React.Component<TreeRowProps<ReflectionItem>
 					<RefLink reflection={info.reflection} />
 				</div>
 				<div className={ItemDescriptionCell}>
-					<CommentView reflection={info.reflection} />
+					<CommentView reflection={info.reflection} tag="summary" />
 				</div>
 			</div>
 		)
@@ -170,12 +170,16 @@ const ItemRow = css`
 `
 
 const ItemNameCell = css`
-	width: 150px;
+	min-width: 150px;
 	white-space: nowrap;
+	display: flex;
+	align-items: center;
 `
 
 const ItemDescriptionCell = css`
 	flex: 1 1 auto;
+	display: flex;
+	align-items: center;
 `
 
 export function groupReflections(reflections: Reflection[]): GroupedReflections {

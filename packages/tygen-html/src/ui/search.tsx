@@ -231,7 +231,7 @@ const SearchBody = css`
 
 const SearchInput = css`
 	width: 100%;
-	font-family: var(--monospace-font);
+	font-family: var(--font-mono);
 	border: none;
 	outline: none;
 	border-bottom: 1px solid #ccc;

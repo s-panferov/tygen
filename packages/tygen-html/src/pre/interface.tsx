@@ -6,6 +6,7 @@ import { CommentView } from '../comment'
 import { ReflectionPre } from '.'
 import { TypeArgumentsPre } from './type/type-arguments'
 import { RefLink, getKey } from '../ref-link'
+import { Join } from '../ui/join'
 
 export class InterfacePre extends PrettyCode<{
 	reflection: InterfaceReflection | ClassReflection
@@ -25,10 +26,12 @@ export class InterfacePre extends PrettyCode<{
 					<TypeArgumentsPre types={reflection.typeParameters} />
 				)}
 				{'{'}
-				{reflection.allProperties &&
-					reflection.allProperties.map((prop, i) => {
-						return <ReflectionPre key={getKey(prop.id) || i} reflection={prop} />
-					})}
+				<Join joinWith={`\n`}>
+					{reflection.allProperties &&
+						reflection.allProperties.map((prop, i) => {
+							return <ReflectionPre key={getKey(prop.id) || i} reflection={prop} />
+						})}
+				</Join>
 				{'}'}
 			</React.Fragment>
 		)

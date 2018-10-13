@@ -4,7 +4,6 @@ import { ReflectionKind } from '../reflection'
 
 import { Context } from '../../context'
 import { visitSymbol } from '../visitor'
-import { visitTypeParameter } from '../type-parameter'
 import { visitContainer } from '../module'
 import { visitType } from '../_type'
 import { visitCallSignatures, visitConstructSignatures, visitIndexSignatures } from '../signature'
@@ -20,6 +19,7 @@ import {
 	ReflectionWithProperties
 } from './reflection'
 import { MethodReflection } from '../function/reflection'
+import { TypeParameterReflection } from '../_type/reflection'
 
 export function visitInterface(symbol: ts.Symbol, ctx: Context): InterfaceReflection {
 	let iface: InterfaceReflection = {
@@ -76,7 +76,7 @@ export function visitTypeParameters(
 			if (!parent.typeParameters) {
 				parent.typeParameters = []
 			}
-			parent.typeParameters.push(visitTypeParameter(ty, ctx))
+			parent.typeParameters.push(visitSymbol(ty.symbol, ctx) as TypeParameterReflection)
 		})
 	}
 }

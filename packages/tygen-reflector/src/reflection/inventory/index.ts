@@ -45,6 +45,7 @@ export function updateInventory(outDir: string) {
 	walkFolder(outDir)
 
 	const inventory: InventoryReflection = {
+		name: 'Packages',
 		kind: ReflectionKind.Inventory,
 		packages
 	}
