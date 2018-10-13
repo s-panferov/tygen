@@ -1,17 +1,26 @@
-# TypeScript documentation generator [beta]
+# TyGen — TypeScript documentation generator
 
-[![Gitter](https://badges.gitter.im/s-panferov/tygen.svg)](https://gitter.im/s-panferov/tygen?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-<span class="badge-patreon"><a href="https://www.patreon.com/spanferov" title="Donate to this project using Patreon"><img src="https://img.shields.io/badge/patreon-donate-yellow.svg" alt="Patreon donate button" /></a></span>
+[![Gitter](https://badges.gitter.im/s-panferov/tygen.svg)]
 
-## Currently the project is WIP, expect it to be completely broken!! A working version expected to be ready soon.
-
-This project aims to create a full-featured modern TypeScript documentation generator with support of all the latest TypeScript features. It can build interlinked representation of all project files, so every symbol of your program (and your dependencies) is inspectable, even those dependencies in `@types/*` packages.
+This project aims to create a full-featured modern TypeScript documentation generator with support of all the latest TypeScript features. It can build an interlinked representation of all project files, so every symbol of your program (and your dependencies) is inspectable, even those dependencies in `@types/*` packages.
 
 Big goals:
 
-1.  Full-featured static/dynamic TypeScript documentation generator. **<<-- we are here right now**
+1.  Full-featured static/dynamic TypeScript documentation generator.
 2.  Special support for ReactJS/Angular/Vue projects.
 3.  All-in-one documentation portal like Rust's [docs.rs](docs.rs), but this will be possible **only** if you support me.
+
+## Donation request
+
+This project has very ambitious goals, but demands a lot of attention and hard work to make things right. I need to invest tons of my free time and right now this project is supported solely by my enthusiasm.
+
+We all know that maintaining an open source project is a HARD work. Enthusiasm burns out and does not last forever (especially after you get your first 100 bug reports without a proper description and reproduction steps), but money can motivate you for years. And this is why I ask you to consider a donation if you're interested me to continue this work.
+
+<span class="badge-patreon"><a href="https://www.patreon.com/spanferov" title="Donate to this project using Patreon"><img src="https://img.shields.io/badge/patreon-donate-yellow.svg" alt="Patreon donate button" /></a></span>
+
+## Work in progress
+
+This project is an active development phase, so please expect it to change rapidly and break often.
 
 ## Install
 
