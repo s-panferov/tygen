@@ -10,16 +10,8 @@ export class TypeAliasPre extends PrettyCode<{ reflection: TypeAliasReflection }
 		const { reflection } = this.props
 		return (
 			<React.Fragment>
-				type {reflection.name}
-				{reflection.typeParameters &&
-					reflection.typeParameters.length > 0 && (
-						<React.Fragment>
-							{'<'}
-							<TypeArgumentsPre types={reflection.typeParameters} />
-							{'>'}
-						</React.Fragment>
-					)}
-				= <ReflectionPre reflection={reflection.type} />
+				type {reflection.name} <TypeArgumentsPre types={reflection.typeParameters} />={' '}
+				<ReflectionPre reflection={reflection.type} />
 			</React.Fragment>
 		)
 	}
