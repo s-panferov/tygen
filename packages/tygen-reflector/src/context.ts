@@ -43,7 +43,7 @@ export class Context {
 			const excluded = declarations
 				.map(d => d.getSourceFile())
 				.every(s => !this.generator.shouldFileBeIncluded(s))
-			if (excluded) {
+			if (excluded && !this.options.alwaysLink) {
 				reflection[ExcludedFlag] = true
 			}
 		}

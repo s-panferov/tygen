@@ -4,4 +4,5 @@ export interface Options {
 	with?: string
 	includeLibs: boolean
 	includeTypes: boolean
+	alwaysLink: boolean
 }

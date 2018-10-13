@@ -52,6 +52,13 @@ const GenerateCommand: yargs.CommandModule = {
 				required: false,
 				type: 'boolean'
 			})
+			.option('always-link', {
+				default: false,
+				description:
+					'If symbol is not included we still emit links to it. You may not want this by default.',
+				required: false,
+				type: 'boolean'
+			})
 	},
 	handler: defer((argv: Options) => {
 		const { program } = compileFolder(argv.project)
