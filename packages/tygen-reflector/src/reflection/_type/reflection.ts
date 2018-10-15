@@ -28,7 +28,6 @@ import { LiteralTypeReflection } from './literal/reflection'
 import { MappedTypeReflection } from './mapped/reflection'
 import { ObjectTypeReflection } from './object/reflection'
 import { TypeReferenceReflection } from './reference/reflection'
-import { SubstitutionTypeReflection } from './substitution/reflection'
 import { ESSymbolReflection } from './symbol/reflection'
 import { TupleReflection } from './tuple/reflection'
 import { ThisReflection } from './this/reflection'
@@ -42,7 +41,6 @@ export * from './literal/reflection'
 export * from './mapped/reflection'
 export * from './object/reflection'
 export * from './reference/reflection'
-export * from './substitution/reflection'
 export * from './symbol/reflection'
 export * from './tuple/reflection'
 export * from './this/reflection'
@@ -58,7 +56,6 @@ export type TypeReflection =
 	| MappedTypeReflection
 	| ObjectTypeReflection
 	| TypeReferenceReflection
-	| SubstitutionTypeReflection
 	| ESSymbolReflection
 	| TupleReflection
 	| PrimitiveTypeReflection

@@ -1,12 +1,7 @@
 import ts from 'typescript'
 
-import {
-	Reflection,
-	ReflectionKind,
-	ReflectionWithExports,
-	createLink,
-	BaseReflection
-} from '../reflection'
+import { Reflection, ReflectionKind, ReflectionWithExports, BaseReflection } from '../reflection'
+import { createLink } from '../utils'
 import { Context } from '../../context'
 import { visitSymbol } from '../visitor'
 import { symbolId, declarationId, generateIdForSourceFile, stringifyId } from '../identifier'

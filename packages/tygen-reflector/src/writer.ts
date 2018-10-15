@@ -3,10 +3,11 @@ import * as fse from 'fs-extra'
 import * as ts from 'typescript'
 import * as path from 'path'
 
-import { ReflectionKind, ExcludedFlag } from './reflection/reflection'
+import { ReflectionKind } from './reflection/reflection'
 import { FileSystem } from './helpers'
 import { SearchReflection } from './reflection/search/reflection'
 import { stringifyId, idFromPath } from './reflection/identifier'
+import { ExcludedFlag, ExcludedReflection } from './reflection/utils'
 
 const IsWritable: { [name: string]: boolean } = {
 	[ReflectionKind.Class]: true,
@@ -53,7 +54,7 @@ export class Writer {
 		}
 
 		this.context.reflectionById.forEach(reflection => {
-			if (reflection[ExcludedFlag]) {
+			if ((reflection as ExcludedReflection)[ExcludedFlag]) {
 				return
 			}
 

@@ -33,7 +33,9 @@ export class ReactConverter implements Converter {
 		} catch (e) {}
 
 		extra.fs.readdirSync(runtimeDir).forEach(item => {
-			extra.fs.copyFileSync(path.join(runtimeDir, item), path.join(assetsDir, item))
+			if (!item.includes('hot-update')) {
+				extra.fs.copyFileSync(path.join(runtimeDir, item), path.join(assetsDir, item))
+			}
 		})
 
 		return undefined

@@ -27,7 +27,7 @@ class BreadcrumbBase extends React.Component<{
 			<a
 				className={cx(LinkStyle, HomeLinkStyle)}
 				key="__home"
-				href={normalizePath(settings!, '/')}>
+				href={normalizePath(settings, '')}>
 				<svg
 					viewBox={homeIcon.viewBox}
 					className={HomeIconStyle}

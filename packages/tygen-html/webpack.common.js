@@ -27,7 +27,7 @@ function buildConfig() {
 			extensions: [".ts", ".tsx", ".js"]
 		},
 		output: {
-			publicPath: '/-/assets/'
+			publicPath: '-/assets/'
 		},
 		module: {
 			rules: [{
@@ -64,7 +64,7 @@ function buildConfig() {
 				{
 					test: /\.svg$/,
 					loader: 'file-loader',
-					include: /tsd.svg$/
+					include: /tsd.svg$/,
 				},
 				{
 					test: /\.svg$/,

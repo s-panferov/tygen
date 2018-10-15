@@ -14,7 +14,7 @@ import { normalizePath } from './helpers'
 
 class PackageItem extends TextItem<InventoryPackage & { selected?: boolean }> {
 	href() {
-		return `/${this.info.name}/${this.info.versions[0]}`
+		return `${this.info.name}/${this.info.versions[0]}`
 	}
 }
 

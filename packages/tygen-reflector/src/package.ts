@@ -1,8 +1,9 @@
 import * as path from 'path'
 import * as fs from 'fs'
 import { SourceFileMeta } from './file'
-import { ReflectionKind, createLink } from './reflection/reflection'
+import { ReflectionKind } from './reflection/reflection'
 import { Context } from './context'
+import { createLink } from './reflection/utils'
 
 const closest = require('pkg-up')
 import log from 'roarr'

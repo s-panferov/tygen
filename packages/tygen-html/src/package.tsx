@@ -8,9 +8,9 @@ import { Outline } from './ui/outline'
 
 import PackageIcon from '@fortawesome/fontawesome-free/svgs/solid/cube.svg'
 import BookIcon from '@fortawesome/fontawesome-free/svgs/brands/markdown.svg'
-import { formatLink } from './ref-link'
-import { Tree, TreeNavigation } from './ui/tree'
-import { StructureItem, HeaderItem, LinkItem, Sidebar } from './ui/sidebar'
+
+import { StructureItem, HeaderItem, ReflectionItem, Structure } from './structure'
+import { NavTree } from './ui/tree-render'
 
 export function createStructure(reflection: PackageReflection): StructureItem[] {
 	let result = [] as StructureItem[]
@@ -22,17 +22,10 @@ export function createStructure(reflection: PackageReflection): StructureItem[] 
 					new HeaderItem(
 						'structure',
 						{
-							text: 'Structure',
-							kind: 'header' as 'header'
+							kind: 'header',
+							text: 'Structure'
 						},
-						reflection.modules.map(mod => {
-							const link = formatLink(mod)
-							return new LinkItem(link.href, {
-								kind: 'link',
-								text: link.name,
-								href: link.href
-							})
-						})
+						reflection.modules.map(ReflectionItem.fromReflection)
 					)
 				)
 			}
@@ -42,17 +35,10 @@ export function createStructure(reflection: PackageReflection): StructureItem[] 
 					new HeaderItem(
 						'exports',
 						{
-							text: 'Exports',
-							kind: 'header'
+							kind: 'header',
+							text: 'Exports'
 						},
-						reflection.exports.map(mod => {
-							const link = formatLink(mod)
-							return new LinkItem(link.href, {
-								kind: 'link',
-								text: link.name,
-								href: link.href
-							})
-						})
+						reflection.exports.map(ReflectionItem.fromReflection)
 					)
 				)
 			}
@@ -62,9 +48,7 @@ export function createStructure(reflection: PackageReflection): StructureItem[] 
 }
 
 export class PackagePage extends BaseView<PackageReflection> {
-	tree = new Tree(createStructure(this.props.reflection), tree => ({
-		nav: new TreeNavigation(tree)
-	}))
+	tree = new NavTree(createStructure(this.props.reflection))
 
 	render() {
 		const { reflection } = this.props
@@ -72,7 +56,7 @@ export class PackagePage extends BaseView<PackageReflection> {
 		return (
 			<Page
 				reflection={reflection}
-				sidebar={<Sidebar tree={this.tree} />}
+				sidebar={<Structure tree={this.tree} />}
 				header={
 					<Outline
 						icon={<Icon width={20} height={20} sym={PackageIcon} />}

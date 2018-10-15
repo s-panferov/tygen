@@ -33,6 +33,13 @@ const finalConfig = Object.assign({}, config, {
 	],
 })
 
+finalConfig.output.libraryTarget = 'umd'
+finalConfig.output.library = {
+	root: 'TygenHtml',
+	amd: '@tygen/html',
+	commonjs: '@tygen/html'
+}
+
 finalConfig.plugins.push(new webpack.optimize.LimitChunkCountPlugin({
 	maxChunks: 1
 }))

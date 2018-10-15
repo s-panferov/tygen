@@ -7,7 +7,7 @@
     "documentation",
     "generator"
   ],
-  "main": "dist/index.js",
+  "main": "dist/cli.js",
   "publishConfig": {
     "access": "public"
   },
@@ -50,6 +50,7 @@
     "@fortawesome/fontawesome-free": "^5.3.1",
     "react-icons": "^3.1.0",
     "webpack": "^4.20.2",
+    "write-file-webpack-plugin": "^4.4.1",
     "@babel/core": "^7.1.2",
     "mobx": "^5.5.0",
     "mobx-react": "^5.2.8",

@@ -2,13 +2,13 @@ import * as React from 'react'
 
 import { BaseView } from './view'
 import { ReflectionWithExports } from '@tygen/reflector'
-import { GroupView } from './group'
+import { NavTree } from './ui/tree-render';
+import { buildTreeByType } from './group';
+import { Structure } from './structure';
 
 export class ExportsView extends BaseView<ReflectionWithExports> {
+	tree = new NavTree(buildTreeByType(this.props.reflection.exports || []))
 	render() {
-		const { reflection } = this.props
-
-		const groups = GroupView.groupReflections(reflection.exports || [])
-		return <GroupView groups={groups} />
+		return <Structure tree={this.tree} />
 	}
 }

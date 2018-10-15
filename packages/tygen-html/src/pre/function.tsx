@@ -8,7 +8,6 @@ import { SignaturePre } from './signature'
 export class FunctionPre extends PrettyCode<{ reflection: FunctionReflection }> {
 	render() {
 		const { reflection } = this.props
-		console.log(reflection)
 		return (
 			<React.Fragment>
 				<Join joinWith={`;\n`}>

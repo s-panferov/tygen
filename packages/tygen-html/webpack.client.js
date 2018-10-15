@@ -3,6 +3,8 @@ const {
 	stats
 } = require('./webpack.common')
 
+const WriteFilePlugin = require('write-file-webpack-plugin')
+
 const config = buildConfig()
 
 const finalConfig = Object.assign({}, config, {
@@ -28,5 +30,7 @@ const finalConfig = Object.assign({}, config, {
 		}
 	},
 })
+
+finalConfig.plugins.push(new WriteFilePlugin())
 
 module.exports = finalConfig

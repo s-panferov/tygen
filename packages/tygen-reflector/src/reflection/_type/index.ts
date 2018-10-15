@@ -2,7 +2,8 @@ import * as ts from 'typescript'
 import { visitPrimitive } from './primitive'
 import { visitSymbol } from '../visitor'
 import { Context } from '../../context'
-import { ReflectionKind, ReflectionLink, createLink, NotSupportedReflection } from '../reflection'
+import { ReflectionKind, ReflectionLink, NotSupportedReflection } from '../reflection'
+import { createLink } from '../utils'
 import { visitLiteral, visitBooleanLiteral } from './literal'
 import { visitUnion, visitIntersection } from './intersection'
 import { visitESSymbol } from './symbol'
@@ -13,7 +14,6 @@ import { visitTuple } from './tuple'
 import { visitConditional } from './conditional'
 import { visitMapped } from './mapped'
 import { visitIndexType } from './index-type'
-import { visitSubstitution } from './substitution'
 import { isWritableSymbol } from '../identifier'
 import { TypeReferenceReflection } from './reference/reflection'
 import { visitThis } from './this'
@@ -25,6 +25,11 @@ export function visitType(
 	opts: VisitTypeOptions = {}
 ): TypeReflection {
 	let { skipReference = false } = opts
+
+	if (type.flags & ts.TypeFlags.Substitution) {
+		// For documentation reasons we don't care about substitutions
+		type = (type as ts.SubstitutionType).typeVariable
+	}
 
 	let existed = ctx.reflectionByType.get(type)
 	if (existed && !skipReference) {
@@ -104,10 +109,6 @@ function visitTypeInternal(
 
 	if (type.flags & ts.TypeFlags.Index) {
 		return visitIndexType(type as ts.IndexType, ctx)
-	}
-
-	if (type.flags & ts.TypeFlags.Substitution) {
-		return visitSubstitution(type as ts.SubstitutionType, ctx)
 	}
 
 	function visitSymbolInternal(symbol: ts.Symbol) {

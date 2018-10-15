@@ -47,7 +47,7 @@ export function getKey(
 export function formatLink(id: Reflection | ReflectionId | ReflectionPath): PreparedLink {
 	const lastId = getReflectionId(id)
 	return {
-		href: '/' + lastId.fileName + '#' + lastId.anchor,
+		href: lastId.fileName + '#' + lastId.anchor,
 		name: lastId.name,
 		anchor: lastId.anchor
 	}

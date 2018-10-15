@@ -1,6 +1,7 @@
 import * as ts from 'typescript'
 
-import { createLink, ReflectionLink, ReflectionKind } from '../../reflection'
+import { ReflectionLink, ReflectionKind } from '../../reflection'
+import { createLink } from '../../utils'
 import { Context } from '../../../context'
 import { ThisReflection } from './reflection'
 import { visitSymbol } from '../../visitor'

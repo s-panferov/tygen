@@ -1,17 +1,20 @@
+import path from 'path'
+
 import { Reflection, ReflectionKind } from '@tygen/reflector'
 import { ViewSettings } from './view'
-import * as path from 'path'
 
 export function normalizePath(settings: ViewSettings, filePath: string) {
-	let result = path.relative(settings.path, filePath)
 	if (settings.static) {
-		let [main, hash] = result.split('#')
+	let result = ''
+		let [main, hash] = filePath.split('#')
 		result = path.join(main, 'index.html')
 		if (hash) {
 			result += '#' + hash
 		}
+		return result
 	}
-	return result
+
+	return filePath
 }
 
 export function key(reflection: Reflection) {

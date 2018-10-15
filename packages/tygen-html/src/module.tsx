@@ -11,14 +11,17 @@ import {
 import { BaseView } from './view'
 import { Outline } from './ui/outline'
 import { TSIcon } from './ui/icon'
-import { GroupView } from './group'
+import { NavTree } from './ui/tree-render';
+import { buildTreeByType } from './group';
+import { Structure } from './structure';
 
 export class ModulePage extends BaseView<
 	ESModuleReflection | ModuleReflection | NamespaceReflection | AmbientFileReflection
 > {
+	tree = new NavTree(buildTreeByType(this.props.reflection.exports || []))
+
 	render() {
 		const { reflection } = this.props
-		const groups = GroupView.groupReflections(reflection.exports || [])
 
 		return (
 			<Page
@@ -29,7 +32,7 @@ export class ModulePage extends BaseView<
 						header={<h1>{reflection.name}</h1>}
 					/>
 				}>
-				<GroupView groups={groups} />
+				<Structure wide tree={this.tree} />
 			</Page>
 		)
 	}

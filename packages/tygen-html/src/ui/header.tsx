@@ -1,8 +1,6 @@
 import React from 'react'
 import { css } from 'linaria'
 import { Search } from './search'
-import { withSettings, ViewSettings } from '../view'
-import { normalizePath } from '../helpers'
 import { SearchReflection } from '@tygen/reflector'
 
 export interface HeaderProps {
@@ -25,15 +23,13 @@ export class Header extends React.Component<HeaderProps> {
 	}
 }
 
-export function LogoBase({ settings }: { settings: ViewSettings }) {
+export function Logo() {
 	return (
-		<a className={LogoStyle} href={normalizePath(settings!, '/')}>
+		<a className={LogoStyle} href="/">
 			<img src={require('../../asset/logo.png')} width={70} />
 		</a>
 	)
 }
-
-export const Logo = withSettings(LogoBase)
 
 const LogoStyle = css`
 	display: block;

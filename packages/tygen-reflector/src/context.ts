@@ -1,7 +1,8 @@
 import ts from 'typescript'
 
 import { Generator } from './generator'
-import { Reflection, createLink, ExcludedFlag } from './reflection/reflection'
+import { Reflection } from './reflection/reflection'
+import { createLink, ExcludedFlag, ExcludedReflection } from './reflection/utils'
 import { TypeReflection } from './reflection/_type/reflection'
 import { stringifyId } from './reflection/identifier'
 import { Options } from './options'
@@ -44,7 +45,7 @@ export class Context {
 				.map(d => d.getSourceFile())
 				.every(s => !this.generator.shouldFileBeIncluded(s))
 			if (excluded && !this.options.alwaysLink) {
-				reflection[ExcludedFlag] = true
+				;(reflection as ExcludedReflection)[ExcludedFlag] = true
 			}
 		}
 

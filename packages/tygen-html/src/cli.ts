@@ -3,13 +3,14 @@
 require('source-map-support').install()
 
 import yargs from 'yargs'
-
-import { serverRequest } from './server'
-import { ReactConverter } from './converter'
 import { run } from 'micro'
 import { Server } from 'http'
 
+import { serverRequest } from './server'
+import { ReactConverter } from './converter'
+
 export { ReactConverter }
+
 export default (argv: any) => new ReactConverter(argv)
 
 const argv = yargs.argv
@@ -20,9 +21,7 @@ if (argv.server) {
 	const server = new Server(requestListener).listen(3000)
 	;(global as any).server = server
 
-	console.log('Started...', {
-		hot: !!module.hot
-	})
+	console.log('Started...')
 
 	if (module.hot) {
 		module.hot.accept(['./server', './converter'], function() {

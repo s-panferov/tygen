@@ -94,6 +94,7 @@ const GenerateCommand: yargs.CommandModule = {
 		}
 
 		console.log('Completed!')
+		process.exit(0)
 	})
 }
 

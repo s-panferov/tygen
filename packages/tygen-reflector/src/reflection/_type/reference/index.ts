@@ -4,7 +4,8 @@ import { visitType } from '../index'
 import { Context } from '../../../context'
 import { TypeReferenceReflection } from './reflection'
 import { visitSymbol } from '../../visitor'
-import { ReflectionKind, createLink } from '../../reflection'
+import { ReflectionKind } from '../../reflection'
+import { createLink } from '../../utils'
 import { TypeReflection } from '../reflection'
 
 export function visitReference(type: ts.TypeReference, ctx: Context): TypeReferenceReflection {
