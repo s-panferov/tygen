@@ -16,9 +16,11 @@ export default (argv: any) => new ReactConverter(argv)
 const argv = yargs.argv
 
 if (argv.server) {
+	const PORT = process.env.PORT ? Number(process.env.PORT) : 3000
+
 	let obj = { handler: serverRequest.bind(null, argv) }
 	const requestListener = (req: any, res: any) => run(req, res, obj.handler)
-	const server = new Server(requestListener).listen(3000)
+	const server = new Server(requestListener).listen(PORT)
 	;(global as any).server = server
 
 	console.log('Started...')
