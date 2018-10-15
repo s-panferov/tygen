@@ -14,19 +14,61 @@ export function createMemoryFileSystem(): FileSystem {
 }
 
 export function compileFolder(target: string = process.cwd()) {
-	const absolutePath = path.resolve(process.cwd(), target)
-	const configFilePath = ts.findConfigFile(absolutePath, ts.sys.fileExists)!
-
 	log.info(`Using TypeScript ${ts.version}`)
 
-	const jsonConfig = ts.readJsonConfigFile(configFilePath, ts.sys.readFile)
-	const config = ts.parseJsonSourceFileConfigFileContent(
-		jsonConfig,
-		ts.sys,
-		absolutePath,
-		undefined,
-		configFilePath
-	)
+	let packageFilePath: string | undefined
+	let configFilePath: string | undefined
+
+	if (target.includes('package.json')) {
+		packageFilePath = target
+	} else if (target.includes('.json')) {
+		configFilePath = target
+	} else {
+		const maybeTsconfig = path.join(target, 'tsconfig.json')
+		if (fs.existsSync(maybeTsconfig)) {
+			configFilePath = maybeTsconfig
+		}
+
+		const maybePackageJson = path.join(target, 'package.json')
+		if (fs.existsSync(maybePackageJson)) {
+			packageFilePath = maybePackageJson
+		}
+	}
+
+	let config: ts.ParsedCommandLine | undefined
+
+	if (configFilePath) {
+		const jsonConfig = ts.readJsonConfigFile(configFilePath, ts.sys.readFile)
+		config = ts.parseJsonSourceFileConfigFileContent(
+			jsonConfig,
+			ts.sys,
+			'.',
+			undefined,
+			configFilePath
+		)
+	} else if (packageFilePath) {
+		const pkg = JSON.parse(fs.readFileSync(packageFilePath).toString())
+		if (pkg.typings) {
+			config = ts.parseJsonConfigFileContent(
+				{
+					files: [pkg.typings],
+					compilerOptions: {
+						moduleResolution: 'node',
+						target: 'esnext',
+						strict: true
+					}
+				},
+				ts.sys,
+				'.',
+				undefined,
+				packageFilePath
+			)
+		}
+	}
+
+	if (!config) {
+		throw new Error('Nothing to compile')
+	}
 
 	if (config.errors.length > 0) {
 		log.error({ errors: config.errors }, `Cannot build project, tsconfig.json has errors`)

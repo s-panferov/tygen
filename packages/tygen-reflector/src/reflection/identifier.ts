@@ -270,6 +270,12 @@ function generateIdChainForDeclaration(
 			kind: ReflectionKind.IntersectionType,
 			name: 'intersection'
 		})
+	} else if (ts.isIndexSignatureDeclaration(node)) {
+		const firstParam = node.parameters[0]
+		id = concatIdentifier(id, {
+			kind: ReflectionKind.Signature,
+			name: firstParam.type ? firstParam.type!.getText() : firstParam.getText()
+		})
 	} else if (ts.isModuleDeclaration(node)) {
 		id = concatIdentifier(id, {
 			kind: ReflectionKind.Module,

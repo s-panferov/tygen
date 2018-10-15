@@ -137,6 +137,8 @@ export function symbolToKnownReflectionKind(symbol: ts.Symbol): ReflectionKind |
 		return ReflectionKind.Function
 	} else if (symbol.flags & ts.SymbolFlags.TypeAlias) {
 		return ReflectionKind.TypeAlias
+	} else if (symbol.flags & ts.SymbolFlags.Signature) {
+		return ReflectionKind.Signature
 	} else if (symbol.flags & ts.SymbolFlags.TypeParameter) {
 		return ReflectionKind.TypeParameter
 	} else if (symbol.flags & ts.SymbolFlags.Variable) {

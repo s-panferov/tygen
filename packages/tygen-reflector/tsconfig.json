@@ -4,6 +4,7 @@
     "composite": true,
     "outDir": "lib",
     "module": "commonjs",
+    "noEmitOnError": false,
     "sourceMap": true,
     "lib": [
       "esnext", "dom"

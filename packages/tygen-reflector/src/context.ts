@@ -61,7 +61,6 @@ export class Context {
 			if (current) {
 				let conflict = this.symbolByReflection.get(current)!
 				if (!symbol || !areSymbolsEqual(symbol, conflict)) {
-					debugger
 					console.error(`Duplicate ID for symbol`, reflection.id)
 					return
 				}

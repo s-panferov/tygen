@@ -13,7 +13,7 @@ export class EnumPre extends PrettyCode<{ reflection: EnumReflection }> {
 					reflection.members.map(member => {
 						return (
 							<React.Fragment>
-								{member.value} = {JSON.stringify(member.value)}
+								{member.name} = {JSON.stringify(member.value)},
 							</React.Fragment>
 						)
 					})}
