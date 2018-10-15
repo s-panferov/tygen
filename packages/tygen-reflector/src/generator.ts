@@ -5,16 +5,16 @@ import { SourceFileMeta } from './file'
 import { Context } from './context'
 
 import log from 'roarr'
-import { Options } from './options'
+import { ReflectOptions } from './options'
 
 export class Generator {
 	program: ts.Program
-	options: Options
+	options: ReflectOptions
 
 	packages = new Map<string, Package>()
 	files = new Map<string, SourceFileMeta>()
 
-	constructor(options: Options, program: ts.Program) {
+	constructor(options: ReflectOptions, program: ts.Program) {
 		this.program = program
 		this.options = options
 

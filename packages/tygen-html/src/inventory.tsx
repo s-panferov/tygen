@@ -1,7 +1,5 @@
 import * as React from 'react'
 
-import { withSettings, ViewSettings } from './view'
-
 import { InventoryReflection, InventoryPackage } from '@tygen/reflector'
 import { css, cx } from 'linaria'
 import { Page } from './ui/layout'
@@ -10,7 +8,7 @@ import { TreeRender, TreeRowProps } from './ui/tree-render'
 import { Tree, TextItem, TreeNavigation } from './ui/tree'
 import { autobind } from 'core-decorators'
 import { observer } from 'mobx-react'
-import { normalizePath } from './helpers'
+import { NormalizedLink } from './ref-link'
 
 class PackageItem extends TextItem<InventoryPackage & { selected?: boolean }> {
 	href() {
@@ -27,9 +25,8 @@ function extractStructure(reflection: InventoryReflection) {
 	})
 }
 
-export class InventoryPage_ extends React.Component<{
+export class InventoryPage extends React.Component<{
 	reflection: InventoryReflection
-	settings: ViewSettings
 }> {
 	tree = new Tree(extractStructure(this.props.reflection), tree => ({
 		nav: new TreeNavigation(tree)
@@ -59,7 +56,7 @@ export class InventoryPage_ extends React.Component<{
 
 	@autobind
 	renderItem(props: TreeRowProps<PackageItem>) {
-		return <InventoryNode {...props} settings={this.props.settings} />
+		return <InventoryNode {...props} />
 	}
 
 	@autobind
@@ -75,25 +72,19 @@ export class InventoryPage_ extends React.Component<{
 	}
 }
 
-export const InventoryPage = withSettings(InventoryPage_)
-
 @observer
-export class InventoryNode extends React.Component<
-	TreeRowProps<PackageItem> & { settings: ViewSettings }
-> {
+export class InventoryNode extends React.Component<TreeRowProps<PackageItem>> {
 	render() {
 		const {
 			item,
-			item: { key, info },
-			settings
+			item: { key, info }
 		} = this.props
-		const href = normalizePath(settings, item.href())
 		return (
 			<div key={key} className={cx(PackageRow, info.selected && 'selected')}>
 				<div className={PackageNameCell}>
-					<a className={PackageName} href={href}>
+					<NormalizedLink className={PackageName} href={item.href()}>
 						{info.name}
-					</a>
+					</NormalizedLink>
 				</div>
 				<div className={PackageDescriptionCell}>{info.description}</div>
 				<div className={PackageVersionCell}>{info.versions[0]}</div>

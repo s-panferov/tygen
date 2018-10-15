@@ -2,6 +2,7 @@ import React from 'react'
 import { css } from 'linaria'
 import { Search } from './search'
 import { SearchReflection } from '@tygen/reflector'
+import { NormalizedLink } from '../ref-link'
 
 export interface HeaderProps {
 	pkg?: string
@@ -11,12 +12,12 @@ export interface HeaderProps {
 
 export class Header extends React.Component<HeaderProps> {
 	render() {
-		const { pkg, version, search } = this.props
+		const { search } = this.props
 		return (
 			<div className={HeaderStyle}>
 				<div className={HeaderInner}>
 					<Logo />
-					<Search reflection={search} pkg={pkg} version={version} />
+					<Search reflection={search} />
 				</div>
 			</div>
 		)
@@ -25,9 +26,9 @@ export class Header extends React.Component<HeaderProps> {
 
 export function Logo() {
 	return (
-		<a className={LogoStyle} href="/">
+		<NormalizedLink className={LogoStyle} href={''}>
 			<img src={require('../../asset/logo.png')} width={70} />
-		</a>
+		</NormalizedLink>
 	)
 }
 

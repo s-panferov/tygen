@@ -3,7 +3,7 @@ import * as path from 'path'
 import { css } from 'linaria'
 import * as fuzz from 'fuzzaldrin-plus'
 
-import { SearchReflection, ReflectionId } from '@tygen/reflector'
+import { SearchReflection, ReflectionId, Reflection } from '@tygen/reflector'
 
 import { normalizePath } from '../helpers'
 import { navigateTo, getKey, RefLink } from '../ref-link'
@@ -23,21 +23,17 @@ interface ReflectionIdWithSearchPattern extends ReflectionId {
 	searchPattern?: string
 }
 
-interface SearchReflectionWithPattern extends SearchReflection {
-	items: ReflectionIdWithSearchPattern[]
-}
-
 export class SearchPage extends BaseView<SearchReflection> {
 	render() {
-		return <Header pkg={'🔎'} search={this.props.reflection} />
+		return <Header search={this.props.reflection} />
 	}
 }
 
 export class Search_ extends React.Component<
-	{ pkg?: string; version?: string; reflection?: SearchReflection; settings: ViewSettings },
+	{ reflection?: SearchReflection; settings: ViewSettings },
 	SearchState
 > {
-	reflection?: SearchReflectionWithPattern = this.props.reflection
+	items?: ReflectionIdWithSearchPattern[]
 
 	state: SearchState = {
 		index: 0,
@@ -55,20 +51,20 @@ export class Search_ extends React.Component<
 		const searchScope = window.localStorage.getItem('searchScope') || 'package'
 		const searchQuery = window.localStorage.getItem('searchQuery') || ''
 		if (!this.props.reflection && window.location.protocol !== 'file:') {
-			const url = normalizePath(this.props.settings!, '/_search/index.json')
+			const url = normalizePath(this.props.settings!, '_search/index.json')
 			fetch(url.toString())
 				.then(index => index.json())
-				.then((reflection: SearchReflection) => {
-					this.reflection = reflection
-					this.reflection.items.forEach(item => {
-						item.searchPattern = path.join(item.fileName, item.anchor)
-					})
+				.then(reflection => {
+					this.reflectionReady(reflection)
 					this.setState({
 						results: this.updateResults()
 					})
 				})
 				.catch(e => console.error(e))
+		} else if (this.props.reflection) {
+			this.reflectionReady(this.props.reflection)
 		}
+
 		this.setState({
 			scope: searchScope,
 			query: searchQuery,
@@ -78,12 +74,23 @@ export class Search_ extends React.Component<
 		})
 	}
 
+	reflectionReady(reflection: SearchReflection) {
+		const items = [] as ReflectionIdWithSearchPattern[]
+		Object.keys(reflection.packages).forEach(pkg => {
+			reflection.packages[pkg].forEach((id: ReflectionIdWithSearchPattern) => {
+				id.searchPattern = path.join(id.fileName, id.anchor)
+				items.push(id)
+			})
+		})
+		this.items = items
+	}
+
 	render() {
 		const scope = this.state.scope
 		return (
 			<div className={SearchBody} onKeyDown={this.onKeyDown}>
 				<select value={scope} onChange={this.onScopeChange}>
-					<option value={'package'}>Package</option>
+					<option value={'package'}>This package</option>
 					<option value={'global'}>Global</option>
 				</select>
 				<input
@@ -123,7 +130,7 @@ export class Search_ extends React.Component<
 		) {
 			// Navigate to search page for file mode, because file: does not allow
 			// us to make a fetch request.
-			window.location = normalizePath(this.props.settings, '/_search') as any
+			window.location = normalizePath(this.props.settings, '_search') as any
 		}
 
 		this.setState({
@@ -160,11 +167,12 @@ export class Search_ extends React.Component<
 	}
 
 	updateResults(query: string = this.state.query, scope = this.state.scope) {
-		if (query && this.reflection) {
-			const scopedQuery =
-				scope === 'package' ? `${this.props.pkg}/${this.props.version}/${query}` : query
+		if (query && this.items) {
+			const reflection = (window as any).__ref as Reflection
+			const packageScope = `${reflection.id![0].name}/${reflection.id![0].version}`
+			const scopedQuery = scope === 'package' ? `${packageScope}/${query}` : query
 
-			return fuzz.filter(this.reflection.items, scopedQuery, {
+			return fuzz.filter(this.items, scopedQuery, {
 				key: 'searchPattern',
 				maxResults: 50
 			})
@@ -217,7 +225,16 @@ class SearchItem extends React.Component<{ id: ReflectionId; focus: boolean }> {
 	}
 
 	render() {
-		return <RefLink reflectionId={this.props.id} />
+		return (
+			<div style={{ padding: 5 }}>
+				<RefLink reflectionId={this.props.id}>
+					<React.Fragment>
+						<span>{this.props.id.name}</span>{' '}
+						<span style={{ color: '#999' }}>{this.props.id.fileName}</span>
+					</React.Fragment>
+				</RefLink>
+			</div>
+		)
 	}
 }
 
@@ -235,6 +252,7 @@ const SearchInput = css`
 	border: none;
 	outline: none;
 	border-bottom: 1px solid #ccc;
+	background-color: transparent;
 	margin-left: 10px;
 `
 

@@ -8,7 +8,7 @@ import { ConverterFactory } from './converter'
 import { Writer } from './writer'
 
 import * as ts from 'typescript'
-import { Options } from './options'
+import { ReflectOptions, GenerateOptions } from './options'
 import { Generator } from './generator'
 
 require('source-map-support').install()
@@ -16,21 +16,15 @@ require('source-map-support').install()
 // @ts-ignore
 global.ts = ts
 
-const GenerateCommand: yargs.CommandModule = {
-	command: 'generate',
-	describe: 'Build documentation',
+const ReflectCommand: yargs.CommandModule = {
+	command: 'reflect',
+	describe: 'Build reflections',
 	builder: yargs => {
 		return yargs
 			.option('project', {
 				alias: 'p',
 				description: 'Path to tsconfig.json to compile and generate documentation',
 				required: true,
-				type: 'string'
-			})
-			.option('with', {
-				alias: 'w',
-				description: 'Documentation preprocessor (for HTML, Markdown, etc.)',
-				required: false,
 				type: 'string'
 			})
 			.option('out', {
@@ -60,7 +54,7 @@ const GenerateCommand: yargs.CommandModule = {
 				type: 'boolean'
 			})
 	},
-	handler: defer((argv: Options) => {
+	handler: defer((argv: ReflectOptions) => {
 		const { program } = compileFolder(argv.project)
 
 		const generator = new Generator(argv, program)
@@ -73,24 +67,47 @@ const GenerateCommand: yargs.CommandModule = {
 
 		updateInventory(argv.out)
 
-		if (argv.with) {
-			const mainFile = require.resolve(argv.with)
-			let converterFactory: ConverterFactory = require(argv.with)
-			if (typeof (converterFactory as any).default !== 'undefined') {
-				converterFactory = (converterFactory as any).default
-			}
+		console.log('Completed!')
+		process.exit(0)
+	})
+}
 
-			const converter = converterFactory(argv)
+const GenerateCommand: yargs.CommandModule = {
+	command: 'generate',
+	describe: 'Build pre-generated documentation from reflections',
+	builder: yargs => {
+		return yargs
+			.option('out', {
+				alias: 'o',
+				default: 'docs',
+				description: 'Output folder',
+				required: false,
+				type: 'string'
+			})
+			.option('with', {
+				alias: 'w',
+				description: 'Documentation preprocessor (for HTML, Markdown, etc.)',
+				required: true,
+				type: 'string'
+			})
+	},
+	handler: defer((argv: GenerateOptions) => {
+		const mainFile = require.resolve(argv.with)
+		let converterFactory: ConverterFactory = require(argv.with)
+		if (typeof (converterFactory as any).default !== 'undefined') {
+			converterFactory = (converterFactory as any).default
+		}
 
-			let visitor = new ReflectionWalker(argv.out)
-			visitor.walk(converter)
+		const converter = converterFactory(argv)
 
-			if (converter.emitRuntime) {
-				converter.emitRuntime(argv.out, {
-					fs: fs,
-					main: mainFile
-				})
-			}
+		let visitor = new ReflectionWalker(argv.out)
+		visitor.walk(converter)
+
+		if (converter.emitRuntime) {
+			converter.emitRuntime(argv.out, {
+				fs: fs,
+				main: mainFile
+			})
 		}
 
 		console.log('Completed!')
@@ -105,6 +122,7 @@ function defer<T extends Function>(fn: T) {
 }
 
 yargs
+	.command(ReflectCommand)
 	.command(GenerateCommand)
 	.strict()
 	.recommendCommands()

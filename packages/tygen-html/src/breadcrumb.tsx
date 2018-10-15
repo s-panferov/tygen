@@ -2,19 +2,15 @@ import React from 'react'
 import { css, cx } from 'linaria'
 
 import { Reflection } from '@tygen/reflector'
-
-import { withSettings, ViewSettings } from './view'
-import { normalizePath } from './helpers'
-import { RefLink } from './ref-link'
+import { RefLink, NormalizedLink } from './ref-link'
 
 import homeIcon from '@fortawesome/fontawesome-free/svgs/solid/home.svg'
 
-class BreadcrumbBase extends React.Component<{
+export class Breadcrumb extends React.Component<{
 	reflection: Reflection
-	settings: ViewSettings
 }> {
 	render() {
-		const { reflection, settings } = this.props
+		const { reflection } = this.props
 		const { id } = reflection
 
 		if (!id) {
@@ -24,10 +20,7 @@ class BreadcrumbBase extends React.Component<{
 		const links = [] as React.ReactNode[]
 
 		links.push(
-			<a
-				className={cx(LinkStyle, HomeLinkStyle)}
-				key="__home"
-				href={normalizePath(settings, '')}>
+			<NormalizedLink className={cx(LinkStyle, HomeLinkStyle)} key="__home" href={''}>
 				<svg
 					viewBox={homeIcon.viewBox}
 					className={HomeIconStyle}
@@ -37,7 +30,7 @@ class BreadcrumbBase extends React.Component<{
 					<use href={'#' + homeIcon.id} />
 				</svg>
 				<span className={ArrowStyle}> </span>
-			</a>
+			</NormalizedLink>
 		)
 
 		id.forEach(id => {
@@ -58,8 +51,6 @@ class BreadcrumbBase extends React.Component<{
 		return <div className={BodyStyle}>{links}</div>
 	}
 }
-
-export const Breadcrumb = withSettings(BreadcrumbBase)
 
 const BodyStyle = css`
 	font-size: 14px;

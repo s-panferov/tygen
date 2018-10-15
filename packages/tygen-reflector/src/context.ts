@@ -5,13 +5,13 @@ import { Reflection } from './reflection/reflection'
 import { createLink, ExcludedFlag, ExcludedReflection } from './reflection/utils'
 import { TypeReflection } from './reflection/_type/reflection'
 import { stringifyId } from './reflection/identifier'
-import { Options } from './options'
+import { ReflectOptions } from './options'
 
 export class Context {
 	generator: Generator
 	program: ts.Program
 	checker: ts.TypeChecker
-	options: Options
+	options: ReflectOptions
 
 	visitedReflections = new Set<ts.Symbol>()
 

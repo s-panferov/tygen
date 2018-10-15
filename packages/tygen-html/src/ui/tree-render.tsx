@@ -73,7 +73,7 @@ export class TreeRender<I extends TreeItem> extends React.Component<{
 					serverHeight={900}
 					scrollElement={typeof window !== 'undefined' ? window : undefined}>
 					{({ height, isScrolling, registerChild, onChildScroll, scrollTop }: any) => (
-						<AutoSizer disableHeight>
+						<AutoSizer defaultHeight={900} defaultWidth={500} disableHeight>
 							{({ width }) => (
 								<div ref={registerChild}>
 									<List

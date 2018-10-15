@@ -27,8 +27,7 @@ const IsWritable: { [name: string]: boolean } = {
 const IsSearchable: { [name: string]: boolean } = Object.assign({}, IsWritable, {
 	[ReflectionKind.Property]: true,
 	[ReflectionKind.Method]: true,
-	[ReflectionKind.EnumMember]: true,
-	[ReflectionKind.Parameter]: true
+	[ReflectionKind.EnumMember]: true
 })
 
 export class Writer {
@@ -48,10 +47,23 @@ export class Writer {
 	}
 
 	writeReflections() {
-		const search: SearchReflection = {
-			kind: ReflectionKind.Search,
-			items: []
+		let search: SearchReflection
+		const searchDir = path.join(this.outDir, '_search')
+		const searchFile = path.join(searchDir, 'index.json')
+		if (!this.fs.existsSync(searchDir)) {
+			this.fs.mkdirSync(searchDir)
 		}
+
+		if (!this.fs.existsSync(searchFile)) {
+			search = {
+				kind: ReflectionKind.Search,
+				packages: {}
+			}
+		} else {
+			search = JSON.parse(fse.readFileSync(searchFile).toString())
+		}
+
+		const updatedSearchPackages: { [key: string]: boolean } = {}
 
 		this.context.reflectionById.forEach(reflection => {
 			if ((reflection as ExcludedReflection)[ExcludedFlag]) {
@@ -64,7 +76,12 @@ export class Writer {
 				// Make only top-level items searchable
 				reflection.id.every(id => IsSearchable[id.kind])
 			) {
-				search.items.push(idFromPath(reflection.id))
+				const packageKey = `${reflection.id[0].name}@${reflection.id[0].version}`
+				if (!search.packages[packageKey] || !updatedSearchPackages[packageKey]) {
+					search.packages[packageKey] = []
+					updatedSearchPackages[packageKey] = true
+				}
+				search.packages[packageKey].push(idFromPath(reflection.id))
 			}
 
 			if (!IsWritable[reflection.kind]) {
@@ -78,12 +95,7 @@ export class Writer {
 			this.fs.writeFileSync(fileName, JSON.stringify(reflection, null, 4))
 		})
 
-		const searchDir = path.join(this.outDir, '_search')
-		if (!this.fs.existsSync(searchDir)) {
-			this.fs.mkdirSync(searchDir)
-		}
-
-		this.fs.writeFileSync(path.join(searchDir, 'index.json'), JSON.stringify(search))
+		this.fs.writeFileSync(searchFile, JSON.stringify(search))
 	}
 
 	writeSources() {

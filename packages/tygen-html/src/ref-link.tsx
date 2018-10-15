@@ -124,6 +124,19 @@ class RefLink_ extends React.Component<RefLinkProps & { settings: ViewSettings }
 
 export const RefLink = withSettings(RefLink_)
 
+class NormalizedLink_ extends React.Component<
+	React.AnchorHTMLAttributes<HTMLAnchorElement> & { settings: ViewSettings }
+> {
+	render() {
+		const { settings, href, ...rest } = this.props
+		const normalized = typeof href !== 'undefined' ? normalizePath(settings, href) : undefined
+
+		return <a {...rest} href={normalized} />
+	}
+}
+
+export const NormalizedLink = withSettings(NormalizedLink_)
+
 const Name = css`
 	color: #ccc;
 	&.main {
