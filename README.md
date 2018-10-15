@@ -10,6 +10,10 @@ Big goals:
 2.  Special support for ReactJS/Angular/Vue projects.
 3.  All-in-one documentation portal like Rust's [docs.rs](docs.rs), but this will be possible **only** if you support me.
 
+## Example output
+
+http://tsdoc.io/typescript/3.1.2
+
 ## Donation request
 
 This project has very ambitious goals, but demands a lot of attention and hard work to make things right. I need to invest tons of my free time and right now this project is supported solely by my enthusiasm.
