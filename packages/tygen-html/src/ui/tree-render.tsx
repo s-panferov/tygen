@@ -69,7 +69,7 @@ export class TreeRender<I extends TreeItem> extends React.Component<{
 				/>
 				{this.props.children}
 				<WindowScroller
-					serverHeight={0}
+					serverHeight={700}
 					scrollElement={typeof window !== 'undefined' ? window : undefined}>
 					{({ height, isScrolling, onChildScroll, registerChild, scrollTop }: any) => (
 						<div {...{ 'data-virtual': true }} ref={registerChild}>
