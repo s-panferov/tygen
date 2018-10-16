@@ -69,38 +69,34 @@ export class TreeRender<I extends TreeItem> extends React.Component<{
 				/>
 				{this.props.children}
 				<WindowScroller
-					serverWidth={250}
 					serverHeight={900}
 					scrollElement={typeof window !== 'undefined' ? window : undefined}>
 					{({ height, isScrolling, registerChild, onChildScroll, scrollTop }: any) => (
-						<AutoSizer defaultHeight={900} defaultWidth={500} disableHeight>
-							{({ width }) => (
-								<div ref={registerChild}>
-									<List
-										{...{ flatTree }}
-										autoHeight
-										height={height}
-										style={{
-											overflow: 'visible',
-											outline: 'none'
-										}}
-										containerStyle={{
-											// overflowX: 'scroll'
-											overflow: 'visible',
-											outline: 'none'
-										}}
-										isScrolling={isScrolling}
-										onScroll={onChildScroll}
-										overscanRowCount={2}
-										rowCount={flatTree.length}
-										rowHeight={this.rowHeight}
-										rowRenderer={this.rowRender}
-										scrollTop={scrollTop}
-										width={width}
-									/>
-								</div>
-							)}
-						</AutoSizer>
+						<div ref={registerChild}>
+							<List
+								{...{ flatTree }}
+								autoHeight
+								autoWidth
+								height={height}
+								style={{
+									overflow: 'visible',
+									outline: 'none'
+								}}
+								containerStyle={{
+									// overflowX: 'scroll'
+									overflow: 'visible',
+									outline: 'none'
+								}}
+								isScrolling={isScrolling}
+								onScroll={onChildScroll}
+								overscanRowCount={2}
+								rowCount={flatTree.length}
+								rowHeight={this.rowHeight}
+								rowRenderer={this.rowRender}
+								scrollTop={scrollTop}
+								width={1058}
+							/>
+						</div>
 					)}
 				</WindowScroller>
 			</div>
