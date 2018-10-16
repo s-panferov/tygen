@@ -2,7 +2,6 @@ import * as React from 'react'
 
 import { FunctionReflection } from '@tygen/reflector'
 import { PrettyCode } from './prettier'
-import { Join } from '../ui/join'
 import { SignaturePre } from './signature'
 
 export class FunctionPre extends PrettyCode<{ reflection: FunctionReflection }> {
@@ -10,16 +9,14 @@ export class FunctionPre extends PrettyCode<{ reflection: FunctionReflection }> 
 		const { reflection } = this.props
 		return (
 			<React.Fragment>
-				<Join joinWith={`;\n`}>
-					{reflection.allCallSignatures &&
-						reflection.allCallSignatures.map(sig => {
-							return (
-								<React.Fragment>
-									function <SignaturePre reflection={sig as any} />
-								</React.Fragment>
-							)
-						})}
-				</Join>
+				{reflection.allCallSignatures &&
+					reflection.allCallSignatures.map((sig, i) => {
+						return (
+							<React.Fragment key={i}>
+								function <SignaturePre reflection={sig as any} />;{`\n\n`}
+							</React.Fragment>
+						)
+					})}
 			</React.Fragment>
 		)
 	}

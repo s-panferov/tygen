@@ -33,23 +33,25 @@ export function renderHTML(
 	return `
 		<html>
 			<head>
+				<meta charset="UTF-8">
+				<title>${name} - TypeScript</title>
 				<script>
 					__webpack_public_path__ = "${base}"
-					window.__argv = ${JSON.stringify(normalizedSettings)}
-					window.__ref = ${JSON.stringify(ref)}
 				</script>
 				<base href="${base || '.'}" />
+				<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css"/>
+				<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+				<link href="https://fonts.googleapis.com/css?family=Fira+Mono" rel="stylesheet">
 				<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js" defer></script>
 				<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" defer></script>
 				<script crossorigin src="https://unpkg.com/prettier@1.14.2/standalone.js" defer></script>
 				<script crossorigin src="https://unpkg.com/prettier@1.14.2/parser-typescript.js" defer></script>
-				<script type="text/javascript" src="-/assets/index.js" defer></script>
-				<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css"/>
-				<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
-				<link href="https://fonts.googleapis.com/css?family=Fira+Mono" rel="stylesheet">
 				<link rel="stylesheet" type="text/css" href="-/assets/index.css"/>
-				<meta charset="UTF-8">
-				<title>${name} - TypeScript</title>
+				<script>
+					window.__argv = ${JSON.stringify(normalizedSettings)}
+					window.__ref = ${JSON.stringify(ref)}
+				</script>
+				<script type="text/javascript" src="-/assets/index.js" defer></script>
 			</head>
 			<body class="${BodyStyle}">
 				<div id='react-app'>${html}</div>

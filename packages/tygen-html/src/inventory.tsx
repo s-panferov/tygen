@@ -41,7 +41,7 @@ export class InventoryPage extends React.Component<{
 				header={<Outline icon={null} header={<h1>Packages</h1>} />}>
 				<TreeRender<PackageItem>
 					tree={this.tree}
-					rowHeight={30}
+					rowHeight={46}
 					onSelect={this.onSelect}
 					itemRender={this.renderItem}>
 					<div className={PackageRow}>
@@ -77,10 +77,11 @@ export class InventoryNode extends React.Component<TreeRowProps<PackageItem>> {
 	render() {
 		const {
 			item,
-			item: { key, info }
+			item: { key, info },
+			style
 		} = this.props
 		return (
-			<div key={key} className={cx(PackageRow, info.selected && 'selected')}>
+			<div key={key} style={style} className={cx(PackageRow, info.selected && 'selected')}>
 				<div className={PackageNameCell}>
 					<NormalizedLink className={PackageName} href={item.href()}>
 						{info.name}
@@ -101,6 +102,11 @@ const PackageNameCell = css`
 		width: auto;
 		flex: 1 1 auto;
 	}
+
+	> * {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 `
 const PackageVersionCell = css`
 	width: 100px;
@@ -117,6 +123,9 @@ const PackageDescriptionCell = css`
 const PackageRow = css`
 	display: flex;
 	padding: 5px 10px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 
 	&.selected {
 		background-color: #eee;

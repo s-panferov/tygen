@@ -12,10 +12,12 @@ export class Icon extends React.Component<{ sym: SvgSymbol } & React.SVGAttribut
 	}
 }
 
+const image = require('../../asset/tsd.svg')
+
 export class TSIcon extends React.Component<{ className: string }> {
 	render() {
 		return (
-			<span className={this.props.className}>
+			<span className={this.props.className} style={{ '--image': image } as any}>
 				<span className="tsd-kind-icon" />
 			</span>
 		)

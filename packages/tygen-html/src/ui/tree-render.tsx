@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import { action, computed } from 'mobx'
-import { List, WindowScroller, AutoSizer, ListRowProps, Index } from 'react-virtualized'
+import { List, WindowScroller, ListRowProps, Index } from 'react-virtualized'
 import { score, match, prepareQuery, IFilterOptions } from 'fuzzaldrin-plus'
 
 import { Tree, QueryEngine, TreeNavigation, TreeItem } from './tree'
@@ -69,10 +69,10 @@ export class TreeRender<I extends TreeItem> extends React.Component<{
 				/>
 				{this.props.children}
 				<WindowScroller
-					serverHeight={900}
+					serverHeight={0}
 					scrollElement={typeof window !== 'undefined' ? window : undefined}>
-					{({ height, isScrolling, registerChild, onChildScroll, scrollTop }: any) => (
-						<div ref={registerChild}>
+					{({ height, isScrolling, onChildScroll, registerChild, scrollTop }: any) => (
+						<div {...{ 'data-virtual': true }} ref={registerChild}>
 							<List
 								{...{ flatTree }}
 								autoHeight
@@ -88,13 +88,13 @@ export class TreeRender<I extends TreeItem> extends React.Component<{
 									outline: 'none'
 								}}
 								isScrolling={isScrolling}
-								onScroll={onChildScroll}
 								overscanRowCount={2}
 								rowCount={flatTree.length}
 								rowHeight={this.rowHeight}
 								rowRenderer={this.rowRender}
 								scrollTop={scrollTop}
-								width={1058}
+								width={1100}
+								onScroll={onChildScroll}
 							/>
 						</div>
 					)}

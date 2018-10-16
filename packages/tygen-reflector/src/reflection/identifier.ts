@@ -278,7 +278,10 @@ function generateIdChainForDeclaration(
 		})
 	} else if (ts.isModuleDeclaration(node)) {
 		id = concatIdentifier(id, {
-			kind: ReflectionKind.Module,
+			kind:
+				node.flags & ts.NodeFlags.Namespace
+					? ReflectionKind.Namespace
+					: ReflectionKind.Module,
 			name: node.name.getText().replace(/"|'/g, ''),
 			keywords
 		})

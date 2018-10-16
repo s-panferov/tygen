@@ -11,7 +11,7 @@
 	vertical-align: middle;
 	width: 17px;
 	height: 17px;
-	background-image: url(./tsd.svg);
+	background-image: var(--image);
 }
 
 .tsd-signature.tsd-kind-icon:before {

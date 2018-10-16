@@ -20,7 +20,7 @@ export class Breadcrumb extends React.Component<{
 		const links = [] as React.ReactNode[]
 
 		links.push(
-			<NormalizedLink className={cx(LinkStyle, HomeLinkStyle)} key="__home" href={''}>
+			<NormalizedLink key="__home" className={cx(LinkStyle, HomeLinkStyle)} href={''}>
 				<svg
 					viewBox={homeIcon.viewBox}
 					className={HomeIconStyle}
@@ -35,7 +35,7 @@ export class Breadcrumb extends React.Component<{
 
 		id.forEach(id => {
 			links.push(
-				<RefLink className={LinkStyle} reflectionId={id}>
+				<RefLink key={id.anchor} className={LinkStyle} reflectionId={id}>
 					{({ name }) => {
 						return (
 							<React.Fragment>
