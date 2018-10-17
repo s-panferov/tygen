@@ -1,6 +1,7 @@
 # TyGen — TypeScript documentation generator
 
 [![Gitter](https://badges.gitter.im/s-panferov/tygen.svg)](https://gitter.im/s-panferov/tygen?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Build Status](https://travis-ci.org/s-panferov/tygen.svg?branch=master)](https://travis-ci.org/s-panferov/tygen)
 
 This project aims to create a full-featured modern TypeScript documentation generator with support of all the latest TypeScript features. It can build an interlinked representation of all project files, so every symbol of your program (and your dependencies) is inspectable, even those dependencies in `@types/*` packages.
 
