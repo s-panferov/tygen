@@ -1,0 +1,19 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "module": "commonjs",
+    "outDir": "lib",
+    "sourceMap": true,
+    "lib": [
+      "esnext", "dom",
+    ],
+    "types": ["jest"]
+  },
+  "references": [{
+    "path": ".."
+  }],
+  "include": [
+    "./**/*.spec.ts",
+  ]
+}

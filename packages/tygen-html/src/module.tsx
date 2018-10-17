@@ -3,9 +3,9 @@ import { Page } from './ui/layout'
 
 import {
 	ESModuleReflection,
-	ModuleReflection,
+	AmbientModuleReflection,
 	NamespaceReflection,
-	AmbientFileReflection
+	DeclarationFileReflection
 } from '@tygen/reflector'
 
 import { BaseView } from './view'
@@ -16,7 +16,7 @@ import { buildTreeByType } from './group';
 import { Structure } from './structure';
 
 export class ModulePage extends BaseView<
-	ESModuleReflection | ModuleReflection | NamespaceReflection | AmbientFileReflection
+	ESModuleReflection | AmbientModuleReflection | NamespaceReflection | DeclarationFileReflection
 > {
 	tree = new NavTree(buildTreeByType(this.props.reflection.exports || []))
 

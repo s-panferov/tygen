@@ -13,10 +13,10 @@ import { PackageReflection, FolderReflection } from './package'
 import { SearchReflection } from './search/reflection'
 
 import {
-	ModuleReflection,
+	AmbientModuleReflection,
 	NamespaceReflection,
 	ESModuleReflection,
-	AmbientFileReflection
+	DeclarationFileReflection
 } from './module/reflection'
 
 export enum ReflectionKind {
@@ -28,10 +28,10 @@ export enum ReflectionKind {
 	Enum = 'Enum',
 	EnumMember = 'EnumMember',
 	Link = 'Link',
-	Module = 'Module',
+	DeclarationFile = 'DeclarationFile',
+	AmbientModule = 'AmbientModule',
 	Namespace = 'Namespace',
 	ESModule = 'ESModule',
-	AmbientFile = 'AmbientFile',
 	Interface = 'Interface',
 	HeritageClause = 'HeritageClause',
 	Property = 'Property',
@@ -119,7 +119,7 @@ export type Reflection =
 	| ReflectionLink
 	| InterfaceReflection
 	| PropertyReflection
-	| ModuleReflection
+	| AmbientModuleReflection
 	| EnumReflection
 	| EnumMemberReflection
 	| FunctionReflection
@@ -133,7 +133,7 @@ export type Reflection =
 	| TypeReflection
 	| NamespaceReflection
 	| ESModuleReflection
-	| AmbientFileReflection
+	| DeclarationFileReflection
 	| PackageReflection
 	| FolderReflection
 	| InventoryReflection

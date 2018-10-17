@@ -7,7 +7,9 @@ export const SectionNames = {
 	[ReflectionKind.TypeAlias]: 'Type Aliases',
 	[ReflectionKind.Function]: 'Functions',
 	[ReflectionKind.Variable]: 'Variables',
-	[ReflectionKind.Module]: 'Modules',
+	[ReflectionKind.ESModule]: 'Modules',
+	[ReflectionKind.DeclarationFile]: 'Declaration Files',
+	[ReflectionKind.AmbientModule]: 'Global modules',
 	[ReflectionKind.Namespace]: 'Namespaces',
 	getName(group: string): string {
 		return (this as any)[group] || group

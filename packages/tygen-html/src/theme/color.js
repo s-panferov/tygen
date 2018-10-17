@@ -1,19 +1,4 @@
-export interface ColorTheme {
-	$schema: string
-	type: 'light' | 'dark'
-	colors: { [key: string]: string }
-	tokenColors: {
-		name?: string
-		scope: string
-		settings: {
-			[key: string]: string | undefined
-			foreground?: string
-			background?: string
-		}
-	}[]
-}
-
-export function convertColorThemeToCSS(theme: ColorTheme) {
+export function convertColorThemeToCSS(theme) {
 	let style = ''
 
 	theme.tokenColors.forEach(token => {
@@ -43,16 +28,14 @@ export function convertColorThemeToCSS(theme: ColorTheme) {
 	})
 
 	return `
-		body {
-			background-color: ${theme.colors['editor.background']};
-			color: ${theme.colors['editor.foreground']};
-		}
+		background-color: ${theme.colors['editor.background']};
+		color: ${theme.colors['editor.foreground']};
 
 		${style}
 	`
 }
 
-export const colorTheme: ColorTheme = {
+export const colorTheme = {
 	$schema: 'vscode://schemas/color-theme',
 	type: 'light',
 	colors: {
@@ -62,8 +45,7 @@ export const colorTheme: ColorTheme = {
 		'editorCursor.foreground': '#526fff',
 		'editorIndentGuide.background': '#cbd3ff'
 	},
-	tokenColors: [
-		{
+	tokenColors: [{
 			name: 'Comment',
 			scope: 'comment',
 			settings: {
@@ -249,10 +231,8 @@ export const colorTheme: ColorTheme = {
 			}
 		},
 		{
-			name:
-				'Punctuation Definition Method Parameters,punctuation Definition Function Parameters,punctuation Definition Parameters,punctuation Definition Separator,punctuation Definition Seperator,punctuation Definition Array',
-			scope:
-				'punctuation.definition.method-parameters,punctuation.definition.function-parameters,punctuation.definition.parameters,punctuation.definition.separator,punctuation.definition.seperator,punctuation.definition.array',
+			name: 'Punctuation Definition Method Parameters,punctuation Definition Function Parameters,punctuation Definition Parameters,punctuation Definition Separator,punctuation Definition Seperator,punctuation Definition Array',
+			scope: 'punctuation.definition.method-parameters,punctuation.definition.function-parameters,punctuation.definition.parameters,punctuation.definition.separator,punctuation.definition.seperator,punctuation.definition.array',
 			settings: {
 				foreground: '#383a42'
 			}
@@ -288,10 +268,8 @@ export const colorTheme: ColorTheme = {
 			}
 		},
 		{
-			name:
-				'Punctuation Section Method,punctuation Section Class,punctuation Section Inner Class',
-			scope:
-				'punctuation.section.method,punctuation.section.class,punctuation.section.inner-class',
+			name: 'Punctuation Section Method,punctuation Section Class,punctuation Section Inner Class',
+			scope: 'punctuation.section.method,punctuation.section.class,punctuation.section.inner-class',
 			settings: {
 				foreground: '#383a42'
 			}
@@ -638,10 +616,8 @@ export const colorTheme: ColorTheme = {
 			}
 		},
 		{
-			name:
-				'Source Js Keyword Operator Delete,source Js Keyword Operator In,source Js Keyword Operator Of,source Js Keyword Operator Instanceof,source Js Keyword Operator New,source Js Keyword Operator Typeof,source Js Keyword Operator Void',
-			scope:
-				'source.js keyword.operator.delete,source.js keyword.operator.in,source.js keyword.operator.of,source.js keyword.operator.instanceof,source.js keyword.operator.new,source.js keyword.operator.typeof,source.js keyword.operator.void',
+			name: 'Source Js Keyword Operator Delete,source Js Keyword Operator In,source Js Keyword Operator Of,source Js Keyword Operator Instanceof,source Js Keyword Operator New,source Js Keyword Operator Typeof,source Js Keyword Operator Void',
+			scope: 'source.js keyword.operator.delete,source.js keyword.operator.in,source.js keyword.operator.of,source.js keyword.operator.instanceof,source.js keyword.operator.new,source.js keyword.operator.typeof,source.js keyword.operator.void',
 			settings: {
 				foreground: '#a626a4'
 			}
@@ -654,28 +630,22 @@ export const colorTheme: ColorTheme = {
 			}
 		},
 		{
-			name:
-				'Source Json Meta Structure Dictionary Json > String Quoted Json > Punctuation String',
-			scope:
-				'source.json meta.structure.dictionary.json > string.quoted.json > punctuation.string',
+			name: 'Source Json Meta Structure Dictionary Json > String Quoted Json > Punctuation String',
+			scope: 'source.json meta.structure.dictionary.json > string.quoted.json > punctuation.string',
 			settings: {
 				foreground: '#e45649'
 			}
 		},
 		{
-			name:
-				'Source Json Meta Structure Dictionary Json > Value Json > String Quoted Json,source Json Meta Structure Array Json > Value Json > String Quoted Json,source Json Meta Structure Dictionary Json > Value Json > String Quoted Json > Punctuation,source Json Meta Structure Array Json > Value Json > String Quoted Json > Punctuation',
-			scope:
-				'source.json meta.structure.dictionary.json > value.json > string.quoted.json,source.json meta.structure.array.json > value.json > string.quoted.json,source.json meta.structure.dictionary.json > value.json > string.quoted.json > punctuation,source.json meta.structure.array.json > value.json > string.quoted.json > punctuation',
+			name: 'Source Json Meta Structure Dictionary Json > Value Json > String Quoted Json,source Json Meta Structure Array Json > Value Json > String Quoted Json,source Json Meta Structure Dictionary Json > Value Json > String Quoted Json > Punctuation,source Json Meta Structure Array Json > Value Json > String Quoted Json > Punctuation',
+			scope: 'source.json meta.structure.dictionary.json > value.json > string.quoted.json,source.json meta.structure.array.json > value.json > string.quoted.json,source.json meta.structure.dictionary.json > value.json > string.quoted.json > punctuation,source.json meta.structure.array.json > value.json > string.quoted.json > punctuation',
 			settings: {
 				foreground: '#50a14f'
 			}
 		},
 		{
-			name:
-				'Source Json Meta Structure Dictionary Json > Constant Language Json,source Json Meta Structure Array Json > Constant Language Json',
-			scope:
-				'source.json meta.structure.dictionary.json > constant.language.json,source.json meta.structure.array.json > constant.language.json',
+			name: 'Source Json Meta Structure Dictionary Json > Constant Language Json,source Json Meta Structure Array Json > Constant Language Json',
+			scope: 'source.json meta.structure.dictionary.json > constant.language.json,source.json meta.structure.array.json > constant.language.json',
 			settings: {
 				foreground: '#0184bc'
 			}
@@ -745,8 +715,7 @@ export const colorTheme: ColorTheme = {
 		},
 		{
 			name: '[VSCODE-CUSTOM] JS/TS Embedded Operator',
-			scope:
-				'source.js.embedded.html keyword.operator,source.ts.embedded.html keyword.operator',
+			scope: 'source.js.embedded.html keyword.operator,source.ts.embedded.html keyword.operator',
 			settings: {
 				foreground: '#56B6C2'
 			}
@@ -774,16 +743,14 @@ export const colorTheme: ColorTheme = {
 		},
 		{
 			name: '[VSCODE-CUSTOM] JS/TS Interpolation String Punctuation',
-			scope:
-				'meta.template.expression.js punctuation.definition,meta.template.expression.ts punctuation.definition',
+			scope: 'meta.template.expression.js punctuation.definition,meta.template.expression.ts punctuation.definition',
 			settings: {
 				foreground: '#BE5046'
 			}
 		},
 		{
 			name: '[VSCODE-CUSTOM] JS/TS Punctuation Type Parameters',
-			scope:
-				'source.ts punctuation.definition.typeparameters,source.js punctuation.definition.typeparameters',
+			scope: 'source.ts punctuation.definition.typeparameters,source.js punctuation.definition.typeparameters',
 			settings: {
 				foreground: '#383a42'
 			}
@@ -870,3 +837,5 @@ export const colorTheme: ColorTheme = {
 		}
 	]
 }
+
+export const bodyStyle = convertColorThemeToCSS(colorTheme)

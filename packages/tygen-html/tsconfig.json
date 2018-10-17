@@ -7,10 +7,10 @@
     "outDir": "lib",
     "esModuleInterop": true,
     "jsx": "react",
-    // "baseUrl": ".",
-    // "paths": {
-    //   "@tygen/reflector/*": ["../tygen-reflector/*"]
-    // },
+    "baseUrl": ".",
+    "paths": {
+      "@tygen/reflector": ["../tygen-reflector/src/index.ts"]
+    },
     "lib": [
       "esnext", "dom"
     ]

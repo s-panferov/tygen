@@ -1,12 +1,4 @@
 module.exports = {
-	moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-	transform: {
-		'\\.(ts|tsx)$': 'ts-jest'
-	},
-	testMatch: ['<rootDir>/packages/*/src/**/*.spec.(ts|tsx|js)'],
-	moduleNameMapper: {
-		// 'tools/(.*)': '<rootDir>/../tools/src/$1',
-		// 'client/(.*)': '<rootDir>/../client/src/$1',
-		// 'main/(.*)': '<rootDir>/../main/src/$1'
-	}
+	moduleFileExtensions: ['js', 'jsx'],
+	testMatch: ['<rootDir>/packages/*/(src|tests)/**/*.spec.(js)'],
 }

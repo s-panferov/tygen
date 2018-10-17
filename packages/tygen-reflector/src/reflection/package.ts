@@ -4,9 +4,8 @@ import {
 	Reflection,
 	ReflectionWithExports,
 	ReflectionWithGlobals,
-	ReflectionLink,
-	NotIncludedReflection,
-	ReflectionPath
+	ReflectionPath,
+	ReflectionId
 } from './reflection'
 
 export interface PackageReflection
@@ -24,15 +23,20 @@ export interface ReflectionWithReadme {
 	readme?: string
 }
 
+export interface ReflectionIdWithChildren extends ReflectionId {
+	children?: ReflectionIdWithChildren[]
+}
+
 export interface ReflectionWithStructure {
 	id?: ReflectionPath
-	modules: (ReflectionLink | NotIncludedReflection)[]
+	modules?: ReflectionIdWithChildren[]
 }
 
 export interface FolderReflection
 	extends BaseReflection,
 		ReflectionWithReadme,
 		ReflectionWithStructure {
+	id: ReflectionPath
 	kind: ReflectionKind.Folder
 	name: string
 }

@@ -8,12 +8,13 @@
     "sourceMap": true,
     "lib": [
       "esnext", "dom"
-    ]
+    ],
+    "types": []
   },
   "files": [
-    "runtime.ts"
+    "runtime.d.ts"
   ],
   "include": [
-    "src/**/*",
+    "src/**/*"
   ]
 }

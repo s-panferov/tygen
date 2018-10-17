@@ -1,8 +1,10 @@
 import * as ts from 'typescript'
+import * as path from 'path'
 import { Context } from '../context'
 import { isParameter } from './variable'
 import { ReflectionPath, ReflectionId, ReflectionKind } from './reflection'
 import { symbolToKnownReflectionKind } from './visitor'
+import { IsWritable } from '../writer'
 
 export function symbolId(
 	symbol: ts.Symbol,
@@ -73,7 +75,7 @@ export function concatIdentifier(
 	const writable: ReflectionId[] = []
 	const anchor: ReflectionId[] = []
 
-	let notWritableAlready = false
+	let notWritableAlready: ReflectionId | undefined
 
 	const finalSegment = newSegment as ReflectionId
 	const finalSegments = segments.concat(finalSegment)
@@ -81,11 +83,15 @@ export function concatIdentifier(
 	finalSegments.forEach(seg => {
 		if (isWritableReflection(seg.kind)) {
 			if (notWritableAlready) {
-				throw new Error('Writable reflection after a non-writable, please debug')
+				throw new Error(
+					`Writable reflection ${seg.kind} after a non-writable ${
+						notWritableAlready.kind
+					}, please debug`
+				)
 			}
 			writable.push(seg)
 		} else {
-			notWritableAlready = true
+			notWritableAlready = seg
 			anchor.push(seg)
 		}
 	})
@@ -135,21 +141,7 @@ function isStatic(node: ts.Declaration) {
 }
 
 export function isWritableReflection(kind: ReflectionKind) {
-	switch (kind) {
-		case ReflectionKind.Package:
-		case ReflectionKind.Folder:
-		case ReflectionKind.Interface:
-		case ReflectionKind.Module:
-		case ReflectionKind.Namespace:
-		case ReflectionKind.Class:
-		case ReflectionKind.Function:
-		case ReflectionKind.Variable:
-		case ReflectionKind.TypeAlias:
-		case ReflectionKind.Enum:
-			return true
-		default:
-			return false
-	}
+	return IsWritable[kind]
 }
 
 export function isWritableSymbol(symbol: ts.Symbol) {
@@ -182,9 +174,20 @@ export function generateIdForSourceFile(
 	})
 
 	if (addFilePath) {
+		const fileName = module.pathInfo.relativePath
+		const folders = path.dirname(fileName).split(path.sep)
+		folders.forEach(folder => {
+			id = concatIdentifier(id, {
+				name: folder,
+				kind: ReflectionKind.Folder
+			})
+		})
+
 		id = concatIdentifier(id, {
-			name: module.pathInfo.relativePath,
-			kind: ReflectionKind.Module
+			name: path.basename(fileName),
+			kind: (sourceFile as any).symbol
+				? ReflectionKind.ESModule
+				: ReflectionKind.DeclarationFile
 		})
 	}
 
@@ -281,7 +284,7 @@ function generateIdChainForDeclaration(
 			kind:
 				node.flags & ts.NodeFlags.Namespace
 					? ReflectionKind.Namespace
-					: ReflectionKind.Module,
+					: ReflectionKind.AmbientModule,
 			name: node.name.getText().replace(/"|'/g, ''),
 			keywords
 		})

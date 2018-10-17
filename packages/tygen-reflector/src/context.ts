@@ -1,17 +1,16 @@
 import ts from 'typescript'
 
-import { Generator } from './generator'
+import { Generator, GeneratorOptions } from './generator'
 import { Reflection } from './reflection/reflection'
 import { createLink, ExcludedFlag, ExcludedReflection } from './reflection/utils'
 import { TypeReflection } from './reflection/_type/reflection'
 import { stringifyId } from './reflection/identifier'
-import { ReflectOptions } from './options'
 
 export class Context {
 	generator: Generator
 	program: ts.Program
 	checker: ts.TypeChecker
-	options: ReflectOptions
+	options: GeneratorOptions
 
 	visitedReflections = new Set<ts.Symbol>()
 

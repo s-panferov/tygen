@@ -9,14 +9,14 @@ import { SearchReflection } from './reflection/search/reflection'
 import { stringifyId, idFromPath } from './reflection/identifier'
 import { ExcludedFlag, ExcludedReflection } from './reflection/utils'
 
-const IsWritable: { [name: string]: boolean } = {
+export const IsWritable: { [name: string]: boolean } = {
 	[ReflectionKind.Class]: true,
 	[ReflectionKind.Enum]: true,
 	[ReflectionKind.Function]: true,
 	[ReflectionKind.Interface]: true,
 	[ReflectionKind.ESModule]: true,
-	[ReflectionKind.AmbientFile]: true,
-	[ReflectionKind.Module]: true,
+	[ReflectionKind.DeclarationFile]: true,
+	[ReflectionKind.AmbientModule]: true,
 	[ReflectionKind.Namespace]: true,
 	[ReflectionKind.Variable]: true,
 	[ReflectionKind.TypeAlias]: true,
@@ -24,7 +24,7 @@ const IsWritable: { [name: string]: boolean } = {
 	[ReflectionKind.Folder]: true
 }
 
-const IsSearchable: { [name: string]: boolean } = Object.assign({}, IsWritable, {
+export const IsSearchable: { [name: string]: boolean } = Object.assign({}, IsWritable, {
 	[ReflectionKind.Property]: true,
 	[ReflectionKind.Method]: true,
 	[ReflectionKind.EnumMember]: true

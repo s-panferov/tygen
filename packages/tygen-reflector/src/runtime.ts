@@ -1,5 +1,6 @@
 export { Converter } from './converter'
+export { Generator } from './generator'
 export { ReflectionWalker } from './walker'
 export * from './reflection'
-export { compileFolder, createMemoryFileSystem } from './helpers'
+export { compileFolder, createMemoryFileSystem, FileSystem, reflectToMemory } from './helpers'
 export { Writer } from './writer'

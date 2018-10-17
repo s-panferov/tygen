@@ -10,15 +10,6 @@
     "start": "cd packages/tygen-html && DOCS=$(pwd)/../../docs yarn start",
     "build": "cd packages/tygen-reflector && yarn run build && cd ../tygen-html && yarn run build"
   },
-  "_moduleAliases": {
-    "@tygen/reflector": "lib/tygen-reflector/src/index.js",
-    "@tygen/reflector/src": "lib/tygen-reflector/src",
-    "@tygen/html": "packages/tygen-html/dist/index.js"
-  },
-  "alias": {
-    "@tygen/reflector": "packages/tygen-reflector",
-    "@tygen/html": "packages/tygen-html"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/tygen/tygen.git"
@@ -40,8 +31,8 @@
     "lerna": "^3.4.3",
     "lint-staged": "^7.2.2",
     "prettier": "^1.14.3",
-    "ts-jest": "^23.1.4",
+    "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
-    "typescript": "^3.1.2"
+    "typescript": "^3.1.3"
   }
 }

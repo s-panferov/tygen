@@ -1,5 +1,5 @@
 {
   "name": "example",
   "version": "1.0.0",
-  "main": "index.ts"
+  "main": "src/folder1/index.ts"
 }

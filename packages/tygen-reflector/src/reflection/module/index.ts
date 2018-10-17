@@ -6,17 +6,17 @@ import { Context } from '../../context'
 import { visitSymbol } from '../visitor'
 import { symbolId, declarationId, generateIdForSourceFile, stringifyId } from '../identifier'
 import {
-	ModuleReflection,
+	AmbientModuleReflection,
 	NamespaceReflection,
 	ESModuleReflection,
-	AmbientFileReflection
+	DeclarationFileReflection
 } from './reflection'
 
 export function visitModule(symbol: ts.Symbol, ctx: Context): Reflection {
 	if (symbol.flags & ts.SymbolFlags.ValueModule && symbol.name.includes(`"`)) {
-		const reflection: ModuleReflection = {
+		const reflection: AmbientModuleReflection = {
 			id: symbolId(symbol, ctx),
-			kind: ReflectionKind.Module,
+			kind: ReflectionKind.AmbientModule,
 			name: symbol.name.replace(/"/g, ''),
 			exports: []
 		}
@@ -68,7 +68,7 @@ function setVisitedIn(parent: BaseReflection, symbol: ts.Symbol | string) {
 export function visitSourceFile(
 	sourceFile: ts.SourceFile,
 	ctx: Context
-): ESModuleReflection | AmbientFileReflection {
+): ESModuleReflection | DeclarationFileReflection {
 	const file = ctx.generator.getFile(sourceFile.fileName)!
 	const symbol = ctx.checker.getSymbolAtLocation(sourceFile)
 
@@ -84,9 +84,9 @@ export function visitSourceFile(
 		visitContainer(symbol, moduleRef, ctx)
 		return moduleRef
 	} else {
-		const ambientFileRef: AmbientFileReflection = {
+		const ambientFileRef: DeclarationFileReflection = {
 			id: generateIdForSourceFile(sourceFile, ctx),
-			kind: ReflectionKind.AmbientFile,
+			kind: ReflectionKind.DeclarationFile,
 			name: file.pathInfo.fileName,
 			folder: file.pathInfo.folderName
 		}

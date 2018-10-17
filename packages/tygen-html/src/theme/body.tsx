@@ -2,6 +2,7 @@ import { css } from 'linaria'
 
 import '../../asset/tsd.css'
 import { StyleVariables } from './variables'
+import { bodyStyle } from './color'
 
 export const BodyStyle = css`
 	${StyleVariables.FontFamily}: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
@@ -31,4 +32,6 @@ export const BodyStyle = css`
 	* {
 		box-sizing: border-box;
 	}
+
+	${bodyStyle};
 `

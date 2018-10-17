@@ -13,7 +13,8 @@ import {
 	PackageReflection,
 	ReflectionWithReadme,
 	ReflectionWithStructure,
-	FolderReflection
+	FolderReflection,
+	ReflectionIdWithChildren
 } from './reflection/package'
 
 import { ESModuleReflection } from './reflection'
@@ -95,7 +96,7 @@ export class Package {
 		})
 
 		visitReadme(this.folderPath, packageRef)
-		visitFolders(this.volume, packageRef, ctx)
+		packageRef.modules = visitFolders(this.volume, packageRef, ctx)
 
 		if (this.manifest.main && this.volume.existsSync(this.manifest.main)) {
 			const id = this.volume.readFileSync(this.manifest.main).toString()
@@ -129,8 +130,9 @@ export function visitFolders(
 	ctx: Context,
 	root = '.',
 	_isRoot: boolean = true
-) {
+): ReflectionIdWithChildren[] {
 	const res = volume.readdirSync(root)
+	const ids = [] as ReflectionIdWithChildren[]
 
 	// first walk over directories
 	res.forEach(item => {
@@ -142,19 +144,14 @@ export function visitFolders(
 					name: item
 				}),
 				kind: ReflectionKind.Folder,
-				name: item,
-				modules: []
+				name: item
 			}
 
 			ctx.registerReflectionWithoutSymbol(folderRef)
-			visitFolders(volume, folderRef, ctx, fullPath, false)
 
-			if (res.length === 1) {
-				parent.modules.push(...folderRef.modules)
-			} else {
-				const ref = createLink(folderRef)
-				parent.modules.push(ref)
-			}
+			const id = folderRef.id[folderRef.id.length - 1] as ReflectionIdWithChildren
+			id.children = visitFolders(volume, folderRef, ctx, fullPath, false)
+			ids.push(id)
 		}
 	})
 
@@ -163,13 +160,16 @@ export function visitFolders(
 		const fullPath = path.join(root, item)
 
 		if (volume.statSync(fullPath).isFile()) {
-			const id = volume.readFileSync(fullPath).toString()
-			const ref = ctx.reflectionById.get(id)
+			const reflectionId = volume.readFileSync(fullPath).toString()
+			const ref = ctx.reflectionById.get(reflectionId)
 			if (!ref) {
 				throw new Error('Unknown reflection')
 			}
 			const link = createLink(ref)
-			parent.modules.push(link)
+			const id = link.target as ReflectionIdWithChildren
+			ids.push(id)
 		}
 	})
+
+	return ids
 }

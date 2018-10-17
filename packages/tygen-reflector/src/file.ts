@@ -5,7 +5,7 @@ import { Package } from './package'
 import { Context } from './context'
 
 import { visitSourceFile } from './reflection/module'
-import { ESModuleReflection, AmbientFileReflection } from './reflection/module/reflection'
+import { ESModuleReflection, DeclarationFileReflection } from './reflection/module/reflection'
 
 export class SourceFileMeta {
 	pkg: Package
@@ -13,7 +13,7 @@ export class SourceFileMeta {
 	pathInfo: PathInfo
 	included: boolean
 
-	reflection!: ESModuleReflection | AmbientFileReflection
+	reflection!: ESModuleReflection | DeclarationFileReflection
 
 	constructor(pkg: Package, sourceFile: ts.SourceFile, included: boolean) {
 		this.sourceFile = sourceFile as ts.SourceFile

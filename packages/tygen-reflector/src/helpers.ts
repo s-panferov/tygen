@@ -5,6 +5,7 @@ import * as fs from 'fs'
 import { Package } from './package'
 
 import log from 'roarr'
+import { Generator, Writer } from './runtime'
 
 const { Volume } = require('memfs')
 
@@ -91,6 +92,17 @@ export function compileFolder(target: string = process.cwd()) {
 		program,
 		pkg
 	}
+}
+
+export function reflectToMemory(project: string) {
+	const { program } = compileFolder(project)
+	const generator = new Generator({}, program)
+	const context = generator.generate()
+	const fileSystem = createMemoryFileSystem()
+	const writer = new Writer(context, '/', fileSystem)
+	writer.writeReflections()
+
+	return fileSystem
 }
 
 export function compile(fileNames: string[], options: ts.CompilerOptions): ts.Program {

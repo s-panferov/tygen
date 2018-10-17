@@ -6,7 +6,7 @@ import { TreeRowProps, NavTree, TreeRender } from './ui/tree-render'
 import { CommentView } from './comment'
 import { cx, css } from 'linaria'
 import { autobind } from 'core-decorators'
-import { Reflection } from '@tygen/reflector';
+import { Reflection } from '@tygen/reflector'
 
 export class HeaderItem extends TextItem<
 	{
@@ -14,8 +14,7 @@ export class HeaderItem extends TextItem<
 		selected?: boolean
 	},
 	StructureItem
-> {
-}
+> {}
 
 export class ReflectionItem extends TextItem<
 	{
@@ -32,7 +31,7 @@ export class ReflectionItem extends TextItem<
 			kind: 'reflection',
 			text: link.name,
 			link,
-			reflection,
+			reflection
 		})
 	}
 }
@@ -40,7 +39,9 @@ export class ReflectionItem extends TextItem<
 export type StructureItem = HeaderItem | ReflectionItem
 
 @observer
-export class ReflectionNode extends React.Component<TreeRowProps<ReflectionItem> & { wide?: boolean }> {
+export class ReflectionNode extends React.Component<
+	TreeRowProps<ReflectionItem> & { wide?: boolean }
+> {
 	render() {
 		const {
 			item: { key, info },
@@ -57,10 +58,11 @@ export class ReflectionNode extends React.Component<TreeRowProps<ReflectionItem>
 				<div className={ItemNameCell}>
 					<RefLink preparedLink={info.link} />
 				</div>
-				{wide && <div className={ItemDescriptionCell}>
-					<CommentView reflection={info.reflection} tag="summary" />
-				</div>
-				}
+				{wide && (
+					<div className={ItemDescriptionCell}>
+						<CommentView reflection={info.reflection} tag="summary" />
+					</div>
+				)}
 			</div>
 		)
 	}
@@ -82,7 +84,12 @@ export class HeaderNode extends React.Component<TreeRowProps<HeaderItem>> {
 	}
 }
 
-export type RenderWith = {[key: string]: <I>(row: TreeRowProps<I>, structure: StructureProps) => React.ReactElement<TreeRowProps<I>>}
+export type RenderWith = {
+	[key: string]: <I>(
+		row: TreeRowProps<I>,
+		structure: StructureProps
+	) => React.ReactElement<TreeRowProps<I>>
+}
 
 export interface StructureProps {
 	tree: NavTree<StructureItem>
@@ -94,7 +101,9 @@ export class Structure extends React.Component<StructureProps> {
 	static defaultProps = {
 		renderWith: {
 			header: (row: TreeRowProps<HeaderItem>) => <HeaderNode {...row} />,
-			reflection: (row: TreeRowProps<ReflectionItem>, structure) => <ReflectionNode wide={structure.wide} {...row} />
+			reflection: (row: TreeRowProps<ReflectionItem>, structure) => (
+				<ReflectionNode wide={structure.wide} {...row} />
+			)
 		} as RenderWith
 	}
 
@@ -122,7 +131,9 @@ export class Structure extends React.Component<StructureProps> {
 	@autobind
 	onSelect(e: React.KeyboardEvent<HTMLElement>, item: StructureItem) {
 		if (item instanceof ReflectionItem) {
-			const link = e.currentTarget.parentElement!.querySelector<HTMLElement>(item.info.link.anchor)
+			const link = e.currentTarget.parentElement!.querySelector<HTMLElement>(
+				item.info.link.anchor
+			)
 			if (link) {
 				link.click()
 			}

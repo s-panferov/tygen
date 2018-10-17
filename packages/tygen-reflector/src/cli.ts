@@ -8,13 +8,22 @@ import { ConverterFactory } from './converter'
 import { Writer } from './writer'
 
 import * as ts from 'typescript'
-import { ReflectOptions, GenerateOptions } from './options'
-import { Generator } from './generator'
+import { Generator, GeneratorOptions } from './generator'
 
 require('source-map-support').install()
 
 // @ts-ignore
 global.ts = ts
+
+export interface ReflectOptions extends GeneratorOptions {
+	project: string
+	out: string
+}
+
+export interface GenerateOptions {
+	out: string
+	with: string
+}
 
 const ReflectCommand: yargs.CommandModule = {
 	command: 'reflect',

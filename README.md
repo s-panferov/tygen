@@ -91,7 +91,7 @@ My vscode debugging configuration:
 	"args": ["generate", "--project", ".", "--out", "docs", "--with", "@tygen/html"],
 	"cwd": "${workspaceRoot}/",
 	"runtimeExecutable": "node",
-	"runtimeArgs": ["--nolazy", "--stack_size=90000" /*, "-r", "module-alias/register" */],
+	"runtimeArgs": ["--nolazy", "--stack_size=90000"],
 	"sourceMaps": true,
 	"env": { "NODE_ENV": "development" }
 }

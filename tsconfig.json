@@ -1,7 +1,11 @@
 {
   "files": [],
+  "include": [],
   "references": [{
       "path": "./packages/tygen-reflector"
+    },
+    {
+      "path": "./packages/tygen-reflector/tests"
     },
     {
       "path": "./packages/tygen-html"

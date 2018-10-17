@@ -5,9 +5,9 @@ import {
 	ReflectionPath
 } from '../reflection'
 
-export interface ModuleReflection extends BaseReflection, ReflectionWithExports {
+export interface AmbientModuleReflection extends BaseReflection, ReflectionWithExports {
 	id: ReflectionPath
-	kind: ReflectionKind.Module
+	kind: ReflectionKind.AmbientModule
 	name: string
 }
 
@@ -24,9 +24,9 @@ export interface ESModuleReflection extends BaseReflection, ReflectionWithExport
 	folder: string
 }
 
-export interface AmbientFileReflection extends BaseReflection, ReflectionWithExports {
+export interface DeclarationFileReflection extends BaseReflection, ReflectionWithExports {
 	id: ReflectionPath
-	kind: ReflectionKind.AmbientFile
+	kind: ReflectionKind.DeclarationFile
 	name: string
 	folder: string
 }

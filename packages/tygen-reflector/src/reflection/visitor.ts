@@ -30,7 +30,7 @@ export function visitSymbol(symbol: ts.Symbol, ctx: Context): Reflection | undef
 	let reflection: Reflection | undefined
 
 	switch (symbolToKnownReflectionKind(symbol)) {
-		case ReflectionKind.Module:
+		case ReflectionKind.AmbientModule:
 			reflection = visitModule(symbol, ctx)
 			break
 		case ReflectionKind.Variable:
@@ -118,7 +118,7 @@ export function visitSymbol(symbol: ts.Symbol, ctx: Context): Reflection | undef
 
 export function symbolToKnownReflectionKind(symbol: ts.Symbol): ReflectionKind | undefined {
 	if (symbol.flags & ts.SymbolFlags.Module) {
-		return ReflectionKind.Module
+		return ReflectionKind.AmbientModule
 	} else if (symbol.flags & ts.SymbolFlags.Alias) {
 		return ReflectionKind.Variable
 	} else if (symbol.flags & ts.SymbolFlags.Enum) {

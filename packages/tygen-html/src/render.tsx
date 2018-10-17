@@ -14,7 +14,6 @@ import { EnumPage } from './enum'
 import { ReactConverterSettings } from './settings'
 import { InventoryPage } from './inventory'
 import { SearchPage } from './ui/search'
-import { convertColorThemeToCSS, colorTheme } from './theme/color'
 
 const { hot } = require('react-hot-loader')
 
@@ -25,8 +24,8 @@ export function renderPage(ref: Reflection): React.ReactElement<any> {
 		case ReflectionKind.Folder:
 			return <FolderPage reflection={ref} />
 		case ReflectionKind.ESModule:
-		case ReflectionKind.Module:
-		case ReflectionKind.AmbientFile:
+		case ReflectionKind.AmbientModule:
+		case ReflectionKind.DeclarationFile:
 		case ReflectionKind.Namespace:
 			return <ModulePage reflection={ref} />
 		case ReflectionKind.Interface:
@@ -52,11 +51,6 @@ class PageView_ extends BaseView<Reflection, { settings: ReactConverterSettings 
 	render() {
 		return (
 			<ViewContext.Provider value={this.props.settings}>
-				<style
-					dangerouslySetInnerHTML={{
-						__html: convertColorThemeToCSS(colorTheme)
-					}}
-				/>
 				{renderPage(this.props.reflection)}
 			</ViewContext.Provider>
 		)
