@@ -6,10 +6,7 @@
   "workspaces": [
     "packages/*"
   ],
-  "scripts": {
-    "start": "cd packages/tygen-html && DOCS=$(pwd)/../../docs yarn start",
-    "build": "cd packages/tygen-reflector && yarn run build && cd ../tygen-html && yarn run build"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/tygen/tygen.git"
