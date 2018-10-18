@@ -24,8 +24,8 @@ export function createStructure(reflection: PackageReflection): StructureItem[] 
 						{
 							kind: 'header',
 							text: 'Structure'
-						}
-						// reflection.modules.map(ReflectionItem.fromReflection)
+						},
+						reflection.modules && reflection.modules.map(ReflectionItem.fromId)
 					)
 				)
 			}

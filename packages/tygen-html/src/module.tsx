@@ -11,9 +11,9 @@ import {
 import { BaseView } from './view'
 import { Outline } from './ui/outline'
 import { TSIcon } from './ui/icon'
-import { NavTree } from './ui/tree-render';
-import { buildTreeByType } from './group';
-import { Structure } from './structure';
+import { NavTree } from './ui/tree-render'
+import { buildTreeByType } from './group'
+import { Structure } from './structure'
 
 export class ModulePage extends BaseView<
 	ESModuleReflection | AmbientModuleReflection | NamespaceReflection | DeclarationFileReflection

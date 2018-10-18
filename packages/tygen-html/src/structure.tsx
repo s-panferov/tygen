@@ -6,7 +6,12 @@ import { TreeRowProps, NavTree, TreeRender } from './ui/tree-render'
 import { CommentView } from './comment'
 import { cx, css } from 'linaria'
 import { autobind } from 'core-decorators'
-import { Reflection } from '@tygen/reflector'
+import {
+	Reflection,
+	ReflectionId,
+	ReflectionPath,
+	ReflectionIdWithChildren
+} from '@tygen/reflector'
 
 export class HeaderItem extends TextItem<
 	{
@@ -20,7 +25,7 @@ export class ReflectionItem extends TextItem<
 	{
 		kind: 'reflection'
 		link: PreparedLink
-		reflection: Reflection
+		reflection?: Reflection
 		selected?: boolean
 	},
 	ReflectionItem
@@ -34,6 +39,23 @@ export class ReflectionItem extends TextItem<
 			reflection
 		})
 	}
+
+	static fromId(id: ReflectionId | ReflectionPath): ReflectionItem {
+		const id1 = id as ReflectionIdWithChildren
+		const link = formatLink(id)
+		return new ReflectionItem(
+			link.href,
+			{
+				kind: 'reflection',
+				text: link.name,
+				link
+			},
+			id1.children &&
+				id1.children.map(ref => {
+					return ReflectionItem.fromId(ref)
+				})
+		)
+	}
 }
 
 export type StructureItem = HeaderItem | ReflectionItem
@@ -46,23 +68,30 @@ export class ReflectionNode extends React.Component<
 		const {
 			item: { key, info },
 			style,
-			wide
+			wide,
+			item
 		} = this.props
 
 		return (
 			<div
 				id={key}
 				key={key}
-				style={style}
+				style={{
+					...style,
+					// FIXME bad assertion
+					fontWeight: info.link.anchor.startsWith('folder') ? 'bold' : 'normal',
+					paddingLeft: `${(item.depth - 1) * 10}px`
+				}}
 				className={cx(ItemRow, info.selected && 'selected')}>
 				<div className={ItemNameCell}>
 					<RefLink preparedLink={info.link} />
 				</div>
-				{wide && (
-					<div className={ItemDescriptionCell}>
-						<CommentView reflection={info.reflection} tag="summary" />
-					</div>
-				)}
+				{wide &&
+					info.reflection && (
+						<div className={ItemDescriptionCell}>
+							<CommentView reflection={info.reflection} tag="summary" />
+						</div>
+					)}
 			</div>
 		)
 	}
