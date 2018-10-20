@@ -1,12 +1,10 @@
-const path = require('path')
 const webpack = require('webpack');
 
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require("extract-css-chunks-webpack-plugin")
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
-const DEVELOPMENT = process.env.NODE_ENV !== 'production'
-
 const SpritePlugin = require(`svg-sprite-loader/plugin`)
+
+const DEVELOPMENT = process.env.NODE_ENV !== 'production'
 
 const stats = {
 	warningsFilter: /export .* was not found in/,
@@ -27,7 +25,7 @@ function buildConfig() {
 			extensions: [".ts", ".tsx", ".js"]
 		},
 		output: {
-			publicPath: '-/assets/'
+			publicPath: '-/assets/',
 		},
 		module: {
 			rules: [{
@@ -87,11 +85,11 @@ function buildConfig() {
 			minimizer: [new TerserPlugin()]
 		},
 		plugins: [
-			new webpack.NamedModulesPlugin(),
+			// new webpack.NamedModulesPlugin(),
 			new MiniCssExtractPlugin({
-				hot: DEVELOPMENT
+				hot: DEVELOPMENT,
+				filename: DEVELOPMENT ? "[name].css" : "[name].[contenthash].css"
 			}),
-			// new HardSourceWebpackPlugin(),
 			new SpritePlugin()
 		]
 	}

@@ -13,8 +13,6 @@ export abstract class BaseView<
 > extends React.Component<ReflectionViewProps<R> & P> {}
 
 export interface ViewSettings extends ReactConverterSettings {
-	nav?: boolean
-	compact?: boolean
 	path: string
 	static?: boolean
 }

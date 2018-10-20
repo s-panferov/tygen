@@ -13,7 +13,7 @@ export class FunctionPre extends PrettyCode<{ reflection: FunctionReflection }> 
 					reflection.allCallSignatures.map((sig, i) => {
 						return (
 							<React.Fragment key={i}>
-								function <SignaturePre reflection={sig as any} />;{`\n\n`}
+								<SignaturePre reflection={sig as any} keyword="function" />;{`\n\n`}
 							</React.Fragment>
 						)
 					})}

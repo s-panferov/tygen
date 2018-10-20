@@ -6,7 +6,9 @@
   "workspaces": [
     "packages/*"
   ],
-  "scripts": {},
+  "scripts": {
+    "build": "rm -rf packages/tygen-html/lib && rm -rf packages/tygen-reflector/lib && tsc -b && cd packages/tygen-html && npm run build"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/tygen/tygen.git"

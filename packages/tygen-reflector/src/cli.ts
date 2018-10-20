@@ -10,6 +10,8 @@ import { Writer } from './writer'
 import * as ts from 'typescript'
 import { Generator, GeneratorOptions } from './generator'
 
+const Yargs = require('yargs/yargs')
+
 require('source-map-support').install()
 
 // @ts-ignore
@@ -84,8 +86,13 @@ const ReflectCommand: yargs.CommandModule = {
 const GenerateCommand: yargs.CommandModule = {
 	command: 'generate',
 	describe: 'Build pre-generated documentation from reflections',
-	builder: yargs => {
-		return yargs
+	builder: args => {
+		// First-pass parser
+		const argv = Yargs(process.argv.slice(2))
+			.help(false)
+			.parse()
+
+		let yargsSpec = args
 			.option('out', {
 				alias: 'o',
 				default: 'docs',
@@ -99,14 +106,19 @@ const GenerateCommand: yargs.CommandModule = {
 				required: true,
 				type: 'string'
 			})
+
+		try {
+			const factory = loadFactory(argv.with)
+			if (factory && factory.args) {
+				yargsSpec = factory.args(yargsSpec)
+			}
+		} catch (e) {}
+
+		return yargsSpec
 	},
 	handler: defer((argv: GenerateOptions) => {
 		const mainFile = require.resolve(argv.with)
-		let converterFactory: ConverterFactory = require(argv.with)
-		if (typeof (converterFactory as any).default !== 'undefined') {
-			converterFactory = (converterFactory as any).default
-		}
-
+		const converterFactory = loadFactory(argv.with)
 		const converter = converterFactory(argv)
 
 		let visitor = new ReflectionWalker(argv.out)
@@ -122,6 +134,15 @@ const GenerateCommand: yargs.CommandModule = {
 		console.log('Completed!')
 		process.exit(0)
 	})
+}
+
+export function loadFactory(spec: string) {
+	let converterFactory: ConverterFactory = require(spec)
+	if (typeof (converterFactory as any).default !== 'undefined') {
+		converterFactory = (converterFactory as any).default
+	}
+
+	return converterFactory
 }
 
 function defer<T extends Function>(fn: T) {

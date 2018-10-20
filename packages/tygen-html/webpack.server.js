@@ -11,7 +11,7 @@ const whitelist = [/@tygen/, /\.css$/, /\.svg$/, 'webpack/hot/poll?1000']
 
 const finalConfig = Object.assign({}, config, {
 	entry: {
-		cli: ['webpack/hot/poll?1000', './src/cli.ts']
+		cli: './src/cli.ts'
 	},
 	target: 'node',
 	node: {

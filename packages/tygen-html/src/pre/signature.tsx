@@ -8,16 +8,19 @@ import { Join } from '../ui/join'
 import { CommentView } from '../comment'
 import { getKey } from '../ref-link'
 
-export class SignaturePre extends PrettyCode<{ reflection: SignatureReflection }> {
+export class SignaturePre extends PrettyCode<{
+	reflection: SignatureReflection
+	keyword?: string
+}> {
 	render() {
-		const { reflection } = this.props
+		const { reflection, keyword } = this.props
 		const name =
 			reflection.name === '__call' || reflection.name === '__type' ? '' : reflection.name
 		const br = `\n`
 		return (
 			<React.Fragment>
 				{reflection.comments && this.doc(<CommentView inline reflection={reflection} />)}
-				{name}
+				{keyword} {name}
 				{reflection.typeParameters && (
 					<TypeArgumentsPre types={reflection.typeParameters} />
 				)}

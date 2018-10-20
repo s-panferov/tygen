@@ -1,4 +1,5 @@
 import fs from 'fs'
+import { Argv } from 'yargs'
 
 import { Reflection } from './reflection/reflection'
 import { ReflectionWalker } from './walker'
@@ -9,6 +10,7 @@ export interface File {
 }
 
 export interface ConverterFactory {
+	args?: (yargs: Argv) => Argv
 	(argv: any): Converter
 }
 

@@ -19,11 +19,9 @@
     "tygen-html": "./bin/tygen-html.js"
   },
   "scripts": {
-    "server-start": "node dist/cli.js --server",
     "server-watch": "webpack --watch --progress --config webpack.server.js",
     "client-watch": "webpack-dev-server  --progress --hot --config webpack.client.js",
-    "start": "concurrently -p name -n \"server-watch,client-watch,server\" \"yarn run server-watch\" \"yarn run client-watch\" \"yarn run server-start\"",
-    "build": "webpack --config webpack.common.js"
+    "build": "rm -rf dist && webpack --config webpack.server.js && webpack --config webpack.client.js"
   },
   "browserslist": [
     "last 2 Chrome versions"
@@ -43,6 +41,7 @@
     "@types/webpack-env": "^1.13.6",
     "concurrently": "^4.0.1",
     "source-map-support": "^0.5.9",
+    "webpack-manifest-plugin": "^2.0.4",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.9",
     "react-hot-loader": "^4.3.11",

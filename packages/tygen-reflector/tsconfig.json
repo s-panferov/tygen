@@ -6,15 +6,13 @@
     "module": "commonjs",
     "noEmitOnError": false,
     "sourceMap": true,
+    "rootDir": "src",
     "lib": [
       "esnext", "dom"
     ],
     "types": []
   },
-  "files": [
-    "runtime.d.ts"
-  ],
   "include": [
-    "src/**/*"
+    "./src/**/*"
   ]
 }

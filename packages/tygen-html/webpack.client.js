@@ -1,8 +1,10 @@
 const {
 	buildConfig,
-	stats
+	stats,
+	DEVELOPMENT
 } = require('./webpack.common')
 
+const ManifestPlugin = require('webpack-manifest-plugin')
 const WriteFilePlugin = require('write-file-webpack-plugin')
 
 const config = buildConfig()
@@ -15,7 +17,7 @@ const finalConfig = Object.assign({}, config, {
 		prettier: 'prettier',
 		'react-dom/server': 'ReactDOM.Server',
 		'react-dom': 'ReactDOM',
-		'react': 'React'
+		react: 'React'
 	},
 	node: {
 		path: true
@@ -28,9 +30,11 @@ const finalConfig = Object.assign({}, config, {
 		proxy: {
 			'**': 'http://localhost:3000'
 		}
-	},
+	}
 })
 
+finalConfig.output.filename = DEVELOPMENT ? '[name].js' : '[name].[contenthash].js'
 finalConfig.plugins.push(new WriteFilePlugin())
+finalConfig.plugins.push(new ManifestPlugin())
 
 module.exports = finalConfig

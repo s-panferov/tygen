@@ -4,6 +4,19 @@ import * as path from 'path'
 import { Converter, Reflection, ReflectionWalker } from '@tygen/reflector/runtime'
 import { ReactConverterSettings } from './settings'
 import { renderHTML } from './html'
+import { Argv } from 'yargs'
+
+export const manifest = JSON.parse(
+	fs.readFileSync(path.join(__dirname, 'manifest.json')).toString()
+)
+
+export const args = (yargs: Argv) => {
+	return yargs
+		.option('google.analytics.id', {
+			type: 'string'
+		})
+		.option('contextRoot', { required: false, type: 'string' })
+}
 
 export class ReactConverter implements Converter {
 	options: ReactConverterSettings
@@ -16,7 +29,7 @@ export class ReactConverter implements Converter {
 		const fileNameWithoutExt = path.basename(fileName, path.extname(fileName))
 		return [
 			{
-				content: renderHTML(ref, fileName, Object.assign({ static: true }, this.options)),
+				content: renderHTML(ref, Object.assign({ static: true }, this.options)),
 				name: `${fileNameWithoutExt}.html`
 			}
 		]
@@ -41,3 +54,7 @@ export class ReactConverter implements Converter {
 		return undefined
 	}
 }
+
+export const reactConverterFactory = (argv: any) => new ReactConverter({ ...argv, manifest })
+reactConverterFactory.args = args
+export default reactConverterFactory

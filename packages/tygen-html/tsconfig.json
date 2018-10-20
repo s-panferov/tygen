@@ -5,6 +5,7 @@
     "module": "esnext",
     "target": "esnext",
     "outDir": "lib",
+    "rootDir": "src",
     "esModuleInterop": true,
     "jsx": "react",
     "baseUrl": ".",
@@ -19,6 +20,6 @@
     "path": "../tygen-reflector"
   }],
   "include": [
-    "src/**/*"
+    "./src/**/*"
   ]
 }

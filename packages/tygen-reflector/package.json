@@ -2,8 +2,8 @@
   "name": "@tygen/reflector",
   "version": "0.1.0",
   "description": "Reflector for TypeScript types",
-  "typings": "lib/src/index.d.ts",
-  "main": "lib/src/index.js",
+  "typings": "lib/index.d.ts",
+  "main": "lib/index.js",
   "bin": {
     "tygen": "./bin/tygen.js"
   },

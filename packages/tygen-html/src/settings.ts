@@ -1,5 +1,13 @@
+import { Manifest } from './html'
+
 export interface ReactConverterSettings {
 	contextRoot: string
+	google?: {
+		analytics?: {
+			id: string
+		}
+	}
+	manifest: Manifest
 }
 
 export function normalizeSettings(
@@ -9,5 +17,12 @@ export function normalizeSettings(
 		options.contextRoot = '/'
 	}
 
-	return options as ReactConverterSettings
+	if (!options.manifest) {
+		options.manifest = {
+			'index.css': '-assets/index.css',
+			'index.js': '-assets/index.js'
+		}
+	}
+
+	return options as any
 }
