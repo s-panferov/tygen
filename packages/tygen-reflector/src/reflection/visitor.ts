@@ -31,6 +31,7 @@ export function visitSymbol(symbol: ts.Symbol, ctx: Context): Reflection | undef
 
 	switch (symbolToKnownReflectionKind(symbol)) {
 		case ReflectionKind.AmbientModule:
+		case ReflectionKind.Namespace:
 			reflection = visitModule(symbol, ctx)
 			break
 		case ReflectionKind.Variable:
@@ -135,6 +136,8 @@ export function symbolToKnownReflectionKind(symbol: ts.Symbol): ReflectionKind |
 		return ReflectionKind.Property
 	} else if (symbol.flags & ts.SymbolFlags.Function) {
 		return ReflectionKind.Function
+	} else if (symbol.flags & ts.SymbolFlags.Namespace) {
+		return ReflectionKind.Namespace
 	} else if (symbol.flags & ts.SymbolFlags.TypeAlias) {
 		return ReflectionKind.TypeAlias
 	} else if (symbol.flags & ts.SymbolFlags.Signature) {

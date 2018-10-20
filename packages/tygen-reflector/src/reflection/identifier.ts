@@ -174,9 +174,14 @@ export function generateIdForSourceFile(
 	})
 
 	if (addFilePath) {
-		const fileName = module.pathInfo.relativePath
-		const folders = path.dirname(fileName).split(path.sep)
+		const relativePath = module.pathInfo.relativePath
+		const folders = path.dirname(relativePath).split(path.sep)
+
 		folders.forEach(folder => {
+			if (folder === '.') {
+				// folder if '.' when relative path contains only a file name
+				return
+			}
 			id = concatIdentifier(id, {
 				name: folder,
 				kind: ReflectionKind.Folder
@@ -184,7 +189,7 @@ export function generateIdForSourceFile(
 		})
 
 		id = concatIdentifier(id, {
-			name: path.basename(fileName),
+			name: path.basename(relativePath),
 			kind: (sourceFile as any).symbol
 				? ReflectionKind.ESModule
 				: ReflectionKind.DeclarationFile

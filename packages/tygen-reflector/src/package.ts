@@ -149,8 +149,11 @@ export function visitFolders(
 
 			ctx.registerReflectionWithoutSymbol(folderRef)
 
-			const id = folderRef.id[folderRef.id.length - 1] as ReflectionIdWithChildren
-			id.children = visitFolders(volume, folderRef, ctx, fullPath, false)
+			const id = Object.assign({
+				...(folderRef.id[folderRef.id.length - 1] as ReflectionIdWithChildren)
+			})
+
+			id.children = folderRef.modules = visitFolders(volume, folderRef, ctx, fullPath, false)
 			ids.push(id)
 		}
 	})

@@ -1,7 +1,7 @@
 import React from 'react'
 import { css, cx } from 'linaria'
 
-import { Reflection } from '@tygen/reflector'
+import { Reflection, ReflectionKind } from '@tygen/reflector'
 import { RefLink, NormalizedLink } from './ref-link'
 
 import homeIcon from '@fortawesome/fontawesome-free/svgs/solid/home.svg'
@@ -34,6 +34,10 @@ export class Breadcrumb extends React.Component<{
 		)
 
 		id.forEach(id => {
+			if (id.kind === ReflectionKind.Namespace) {
+				// FIXME ignore namespaces for now
+				return
+			}
 			links.push(
 				<RefLink key={id.anchor} className={LinkStyle} reflectionId={id}>
 					{({ name }) => {

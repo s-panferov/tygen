@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { PackageReflection, ReflectionKind } from '@tygen/reflector'
+import { PackageReflection, ReflectionKind, ReflectionWithStructure } from '@tygen/reflector'
 import { Markdown } from './ui/markdown'
 import { Page } from './ui/layout'
 import { BaseView } from './view'
@@ -12,22 +12,27 @@ import BookIcon from '@fortawesome/fontawesome-free/svgs/brands/markdown.svg'
 import { StructureItem, HeaderItem, ReflectionItem, Structure } from './structure'
 import { NavTree } from './ui/tree-render'
 
+export function createModulesStructure(reflection: ReflectionWithStructure) {
+	if (reflection.modules && reflection.modules.length > 0) {
+		return new HeaderItem(
+			'structure',
+			{
+				kind: 'header',
+				text: 'Structure'
+			},
+			reflection.modules && reflection.modules.map(ReflectionItem.fromId)
+		)
+	}
+}
+
 export function createStructure(reflection: PackageReflection): StructureItem[] {
 	let result = [] as StructureItem[]
 
 	switch (reflection.kind) {
 		case ReflectionKind.Package:
-			if (reflection.modules && reflection.modules.length > 0) {
-				result.push(
-					new HeaderItem(
-						'structure',
-						{
-							kind: 'header',
-							text: 'Structure'
-						},
-						reflection.modules && reflection.modules.map(ReflectionItem.fromId)
-					)
-				)
+			const structure = createModulesStructure(reflection)
+			if (structure) {
+				result.push(structure)
 			}
 
 			if (reflection.exports && reflection.exports.length > 0) {

@@ -1,10 +1,34 @@
 import * as React from 'react'
+import { FolderReflection } from '@tygen/reflector'
+import { Page } from './ui/layout'
 import { BaseView } from './view'
+import { Outline } from './ui/outline'
 
-import { FolderReflection } from '../../tygen-reflector/src/reflection/package'
+import { StructureItem, Structure } from './structure'
+import { NavTree } from './ui/tree-render'
+import { createModulesStructure } from './package'
+
+export function createStructure(reflection: FolderReflection): StructureItem[] {
+	let result = [] as StructureItem[]
+
+	const structure = createModulesStructure(reflection)
+	if (structure) {
+		result.push(structure)
+	}
+
+	return result
+}
 
 export class FolderPage extends BaseView<FolderReflection> {
+	tree = new NavTree(createStructure(this.props.reflection))
+
 	render() {
-		return <div />
+		const { reflection } = this.props
+
+		return (
+			<Page reflection={reflection} header={<Outline header={<h1>{reflection.name}</h1>} />}>
+				<Structure tree={this.tree} />
+			</Page>
+		)
 	}
 }
