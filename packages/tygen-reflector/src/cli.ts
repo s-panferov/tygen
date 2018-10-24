@@ -20,6 +20,9 @@ global.ts = ts
 export interface ReflectOptions extends GeneratorOptions {
 	project: string
 	out: string
+	gzip: boolean
+	enableSources?: boolean
+	writeInventory?: boolean
 }
 
 export interface GenerateOptions {
@@ -45,15 +48,22 @@ const ReflectCommand: yargs.CommandModule = {
 				required: false,
 				type: 'string'
 			})
+			.option('gzip', {
+				alias: 'z',
+				default: false,
+				description: 'Compressed output',
+				required: false,
+				type: 'boolean'
+			})
 			.option('include-libs', {
 				default: false,
 				description: 'Include TypeScript default library declarations',
 				required: false,
 				type: 'boolean'
 			})
-			.option('include-types', {
+			.option('include-external', {
 				default: false,
-				description: 'Include @types/xxx declarations',
+				description: 'Include external packages',
 				required: false,
 				type: 'boolean'
 			})
@@ -64,19 +74,51 @@ const ReflectCommand: yargs.CommandModule = {
 				required: false,
 				type: 'boolean'
 			})
+			.option('enable-search', {
+				default: false,
+				description: 'Should we write search reflections?',
+				required: false,
+				type: 'boolean'
+			})
+			.option('enable-sources', {
+				default: false,
+				description: 'Should we include original sources?',
+				required: false,
+				type: 'boolean'
+			})
+			.option('write-inventory', {
+				default: false,
+				description: 'Should we write an inventory file?',
+				required: false,
+				type: 'boolean'
+			})
 	},
 	handler: defer((argv: ReflectOptions) => {
 		const { program } = compileFolder(argv.project)
 
-		const generator = new Generator(argv, program)
-		const context = generator.generate()
+		const generator = new Generator(
+			{
+				includeLibs: argv.includeLibs,
+				includeExternal: argv.includeExternal,
+				alwaysLink: argv.alwaysLink
+			},
+			program
+		)
 
-		const writer = new Writer(context, argv.out)
+		const context = generator.generate()
+		const writer = new Writer(context, {
+			outDir: argv.out,
+			gzip: argv.gzip
+		})
 
 		writer.writeReflections()
-		writer.writeSources()
+		if (argv.enableSources) {
+			writer.writeSources()
+		}
 
-		updateInventory(argv.out)
+		if (argv.writeInventory) {
+			updateInventory(argv.out)
+		}
 
 		console.log('Completed!')
 		process.exit(0)

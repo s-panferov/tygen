@@ -115,6 +115,13 @@ export interface NotSupportedReflection extends BaseReflection {
 	kind: ReflectionKind.NotSupported
 }
 
+export interface ReflectionWithMetadata {
+	reflection: Reflection
+	metadata: {
+		formatVersion: string
+	}
+}
+
 export type Reflection =
 	| ReflectionLink
 	| InterfaceReflection

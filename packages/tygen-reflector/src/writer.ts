@@ -2,12 +2,13 @@ import { Context } from './context'
 import * as fse from 'fs-extra'
 import * as ts from 'typescript'
 import * as path from 'path'
+import { gzipSync } from 'zlib'
 
-import { ReflectionKind } from './reflection/reflection'
-import { FileSystem } from './helpers'
+import { ReflectionKind, ReflectionWithMetadata } from './reflection/reflection'
 import { SearchReflection } from './reflection/search/reflection'
 import { stringifyId, idFromPath } from './reflection/identifier'
 import { ExcludedFlag, ExcludedReflection } from './reflection/utils'
+import { formatVersion } from './version'
 
 export const IsWritable: { [name: string]: boolean } = {
 	[ReflectionKind.Class]: true,
@@ -30,37 +31,54 @@ export const IsSearchable: { [name: string]: boolean } = Object.assign({}, IsWri
 	[ReflectionKind.EnumMember]: true
 })
 
+export interface WriterFileSystem {
+	existsSync: (path: string) => boolean
+	mkdirpSync: (path: string) => void
+	writeFileSync: (path: string, content: string | Buffer) => void
+}
+
+export interface WriterOptions {
+	outDir: string
+	fileSystem: WriterFileSystem
+	gzip: boolean
+	enableSearch: boolean
+}
+
 export class Writer {
 	context: Context
-	outDir: string
-	fs: FileSystem
+	options: WriterOptions
 
-	constructor(context: Context, outDir?: string, fsImpl: FileSystem = fse as any) {
-		this.context = context
-		if (!outDir) {
-			outDir = path.join(process.cwd(), 'docs')
+	constructor(context: Context, opts: Partial<WriterOptions> = {}) {
+		this.options = {
+			enableSearch: false,
+			outDir: opts.outDir || path.join(process.cwd(), 'docs'),
+			fileSystem: opts.fileSystem || ((fse as any) as WriterFileSystem),
+			gzip: typeof opts.gzip !== 'undefined' ? opts.gzip : false
 		}
 
-		this.fs = fsImpl
-		this.fs.mkdirpSync(outDir)
-		this.outDir = outDir
+		this.context = context
+		this.options.fileSystem.mkdirpSync(this.options.outDir)
 	}
 
 	writeReflections() {
 		let search: SearchReflection
-		const searchDir = path.join(this.outDir, '_search')
+		const { fileSystem, outDir, gzip, enableSearch } = this.options
+		const searchDir = path.join(outDir, '_search')
 		const searchFile = path.join(searchDir, 'index.json')
-		if (!this.fs.existsSync(searchDir)) {
-			this.fs.mkdirSync(searchDir)
-		}
 
-		if (!this.fs.existsSync(searchFile)) {
-			search = {
-				kind: ReflectionKind.Search,
-				packages: {}
+		if (enableSearch) {
+			if (!fileSystem.existsSync(searchDir)) {
+				fileSystem.mkdirpSync(searchDir)
 			}
-		} else {
-			search = JSON.parse(fse.readFileSync(searchFile).toString())
+
+			if (!fileSystem.existsSync(searchFile)) {
+				search = {
+					kind: ReflectionKind.Search,
+					packages: {}
+				}
+			} else {
+				search = JSON.parse(fse.readFileSync(searchFile).toString())
+			}
 		}
 
 		const updatedSearchPackages: { [key: string]: boolean } = {}
@@ -70,37 +88,58 @@ export class Writer {
 				return
 			}
 
-			if (
-				IsSearchable[reflection.kind] &&
-				reflection.id &&
-				// Make only top-level items searchable
-				reflection.id.every(id => IsSearchable[id.kind])
-			) {
-				const packageKey = `${reflection.id[0].name}@${reflection.id[0].version}`
-				if (!search.packages[packageKey] || !updatedSearchPackages[packageKey]) {
-					search.packages[packageKey] = []
-					updatedSearchPackages[packageKey] = true
+			if (enableSearch) {
+				if (
+					IsSearchable[reflection.kind] &&
+					reflection.id &&
+					// Make only top-level items searchable
+					reflection.id.every(id => IsSearchable[id.kind])
+				) {
+					const packageKey = `${reflection.id[0].name}@${reflection.id[0].version}`
+					if (!search.packages[packageKey] || !updatedSearchPackages[packageKey]) {
+						search.packages[packageKey] = []
+						updatedSearchPackages[packageKey] = true
+					}
+					search.packages[packageKey].push(idFromPath(reflection.id))
 				}
-				search.packages[packageKey].push(idFromPath(reflection.id))
 			}
 
 			if (!IsWritable[reflection.kind]) {
 				return
 			}
 
-			const folder = path.join(this.outDir, stringifyId(reflection.id!))
+			const folder = path.join(outDir, stringifyId(reflection.id!))
 			const fileName = path.join(folder, 'index.json')
 
-			this.fs.mkdirpSync(folder)
-			this.fs.writeFileSync(fileName, JSON.stringify(reflection, null, 4))
+			fileSystem.mkdirpSync(folder)
+
+			const meta: ReflectionWithMetadata = {
+				metadata: {
+					formatVersion
+				},
+				reflection
+			}
+
+			let fileContent: string | Buffer = JSON.stringify(meta, null, 4)
+
+			if (gzip) {
+				fileContent = gzipSync(fileContent, {
+					level: 1
+				})
+			}
+
+			fileSystem.writeFileSync(fileName, fileContent)
 		})
 
-		this.fs.writeFileSync(searchFile, JSON.stringify(search))
+		if (enableSearch) {
+			fileSystem.writeFileSync(searchFile, JSON.stringify(search!))
+		}
 	}
 
 	writeSources() {
-		const sourcesDir = path.join(this.outDir, '_sources')
-		this.fs.mkdirpSync(sourcesDir)
+		const { fileSystem, outDir } = this.options
+		const sourcesDir = path.join(outDir, '_sources')
+		fileSystem.mkdirpSync(sourcesDir)
 
 		const sourceFiles = this.context.program.getSourceFiles()
 		const serialized: SerializedProgram = {
@@ -112,7 +151,7 @@ export class Writer {
 			})
 		}
 
-		this.fs.writeFileSync(path.join(sourcesDir, 'index.json'), JSON.stringify(serialized))
+		fileSystem.writeFileSync(path.join(sourcesDir, 'index.json'), JSON.stringify(serialized))
 		return serialized
 	}
 }

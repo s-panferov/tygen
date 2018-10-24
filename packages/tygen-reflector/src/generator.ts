@@ -8,7 +8,7 @@ import log from 'roarr'
 
 export interface GeneratorOptions {
 	includeLibs?: boolean
-	includeTypes?: boolean
+	includeExternal?: boolean
 	alwaysLink?: boolean
 }
 
@@ -37,7 +37,11 @@ export class Generator {
 			return false
 		}
 
-		if (!this.options.includeTypes && sourceFile.fileName.includes('@types/')) {
+		if (
+			!this.options.includeExternal &&
+			(this.program.isSourceFileFromExternalLibrary(sourceFile) ||
+				sourceFile.fileName.includes('@types/'))
+		) {
 			return false
 		}
 

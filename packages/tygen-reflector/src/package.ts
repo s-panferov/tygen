@@ -1,5 +1,5 @@
 import * as path from 'path'
-import * as fs from 'fs'
+import * as fs from 'fs-extra'
 import { SourceFileMeta } from './file'
 import { ReflectionKind } from './reflection/reflection'
 import { Context } from './context'
@@ -31,7 +31,7 @@ export interface PackageFields {
 export interface Package extends PackageFields {}
 
 export class Package {
-	volume = createMemoryFileSystem()
+	volume = (createMemoryFileSystem() as any) as typeof fs
 	reflection!: PackageReflection
 
 	constructor(contents: PackageFields) {

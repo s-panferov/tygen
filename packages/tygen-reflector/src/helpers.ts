@@ -99,7 +99,10 @@ export function reflectToMemory(project: string) {
 	const generator = new Generator({}, program)
 	const context = generator.generate()
 	const fileSystem = createMemoryFileSystem()
-	const writer = new Writer(context, '/', fileSystem)
+	const writer = new Writer(context, {
+		outDir: '/',
+		fileSystem: fileSystem
+	})
 	writer.writeReflections()
 
 	return fileSystem
