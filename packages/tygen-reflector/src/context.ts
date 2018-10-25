@@ -2,7 +2,7 @@ import ts from 'typescript'
 
 import { Generator, GeneratorOptions } from './generator'
 import { Reflection } from './reflection/reflection'
-import { createLink, ExcludedFlag, ExcludedReflection } from './reflection/utils'
+import { createLink, ExcludedFlag, ExcludedReflection, NotLinkable } from './reflection/utils'
 import { TypeReflection } from './reflection/_type/reflection'
 import { stringifyId } from './reflection/identifier'
 
@@ -43,8 +43,11 @@ export class Context {
 			const excluded = declarations
 				.map(d => d.getSourceFile())
 				.every(s => !this.generator.shouldFileBeIncluded(s))
-			if (excluded && !this.options.alwaysLink) {
+			if (excluded) {
 				;(reflection as ExcludedReflection)[ExcludedFlag] = true
+				if (!this.options.alwaysLink) {
+					;(reflection as ExcludedReflection)[NotLinkable] = true
+				}
 			}
 		}
 

@@ -14,7 +14,12 @@ export function createMemoryFileSystem(): FileSystem {
 	return Volume.fromJSON({}) as any
 }
 
-export function compileFolder(target: string = process.cwd()) {
+export interface FolderCompilationResult {
+	pkg: Package
+	result: CompilationResult
+}
+
+export function compileFolder(target: string = process.cwd()): FolderCompilationResult {
 	log.info(`Using TypeScript ${ts.version}`)
 
 	let packageFilePath: string | undefined
@@ -79,7 +84,7 @@ export function compileFolder(target: string = process.cwd()) {
 	log.trace({ fileNames: config.fileNames }, 'Initial project files')
 
 	const pkg = Package.fromPath(path.join(target, 'package.js'))
-	const program = compile(
+	const result = compile(
 		config.fileNames,
 		Object.assign({}, config.options, {
 			target: ts.ScriptTarget.Latest,
@@ -89,14 +94,20 @@ export function compileFolder(target: string = process.cwd()) {
 	)
 
 	return {
-		program,
+		result,
 		pkg
 	}
 }
 
 export function reflectToMemory(project: string) {
-	const { program } = compileFolder(project)
-	const generator = new Generator({}, program)
+	const { result } = compileFolder(project)
+
+	if (!result.success) {
+		result.diagnostics.forEach(d => console.error(d.formatted))
+		throw new Error(`Project ${project} compilation failed`)
+	}
+
+	const generator = new Generator({}, result.program)
 	const context = generator.generate()
 	const fileSystem = createMemoryFileSystem()
 	const writer = new Writer(context, {
@@ -108,28 +119,44 @@ export function reflectToMemory(project: string) {
 	return fileSystem
 }
 
-export function compile(fileNames: string[], options: ts.CompilerOptions): ts.Program {
-	let program = ts.createProgram(fileNames, options)
-	let allDiagnostics = ts.getPreEmitDiagnostics(program)
+export type CompilationResult =
+	| {
+			success: true
+			program: ts.Program
+	  }
+	| {
+			success: false
+			program: ts.Program
+			diagnostics: ReflectorDiagnostics[]
+	  }
 
-	allDiagnostics.forEach(diagnostic => {
-		if (diagnostic.file) {
-			let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(
-				diagnostic.start!
-			)
-			let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')
-			log.error(
-				{ fileName: diagnostic.file.fileName, line: line + 1, character: character + 1 },
-				message
-			)
-		} else {
-			log.error(ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n'))
+export interface ReflectorDiagnostics {
+	diagnostic: ts.Diagnostic
+	formatted: string
+}
+
+export function compile(fileNames: string[], options: ts.CompilerOptions): CompilationResult {
+	const host = ts.createCompilerHost(options, true)
+	const program = ts.createProgram(fileNames, options, host)
+	const diagnostics: ReflectorDiagnostics[] = ts
+		.getPreEmitDiagnostics(program)
+		.map(diagnostic => {
+			return {
+				diagnostic,
+				formatted: ts.formatDiagnostic(diagnostic, host)
+			}
+		})
+
+	if (diagnostics.length > 0) {
+		return {
+			success: false,
+			program,
+			diagnostics
 		}
-	})
-
-	if (allDiagnostics.length > 0) {
-		throw new Error('Refuse to generate documentation due to compilation errors.')
+	} else {
+		return {
+			success: true,
+			program
+		}
 	}
-
-	return program
 }

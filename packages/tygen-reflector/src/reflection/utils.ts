@@ -8,9 +8,11 @@ import {
 import { idFromPath } from './identifier'
 
 export const ExcludedFlag = Symbol('Excluded')
+export const NotLinkable = Symbol('NotLinkable')
 
 export interface ExcludedReflection extends BaseReflection {
 	[ExcludedFlag]?: boolean
+	[NotLinkable]?: boolean
 }
 
 export function createLink(ref: Reflection): ReflectionLink | NotIncludedReflection {
@@ -18,7 +20,7 @@ export function createLink(ref: Reflection): ReflectionLink | NotIncludedReflect
 		return ref
 	} else if (ref.id) {
 		const summary = extractSummary(ref)
-		if ((ref as ExcludedReflection)[ExcludedFlag]) {
+		if ((ref as ExcludedReflection)[NotLinkable]) {
 			return <NotIncludedReflection>{
 				kind: ReflectionKind.NotIncluded,
 				target: idFromPath(ref.id),

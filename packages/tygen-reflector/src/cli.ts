@@ -94,7 +94,12 @@ const ReflectCommand: yargs.CommandModule = {
 			})
 	},
 	handler: defer((argv: ReflectOptions) => {
-		const { program } = compileFolder(argv.project)
+		const { result } = compileFolder(argv.project)
+
+		if (!result.success) {
+			result.diagnostics.forEach(d => console.error(d.formatted))
+			throw new Error(`Project ${argv.project} compilation failed`)
+		}
 
 		const generator = new Generator(
 			{
@@ -102,7 +107,7 @@ const ReflectCommand: yargs.CommandModule = {
 				includeExternal: argv.includeExternal,
 				alwaysLink: argv.alwaysLink
 			},
-			program
+			result.program
 		)
 
 		const context = generator.generate()
