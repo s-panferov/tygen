@@ -47,6 +47,19 @@ export function createStructure(reflection: PackageReflection): StructureItem[] 
 					)
 				)
 			}
+
+			if (reflection.globals && reflection.globals.length > 0) {
+				result.push(
+					new HeaderItem(
+						'globals',
+						{
+							kind: 'header',
+							text: 'Globals'
+						},
+						reflection.globals.map(ReflectionItem.fromReflection)
+					)
+				)
+			}
 	}
 
 	return result

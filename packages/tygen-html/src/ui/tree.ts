@@ -207,6 +207,12 @@ export class TreeNavigation<I extends TreeItemWithSelection> {
 		this.tree = tree
 	}
 
+	setIndex(index: number) {
+		this.modify(() => {
+			this.index = index
+		})
+	}
+
 	reset() {
 		this.modify(() => {
 			this.index = -1
@@ -226,22 +232,26 @@ export class TreeNavigation<I extends TreeItemWithSelection> {
 	}
 
 	@action
-	down() {
+	down(): number {
 		this.modify(() => {
 			this.index++
 			if (this.index >= this.tree.flat.length) {
 				this.index = -1
 			}
 		})
+
+		return this.index
 	}
 
 	@action
-	up() {
+	up(): number {
 		this.modify(() => {
 			this.index--
 			if (this.index < -1) {
 				this.index = -1
 			}
 		})
+
+		return this.index
 	}
 }

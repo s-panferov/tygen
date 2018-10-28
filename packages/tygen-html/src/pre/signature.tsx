@@ -16,7 +16,6 @@ export class SignaturePre extends PrettyCode<{
 		const { reflection, keyword } = this.props
 		const name =
 			reflection.name === '__call' || reflection.name === '__type' ? '' : reflection.name
-		const br = `\n`
 		return (
 			<React.Fragment>
 				{reflection.comments && this.doc(<CommentView inline reflection={reflection} />)}
@@ -31,7 +30,6 @@ export class SignaturePre extends PrettyCode<{
 					})}
 				</Join>
 				): <ReflectionPre reflection={reflection.returnType} />
-				{br}
 			</React.Fragment>
 		)
 	}

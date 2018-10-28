@@ -37,13 +37,17 @@ export class CommentView extends React.Component<{
 	}
 }
 
+const InnerBody = css``
+
 const CommentBody = css`
 	margin: 10px 0px;
 
 	&.inline {
 		display: inline-block;
 		opacity: 0.5;
+
 		max-width: 600px;
+
 		border-left: 2px solid #ccc;
 		padding-left: 10px;
 

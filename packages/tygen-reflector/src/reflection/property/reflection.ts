@@ -5,6 +5,7 @@ export interface PropertyReflection extends BaseReflection, ReflectionWithOrigin
 	kind: ReflectionKind.Property
 	name: string
 	type: TypeReflection
+	question?: boolean
 	getter?: boolean
 	setter?: boolean
 }

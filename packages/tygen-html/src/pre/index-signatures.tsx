@@ -14,13 +14,13 @@ export class IndexSignaturesPre extends PrettyCode<{
 
 		const string = reflection.stringIndexType && (
 			<React.Fragment key="string-index">
-				[key: string]: <ReflectionPre reflection={reflection.stringIndexType} />;
+				[key: string]: <ReflectionPre reflection={reflection.stringIndexType} />;{'\n'}
 			</React.Fragment>
 		)
 
 		const number = reflection.numberIndexType && (
 			<React.Fragment key="number-index">
-				[key: number]: <ReflectionPre reflection={reflection.numberIndexType} />;
+				[key: number]: <ReflectionPre reflection={reflection.numberIndexType} />;{'\n'}
 			</React.Fragment>
 		)
 

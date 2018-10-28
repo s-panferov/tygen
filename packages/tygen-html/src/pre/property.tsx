@@ -12,7 +12,9 @@ export class PropertyPre extends PrettyCode<{ reflection: PropertyReflection }> 
 		return (
 			<React.Fragment>
 				{reflection.comments && this.doc(<CommentView inline reflection={reflection} />)}
-				{reflection.name}: <ReflectionPre reflection={reflection.type} />;{br}
+				{reflection.name}
+				{reflection.question ? '?' : ''}: <ReflectionPre reflection={reflection.type} />;
+				{br}
 			</React.Fragment>
 		)
 	}

@@ -31,6 +31,35 @@ export function visitProperty(symbol: ts.Symbol, ctx: Context): PropertyReflecti
 	let type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
 	let typeReflection = visitType(type, ctx)
 
+	let question: boolean | undefined = undefined
+
+	const declarations = symbol.declarations
+	if (declarations) {
+		question = declarations.some(d => {
+			if (ts.isPropertyDeclaration(d) || ts.isPropertySignature(d)) {
+				return !!d.questionToken
+			}
+			return false
+		})
+	}
+
+	if (question) {
+		propertyRef.question = question
+		// normalize `undefined` with question token
+		if (typeReflection.kind === ReflectionKind.UnionType) {
+			if (typeReflection.types) {
+				// TODO in some cyclic cases types may be not initilalized yet
+				typeReflection.types = typeReflection.types.filter(
+					t => t.kind !== ReflectionKind.UndefinedType
+				)
+				if (typeReflection.types.length == 1) {
+					// only type and "undefined"
+					typeReflection = typeReflection.types[0]
+				}
+			}
+		}
+	}
+
 	propertyRef.type = typeReflection
 
 	const parentSymbol = getSymbolParent(symbol)

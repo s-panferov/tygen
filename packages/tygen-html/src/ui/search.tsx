@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { HTMLAttributes } from 'react'
 import * as path from 'path'
 import { css } from 'linaria'
 import * as fuzz from 'fuzzaldrin-plus'
@@ -9,15 +9,13 @@ import { normalizePath } from '../helpers'
 import { navigateTo, getKey, RefLink } from '../ref-link'
 import { BaseView, ViewSettings, withSettings } from '../view'
 import { Header } from './header'
-
-export interface SearchState {
-	index: number
-	query: string
-	scope: string
-	ready: boolean
-	open: boolean
-	results: ReflectionId[]
-}
+import { observer } from 'mobx-react'
+import { Payload } from '../utils/payload'
+import { computed, observable } from 'mobx'
+import { mobxPromise } from '../utils/promise'
+import { NavTree, TreeRender, TreeRowProps } from './tree-render'
+import { StructureItem, HeaderItem, ReflectionItem, HeaderNode } from '../structure'
+import { autobind } from 'core-decorators'
 
 interface ReflectionIdWithSearchPattern extends ReflectionId {
 	searchPattern?: string
@@ -29,98 +27,198 @@ export class SearchPage extends BaseView<SearchReflection> {
 	}
 }
 
-export class Search_ extends React.Component<
-	{ reflection?: SearchReflection; settings: ViewSettings },
-	SearchState
-> {
-	items?: ReflectionIdWithSearchPattern[]
-
-	state: SearchState = {
-		index: 0,
-		query: '',
-		scope: 'package',
-		ready: !!this.props.reflection,
-		open: false,
-		results: []
-	}
-
+@observer
+export class Search_ extends React.Component<{
+	reflection?: SearchReflection
+	settings: ViewSettings
+}> {
 	input?: HTMLInputElement
 
-	componentDidMount() {
-		const searchIndex = window.localStorage.getItem('searchIndex')
-		const searchScope = window.localStorage.getItem('searchScope') || 'package'
-		const searchQuery = window.localStorage.getItem('searchQuery') || ''
-		if (!this.props.reflection && window.location.protocol !== 'file:') {
-			const url = normalizePath(this.props.settings!, '_search/index.json')
-			fetch(url.toString())
-				.then(index => index.json())
-				.then(reflection => {
-					this.reflectionReady(reflection)
-					this.setState({
-						results: this.updateResults()
-					})
-				})
-				.catch(e => console.error(e))
-		} else if (this.props.reflection) {
-			this.reflectionReady(this.props.reflection)
+	@observable
+	open: boolean = false
+
+	@observable
+	query: string = ''
+
+	reflection = mobxPromise()
+		.autorun(
+			(): Promise<SearchReflection> | Payload<SearchReflection> => {
+				if (this.props.reflection) {
+					return new Payload.Value(this.props.reflection)
+				}
+
+				if (window.location.protocol !== 'file:') {
+					const search = this.props.settings.search
+					const currentPackage = this.currentPackage
+
+					let url: string | undefined
+					if (search && search.disableGlobal) {
+						if (currentPackage) {
+							url = normalizePath(
+								this.props.settings!,
+								path.join(currentPackage.replace('#', '/'), 'search.json')
+							)
+						}
+					} else {
+						// global search index
+						url = normalizePath(this.props.settings!, '_search/index.json')
+					}
+
+					if (!url) {
+						return new Payload.Nothing()
+					}
+
+					return fetch(url.toString()).then(res => res.json())
+				}
+
+				throw new Error('Unreachable')
+			}
+		)
+		.build()
+
+	@computed
+	get currentPackage(): string | undefined {
+		const reflection = (window as any).__ref as Reflection
+		if (!reflection || !reflection.id) {
+			return undefined
 		}
 
-		this.setState({
-			scope: searchScope,
-			query: searchQuery,
-			index: searchIndex != null ? Number(searchIndex) : 0,
-			results: this.updateResults(searchQuery, searchScope),
-			ready: true
+		return `${reflection.id![0].name}#${reflection.id![0].version}`
+	}
+
+	@computed
+	get items(): Payload<{ local: ReflectionId[]; global: ReflectionId[] }> {
+		function mapId(id: ReflectionIdWithSearchPattern) {
+			id.searchPattern = path.join(id.fileName, id.anchor)
+			return id
+		}
+
+		return this.reflection.payload.map(ref => {
+			const currentPackage = this.currentPackage
+			const rest = Object.keys(ref.packages).filter(p => p != currentPackage)
+			return {
+				local: currentPackage ? ref.packages[currentPackage].map(mapId) : [],
+				global: [].concat.apply([], rest.map(r => ref.packages[r])).map(mapId)
+			}
 		})
 	}
 
-	reflectionReady(reflection: SearchReflection) {
-		const items = [] as ReflectionIdWithSearchPattern[]
-		Object.keys(reflection.packages).forEach(pkg => {
-			reflection.packages[pkg].forEach((id: ReflectionIdWithSearchPattern) => {
-				id.searchPattern = path.join(id.fileName, id.anchor)
-				items.push(id)
-			})
+	@computed
+	get results(): Payload<{ local: ReflectionId[]; global: ReflectionId[] }> {
+		return this.items.map(items => {
+			return {
+				local:
+					this.query.length > 2
+						? fuzz.filter(items.local, this.query, {
+								key: 'searchPattern',
+								maxResults: 20
+						  })
+						: [],
+				global:
+					this.query.length > 2
+						? fuzz.filter(items.global, this.query, {
+								key: 'searchPattern',
+								maxResults: 20
+						  })
+						: []
+			}
 		})
-		this.items = items
+	}
+
+	@computed
+	get resultTree(): Payload<NavTree<StructureItem>> {
+		return this.results.map(res => {
+			const tree = new NavTree([
+				res.local.length > 0
+					? new HeaderItem(
+							'local',
+							{
+								kind: 'header',
+								text: 'Current package results'
+							},
+							res.local.map(ReflectionItem.fromId)
+					  )
+					: undefined,
+				res.global.length > 0
+					? new HeaderItem(
+							'global',
+							{
+								kind: 'header',
+								text: 'Global results'
+							},
+							res.global.map(ReflectionItem.fromId)
+					  )
+					: undefined
+			].filter(Boolean) as StructureItem[])
+
+			const searchIndex = Number(window.localStorage.getItem('searchIndex') || 0)
+			tree.ext.nav.setIndex(searchIndex)
+
+			return tree
+		})
+	}
+
+	componentDidMount() {
+		window.document.body.addEventListener('keydown', this.onWindowKeyDown)
+		const searchQuery = window.localStorage.getItem('searchQuery') || ''
+		this.query = searchQuery
+	}
+
+	componentWillUnmount() {
+		window.document.body.removeEventListener('keydown', this.onWindowKeyDown)
 	}
 
 	render() {
-		const scope = this.state.scope
 		return (
-			<div className={SearchBody} onKeyDown={this.onKeyDown}>
-				<select value={scope} onChange={this.onScopeChange}>
-					<option value={'package'}>This package</option>
-					<option value={'global'}>Global</option>
-				</select>
+			<div className={SearchBody}>
 				<input
 					className={SearchInput}
 					ref={r => (this.input = r!)}
 					tabIndex={1}
-					value={this.state.query}
+					value={this.query}
 					placeholder="Search for items..."
-					disabled={!this.state.ready}
+					disabled={typeof window === 'undefined' || !this.items.isValue()}
 					onFocus={this.onFocus}
 					onBlur={this.onBlur}
 					onClick={this.onFocus}
 					onChange={this.onChange}
+					onKeyDown={this.onKeyDown}
 				/>
-				{this.state.open && (
+				{this.open && <Overlay onClick={this.onClose} />}
+				{this.open && (
 					<div className={SearchResults}>
 						<NotScrollable />
-						{this.state.results.map((res, i) => {
-							return (
-								<SearchItem
-									key={getKey(res)}
-									id={res}
-									focus={i === this.state.index}
-								/>
-							)
+						{this.resultTree.match({
+							Value: tree => {
+								return (
+									<TreeRender<StructureItem>
+										tree={tree}
+										disableSearch
+										rowHeight={i => (i.item instanceof HeaderItem ? 40 : 50)}
+										itemRender={this.renderItem}
+									/>
+								)
+							},
+							Nothing: () => null,
+							Error: () => null,
+							Loading: () => null
 						})}
 					</div>
 				)}
 			</div>
 		)
+	}
+
+	@autobind
+	renderItem(row: TreeRowProps<StructureItem>) {
+		switch (row.item.info.kind) {
+			case 'header':
+				return <HeaderNode {...row as any} />
+			case 'reflection':
+				return <SearchNode {...row as any} onClick={this.onClose} />
+			default:
+				return null
+		}
 	}
 
 	onFocus = () => {
@@ -133,51 +231,40 @@ export class Search_ extends React.Component<
 			window.location = normalizePath(this.props.settings, '_search') as any
 		}
 
-		this.setState({
-			open: true
-		})
+		this.open = true
 	}
 
 	onBlur = () => {}
 
-	onKeyDown = (e: React.KeyboardEvent<EventTarget>) => {
-		const { index, results } = this.state
-		if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-			const nextIndex =
-				e.key === 'ArrowUp'
-					? index > 1
-						? index - 1
-						: 0
-					: index < results.length - 1
-						? index + 1
-						: results.length - 1
+	onClose = () => {
+		this.open = false
+	}
 
-			window.localStorage.setItem('searchIndex', nextIndex.toString())
-			this.setState({
-				index: nextIndex
-			})
-		} else if (e.key === 'Enter') {
-			const ref = results[index]
-			navigateTo(this.props.settings, ref)
-		} else if (e.key === 'Escape') {
-			this.setState({
-				open: false
-			})
+	onWindowKeyDown = (e: KeyboardEvent) => {
+		if (e.key === 'Escape') {
+			this.open = false
 		}
 	}
 
-	updateResults(query: string = this.state.query, scope = this.state.scope) {
-		if (query && this.items) {
-			const reflection = (window as any).__ref as Reflection
-			const packageScope = `${reflection.id![0].name}/${reflection.id![0].version}`
-			const scopedQuery = scope === 'package' ? `${packageScope}/${query}` : query
-
-			return fuzz.filter(this.items, scopedQuery, {
-				key: 'searchPattern',
-				maxResults: 50
-			})
-		} else {
-			return []
+	onKeyDown = (e: React.KeyboardEvent<EventTarget>) => {
+		if (e.key === 'ArrowUp') {
+			if (this.resultTree.isValue()) {
+				const index = this.resultTree.value.ext.nav.up()
+				window.localStorage.setItem('searchIndex', index.toString())
+			}
+		} else if (e.key === 'ArrowDown') {
+			if (this.resultTree.isValue()) {
+				const index = this.resultTree.value.ext.nav.down()
+				window.localStorage.setItem('searchIndex', index.toString())
+			}
+		} else if (e.key === 'Enter') {
+			if (this.resultTree.isValue()) {
+				const item = this.resultTree.value.ext.nav.current
+				if (item && item.info.kind === 'reflection') {
+					navigateTo(this.props.settings, item.info.id!)
+				}
+				this.open = false
+			}
 		}
 	}
 
@@ -185,20 +272,7 @@ export class Search_ extends React.Component<
 		const query = e.currentTarget.value
 		window.localStorage.setItem('searchQuery', query)
 		window.localStorage.setItem('searchIndex', '0')
-		this.setState({
-			query,
-			index: 0,
-			results: this.updateResults(query)
-		})
-	}
-
-	onScopeChange = (e: React.FormEvent<HTMLSelectElement>) => {
-		const value = e.currentTarget.value
-		window.localStorage.setItem('searchScope', value)
-		this.setState(state => ({
-			results: this.updateResults(state.query, value),
-			scope: value
-		}))
+		this.query = query
 	}
 }
 
@@ -219,18 +293,41 @@ export class NotScrollable extends React.Component {
 	}
 }
 
-class SearchItem extends React.Component<{ id: ReflectionId; focus: boolean }> {
-	shouldComponentUpdate(nextProps: this['props']) {
-		return this.props.id !== nextProps.id || this.props.focus !== nextProps.focus
-	}
-
+export class Overlay extends React.Component<HTMLAttributes<any>> {
 	render() {
 		return (
-			<div style={{ padding: 5 }}>
-				<RefLink reflectionId={this.props.id}>
+			<div
+				{...this.props}
+				style={{
+					position: 'fixed',
+					top: 30,
+					right: 0,
+					bottom: 0,
+					left: 0
+				}}
+			/>
+		)
+	}
+}
+
+@observer
+class SearchNode extends React.Component<TreeRowProps<ReflectionItem> & { onClick: () => void }> {
+	render() {
+		const { style, item } = this.props
+		return (
+			<div
+				style={{
+					paddingLeft: (item.depth + 1) * 10,
+					...style,
+					display: 'flex',
+					alignItems: 'center',
+					outline: item.info.selected ? '5px solid #eee' : undefined,
+					backgroundColor: item.info.selected ? '#eee' : undefined
+				}}>
+				<RefLink preparedLink={item.info.link} onClick={this.props.onClick}>
 					<React.Fragment>
-						<span>{this.props.id.name}</span>{' '}
-						<span style={{ color: '#999' }}>{this.props.id.fileName}</span>
+						<span>{item.info.link.name}</span>{' '}
+						<div style={{ color: '#999' }}>{item.info.id!.fileName}</div>
 					</React.Fragment>
 				</RefLink>
 			</div>
@@ -260,10 +357,11 @@ const SearchResults = css`
 	left: -1px;
 	right: 0;
 	position: absolute;
-	top: 40px;
+	top: 30px;
 	height: calc(100vh - 40px);
 	background-color: #fff;
 	z-index: 2;
 	border-left: 1px solid #ccc;
 	overflow: scroll;
+	padding: 5px 15px;
 `

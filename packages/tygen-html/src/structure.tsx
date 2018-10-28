@@ -25,6 +25,8 @@ export class ReflectionItem extends TextItem<
 	{
 		kind: 'reflection'
 		link: PreparedLink
+		id?: ReflectionId
+		path?: ReflectionPath
 		reflection?: Reflection
 		selected?: boolean
 	},
@@ -36,7 +38,8 @@ export class ReflectionItem extends TextItem<
 			kind: 'reflection',
 			text: link.name,
 			link,
-			reflection
+			id: reflection.id ? reflection.id[reflection.id.length - 1] : undefined,
+			path: reflection.id
 		})
 	}
 
@@ -48,6 +51,8 @@ export class ReflectionItem extends TextItem<
 			{
 				kind: 'reflection',
 				text: link.name,
+				id: Array.isArray(id) ? id[id.length - 1] : id,
+				path: Array.isArray(id) ? id : undefined,
 				link
 			},
 			id1.children &&

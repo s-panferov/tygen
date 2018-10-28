@@ -13,10 +13,11 @@ import { ViewSettings } from './view'
 import { computed, observable } from 'mobx'
 import { mobxPromise } from './utils/promise'
 import axios from 'axios'
+import { normalizePath } from './helpers'
 
 class PackageItem extends TextItem<InventoryPackage & { selected?: boolean }> {
-	href() {
-		return `${this.info.name}/${this.info.versions[0]}`
+	href(version?: string) {
+		return `${this.info.name}/${version || this.info.versions[0]}`
 	}
 }
 
@@ -89,7 +90,7 @@ export class InventoryPage extends React.Component<{
 
 	@autobind
 	renderItem(props: TreeRowProps<PackageItem>) {
-		return <InventoryNode {...props} />
+		return <InventoryNode {...props} settings={this.props.settings} />
 	}
 
 	@autobind
@@ -111,7 +112,9 @@ export class InventoryPage extends React.Component<{
 }
 
 @observer
-export class InventoryNode extends React.Component<TreeRowProps<PackageItem>> {
+export class InventoryNode extends React.Component<
+	TreeRowProps<PackageItem> & { settings: ViewSettings }
+> {
 	render() {
 		const {
 			item,
@@ -126,8 +129,23 @@ export class InventoryNode extends React.Component<TreeRowProps<PackageItem>> {
 					</NormalizedLink>
 				</div>
 				<div className={PackageDescriptionCell}>{info.description}</div>
-				<div className={PackageVersionCell}>{info.versions[0]}</div>
+				<div className={PackageVersionCell}>
+					<select style={{ border: 'none' }} onChange={this.onSelect}>
+						{info.versions.map(v => {
+							return <option key={v}>{v}</option>
+						})}
+					</select>
+				</div>
 			</div>
+		)
+	}
+
+	@autobind
+	onSelect(e: React.FormEvent<HTMLSelectElement>) {
+		debugger
+		window.location.href = normalizePath(
+			this.props.settings,
+			this.props.item.href(e.currentTarget.value)
 		)
 	}
 }

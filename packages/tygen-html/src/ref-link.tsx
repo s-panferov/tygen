@@ -76,6 +76,7 @@ export interface RefLinkProps {
 	phantom?: boolean
 	name?: string
 	children?: React.ReactElement<any> | ((link: PreparedLink) => React.ReactChild)
+	onClick?: () => void
 }
 
 class RefLink_ extends React.Component<RefLinkProps & { settings: ViewSettings }> {
@@ -100,7 +101,8 @@ class RefLink_ extends React.Component<RefLinkProps & { settings: ViewSettings }
 			<a
 				id={link.anchor}
 				className={cx(RefLinkBody, cn({ phantom }), this.props.className)}
-				href={relativeHref}>
+				href={relativeHref}
+				onClick={this.props.onClick}>
 				{typeof this.props.children === 'function'
 					? this.props.children(link)
 					: this.props.children ||

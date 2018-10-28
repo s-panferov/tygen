@@ -42,6 +42,7 @@ export class NavTree<
 export class TreeRender<I extends TreeItem> extends React.Component<{
 	tree: NavTree<I>
 	itemRender: ItemRenderer<I>
+	disableSearch?: boolean
 	searchPlaceholder?: string
 	rowHeight: number | ((indext: Index & { item: I }) => number)
 	onSearch?: (query?: string) => void
@@ -61,18 +62,20 @@ export class TreeRender<I extends TreeItem> extends React.Component<{
 	query: string = ''
 
 	render() {
-		const { tree, searchPlaceholder } = this.props
+		const { disableSearch, tree, searchPlaceholder } = this.props
 		const flatTree = tree.flat.slice()
 
 		return (
 			<div>
-				<input
-					value={this.query}
-					className={InputStyle}
-					placeholder={searchPlaceholder || 'Search for contents...'}
-					onKeyDown={this.onKeyDown}
-					onChange={this.onSearchChange}
-				/>
+				{!disableSearch && (
+					<input
+						value={this.query}
+						className={InputStyle}
+						placeholder={searchPlaceholder || 'Search for contents...'}
+						onKeyDown={this.onKeyDown}
+						onChange={this.onSearchChange}
+					/>
+				)}
 				{this.props.children}
 				<WindowScroller
 					serverHeight={700}

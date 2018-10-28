@@ -10,6 +10,9 @@ export interface ReactConverterSettings {
 	packages?: {
 		remote: string
 	}
+	search?: {
+		disableGlobal?: boolean
+	}
 	manifest: Manifest
 }
 
