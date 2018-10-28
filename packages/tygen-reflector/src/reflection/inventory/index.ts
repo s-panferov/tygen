@@ -3,6 +3,7 @@ import fs from 'fs'
 import semver from 'semver'
 import { InventoryReflection, InventoryPackage } from './reflection'
 import { ReflectionKind } from '..'
+import { formatVersion } from '../../version'
 
 export function updateInventory(outDir: string) {
 	const packages: InventoryPackage[] = []
@@ -31,7 +32,7 @@ export function updateInventory(outDir: string) {
 
 				const manifest = JSON.parse(
 					fs.readFileSync(path.join(packagePath, versions[0], 'index.json')).toString()
-				).manifest
+				).reflection.manifest
 
 				packages.push({
 					name: scope ? `${scope}/${pkg}` : pkg,
@@ -50,6 +51,9 @@ export function updateInventory(outDir: string) {
 		packages
 	}
 
-	fs.writeFileSync(path.join(outDir, 'index.json'), JSON.stringify(inventory))
+	fs.writeFileSync(
+		path.join(outDir, 'index.json'),
+		JSON.stringify({ metadata: { formatVersion }, reflection: inventory })
+	)
 	return inventory
 }

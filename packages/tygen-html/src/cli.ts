@@ -7,8 +7,10 @@ import { run } from 'micro'
 import { Server } from 'http'
 
 import { serverRequest } from './server'
-
 import { args, manifest, reactConverterFactory } from './converter'
+export { ReactConverterSettings } from './settings'
+export { renderHTML } from './html'
+
 export default reactConverterFactory
 
 if (process.mainModule && process.mainModule!.filename === __filename) {

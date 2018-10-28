@@ -44,7 +44,7 @@ export function serverRequest(
 		if (fs.existsSync(indexPath)) {
 			const content = fs.readFileSync(indexPath).toString()
 			res.setHeader('Content-Type', 'text/html; charset=utf-8')
-			return renderHTML(JSON.parse(content), settings)
+			return renderHTML(JSON.parse(content).reflection, settings)
 		} else {
 			throw new Error(`File not found: ${url}`)
 		}

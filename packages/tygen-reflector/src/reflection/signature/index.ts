@@ -13,6 +13,7 @@ import {
 } from './reflection'
 
 import { TypeParameterReflection, ReflectionLink } from '..'
+import { visitTypeParameters } from '../interface'
 
 function signatureName(sig: ts.Signature) {
 	const decl = sig.getDeclaration()
@@ -35,12 +36,7 @@ export function visitSignature(sig: ts.Signature, ctx: Context): SignatureReflec
 	}
 
 	if (sig.typeParameters) {
-		sig.typeParameters.forEach(ty => {
-			if (!signatureRef.typeParameters) {
-				signatureRef.typeParameters = []
-			}
-			signatureRef.typeParameters.push(visitType(ty, ctx) as TypeParameterReflection)
-		})
+		visitTypeParameters(sig.typeParameters, signatureRef, ctx)
 	}
 
 	sig.parameters.forEach(parameter => {
@@ -89,20 +85,6 @@ export function visitCallSignatures(
 	parent: ReflectionWithCallSignatures,
 	ctx: Context
 ) {
-	let otype = type as ts.InterfaceTypeWithDeclaredMembers
-
-	// TODO strage place, why two?
-
-	if (otype.declaredCallSignatures) {
-		otype.declaredCallSignatures.forEach(signature => {
-			if (!parent.ownCallSignatures) {
-				parent.ownCallSignatures = []
-			}
-			let reflection = visitSignature(signature, ctx)
-			parent.ownCallSignatures.push(reflection)
-		})
-	}
-
 	const callSignatures = type.getCallSignatures()
 	callSignatures.forEach(signature => {
 		if (!parent.allCallSignatures) {

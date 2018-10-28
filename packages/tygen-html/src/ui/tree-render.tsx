@@ -1,6 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import { action, computed } from 'mobx'
+import { action, computed, observable } from 'mobx'
 import { List, WindowScroller, ListRowProps, Index } from 'react-virtualized'
 import { score, match, prepareQuery, IFilterOptions } from 'fuzzaldrin-plus'
 
@@ -42,7 +42,9 @@ export class NavTree<
 export class TreeRender<I extends TreeItem> extends React.Component<{
 	tree: NavTree<I>
 	itemRender: ItemRenderer<I>
+	searchPlaceholder?: string
 	rowHeight: number | ((indext: Index & { item: I }) => number)
+	onSearch?: (query?: string) => void
 	onSelect?: (e: React.KeyboardEvent<HTMLElement>, item: I) => void
 }> {
 	@computed
@@ -55,17 +57,21 @@ export class TreeRender<I extends TreeItem> extends React.Component<{
 			: rowHeight
 	}
 
+	@observable
+	query: string = ''
+
 	render() {
-		const { tree } = this.props
+		const { tree, searchPlaceholder } = this.props
 		const flatTree = tree.flat.slice()
 
 		return (
 			<div>
 				<input
+					value={this.query}
 					className={InputStyle}
-					placeholder="Search for contents..."
+					placeholder={searchPlaceholder || 'Search for contents...'}
 					onKeyDown={this.onKeyDown}
-					onChange={this.onSearch}
+					onChange={this.onSearchChange}
 				/>
 				{this.props.children}
 				<WindowScroller
@@ -88,7 +94,7 @@ export class TreeRender<I extends TreeItem> extends React.Component<{
 									outline: 'none'
 								}}
 								isScrolling={isScrolling}
-								overscanRowCount={2}
+								overscanRowCount={50}
 								rowCount={flatTree.length}
 								rowHeight={this.rowHeight}
 								rowRenderer={this.rowRender}
@@ -114,19 +120,27 @@ export class TreeRender<I extends TreeItem> extends React.Component<{
 		} else if (e.key === 'Enter') {
 			if (nav.current && this.props.onSelect) {
 				this.props.onSelect(e, nav.current)
+			} else if (this.props.onSearch) {
+				this.props.onSearch(this.query)
 			}
 		}
 	}
 
 	@action
-	onSearch = (e: React.FormEvent<HTMLInputElement>) => {
-		this.props.tree.ext.nav.reset()
+	onSearchChange = (e: React.FormEvent<HTMLInputElement>) => {
 		const value = e.currentTarget.value
-		if (value) {
-			const preparedQuery = prepareQuery(value, { ...FuzzOptions })
-			this.props.tree.filter(value, { preparedQuery, ...FuzzOptions }, queryEngine)
+		this.query = value
+
+		if (this.props.onSearch) {
+			return
 		} else {
-			this.props.tree.resetFilter()
+			this.props.tree.ext.nav.reset()
+			if (value) {
+				const preparedQuery = prepareQuery(value, { ...FuzzOptions })
+				this.props.tree.filter(value, { preparedQuery, ...FuzzOptions }, queryEngine)
+			} else {
+				this.props.tree.resetFilter()
+			}
 		}
 	}
 

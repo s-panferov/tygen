@@ -314,7 +314,8 @@ function generateIdChainForDeclaration(
 			if (name && name.text) {
 				id = concatIdentifier(id, {
 					kind: ReflectionKind.NotSupported,
-					name: name.text
+					name: name.text,
+					keywords
 				})
 			} else if (
 				node.kind === ts.SyntaxKind.VariableStatement ||
@@ -324,7 +325,8 @@ function generateIdChainForDeclaration(
 			} else {
 				id = concatIdentifier(id, {
 					kind: ReflectionKind.NotSupported,
-					name: '__type'
+					name: '__type',
+					keywords
 				})
 			}
 		}

@@ -1,10 +1,19 @@
 import ts from 'typescript'
 
 import { Generator, GeneratorOptions } from './generator'
-import { Reflection } from './reflection/reflection'
+import { Reflection, ReflectionKind } from './reflection/reflection'
 import { createLink, ExcludedFlag, ExcludedReflection, NotLinkable } from './reflection/utils'
 import { TypeReflection } from './reflection/_type/reflection'
 import { stringifyId } from './reflection/identifier'
+
+function getSymbolDeclarations(symbol: ts.Symbol): ts.Declaration[] | undefined {
+	while (symbol) {
+		if (symbol.declarations) {
+			return symbol.declarations
+		}
+		symbol = (symbol as any).parent
+	}
+}
 
 export class Context {
 	generator: Generator
@@ -38,16 +47,18 @@ export class Context {
 		// Exclude some reflections. This code is here because
 		// we need to mark symbol as excluded BEFORE staring to
 		// make links to it
-		const declarations = symbol.declarations
-		if (declarations) {
-			const excluded = declarations
-				.map(d => d.getSourceFile())
-				.every(s => !this.generator.shouldFileBeIncluded(s))
-			if (excluded) {
-				;(reflection as ExcludedReflection)[ExcludedFlag] = true
-				if (!this.options.alwaysLink) {
-					;(reflection as ExcludedReflection)[NotLinkable] = true
-				}
+
+		const declarations = getSymbolDeclarations(symbol)
+		let excluded = declarations
+			? declarations
+					.map(d => d.getSourceFile())
+					.every(s => !this.generator.shouldFileBeIncluded(s))
+			: true
+
+		if (excluded) {
+			;(reflection as ExcludedReflection)[ExcludedFlag] = true
+			if (!this.options.alwaysLink) {
+				;(reflection as ExcludedReflection)[NotLinkable] = true
 			}
 		}
 

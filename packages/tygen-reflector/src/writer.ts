@@ -50,7 +50,7 @@ export class Writer {
 
 	constructor(context: Context, opts: Partial<WriterOptions> = {}) {
 		this.options = {
-			enableSearch: false,
+			enableSearch: !!opts.enableSearch,
 			outDir: opts.outDir || path.join(process.cwd(), 'docs'),
 			fileSystem: opts.fileSystem || ((fse as any) as WriterFileSystem),
 			gzip: typeof opts.gzip !== 'undefined' ? opts.gzip : false
@@ -81,27 +81,27 @@ export class Writer {
 			}
 		}
 
-		const updatedSearchPackages: { [key: string]: boolean } = {}
+		const alreadyRecreated: { [pkgVersion: string]: boolean } = {}
 
 		this.context.reflectionById.forEach(reflection => {
 			if ((reflection as ExcludedReflection)[ExcludedFlag]) {
 				return
 			}
 
-			if (enableSearch) {
-				if (
-					IsSearchable[reflection.kind] &&
-					reflection.id &&
-					// Make only top-level items searchable
-					reflection.id.every(id => IsSearchable[id.kind])
-				) {
-					const packageKey = `${reflection.id[0].name}@${reflection.id[0].version}`
-					if (!search.packages[packageKey] || !updatedSearchPackages[packageKey]) {
-						search.packages[packageKey] = []
-						updatedSearchPackages[packageKey] = true
-					}
-					search.packages[packageKey].push(idFromPath(reflection.id))
+			if (
+				enableSearch &&
+				IsSearchable[reflection.kind] &&
+				reflection.id &&
+				// Make only top-level items searchable
+				reflection.id.every(id => IsSearchable[id.kind])
+			) {
+				const packageKey = `${reflection.id[0].name}#${reflection.id[0].version}`
+				if (!search.packages[packageKey] || !alreadyRecreated[packageKey]) {
+					search.packages[packageKey] = []
+					alreadyRecreated[packageKey] = true
 				}
+
+				search.packages[packageKey].push(idFromPath(reflection.id))
 			}
 
 			if (!IsWritable[reflection.kind]) {
@@ -133,6 +133,23 @@ export class Writer {
 
 		if (enableSearch) {
 			fileSystem.writeFileSync(searchFile, JSON.stringify(search!))
+			Object.keys(search!.packages).forEach(key => {
+				const [pkg, version] = key.split('#')
+
+				// Write individual search reflections
+				try {
+					fileSystem.writeFileSync(
+						path.join(outDir, pkg, version, 'search.json'),
+						JSON.stringify({
+							kind: ReflectionKind.Search,
+							name: 'Search',
+							packages: { [key]: search!.packages[key] }
+						})
+					)
+				} catch (e) {
+					throw new Error('Package has searchable items, but nothing is included')
+				}
+			})
 		}
 	}
 

@@ -22,6 +22,7 @@ export interface ReflectOptions extends GeneratorOptions {
 	out: string
 	gzip: boolean
 	enableSources?: boolean
+	enableSearch?: boolean
 	writeInventory?: boolean
 }
 
@@ -35,6 +36,7 @@ const ReflectCommand: yargs.CommandModule = {
 	describe: 'Build reflections',
 	builder: yargs => {
 		return yargs
+			.strict()
 			.option('project', {
 				alias: 'p',
 				description: 'Path to tsconfig.json to compile and generate documentation',
@@ -112,6 +114,7 @@ const ReflectCommand: yargs.CommandModule = {
 
 		const context = generator.generate()
 		const writer = new Writer(context, {
+			enableSearch: argv.enableSearch,
 			outDir: argv.out,
 			gzip: argv.gzip
 		})

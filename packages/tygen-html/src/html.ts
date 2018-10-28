@@ -30,6 +30,8 @@ function formatGoolgeClickTracking(trackingId: string) {
 function includeGoogleTracking(settings: ReactConverterSettings) {
 	if (settings.google && settings.google.analytics && settings.google.analytics.id) {
 		return formatGoolgeClickTracking(settings.google.analytics.id)
+	} else {
+		return ''
 	}
 }
 
@@ -67,8 +69,8 @@ export function renderHTML(
 				<link href="https://fonts.googleapis.com/css?family=Fira+Mono" rel="stylesheet">
 				<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js" defer></script>
 				<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" defer></script>
-				<script crossorigin src="https://unpkg.com/prettier@1.14.2/standalone.js" defer></script>
-				<script crossorigin src="https://unpkg.com/prettier@1.14.2/parser-typescript.js" defer></script>
+				<script crossorigin src="https://unpkg.com/prettier@1.14.3/standalone.js" defer></script>
+				<script crossorigin src="https://unpkg.com/prettier@1.14.3/parser-typescript.js" defer></script>
 				<link rel="stylesheet" type="text/css" href="${set.manifest['index.css']}"/>
 				<script>
 					window.__argv = ${JSON.stringify(set)}

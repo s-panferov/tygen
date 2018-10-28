@@ -34,7 +34,7 @@ export function visitInterface(symbol: ts.Symbol, ctx: Context): InterfaceReflec
 
 	visitContainer(symbol, iface, ctx)
 
-	visitTypeParameters(type, iface, ctx)
+	visitTypeParameters(type.typeParameters, iface, ctx)
 	visitBaseTypes(type, iface, ctx)
 	visitCallSignatures(type, iface, ctx)
 	visitObjectLikeReflection(type, iface, ctx)
@@ -66,16 +66,16 @@ export function visitBaseTypes(type: ts.Type, parent: ReflectionWithBaseTypes, c
 }
 
 export function visitTypeParameters(
-	type: ts.InterfaceType,
+	typeParameters: ReadonlyArray<ts.TypeParameter> | undefined,
 	parent: ReflectionWithTypeParameters,
 	ctx: Context
 ) {
-	let typeParameters = type.typeParameters
 	if (typeParameters) {
 		typeParameters.forEach(ty => {
 			if (!parent.typeParameters) {
 				parent.typeParameters = []
 			}
+			// visitSymbol instead of visitType because we dont want a reference
 			parent.typeParameters.push(visitSymbol(ty.symbol, ctx) as TypeParameterReflection)
 		})
 	}

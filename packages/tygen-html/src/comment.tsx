@@ -43,6 +43,13 @@ const CommentBody = css`
 	&.inline {
 		display: inline-block;
 		opacity: 0.5;
+		max-width: 600px;
+		border-left: 2px solid #ccc;
+		padding-left: 10px;
+
+		* {
+			font-size: 12px !important;
+		}
 
 		&:hover {
 			opacity: 1;

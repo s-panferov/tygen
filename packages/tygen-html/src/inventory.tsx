@@ -4,11 +4,15 @@ import { InventoryReflection, InventoryPackage } from '@tygen/reflector'
 import { css, cx } from 'linaria'
 import { Page } from './ui/layout'
 import { Outline } from './ui/outline'
-import { TreeRender, TreeRowProps } from './ui/tree-render'
-import { Tree, TextItem, TreeNavigation } from './ui/tree'
+import { TreeRender, TreeRowProps, NavTree } from './ui/tree-render'
+import { TextItem } from './ui/tree'
 import { autobind } from 'core-decorators'
 import { observer } from 'mobx-react'
 import { NormalizedLink } from './ref-link'
+import { ViewSettings } from './view'
+import { computed, observable } from 'mobx'
+import { mobxPromise } from './utils/promise'
+import axios from 'axios'
 
 class PackageItem extends TextItem<InventoryPackage & { selected?: boolean }> {
 	href() {
@@ -16,8 +20,8 @@ class PackageItem extends TextItem<InventoryPackage & { selected?: boolean }> {
 	}
 }
 
-function extractStructure(reflection: InventoryReflection) {
-	return reflection.packages.map(pkg => {
+function extractStructure(packages: InventoryPackage[]) {
+	return packages.map(pkg => {
 		return new PackageItem(pkg.name, {
 			text: `${pkg.name}->${pkg.versions[0]}`,
 			...pkg
@@ -25,12 +29,39 @@ function extractStructure(reflection: InventoryReflection) {
 	})
 }
 
+@observer
 export class InventoryPage extends React.Component<{
 	reflection: InventoryReflection
+	settings: ViewSettings
 }> {
-	tree = new Tree(extractStructure(this.props.reflection), tree => ({
-		nav: new TreeNavigation(tree)
-	}))
+	@observable
+	query: string | undefined = undefined
+
+	searchResult = mobxPromise()
+		.autorun(async () => {
+			const res = await axios.get(this.remote! + '?query=' + this.query)
+			return res.data as InventoryPackage[]
+		})
+		.build()
+
+	@computed
+	get tree() {
+		if (!this.remote || !this.query) {
+			return new NavTree(extractStructure(this.props.reflection.packages))
+		} else {
+			if (this.searchResult.payload.isValue()) {
+				return new NavTree(extractStructure(this.searchResult.payload.value))
+			} else {
+				return new NavTree([])
+			}
+		}
+	}
+
+	@computed
+	get remote() {
+		const { settings } = this.props
+		return settings.packages && settings.packages.remote
+	}
 
 	render() {
 		const { reflection } = this.props
@@ -42,6 +73,8 @@ export class InventoryPage extends React.Component<{
 				<TreeRender<PackageItem>
 					tree={this.tree}
 					rowHeight={46}
+					searchPlaceholder="Search for packages"
+					onSearch={this.remote ? this.onRemoteSearch : undefined}
 					onSelect={this.onSelect}
 					itemRender={this.renderItem}>
 					<div className={PackageRow}>
@@ -70,6 +103,11 @@ export class InventoryPage extends React.Component<{
 			}
 		}
 	}
+
+	@autobind
+	onRemoteSearch(query?: string) {
+		this.query = query
+	}
 }
 
 @observer
@@ -95,7 +133,7 @@ export class InventoryNode extends React.Component<TreeRowProps<PackageItem>> {
 }
 
 const PackageNameCell = css`
-	width: 150px;
+	width: 170px;
 	white-space: nowrap;
 
 	@media (max-width: 500px) {
@@ -136,9 +174,7 @@ const PackageRow = css`
 		padding-right: 10px;
 	}
 
-	&:nth-child(odd) {
-		background-color: #f5f5f5;
-	}
+	border-bottom: 1px solid #eee;
 `
 
 const PackageName = css`

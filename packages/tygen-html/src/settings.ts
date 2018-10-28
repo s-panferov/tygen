@@ -7,6 +7,9 @@ export interface ReactConverterSettings {
 			id: string
 		}
 	}
+	packages?: {
+		remote: string
+	}
 	manifest: Manifest
 }
 
@@ -19,8 +22,8 @@ export function normalizeSettings(
 
 	if (!options.manifest) {
 		options.manifest = {
-			'index.css': '-assets/index.css',
-			'index.js': '-assets/index.js'
+			'index.css': '/-/assets/index.css',
+			'index.js': '/-/assets/index.js'
 		}
 	}
 

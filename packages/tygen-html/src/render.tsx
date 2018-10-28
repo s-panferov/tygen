@@ -5,19 +5,18 @@ import { ReflectionKind, Reflection } from '@tygen/reflector'
 import { PackagePage } from './package'
 import { ModulePage } from './module'
 import { InterfacePage } from './interface'
-import { BaseView, ViewContext } from './view'
+import { BaseView, ViewContext, ViewSettings } from './view'
 import { VariablePage } from './variable'
 import { FolderPage } from './folder'
 import { FunctionPage } from './function'
 import { TypeAliasPage } from './type-alias'
 import { EnumPage } from './enum'
-import { ReactConverterSettings } from './settings'
 import { InventoryPage } from './inventory'
 import { SearchPage } from './ui/search'
 
 const { hot } = require('react-hot-loader')
 
-export function renderPage(ref: Reflection): React.ReactElement<any> {
+export function renderPage(ref: Reflection, settings: ViewSettings): React.ReactElement<any> {
 	switch (ref.kind) {
 		case ReflectionKind.Package:
 			return <PackagePage reflection={ref} />
@@ -40,18 +39,18 @@ export function renderPage(ref: Reflection): React.ReactElement<any> {
 		case ReflectionKind.Enum:
 			return <EnumPage reflection={ref} />
 		case ReflectionKind.Inventory:
-			return <InventoryPage reflection={ref} />
+			return <InventoryPage reflection={ref} settings={settings} />
 		case ReflectionKind.Search:
 			return <SearchPage reflection={ref} />
 	}
 	return <div>Unknown {ref.kind}</div>
 }
 
-class PageView_ extends BaseView<Reflection, { settings: ReactConverterSettings }> {
+class PageView_ extends BaseView<Reflection, { settings: ViewSettings }> {
 	render() {
 		return (
 			<ViewContext.Provider value={this.props.settings}>
-				{renderPage(this.props.reflection)}
+				{renderPage(this.props.reflection, this.props.settings)}
 			</ViewContext.Provider>
 		)
 	}
