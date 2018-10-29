@@ -98,18 +98,12 @@ export class Package {
 		visitReadme(this.folderPath, packageRef)
 		packageRef.modules = visitFolders(this.volume, packageRef, ctx)
 
-		if (this.manifest.main && this.volume.existsSync(this.manifest.main)) {
-			const id = this.volume.readFileSync(this.manifest.main).toString()
+		if (this.manifest.typings && this.volume.existsSync(this.manifest.typings)) {
+			const id = this.volume.readFileSync(this.manifest.typings).toString()
 			const ref = ctx.reflectionById.get(id)!
 			const refLink = createLink(ref)
 			packageRef.main = refLink
 			packageRef.exports = (ref as ESModuleReflection).exports
-		}
-
-		if (this.manifest.typings && this.volume.existsSync(this.manifest.typings)) {
-			const id = this.volume.readFileSync(this.manifest.typings).toString()
-			const ref = createLink(ctx.reflectionById.get(id)!)
-			packageRef.main = ref
 		}
 	}
 }

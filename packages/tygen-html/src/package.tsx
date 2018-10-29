@@ -30,11 +30,6 @@ export function createStructure(reflection: PackageReflection): StructureItem[] 
 
 	switch (reflection.kind) {
 		case ReflectionKind.Package:
-			const structure = createModulesStructure(reflection)
-			if (structure) {
-				result.push(structure)
-			}
-
 			if (reflection.exports && reflection.exports.length > 0) {
 				result.push(
 					new HeaderItem(
@@ -59,6 +54,11 @@ export function createStructure(reflection: PackageReflection): StructureItem[] 
 						reflection.globals.map(ReflectionItem.fromReflection)
 					)
 				)
+			}
+
+			const structure = createModulesStructure(reflection)
+			if (structure) {
+				result.push(structure)
 			}
 	}
 
