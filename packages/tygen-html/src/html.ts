@@ -74,7 +74,8 @@ export function renderHTML(
 				<link rel="stylesheet" type="text/css" href="${set.manifest['index.css']}"/>
 				<script>
 					window.__argv = ${JSON.stringify(set)}
-					window.__ref = "${encodeURIComponent(JSON.stringify(ref))}"
+					var ref = "${encodeURIComponent(JSON.stringify(ref))}";
+					window.__ref = JSON.parse(decodeURIComponent(ref))
 				</script>
 				<script type="text/javascript" src="${set.manifest['index.js']}" defer></script>
 			</head>

@@ -6,10 +6,7 @@ import './theme/body'
 
 if (typeof window !== 'undefined') {
 	ReactDOM.hydrate(
-		<PageView
-			reflection={JSON.parse(decodeURIComponent((window as any).__ref))}
-			settings={(window as any).__argv}
-		/>,
+		<PageView reflection={(window as any).__ref} settings={(window as any).__argv} />,
 		document.querySelector('#react-app')
 	)
 }
