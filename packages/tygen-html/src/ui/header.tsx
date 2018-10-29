@@ -18,6 +18,7 @@ export class Header extends React.Component<HeaderProps> {
 				<div className={HeaderInner}>
 					<Logo />
 					<Search reflection={search} />
+					<Discussion />
 				</div>
 			</div>
 		)
@@ -29,6 +30,17 @@ export function Logo() {
 		<NormalizedLink className={LogoStyle} href={''}>
 			<img src={require('../../asset/logo.png')} width={70} />
 		</NormalizedLink>
+	)
+}
+
+import PackageIcon from '@fortawesome/fontawesome-free/svgs/solid/comments.svg'
+import { Icon } from './icon'
+
+export function Discussion() {
+	return (
+		<a href={'https://talk.tsdoc.io'}>
+			<Icon width={20} height={20} sym={PackageIcon} />
+		</a>
 	)
 }
 
@@ -64,5 +76,6 @@ const HeaderStyle = css`
 	justify-content: center;
 	width: 100vw;
 
+	padding-right: 25px;
 	box-shadow: 0 0 50px 10px rgba(0, 0, 0, 0.05);
 `
