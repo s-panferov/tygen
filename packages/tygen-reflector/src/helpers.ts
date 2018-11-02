@@ -53,11 +53,19 @@ export function compileFolder(target: string = process.cwd()): FolderCompilation
 			configFilePath
 		)
 	} else if (packageFilePath) {
-		const pkg = JSON.parse(fs.readFileSync(packageFilePath).toString())
-		if (pkg.typings) {
+		const pkg: { typings?: string; types?: string; main?: string } = JSON.parse(
+			fs.readFileSync(packageFilePath).toString()
+		)
+
+		const decl =
+			pkg.typings ||
+			pkg.types ||
+			(pkg.main && pkg.main.endsWith('.ts') ? pkg.main : undefined)
+
+		if (decl) {
 			config = ts.parseJsonConfigFileContent(
 				{
-					files: [pkg.typings],
+					files: [decl],
 					compilerOptions: {
 						moduleResolution: 'node',
 						target: 'esnext',
