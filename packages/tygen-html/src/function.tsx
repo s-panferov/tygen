@@ -13,7 +13,9 @@ export class FunctionPage extends BaseView<FunctionReflection> {
 		const { reflection } = this.props
 
 		return (
-			<Page reflection={reflection} header={<Outline header={<h1>{reflection.name}</h1>} />}>
+			<Page
+				reflection={reflection}
+				header={<Outline header={<h1>Function {reflection.name}</h1>} />}>
 				<Pretty>
 					<FunctionPre reflection={reflection} />
 				</Pretty>

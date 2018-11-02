@@ -57,10 +57,10 @@ export function visitBaseTypes(type: ts.Type, parent: ReflectionWithBaseTypes, c
 	if (baseTypes) {
 		baseTypes.forEach(type => {
 			const reflection = visitType(type, ctx)
-			if (!parent.baseTypes) {
-				parent.baseTypes = []
+			if (!parent.extends) {
+				parent.extends = []
 			}
-			parent.baseTypes.push(reflection)
+			parent.extends.push(reflection)
 		})
 	}
 }
@@ -86,22 +86,6 @@ export function visitObjectProperties(
 	parent: ReflectionWithProperties,
 	ctx: Context
 ) {
-	// let ifaceType = type as ts.InterfaceTypeWithDeclaredMembers
-	// if (ifaceType.declaredProperties) {
-	// 	ifaceType.declaredProperties.forEach(property => {
-	// 		let reflection = visitSymbol(property, ctx) as PropertyReflection
-	// 		if (!reflection) {
-	// 			return
-	// 		}
-
-	// 		if (!parent.ownProperties) {
-	// 			parent.ownProperties = []
-	// 		}
-
-	// 		parent.ownProperties.push(reflection)
-	// 	})
-	// }
-
 	const properties = type.getProperties()
 
 	properties.forEach(property => {
@@ -111,10 +95,10 @@ export function visitObjectProperties(
 			return
 		}
 
-		if (!parent.allProperties) {
-			parent.allProperties = []
+		if (!parent.properties) {
+			parent.properties = []
 		}
 
-		parent.allProperties.push(reflection)
+		parent.properties.push(reflection)
 	})
 }

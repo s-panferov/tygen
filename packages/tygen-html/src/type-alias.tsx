@@ -13,7 +13,9 @@ export class TypeAliasPage extends BaseView<TypeAliasReflection> {
 		const { reflection } = this.props
 
 		return (
-			<Page reflection={reflection} header={<Outline header={<h1>{reflection.name}</h1>} />}>
+			<Page
+				reflection={reflection}
+				header={<Outline header={<h1>TypeAlias {reflection.name}</h1>} />}>
 				<Pretty>
 					<TypeAliasPre reflection={reflection} />
 				</Pretty>

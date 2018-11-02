@@ -13,7 +13,9 @@ export class EnumPage extends BaseView<EnumReflection> {
 		const { reflection } = this.props
 
 		return (
-			<Page reflection={reflection} header={<Outline header={<h1>{reflection.name}</h1>} />}>
+			<Page
+				reflection={reflection}
+				header={<Outline header={<h1>Enum {reflection.name}</h1>} />}>
 				<Pretty>
 					<EnumPre reflection={reflection} />
 				</Pretty>

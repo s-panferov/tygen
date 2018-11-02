@@ -26,7 +26,9 @@ export class FolderPage extends BaseView<FolderReflection> {
 		const { reflection } = this.props
 
 		return (
-			<Page reflection={reflection} header={<Outline header={<h1>{reflection.name}</h1>} />}>
+			<Page
+				reflection={reflection}
+				header={<Outline header={<h1>Folder {reflection.name}</h1>} />}>
 				<Structure tree={this.tree} />
 			</Page>
 		)

@@ -25,7 +25,11 @@ export function visitReference(type: ts.TypeReference, ctx: Context): TypeRefere
 	}
 
 	reflection.typeArguments =
-		type.typeArguments && type.typeArguments.map(arg => visitType(arg, ctx))
+		type.typeArguments &&
+		type.typeArguments
+			.map(arg => visitType(arg, ctx))
+			// FIXME why do we have extra this type at the end?
+			.filter(t => t.kind !== ReflectionKind.ThisType)
 
 	return reflection
 }

@@ -8,11 +8,7 @@ export class MethodPre extends PrettyCode<{ reflection: MethodReflection }> {
 	render() {
 		const { reflection } = this.props
 		return (
-			<CallSignaturesPre
-				key="call"
-				join={`;\n`}
-				callSignatures={reflection.allCallSignatures}
-			/>
+			<CallSignaturesPre key="call" join={`;\n`} callSignatures={reflection.callSignatures} />
 		)
 	}
 }

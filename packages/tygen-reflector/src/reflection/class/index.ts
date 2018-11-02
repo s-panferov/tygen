@@ -1,12 +1,23 @@
-import ts from 'typescript'
+import ts, { InterfaceType, SyntaxKind } from 'typescript'
 
 import { Context } from '../../context'
 import { visitContainer } from '../module'
 import { symbolId } from '../identifier'
-import { visitBaseTypes, visitObjectLikeReflection } from '../interface'
+import { visitBaseTypes, visitObjectLikeReflection, visitTypeParameters } from '../interface'
 import { ClassReflection } from './reflection'
 import { ReflectionKind, Reflection } from '../reflection'
 import { visitType } from '../_type'
+
+export function visitModifiers(symbol: ts.Symbol | ts.Signature, cb: (mod: ts.Modifier) => void) {
+	const decl =
+		(symbol as ts.Signature).declaration ||
+		(symbol as ts.Symbol).valueDeclaration ||
+		((symbol as ts.Symbol).declarations && (symbol as ts.Symbol).declarations[0])
+
+	if (decl && decl.modifiers) {
+		decl.modifiers.forEach(cb)
+	}
+}
 
 export function visitClass(symbol: ts.Symbol, ctx: Context): ClassReflection {
 	let classRef: ClassReflection = {
@@ -17,8 +28,15 @@ export function visitClass(symbol: ts.Symbol, ctx: Context): ClassReflection {
 
 	ctx.registerSymbol(symbol, classRef)
 
-	const type = ctx.checker.getDeclaredTypeOfSymbol(symbol)
+	visitModifiers(symbol, mod => {
+		if (mod.kind === SyntaxKind.AbstractKeyword) {
+			classRef.abstract = true
+		}
+	})
 
+	const type = ctx.checker.getDeclaredTypeOfSymbol(symbol) as InterfaceType
+
+	visitTypeParameters(type.typeParameters, classRef, ctx)
 	visitImplements(symbol, classRef, ctx)
 	visitContainer(symbol, classRef, ctx)
 	visitBaseTypes(type, classRef, ctx)

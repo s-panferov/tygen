@@ -5,8 +5,6 @@ import { BaseView } from '../../view'
 import { IndexSignaturesPre } from '../index-signatures'
 import { ReflectionPre } from '..'
 import { getKey } from '../../ref-link'
-import { Join } from '../../ui/join'
-import { SignaturePre } from '../signature'
 import { CallSignaturesPre } from '../call-signatures'
 
 export class ObjectView extends BaseView<ObjectTypeReflection> {
@@ -16,9 +14,9 @@ export class ObjectView extends BaseView<ObjectTypeReflection> {
 			<React.Fragment>
 				{'{'}
 				<IndexSignaturesPre key="index" reflection={reflection} />
-				<CallSignaturesPre key="call" callSignatures={reflection.allCallSignatures} />
-				{reflection.allProperties &&
-					reflection.allProperties.map((prop, i) => {
+				<CallSignaturesPre key="call" callSignatures={reflection.callSignatures} />
+				{reflection.properties &&
+					reflection.properties.map((prop, i) => {
 						return <ReflectionPre key={getKey(prop.id) || i} reflection={prop} />
 					})}
 				{'}'}

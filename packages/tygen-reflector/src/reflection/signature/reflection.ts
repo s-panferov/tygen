@@ -10,8 +10,7 @@ import { TypeReflection, TypeParameterReflection } from '../_type/reflection'
 import { ReflectionWithOrigin } from '../property/reflection'
 
 export interface ReflectionWithCallSignatures {
-	ownCallSignatures?: SignatureReflection[]
-	allCallSignatures?: (ReflectionLink | NotIncludedReflection | SignatureReflection)[]
+	callSignatures?: (ReflectionLink | NotIncludedReflection | SignatureReflection)[]
 }
 
 export interface ReflectionWithConstructSignatures {
@@ -28,5 +27,8 @@ export interface SignatureReflection extends BaseReflection, ReflectionWithOrigi
 	parameters: Reflection[]
 	typeParameters?: TypeParameterReflection[]
 	returnType: TypeReflection
+	async?: boolean
+	static?: boolean
+	abstract?: boolean
 	name: string
 }

@@ -9,7 +9,7 @@ const closest = require('pkg-up')
 import log from 'roarr'
 
 import {
-	Manifest,
+	PackageJson,
 	PackageReflection,
 	ReflectionWithReadme,
 	ReflectionWithStructure,
@@ -18,13 +18,13 @@ import {
 } from './reflection/package'
 
 import { ESModuleReflection } from './reflection'
-import { createMemoryFileSystem } from './helpers'
+import { createMemoryFileSystem, getMainFile } from './helpers'
 import { stringifyId, concatIdentifier } from './reflection/identifier'
 
 export interface PackageFields {
 	folderPath: string
 	manifestFilePath: string
-	manifest: Manifest
+	manifest: PackageJson
 	files: Map<string, SourceFileMeta>
 }
 
@@ -98,8 +98,9 @@ export class Package {
 		visitReadme(this.folderPath, packageRef)
 		packageRef.modules = visitFolders(this.volume, packageRef, ctx)
 
-		if (this.manifest.typings && this.volume.existsSync(this.manifest.typings)) {
-			const id = this.volume.readFileSync(this.manifest.typings).toString()
+		const mainFile = getMainFile(this.manifest)
+		if (mainFile && this.volume.existsSync(mainFile)) {
+			const id = this.volume.readFileSync(mainFile).toString()
 			const ref = ctx.reflectionById.get(id)!
 			const refLink = createLink(ref)
 			packageRef.main = refLink

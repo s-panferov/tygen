@@ -14,5 +14,5 @@ export interface ParameterReflection extends BaseReflection {
 	name: string
 	type: TypeReflection
 	rest?: boolean
-	optional?: boolean
+	question?: boolean
 }

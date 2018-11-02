@@ -20,7 +20,7 @@ export function visitFunction(symbol: ts.Symbol, ctx: Context): FunctionReflecti
 		kind: ReflectionKind.Function,
 		// escape internal typescript names like __@iterator
 		name: nameFromDeclaration(symbol),
-		allCallSignatures: []
+		callSignatures: []
 	}
 
 	ctx.registerSymbol(symbol, functionRef)
@@ -38,7 +38,7 @@ export function visitMethod(symbol: ts.Symbol, ctx: Context): MethodReflection {
 		id: symbolId(symbol, ctx),
 		kind: ReflectionKind.Method,
 		name: symbol.name,
-		allCallSignatures: []
+		callSignatures: []
 	}
 
 	ctx.registerSymbol(symbol, methodRef)

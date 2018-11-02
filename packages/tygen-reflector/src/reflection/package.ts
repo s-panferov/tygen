@@ -15,7 +15,7 @@ export interface PackageReflection
 		ReflectionWithGlobals,
 		ReflectionWithStructure {
 	kind: ReflectionKind.Package
-	manifest: Manifest
+	manifest: PackageJson
 	main?: Reflection
 }
 
@@ -41,9 +41,10 @@ export interface FolderReflection
 	name: string
 }
 
-export interface Manifest {
+export interface PackageJson {
 	name: string
 	version: string
 	typings?: string
+	types?: string
 	main?: string
 }

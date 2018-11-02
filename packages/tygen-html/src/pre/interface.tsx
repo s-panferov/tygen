@@ -20,6 +20,7 @@ export class InterfacePre extends PrettyCode<{
 		return (
 			<React.Fragment>
 				{this.doc(<CommentView inline reflection={reflection} />)}
+				{(reflection as ClassReflection).abstract ? 'abstract ' : ''}
 				{keyword}{' '}
 				{this.id(
 					reflection.name,
@@ -28,10 +29,20 @@ export class InterfacePre extends PrettyCode<{
 				{reflection.typeParameters && (
 					<TypeArgumentsPre types={reflection.typeParameters} />
 				)}
-				{reflection.baseTypes && (
+				{reflection.extends && (
 					<React.Fragment key="base">
+						{' '}
 						extends{' '}
-						{reflection.baseTypes.map((type, i) => {
+						{reflection.extends.map((type, i) => {
+							return <ReflectionPre key={getKey(type) || i} reflection={type} />
+						})}
+					</React.Fragment>
+				)}
+				{(reflection as ClassReflection).implements && (
+					<React.Fragment key="implements">
+						{' '}
+						implements{' '}
+						{(reflection as ClassReflection).implements!.map((type, i) => {
 							return <ReflectionPre key={getKey(type) || i} reflection={type} />
 						})}
 					</React.Fragment>
@@ -44,11 +55,11 @@ export class InterfacePre extends PrettyCode<{
 				/>
 				<CallSignaturesPre
 					key="call"
-					callSignatures={(reflection as InterfaceReflection).allCallSignatures}
+					callSignatures={(reflection as InterfaceReflection).callSignatures}
 				/>
 				<Join joinWith={`\n`}>
-					{reflection.allProperties &&
-						reflection.allProperties.map((prop, i) => {
+					{reflection.properties &&
+						reflection.properties.map((prop, i) => {
 							return <ReflectionPre key={getKey(prop.id) || i} reflection={prop} />
 						})}
 				</Join>

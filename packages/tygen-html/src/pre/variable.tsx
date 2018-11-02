@@ -40,7 +40,7 @@ export class ParameterPre extends PrettyCode<{ reflection: ParameterReflection }
 						reflection={reflection}
 					/>
 				)}
-				: <ReflectionPre reflection={reflection.type} />
+				{reflection.question ? '?' : ''}: <ReflectionPre reflection={reflection.type} />
 			</React.Fragment>
 		)
 	}

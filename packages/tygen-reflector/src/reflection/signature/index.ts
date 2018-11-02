@@ -14,6 +14,7 @@ import {
 
 import { TypeParameterReflection, ReflectionLink } from '..'
 import { visitTypeParameters } from '../interface'
+import { visitModifiers } from '../class'
 
 function signatureName(sig: ts.Signature) {
 	const decl = sig.getDeclaration()
@@ -34,6 +35,14 @@ export function visitSignature(sig: ts.Signature, ctx: Context): SignatureReflec
 		returnType: visitType(sig.getReturnType(), ctx),
 		name: signatureName(sig)
 	}
+
+	visitModifiers(sig, mod => {
+		if (mod.kind === ts.SyntaxKind.StaticKeyword) {
+			signatureRef.static = true
+		} else if (mod.kind === ts.SyntaxKind.AbstractKeyword) {
+			signatureRef.abstract = true
+		}
+	})
 
 	if (sig.typeParameters) {
 		visitTypeParameters(sig.typeParameters, signatureRef, ctx)
@@ -87,11 +96,11 @@ export function visitCallSignatures(
 ) {
 	const callSignatures = type.getCallSignatures()
 	callSignatures.forEach(signature => {
-		if (!parent.allCallSignatures) {
-			parent.allCallSignatures = []
+		if (!parent.callSignatures) {
+			parent.callSignatures = []
 		}
 		let reflection = visitSignature(signature, ctx)
-		parent.allCallSignatures.push(reflection)
+		parent.callSignatures.push(reflection)
 	})
 }
 

@@ -29,7 +29,7 @@ export class ModulePage extends BaseView<
 				header={
 					<Outline
 						icon={<TSIcon className="tsd-kind-module" />}
-						header={<h1>{reflection.name}</h1>}
+						header={<h1>Module {reflection.name}</h1>}
 					/>
 				}>
 				<Structure wide tree={this.tree} />

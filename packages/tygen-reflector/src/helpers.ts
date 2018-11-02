@@ -6,6 +6,7 @@ import { Package } from './package'
 
 import log from 'roarr'
 import { Generator, Writer } from './runtime'
+import { PackageJson } from './reflection'
 
 const { Volume } = require('memfs')
 
@@ -17,6 +18,10 @@ export function createMemoryFileSystem(): FileSystem {
 export interface FolderCompilationResult {
 	pkg: Package
 	result: CompilationResult
+}
+
+export function getMainFile(pkg: PackageJson): string | undefined {
+	return pkg.typings || pkg.types || (pkg.main && pkg.main.endsWith('.ts') ? pkg.main : undefined)
 }
 
 export function compileFolder(target: string = process.cwd()): FolderCompilationResult {
@@ -53,14 +58,8 @@ export function compileFolder(target: string = process.cwd()): FolderCompilation
 			configFilePath
 		)
 	} else if (packageFilePath) {
-		const pkg: { typings?: string; types?: string; main?: string } = JSON.parse(
-			fs.readFileSync(packageFilePath).toString()
-		)
-
-		const decl =
-			pkg.typings ||
-			pkg.types ||
-			(pkg.main && pkg.main.endsWith('.ts') ? pkg.main : undefined)
+		const pkg: PackageJson = JSON.parse(fs.readFileSync(packageFilePath).toString())
+		const decl = getMainFile(pkg)
 
 		if (decl) {
 			config = ts.parseJsonConfigFileContent(

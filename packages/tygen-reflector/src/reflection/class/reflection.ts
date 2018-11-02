@@ -5,6 +5,7 @@ import {
 	Reflection,
 	ReflectionPath
 } from '../reflection'
+
 import {
 	ObjectLikeReflection,
 	ReflectionWithTypeParameters,
@@ -25,4 +26,5 @@ export interface ClassReflection
 	id: ReflectionPath
 	kind: ReflectionKind.Class
 	name: string
+	abstract?: boolean
 }

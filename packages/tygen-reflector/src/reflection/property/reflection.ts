@@ -8,6 +8,8 @@ export interface PropertyReflection extends BaseReflection, ReflectionWithOrigin
 	question?: boolean
 	getter?: boolean
 	setter?: boolean
+	static?: boolean
+	abstract?: boolean
 }
 
 export interface ReflectionWithOrigin extends BaseReflection {

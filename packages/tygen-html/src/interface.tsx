@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { InterfaceReflection, ClassReflection } from '@tygen/reflector'
+import { InterfaceReflection, ClassReflection, ReflectionKind } from '@tygen/reflector'
 import { Page } from './ui/layout'
 import { BaseView } from './view'
 
@@ -12,7 +12,18 @@ export class InterfacePage extends BaseView<InterfaceReflection | ClassReflectio
 		const { reflection } = this.props
 
 		return (
-			<Page reflection={reflection} header={<Outline header={<h1>{reflection.name}</h1>} />}>
+			<Page
+				reflection={reflection}
+				header={
+					<Outline
+						header={
+							<h1>
+								{reflection.kind === ReflectionKind.Class ? 'Class' : 'Interface'}{' '}
+								{reflection.name}
+							</h1>
+						}
+					/>
+				}>
 				<Pretty>
 					<InterfacePre reflection={reflection} />
 				</Pretty>

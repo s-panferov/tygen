@@ -5,6 +5,7 @@ import { Context } from '../../context'
 import { symbolId } from '../identifier'
 import { visitType } from '../_type'
 import { VariableReflection, ParameterReflection } from './reflection'
+import { filterUndefined } from '../property'
 
 export function isParameter(symbol: ts.Symbol) {
 	if (symbol.declarations) {
@@ -23,11 +24,11 @@ export function visitVariable(
 	if (isParameter(symbol)) {
 		const decl = symbol.declarations![0]!
 		let rest = false
-		let optional = false
+		let question = false
 
 		if (ts.isParameter(decl)) {
 			rest = !!decl.dotDotDotToken
-			optional = !!decl.questionToken
+			question = !!decl.questionToken
 		}
 
 		variableRef = {
@@ -36,7 +37,7 @@ export function visitVariable(
 			name: symbol.name,
 			type: undefined as any,
 			rest,
-			optional
+			question
 		}
 	} else {
 		variableRef = {
@@ -50,7 +51,7 @@ export function visitVariable(
 	ctx.registerSymbol(symbol, variableRef)
 
 	let type = ctx.checker.getTypeOfSymbolAtLocation(symbol, {} as any)
-	variableRef.type = visitType(type, ctx)
+	variableRef.type = filterUndefined(visitType(type, ctx))
 
 	return variableRef
 }

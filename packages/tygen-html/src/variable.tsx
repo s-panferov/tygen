@@ -12,7 +12,9 @@ export class VariablePage extends BaseView<VariableReflection> {
 		const { reflection } = this.props
 
 		return (
-			<Page reflection={reflection} header={<Outline header={<h1>{reflection.name}</h1>} />}>
+			<Page
+				reflection={reflection}
+				header={<Outline header={<h1>Variable {reflection.name}</h1>} />}>
 				<Pretty>
 					<VariablePre reflection={reflection} />
 				</Pretty>

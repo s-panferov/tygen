@@ -13,7 +13,7 @@ export class FunctionPre extends PrettyCode<{ reflection: FunctionReflection }> 
 				key="call"
 				keyword="function"
 				join={`;\n\n`}
-				callSignatures={reflection.allCallSignatures}
+				callSignatures={reflection.callSignatures}
 			/>
 		)
 	}

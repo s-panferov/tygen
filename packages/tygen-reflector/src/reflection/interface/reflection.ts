@@ -17,8 +17,7 @@ import {
 } from '../reflection'
 
 export interface ReflectionWithProperties extends BaseReflection {
-	ownProperties?: Reflection[]
-	allProperties?: (Reflection | ReflectionLink)[]
+	properties?: (Reflection | ReflectionLink)[]
 }
 
 export interface ReflectionWithTypeParameters {
@@ -26,7 +25,7 @@ export interface ReflectionWithTypeParameters {
 }
 
 export interface ReflectionWithBaseTypes {
-	baseTypes?: TypeReflection[]
+	extends?: TypeReflection[]
 }
 
 export interface ObjectLikeReflection

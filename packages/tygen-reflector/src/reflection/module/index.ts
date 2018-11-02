@@ -152,25 +152,34 @@ export function visitContainer(
 ) {
 	// !!symbol.exports check needed because `getExportsOfModule` crashes otherwise
 	let exp = symbol.exports && ctx.checker.getExportsOfModule(symbol)
-	if (exp) {
-		exp.forEach(item => {
-			if (wasVisitedIn(refl, item)) {
-				return
-			}
-
-			setVisitedIn(refl, item)
-
-			let reflection = visitSymbol(item, ctx)
-			if (reflection) {
-				if (!cb || cb(reflection) === VisitResult.Export) {
-					if (!refl.exports) {
-						refl.exports = []
-					}
-					refl.exports.push(createLink(reflection))
-				}
-			}
-		})
+	if (!exp) {
+		return
 	}
 
-	return module
+	exp.forEach(item => {
+		if (wasVisitedIn(refl, item)) {
+			return
+		}
+
+		setVisitedIn(refl, item)
+
+		if (item.name === 'prototype') {
+			return
+		}
+
+		let reflection = visitSymbol(item, ctx)
+		if (reflection) {
+			if (!cb || cb(reflection) === VisitResult.Export) {
+				if (!refl.exports) {
+					refl.exports = []
+				}
+
+				refl.exports.push(
+					(item as any).parent === symbol ? reflection : createLink(reflection)
+				)
+			}
+		}
+	})
+
+	return
 }
