@@ -59,12 +59,28 @@ export function compileFolder(target: string = process.cwd()): FolderCompilation
 		)
 	} else if (packageFilePath) {
 		const pkg: PackageJson = JSON.parse(fs.readFileSync(packageFilePath).toString())
-		const decl = getMainFile(pkg)
+		const main = getMainFile(pkg)
 
-		if (decl) {
+		if (main) {
 			config = ts.parseJsonConfigFileContent(
 				{
-					files: [decl],
+					files: [main],
+					compilerOptions: {
+						moduleResolution: 'node',
+						target: 'esnext',
+						strict: true
+					}
+				},
+				ts.sys,
+				'.',
+				undefined,
+				packageFilePath
+			)
+		} else {
+			config = ts.parseJsonConfigFileContent(
+				{
+					include: ['**/*'],
+					exclude: ['node_modules'],
 					compilerOptions: {
 						moduleResolution: 'node',
 						target: 'esnext',
