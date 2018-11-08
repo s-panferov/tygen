@@ -20,9 +20,10 @@
     "tygen-html": "./bin/tygen-html.js"
   },
   "scripts": {
+    "prepublishOnly": "npm run build",
     "server-watch": "webpack --watch --progress --config webpack.server.js",
     "client-watch": "webpack-dev-server  --progress --hot --config webpack.client.js",
-    "build": "rm -rf dist && webpack --config webpack.server.js && webpack --config webpack.client.js"
+    "build": "tsc -b tsconfig.json && rm -rf dist && NODE_ENV=production webpack --config webpack.server.js && NODE_ENV=production webpack --config webpack.client.js"
   },
   "browserslist": [
     "last 2 Chrome versions"

@@ -15,7 +15,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc"
+    "prepublishOnly": "tsc -b tsconfig.json"
   },
   "dependencies": {
     "memfs": "^2.9.4",

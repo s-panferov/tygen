@@ -1,1 +1,1 @@
-export const formatVersion = '1.0.0'
+export const formatVersion = '0.1.0'
