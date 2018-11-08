@@ -9,11 +9,7 @@ Big goals:
 
 1.  Full-featured static/dynamic TypeScript documentation generator.
 2.  Special support for ReactJS/Angular/Vue projects.
-3.  All-in-one documentation portal like Rust's [docs.rs](docs.rs), but this will be possible **only** if you support me.
-
-## Example output
-
-http://tsdoc.io/typescript/3.1.2
+3.  All-in-one documentation portal: [tsdoc.io](https://tsdoc.io)
 
 ## Donation request
 
@@ -22,6 +18,10 @@ This project has very ambitious goals, but demands a lot of attention and hard w
 We all know that maintaining an open source project is a HARD work. Enthusiasm burns out and does not last forever (especially after you get your first 100 bug reports without a proper description and reproduction steps), but money can motivate you for years. And this is why I ask you to consider a donation if you're interested me to continue this work.
 
 <span class="badge-patreon"><a href="https://www.patreon.com/spanferov" title="Donate to this project using Patreon"><img src="https://img.shields.io/badge/patreon-donate-yellow.svg" alt="Patreon donate button" /></a></span>
+
+## Example output
+
+Just visit [tsdoc.io](http://tsdoc.io) and search for a package you're interested in.
 
 ## Work in progress
 
@@ -73,27 +73,50 @@ Right now the best way to contribute is to:
 
 4.  Help to write tests. This may potentially help to become backward-compatible in the future. This projects _does not_ have tests yet. This is an informed decision, I want to concentrate on functionality first.
 
+# How to build
+
 To run this stuff in development mode:
 
-1.  Run `yarn install`
-1.  Run `yarn start` in the root. This will build and start `@tygen/html` server to serve from `docs` folder.
-1.  Run `yarn exec tsc` in the root in the separate shell tab.
-1.  Generate self-reflections by running `node lib/tygen-reflector/src/cli.js . --out docs` in the root.
+1. Run `yarn install`
+1. Open _3_ different terminal tabs:
+   1.1 Run `yarn exec server-watch`
+   1.1 Run `yarn exec client-watch`
+   1.1 Run `yarn exec tsc -- -b --watch`
+1. Generate example reflections by running:
+
+```
+node ./packages/tygen-reflector/lib/cli.js reflect --project=examples/simple --out=docs --write-inventory
+```
 
 My vscode debugging configuration:
 
 ```json
 {
-	"name": "Generate",
+	"name": "Reflect example",
 	"type": "node",
 	"request": "launch",
-	"program": "${workspaceRoot}/lib/tygen-reflector/src/cli.js",
-	"stopOnEntry": false,
-	"args": ["generate", "--project", ".", "--out", "docs", "--with", "@tygen/html"],
+	"runtimeExecutable": "${workspaceRoot}/roarr.sh",
+	"program": "${workspaceRoot}/packages/tygen-reflector/lib/cli.js",
+	"args": [
+		"reflect",
+		"--project",
+		"examples/simple",
+		"--out",
+		"docs",
+		"--include-external",
+		"--include-libs",
+		"--enable-search",
+		"--write-inventory"
+	],
 	"cwd": "${workspaceRoot}/",
-	"runtimeExecutable": "node",
 	"runtimeArgs": ["--nolazy", "--stack_size=90000"],
 	"sourceMaps": true,
-	"env": { "NODE_ENV": "development" }
+	"protocol": "inspector",
+	"stopOnEntry": false,
+	"outputCapture": "std",
+	"env": {
+		"NODE_ENV": "development",
+		"ROARR_LOG": "true"
+	}
 }
 ```

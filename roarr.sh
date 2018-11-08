@@ -1,1 +1,0 @@
-node $* | roarr pretty-print
