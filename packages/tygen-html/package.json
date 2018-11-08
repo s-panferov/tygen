@@ -14,7 +14,9 @@
   },
   "files": [
     "bin",
-    "dist"
+    "dist",
+    "lib",
+    "asset"
   ],
   "bin": {
     "tygen-html": "./bin/tygen-html.js"

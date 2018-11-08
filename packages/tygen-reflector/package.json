@@ -9,7 +9,9 @@
   },
   "files": [
     "bin",
-    "lib"
+    "lib",
+    "runtime.d.ts",
+    "runtime.js"
   ],
   "publishConfig": {
     "access": "public"
